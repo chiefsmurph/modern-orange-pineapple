@@ -6,10 +6,19 @@ import products, {
 } from "../../../public/products";
 import { p } from "framer-motion/client";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error("STRIPE_SECRET_KEY is not set");
+  }
+
+  return new Stripe(key);
+}
+
 const origin = "https://modernorangepineapple.com";
 
 export async function POST(req: NextRequest) {
+  const stripe = getStripe();
   const { productId, ...options } = await req.json();
   const product = products.products.find((p) => p.id === productId);
   if (!product)
