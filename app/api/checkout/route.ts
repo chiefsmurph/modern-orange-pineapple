@@ -15,7 +15,7 @@ function getStripe() {
   return new Stripe(key);
 }
 
-const origin = "https://modernorangepineapple.com";
+const origin = "https://mopclothing.com";
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();

@@ -20,3 +20,5 @@ yarn-error.log*
 
 
 /public/videos
+# Holds a LIVE Stripe secret key (sk_live_) in plaintext on the box — never commit.
+ecosystem.config.js
