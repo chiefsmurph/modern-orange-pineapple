@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import products, {
   getTotalPrice,
   getProductImages,
+  getDelivery,
 } from "../../../public/products";
 import { p } from "framer-motion/client";
 
@@ -32,7 +33,8 @@ export async function POST(req: NextRequest) {
   // Build absolute image URL
   const imageUrl = `${origin}${getProductImages(product, options["color"])[0]}`;
 
-  const [min, max] = product.shipping.estDelivery.split("-").map(Number);
+  // Same window the card and product page show (production + shipping), in business days.
+  const delivery = getDelivery(product);
   const sessionParams: Stripe.Checkout.SessionCreateParams = {
     mode: "payment",
     payment_method_types: ["card"],
@@ -84,11 +86,11 @@ export async function POST(req: NextRequest) {
           delivery_estimate: {
             minimum: {
               unit: "business_day",
-              value: min,
+              value: delivery.minBusinessDays,
             },
             maximum: {
               unit: "business_day",
-              value: max,
+              value: delivery.maxBusinessDays,
             },
           },
         },

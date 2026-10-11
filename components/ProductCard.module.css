@@ -38,3 +38,20 @@
   color: green;
   /* text-decoration: underline; */
 }
+
+.delivery {
+  font-size: 0.85rem;
+  margin-top: -0.25rem;
+  color: #444;
+}
+
+.fabricNote {
+  display: inline-block;
+  margin: 0;
+  padding: 3px 10px;
+  border: 1px solid #c9a227;
+  border-radius: 999px;
+  background: #fff6d6;
+  color: #6b5200;
+  font-size: 0.8rem;
+}

@@ -18,10 +18,37 @@ export type Product = {
   shipping: {
     name: string;
     cost: number;
-    estDelivery: string;
   };
   freeShippingMode?: boolean;
+  /** Shown as a label on the card and product page when the item isn't 100% cotton. */
+  fabricNote?: string;
 };
+
+export type Delivery = {
+  /** Total time to the customer (production + shipping), shown on the card and product page. */
+  text: string;
+  /** The same window in business days, for Stripe Checkout's delivery_estimate. */
+  minBusinessDays: number;
+  maxBusinessDays: number;
+};
+
+// Per supplier: Yoycol makes each piece to order (~10–12 days) before ~8–15 days of shipping;
+// Printful prints and ships from the US in about 1–2 weeks.
+export const vendorDelivery: Record<Product["vendor"]["platform"], Delivery> = {
+  yoycol: {
+    text: "Made to order · arrives in about 3–4 weeks",
+    minBusinessDays: 18,
+    maxBusinessDays: 27,
+  },
+  printful: {
+    text: "Made to order · arrives in about 1–2 weeks",
+    minBusinessDays: 5,
+    maxBusinessDays: 13,
+  },
+};
+
+export const getDelivery = (product: Product) =>
+  vendorDelivery[product.vendor.platform];
 
 export const getProductImages = (
   { images, options: { color: colorOptions = [] } }: Product,
@@ -65,7 +92,6 @@ const products: { products: Product[] } = {
       shipping: {
         name: "Standard Shipping",
         cost: 752,
-        estDelivery: "8-15",
       },
       freeShippingMode: true,
     },
@@ -73,7 +99,7 @@ const products: { products: Product[] } = {
       id: "clouds-skater-dress",
       title: "All‑Over Clouds Skater Dress",
       description:
-        "Dress to impress with this all‑over cloud print skater dress!\n\n- 82% polyester / 18% spandex\n- Fabric weight: 6.78 oz/yd² (230 g/m²) — may vary ±5%\n- Smooth, elastic fabric\n- Mid‑thigh flared skirt with elastic waistline\n- Overlock seams & cover‑stitch hem",
+        "Dress to impress with this all‑over cloud print skater dress!\n\n- 78% polyester / 22% elastane\n- Fabric weight: 6.78 oz/yd² (230 g/m²) — may vary ±5%\n- Smooth, elastic fabric\n- Mid‑thigh flared skirt with elastic waistline\n- Overlock seams & cover‑stitch hem",
       options: {
         size: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
       },
@@ -107,9 +133,9 @@ const products: { products: Product[] } = {
       shipping: {
         name: "Flat Rate",
         cost: 399,
-        estDelivery: "7-10",
       },
       freeShippingMode: true,
+      fabricNote: "Not cotton: 78% polyester",
     },
     {
       id: "pelican-beanie-t-shirt",
@@ -145,7 +171,6 @@ const products: { products: Product[] } = {
       shipping: {
         name: "Flat Rate",
         cost: 469,
-        estDelivery: "7-10",
       },
       freeShippingMode: true,
     },
@@ -176,7 +201,6 @@ const products: { products: Product[] } = {
       shipping: {
         name: "Standard Shipping",
         cost: 1453,
-        estDelivery: "8-15",
       },
       freeShippingMode: true,
     },

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   getTotalPrice,
   getProductImages,
+  getDelivery,
   type Product,
 } from "@/public/products";
 import Link from "next/link";
@@ -42,6 +43,9 @@ export default function ProductClientView({
 
       <h1 className={styles.title}>{product.title}</h1>
       <p className={styles.price}>${getTotalPrice(product)}</p>
+      {product.fabricNote && (
+        <p className={styles.fabricNote}>{product.fabricNote}</p>
+      )}
       <div className={styles.productPage}>
         <div className={styles.textSide}>
           <p
@@ -62,7 +66,7 @@ export default function ProductClientView({
       <p className={styles.shipping}>
         Shipping: $
         {product.freeShippingMode ? "0.00 (free)" : product.shipping.cost / 100}{" "}
-        — Estimated: {product.shipping.estDelivery} business days
+        — {getDelivery(product).text}
       </p>
 
       <PurchaseForm

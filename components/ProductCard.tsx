@@ -5,6 +5,7 @@ import styles from "./ProductCard.module.css";
 import {
   getTotalPrice,
   getProductImages,
+  getDelivery,
   Product,
 } from "@/public/products";
 
@@ -13,7 +14,7 @@ type Props = {
 };
 
 export default function ProductCard({ product }: Props) {
-  const { id, title, freeShippingMode } = product;
+  const { id, title, freeShippingMode, fabricNote } = product;
   const displayPrice = getTotalPrice(product);
   const img = getProductImages(product)[0];
   return (
@@ -30,6 +31,8 @@ export default function ProductCard({ product }: Props) {
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.price}>${displayPrice}</p>
       {freeShippingMode && <p className={styles.freeShipping}>FREE SHIPPING</p>}
+      <p className={styles.delivery}>{getDelivery(product).text}</p>
+      {fabricNote && <p className={styles.fabricNote}>{fabricNote}</p>}
     </Link>
   );
 }

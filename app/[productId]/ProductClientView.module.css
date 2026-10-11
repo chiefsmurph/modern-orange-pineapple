@@ -26,6 +26,17 @@ a.home {
   margin-bottom: 24px;
 }
 
+.fabricNote {
+  display: inline-block;
+  margin: -8px 0 16px;
+  padding: 4px 10px;
+  border: 1px solid #c9a227;
+  border-radius: 999px;
+  background: #fff6d6;
+  color: #6b5200;
+  font-size: 0.8rem;
+}
+
 .gallery {
   display: grid;
   gap: 12px;
