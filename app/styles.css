@@ -22,7 +22,12 @@
   font-weight: 900;
   color: white;
   animation: boldGlow 3.5s ease-in-out infinite;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-orbitron), sans-serif;
   letter-spacing: 1px;
   user-select: none;
+}
+
+/* set while the title is scrolled out of view (see app/page.tsx) */
+.glitch.glow-paused {
+  animation-play-state: paused;
 }

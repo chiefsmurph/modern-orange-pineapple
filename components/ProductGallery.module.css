@@ -1,4 +1,6 @@
 .sliderWrapper {
+  /* must match keen-slider's `spacing` in ProductGallery.tsx */
+  --slide-gap: 16px;
   width: 100%;
   aspect-ratio: 3 / 2; /* Or remove and use natural height */
   /* overflow: hidden; */
@@ -37,5 +39,11 @@
     /* min-height: 400px; */
     object-fit: contain;
     /* max-height: 400px; Tweak this if needed */
+  }
+}
+
+@media (min-width: 768px) {
+  .sliderWrapper {
+    --slide-gap: 24px;
   }
 }

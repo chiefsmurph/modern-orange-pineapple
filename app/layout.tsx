@@ -1,7 +1,19 @@
 import { QueryProvider } from "@/components/QueryProvider";
 import { Analytics } from "@/components/Analytics";
+import { Orbitron } from "next/font/google";
 import "./globals.css";
-import SmartBackground from "@/components/SmartBackground";
+
+// Self-hosted at build time by next/font: no render-blocking Google Fonts @import.
+// Same single 500 weight as before (bold text is synthesized, exactly as it was).
+// No metric-adjusted fallback face: glyphs Orbitron lacks (e.g. "²") keep
+// falling back to the plain sans-serif, exactly as before.
+const orbitron = Orbitron({
+  weight: "500",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-orbitron",
+  adjustFontFallback: false,
+});
 
 export const metadata = {
   title: "MOP Clothing",
@@ -19,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={orbitron.variable}>
       <head>
         {/* self-visit opt-out: ?nostats to disable Umami on THIS browser; ?nostats=off to re-enable */}
         <script dangerouslySetInnerHTML={{ __html: "(function(){var m=/[?&]nostats(=([^&#]*))?/i.exec(location.search);if(!m)return;var off=(m[2]||\"\").toLowerCase()===\"off\";try{off?localStorage.removeItem(\"umami.disabled\"):localStorage.setItem(\"umami.disabled\",\"1\");}catch(e){}window.addEventListener(\"DOMContentLoaded\",function(){var b=document.createElement(\"div\");b.textContent=(off?\"✓ Umami tracking re-enabled\":\"✓ Umami tracking disabled\")+\" on this browser\";b.style.cssText=\"position:fixed;top:0;left:0;right:0;z-index:2147483647;background:#15C7E6;color:#012;font:600 14px/1.4 system-ui,-apple-system,sans-serif;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.25)\";document.body.appendChild(b);});})();" }} />
@@ -31,9 +43,10 @@ export default function RootLayout({
         />
       </head>
       <body>
+        {/* Static sky/sea backdrop (13 KB WebP / 8.5 KB AVIF) — replaces the 8.8 MB autoplay video. */}
+        <div className="site-bg" aria-hidden="true" />
         <QueryProvider>{children}</QueryProvider>
         <Analytics />
-        <SmartBackground/>
         <div className="overlay" />
       </body>
     </html>

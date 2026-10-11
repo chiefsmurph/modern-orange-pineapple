@@ -47,7 +47,7 @@ export default function RedeemPage() {
       style={{
         textAlign: "center",
         padding: "3rem",
-        fontFamily: "Orbitron, sans-serif",
+        fontFamily: "var(--font-orbitron), sans-serif",
       }}
     >
       <h1>Redeem Your Code</h1>
@@ -63,7 +63,7 @@ export default function RedeemPage() {
               border: "2px solid #ff8c00",
               borderRadius: "6px",
               marginRight: "1rem",
-              fontFamily: "Orbitron, sans-serif",
+              fontFamily: "var(--font-orbitron), sans-serif",
             }}
           />
           <button
@@ -76,7 +76,7 @@ export default function RedeemPage() {
               backgroundColor: "#ff8c00",
               color: "white",
               fontWeight: "bold",
-              fontFamily: "Orbitron, sans-serif",
+              fontFamily: "var(--font-orbitron), sans-serif",
               cursor: "pointer",
               transition: "all 0.3s ease",
             }}
@@ -98,7 +98,7 @@ export default function RedeemPage() {
               border: "2px solid #ff8c00",
               borderRadius: "6px",
               marginRight: "1rem",
-              fontFamily: "Orbitron, sans-serif",
+              fontFamily: "var(--font-orbitron), sans-serif",
             }}
           />
           <input
@@ -111,7 +111,7 @@ export default function RedeemPage() {
               border: "2px solid #ff8c00",
               borderRadius: "6px",
               marginRight: "1rem",
-              fontFamily: "Orbitron, sans-serif",
+              fontFamily: "var(--font-orbitron), sans-serif",
             }}
           />
           <button
@@ -124,7 +124,7 @@ export default function RedeemPage() {
               backgroundColor: "#ff8c00",
               color: "white",
               fontWeight: "bold",
-              fontFamily: "Orbitron, sans-serif",
+              fontFamily: "var(--font-orbitron), sans-serif",
               cursor: "pointer",
               transition: "all 0.3s ease",
             }}

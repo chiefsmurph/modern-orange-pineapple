@@ -1,31 +1,31 @@
 "use client";
 import { motion } from "framer-motion";
-import Head from "next/head";
 import Link from "next/link";
-import products, { getProductImages } from "../public/products";
+import products from "../public/products";
 
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
 import ProductCard from "@/components/ProductCard";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import InViewVideo from "@/components/InViewVideo";
+import { useEffect, useRef, useState } from "react";
 import { TypingText } from "@/components/TypingText";
 
 export default function HomePage() {
   const [isCouponHovered, setIsCouponHovered] = useState(false);
   const [isHoveredBtn2, setIsHoveredBtn2] = useState(false);
-  const [shouldAnimate, setShouldAnimate] = useState<boolean | undefined>(
-    undefined
+  // Server-render the page (it used to render nothing until mounted, so the
+  // whole page popped in after JS loaded). Everything still starts at
+  // opacity 0 and runs the same intro; a client-side "← Home" navigation skips
+  // it. The server has no sessionStorage, so it always renders the intro state.
+  const [shouldAnimate] = useState<boolean>(
+    () =>
+      typeof window === "undefined" || !sessionStorage.getItem("fromClientNav")
   );
+  const glowRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    const fromClientNav = sessionStorage.getItem("fromClientNav");
-    console.log({ fromClientNav });
-    if (fromClientNav) {
-      setShouldAnimate(false);
+    if (sessionStorage.getItem("fromClientNav")) {
       requestAnimationFrame(() => sessionStorage.removeItem("fromClientNav"));
-    } else {
-      setShouldAnimate(true);
     }
   }, []);
   useEffect(() => {
@@ -39,15 +39,19 @@ export default function HomePage() {
       return () => clearTimeout(timeout);
     }
   }, [shouldAnimate]);
-  if (shouldAnimate === undefined) return null; // or show loader if desired
+  // The title's glow animates text-shadow, which repaints every frame; pause it
+  // while the title is scrolled out of view so it can't compete with scrolling.
+  useEffect(() => {
+    const el = glowRef.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([entry]) =>
+      el.classList.toggle("glow-paused", !entry.isIntersecting)
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return (
     <main className={styles.main}>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       {/* <motion.h1
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -60,6 +64,7 @@ export default function HomePage() {
         coupon codes redeemed: 0
       </motion.h1> */}
       <motion.h1
+        ref={glowRef}
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: shouldAnimate && 0.8 }}
@@ -83,11 +88,12 @@ export default function HomePage() {
       </motion.p>
 
       <br />
-      <motion.p
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: shouldAnimate && 6 }}
         className="subheader"
+        style={{ marginTop: "1em" }}
       >
         <p>
           {" "}
@@ -107,7 +113,7 @@ export default function HomePage() {
           on your face — and very possibly have strangers stopping to say “I
           love your shirt” or giving you a thumbs up as they pass.
         </p>
-      </motion.p>
+      </motion.div>
 
       <motion.p
         initial={{ opacity: 0 }}
@@ -122,7 +128,7 @@ export default function HomePage() {
             padding: "0.75rem 1.5rem",
             border: "2px solid #ff8c00",
             borderRadius: "8px",
-            fontFamily: "Orbitron, sans-serif",
+            fontFamily: "var(--font-orbitron), sans-serif",
             color: isCouponHovered ? "white" : "#fff", // white text always visible
             backgroundColor: isCouponHovered
               ? "#ff8c00"
@@ -147,7 +153,7 @@ export default function HomePage() {
             padding: "0.75rem 1.5rem",
             border: "2px solid #E1306C",
             borderRadius: "8px",
-            fontFamily: "Orbitron, sans-serif",
+            fontFamily: "var(--font-orbitron), sans-serif",
             color: isHoveredBtn2 ? "white" : "#E1306C",
             backgroundColor: isHoveredBtn2
               ? "#E1306C"
@@ -170,11 +176,12 @@ export default function HomePage() {
       <section className={styles.grid}>
         {products.products.map((p, index) => (
           <motion.h2
+            key={p.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: shouldAnimate && 10 + index * 1 }}
           >
-            <ProductCard key={p.id} product={p} />
+            <ProductCard product={p} />
           </motion.h2>
         ))}
         <motion.h2
@@ -188,13 +195,14 @@ export default function HomePage() {
               href="https://www.google.com/maps?q=Under the Sea Gallery, 833 b, 725 Embarcadero, Morro Bay, CA 93442"
               target="_blank"
               rel="noopener noreferrer"
+              className="store-maps-link"
+              aria-label="Directions to Under The Sea Gallery, Morro Bay"
             >
-              <video
-                src="/videos/underthesea.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
+              <InViewVideo
+                src="/videos/underthesea-web.mp4"
+                poster="/images/underthesea-poster.webp"
+                width={540}
+                height={960}
                 style={{
                   width: "100%",
                   maxWidth: "400px",
@@ -203,27 +211,28 @@ export default function HomePage() {
                   display: "block",
                 }}
               />
-              <p className="store-caption">
-                <b>
-                  Premium Pelican In Clouds
-                  <br />
-                  Morro Bay Edition
-                </b>
-                <br />
-                <br />
-                Now available at{" "}
-                <strong>Harborwalk Convenience / Under The Sea Gallery</strong>
-                <br />
-                in Morro Bay, California – tap for directions&nbsp;
-                <a
-                  href="https://undertheseagallery.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  or here specifically to go to their website
-                </a>
-              </p>
             </a>
+            <p className="store-caption">
+              <b>
+                Premium Pelican In Clouds
+                <br />
+                Morro Bay Edition
+              </b>
+              <br />
+              <br />
+              Now available at{" "}
+              <strong>Harborwalk Convenience / Under The Sea Gallery</strong>
+              <br />
+              in Morro Bay, California – tap for directions&nbsp;
+              <a
+                href="https://undertheseagallery.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="store-site-link"
+              >
+                or here specifically to go to their website
+              </a>
+            </p>
           </div>
         </motion.h2>
       </section>

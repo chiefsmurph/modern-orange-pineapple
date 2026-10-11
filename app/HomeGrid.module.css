@@ -14,5 +14,5 @@
 main.main {
   padding: 3rem;
   text-align: center;
-  font-family: Orbitron, sans-serif;
+  font-family: var(--font-orbitron), sans-serif;
 }

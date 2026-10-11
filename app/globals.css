@@ -1,11 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
-
 html, body {
   height: 100%;
 }
 body {
   position: relative;
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-orbitron), sans-serif;
   font-size: 130%;
   background: white;
   color: #000;
@@ -21,16 +19,31 @@ hr {
   border: 2px dashed rgba(255,255,255, 0.2);
 }
 
-.underwaterVideo {
+/* Fixed backdrop: a still from the old background video, pre-blended at the
+   video's 40% opacity over white, so it looks the same but costs ~10 KB and
+   never repaints. Sized to the large viewport (lvh) so mobile toolbars
+   showing/hiding don't resize it mid-scroll. The gradient (sampled from the
+   image) shows while the image loads. */
+.site-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover;
+  height: 100lvh;
   z-index: -2;
-  opacity: 0.4;
   pointer-events: none;
+  background-color: #bddae4;
+  background-image: url("/images/bg/sea-light.webp"),
+    linear-gradient(to bottom, #d5eaf0, #bddae4 35%, #a9c8d2);
+  background-image: image-set(
+      url("/images/bg/sea-light.avif") type("image/avif"),
+      url("/images/bg/sea-light.webp") type("image/webp")
+    ),
+    linear-gradient(to bottom, #d5eaf0, #bddae4 35%, #a9c8d2);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .overlay {
   position: fixed;
@@ -90,6 +103,7 @@ hr {
 
 
 .featured-store {
+  position: relative;
   text-align: center;
   padding: 2rem;
   background: rgba(100, 200, 2, 0.5)
@@ -98,9 +112,23 @@ hr {
 .featured-store > a {
   text-decoration: none;
   color: inherit;
-  a:visited {
-    color: blue;
-  }
+}
+
+/* The whole card opens directions (the maps link stretches over it); the
+   website link inside the caption sits above that layer. */
+.store-maps-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.store-site-link {
+  position: relative;
+  z-index: 1;
+}
+
+.store-site-link:visited {
+  color: blue;
 }
 
 .store-img {

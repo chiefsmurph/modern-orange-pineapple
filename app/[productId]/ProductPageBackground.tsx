@@ -1,4 +1,5 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import styles from "./ProductClientView.module.css";
 export default function ProductPageBackground({
   side,
@@ -14,8 +15,18 @@ export default function ProductPageBackground({
     return () => clearTimeout(timeout);
   }, []);
 
+  // Products with a single photo have no second ghost.
+  if (!src) return null;
+
+  // Decorative, desktop-only (display:none under 768px). Lazy, so phones never
+  // download it; served at half the viewport width instead of the full PNG.
   return (
-    <img
+    <Image
+      alt=""
+      aria-hidden="true"
+      width={900}
+      height={900}
+      sizes="50vw"
       className={
         styles["product-page-background"] +
         " " +

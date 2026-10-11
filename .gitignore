@@ -13,12 +13,24 @@ yarn-error.log*
 .DS_Store
 
 # dotenv environment files
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
 
-/public/videos
+# Raw/original videos stay out of git; only the small web encodes (*-web.mp4) ship.
+/public/videos/*
+!/public/videos/*-web.mp4
+
+# Redeem codes live outside the code tree (MOP_DATA_DIR; ./data locally). Never commit them:
+# a deploy must not be able to overwrite the server's list.
+/data/
+/db.json
+
+# Stripe webhook order log (written at runtime)
+/stripe_orders.json
+
 # Holds a LIVE Stripe secret key (sk_live_) in plaintext on the box — never commit.
 ecosystem.config.js
