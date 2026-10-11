@@ -41,7 +41,7 @@ const products: { products: Product[] } = {
       options: {
         size: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
       },
-      price: 17,
+      price: 28.48,
       vendor: {
         platform: "yoycol",
         productId: "ID LRVV1",
@@ -77,7 +77,7 @@ const products: { products: Product[] } = {
       options: {
         size: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
       },
-      price: 45,
+      price: 51.01,
       vendor: {
         platform: "printful",
         productTemplate: "73677360",
@@ -120,7 +120,7 @@ const products: { products: Product[] } = {
         size: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         color: ["Yellow", "Light Blue", "White"],
       },
-      price: 11.5,
+      price: 22.31,
       vendor: {
         platform: "printful",
         productTemplate: "85446338",
@@ -147,6 +147,7 @@ const products: { products: Product[] } = {
         cost: 469,
         estDelivery: "7-10",
       },
+      freeShippingMode: true,
     },
     {
       id: "blue-sky-cotton-shorts",
@@ -156,7 +157,7 @@ const products: { products: Product[] } = {
       options: {
         size: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
       },
-      price: 17,
+      price: 25.47,
       vendor: {
         platform: "yoycol",
         productId: "ID LRWGN",

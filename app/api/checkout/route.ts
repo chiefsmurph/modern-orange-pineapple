@@ -49,7 +49,11 @@ export async function POST(req: NextRequest) {
               ...options,
             },
           },
-          unit_amount: Math.round(Number(getTotalPrice(product) * 100)),
+          // getTotalPrice = price + shipping. With free shipping the item carries the whole total; otherwise the item is
+          // the price alone and shipping is charged once, below (it used to be in both — charged twice; 2026-10-11).
+          unit_amount: Math.round(
+            Number((product.freeShippingMode ? getTotalPrice(product) : product.price) * 100)
+          ),
         },
         quantity: 1,
       },
