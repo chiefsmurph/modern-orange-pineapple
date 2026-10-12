@@ -46,6 +46,17 @@ main.main {
   border-radius: 8px;
 }
 
+/* One quiet line above the grid, in the tagline's type without its pill. */
+.materialNote {
+  margin: 0 0 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
 /* ---- products ---- */
 .grid {
   display: grid;
@@ -135,6 +146,11 @@ main.main {
   .tagline {
     margin-top: 0.5rem;
     padding: 0.3rem 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .materialNote {
+    margin-bottom: 0.75rem;
     font-size: 0.72rem;
   }
 

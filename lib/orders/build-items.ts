@@ -60,12 +60,20 @@ export function buildItem(
   productId: string,
   rawOptions: Record<string, unknown>,
   qty = 1,
-  env: Record<string, string | undefined> = process.env
+  env: Record<string, string | undefined> = process.env,
+  /**
+   * inFlight: the item comes from a checkout started before a legacy product was
+   * superseded by a catalog product (webhook line-item fallback), so map it the
+   * old way. New checkouts always get the catalog product.
+   */
+  { inFlight = false }: { inFlight?: boolean } = {}
 ): PricedItem {
   if (!Number.isInteger(qty) || qty < 1 || qty > 20) throw new CheckoutError("invalid quantity");
 
   // The older hand-written products (public/products.ts).
-  const legacy = legacyProducts.products.find((p) => p.id === productId);
+  const legacy = legacyProducts.products.find(
+    (p) => p.id === productId && (!p.superseded || inFlight || !getShopProduct(productId))
+  );
   if (legacy) {
     const opts: Record<string, string> = {};
     for (const [name, values] of Object.entries(legacy.options)) {

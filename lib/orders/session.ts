@@ -84,7 +84,8 @@ export function itemsFromLineItems(
     const qty = li.quantity ?? 1;
     const { productId, qty: _q, supplier: _s, sync_variant_id: _sv, yoycol_design_code: _dc, yoycol_sku_code: _sku, ...opts } = md;
     try {
-      const { item } = buildItem(productId ?? "", opts, qty, env);
+      // These sessions predate our metadata, so they were priced the old way.
+      const { item } = buildItem(productId ?? "", opts, qty, env, { inFlight: true });
       if (li.price?.unit_amount != null) item.unitAmount = li.price.unit_amount;
       return item;
     } catch {

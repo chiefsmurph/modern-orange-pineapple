@@ -46,6 +46,12 @@ export type Product = {
    * before it was retired still map to a supplier and royalty.
    */
   retired?: { redirectTo: string };
+  /**
+   * Replaced by the generated catalog product with the SAME id (lib/catalog):
+   * that one gets the page, the card and new checkouts. This entry is kept only
+   * so checkouts started before the switch still map to their old supplier.
+   */
+  superseded?: true;
   /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
   design?: ProductDesign;
 };
@@ -177,6 +183,8 @@ const products: { products: Product[] } = {
       },
       freeShippingMode: true,
       fabricNote: "Not cotton: 78% polyester",
+      // Now a real Printful sync product in catalog.json (480725889), same URL and $55 (2026-10-12).
+      superseded: true,
     },
     {
       id: "pelican-beanie-t-shirt",

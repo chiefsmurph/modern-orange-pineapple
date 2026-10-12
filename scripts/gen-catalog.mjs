@@ -9,14 +9,22 @@
 //   lib/catalog/products.generated.ts    options, prices, images, credits (pages + checkout)
 //   lib/catalog/fulfilment.generated.ts  Printful sync variant ids + royalty rules (server only)
 // and copies every image the catalog references (paths relative to catalog.json)
-// into public/images/catalog/<slug>/, replacing that folder.
+// into public/images/catalog/<slug>/, replacing that folder. File names carry a
+// short content hash (model.1a2b3c4d.webp), so refreshed mockups (e.g. a new
+// colour grade) get new URLs and no cache keeps serving the old ones.
+// Extra files it makes:
+//   *-checkout.jpg  a small JPEG of each photo set's first photo, for Stripe Checkout;
+//   *-card.webp     the home-grid card, cropped to head-to-hips when the hero is a
+//                   full-body shot (scripts/card-crop.mjs).
 //
 // Costs (cost_item, cost_ship_*) are NOT copied: the repo is public.
 // Flags: --dry-run (validate + report, write nothing).
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import sharp from "sharp"; // ships with next (next/image uses it)
+import { cardCrop, writeCard } from "./card-crop.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = path.join(ROOT, "lib/catalog");
@@ -44,10 +52,16 @@ const sortNames = (names) => [...names].sort((a, b) => orderIndex(a) - orderInde
 const eq = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
 const nonEmpty = (o) => !!o && typeof o === "object" && Object.keys(o).length > 0;
 
-// Legacy product ids (public/products.ts) can't be reused as slugs.
-const legacyIds = [
-  ...fs.readFileSync(path.join(ROOT, "public/products.ts"), "utf8").matchAll(/^\s*id:\s*"([^"]+)"/gm),
-].map((m) => m[1]);
+// Legacy product ids (public/products.ts) can't be reused as slugs, except by
+// the catalog product that superseded one (`superseded: true` there).
+// (Imports the TypeScript file directly: needs Node >= 22.18.)
+const legacy = (await import(pathToFileURL(path.join(ROOT, "public/products.ts")).href)).default.products;
+const legacyIds = legacy.filter((p) => !p.superseded).map((p) => p.id);
+for (const p of legacy.filter((q) => q.superseded))
+  if (!(catalog.products ?? []).some((c) => c.slug === p.id))
+    warnings.push(`legacy ${p.id} is marked superseded but catalog.json has no product with that slug`);
+
+const hash8 = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex").slice(0, 8);
 
 const products = [];
 const fulfilment = {};
@@ -130,7 +144,7 @@ for (const p of catalog.products ?? []) {
     if (typeof val === "string") files = [val];
     else if (Array.isArray(val)) files = val;
     else {
-      const order = ["model", "flat"];
+      const order = ["model", "model2", "flat"];
       files = [...order.filter((k) => val[k]).map((k) => val[k]),
                ...Object.entries(val).filter(([k]) => !order.includes(k)).map(([, f]) => f)];
     }
@@ -141,10 +155,13 @@ for (const p of catalog.products ?? []) {
       if (!fs.existsSync(from)) { fail(`${where}: image missing: ${rel}`); continue; }
       const size = fs.statSync(from).size;
       if (size > 700 * 1024) warnings.push(`${where}: ${rel} is ${Math.round(size / 1024)} KB`);
-      // Keep the path under images/<slug>/, made URL-safe.
+      // Keep the path under images/<slug>/, made URL-safe, plus a content hash.
       const prefix = `images/${p.slug}/`;
       const sub = rel.startsWith(prefix) ? rel.slice(prefix.length) : path.basename(rel);
-      const safe = sub.toLowerCase().replace(/[^a-z0-9._/-]+/g, "-");
+      const ext = path.extname(sub);
+      const safe = `${sub.slice(0, sub.length - ext.length)}.${hash8(from)}${ext}`
+        .toLowerCase()
+        .replace(/[^a-z0-9._/-]+/g, "-");
       if (usedNames.has(safe) && usedNames.get(safe) !== from) fail(`${where}: two images map to ${safe}`);
       if (!usedNames.has(safe)) imageCopies.push({ from, to: path.join(PUBLIC_DIR, p.slug, safe) });
       usedNames.set(safe, from);
@@ -157,9 +174,29 @@ for (const p of catalog.products ?? []) {
         checkout = `/images/catalog/${p.slug}/${jpg}`;
       }
     }
-    if (srcs.length) images.push({ when, images: srcs, checkout });
+    if (srcs.length) images.push({ when, images: srcs, checkout, firstFrom: files.filter(Boolean)[0] });
   }
   if (images.length === 0) fail(`${where}: no images`);
+
+  // Home-grid card: the first photo of what the page shows by default (first
+  // value of every picker), cropped to head-to-hips if it's a full-body shot.
+  let card;
+  const defaults = Object.fromEntries(visual.map((n) => [n, options[n][0]]));
+  const scored = images
+    .filter((s) => Object.entries(s.when).every(([k, v]) => v === "*" || eq(v, defaults[k])))
+    .sort((a, b) =>
+      Object.values(b.when).filter((v) => v !== "*").length - Object.values(a.when).filter((v) => v !== "*").length);
+  const hero = (scored[0] ?? images[0])?.firstFrom;
+  if (hero) {
+    const from = path.resolve(CATALOG_DIR, hero);
+    const crop = fs.existsSync(from) ? await cardCrop(from) : null;
+    if (crop) {
+      const name = `${path.basename(hero, path.extname(hero))}.${hash8(from)}-card.webp`.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
+      imageCopies.push({ from, to: path.join(PUBLIC_DIR, p.slug, name), crop });
+      card = `/images/catalog/${p.slug}/${name}`;
+    }
+  }
+  for (const s of images) delete s.firstFrom;
   // Every colour (and version/style) someone can pick should have its own photos.
   const missing = new Set();
   for (const v of variants) {
@@ -184,7 +221,8 @@ for (const p of catalog.products ?? []) {
   for (const c of credits) {
     for (const [k, v] of Object.entries(c.when ?? {}))
       if (!options[k] || (v !== "*" && !options[k].some((x) => eq(x, v)))) fail(`${where}: credit_when ${k}=${v} matches nothing`);
-    for (const l of c.lines) if (!/ by /.test(l)) warnings.push(`${where}: credit "${l}" isn't "<role> by <name>"`);
+    for (const l of c.lines)
+      if (!/ by /.test(l)) console.log(`note: ${where}: credit "${l}" shows as written, without an avatar`);
   }
 
   // Royalties.
@@ -206,6 +244,7 @@ for (const p of catalog.products ?? []) {
     options,
     variants,
     images,
+    ...(card ? { card } : {}),
     credits,
   });
   fulfilment[p.slug] = { variants: fVariants, royalties };
@@ -237,8 +276,10 @@ const fulfilmentTs =
   `export const catalogFulfilment: Record<string, FulfilmentEntry> = ${JSON.stringify(fulfilment, null, 2)};\n`;
 
 const totalVariants = products.reduce((n, p) => n + p.variants.length, 0);
-console.log(`${products.length} products, ${totalVariants} variants, ${imageCopies.filter((c) => !c.jpeg).length} images (+ ${imageCopies.filter((c) => c.jpeg).length} checkout JPEGs)`);
-for (const p of products) console.log(`  /${p.slug}  pickers: ${Object.keys(p.options).join(", ") || "none"}  variants: ${p.variants.length}`);
+const count = (f) => imageCopies.filter(f).length;
+console.log(`${products.length} products, ${totalVariants} variants, ${count((c) => !c.jpeg && !c.crop)} images (+ ${count((c) => c.jpeg)} checkout JPEGs, ${count((c) => c.crop)} cropped cards)`);
+for (const p of products)
+  console.log(`  /${p.slug}  pickers: ${Object.keys(p.options).join(", ") || "none"}  variants: ${p.variants.length}${p.card ? "  card: cropped" : ""}`);
 if (proposed.length) console.log(`${proposed.length} PROPOSED price(s), e.g. ${proposed.slice(0, 3).join("; ")}`);
 if (dryRun) {
   console.log("dry run: nothing written");
@@ -246,9 +287,11 @@ if (dryRun) {
 }
 
 fs.rmSync(PUBLIC_DIR, { recursive: true, force: true });
-for (const { from, to, jpeg } of imageCopies) {
+for (const { from, to, jpeg, crop } of imageCopies) {
   fs.mkdirSync(path.dirname(to), { recursive: true });
-  if (jpeg) {
+  if (crop) {
+    await writeCard(from, crop, to);
+  } else if (jpeg) {
     await sharp(from)
       .resize({ width: 600, withoutEnlargement: true })
       .flatten({ background: "#ffffff" })

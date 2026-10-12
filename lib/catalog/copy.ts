@@ -24,6 +24,12 @@ const garments: Record<number, Garment> = {
     details:
       "- Embroidered on the left chest\n- Fabric: 100% combed ring-spun cotton piqué\n- Fabric weight: 6.2 oz/yd² (210 g/m²)\n- Classic fit, ribbed collar, 3-button placket\n- Straight hem with side slits",
   },
+  // All-Over Print Skater Dress (US fulfilment)
+  315: {
+    details:
+      "- 78% polyester, 22% elastane\n- Fabric weight: 8.56 oz/yd² (290 g/m²)\n- Smooth, elastic fabric\n- Mid-thigh flared skirt with elastic waistline\n- Overlock seams & cover-stitch hem",
+    fabricNote: "Not cotton: 78% polyester",
+  },
   // Yupoong 6089M
   99: {
     details:
@@ -34,6 +40,11 @@ const garments: Record<number, Garment> = {
 
 /** Intro line per design, matched against the slug (first match wins). */
 const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] = [
+  {
+    match: /dress/,
+    text: () => "Dress to impress with this all-over cloud print skater dress!",
+    rank: 85,
+  },
   {
     match: /crop/,
     text: () => "The pelican on a soft cotton crop top. Pick the Classic, or the one in the Grind Beanie.",

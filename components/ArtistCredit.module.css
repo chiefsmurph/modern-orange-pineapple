@@ -15,6 +15,11 @@
   color: #1d2a33;
 }
 
+/* No avatar (e.g. a CC0 photo source): even padding. */
+.textOnly {
+  padding-left: 0.9rem;
+}
+
 .avatars {
   display: flex;
   flex-shrink: 0;

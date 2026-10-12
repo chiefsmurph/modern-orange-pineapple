@@ -184,8 +184,11 @@ systemctl list-timers mopclothing-royalties.timer
 ### Product data
 
 The Printful line-up is generated from the Printful agent's `catalog.json`:
-`node scripts/gen-catalog.mjs /path/to/catalog.json` rewrites
+`npm run catalog -- /path/to/catalog.json` (Node >= 22.18) rewrites
 `lib/catalog/{products,fulfilment}.generated.ts` and `public/images/catalog/`. Commit the
-result. Descriptions, option labels and fabric notes live in `lib/catalog/copy.ts`.
+result. Image names carry a content hash, so refreshed mockups (e.g. the skater dress's
+new colour grade) get new URLs on the next run and no cache serves the old ones. Full-body
+hero shots get a head-to-hips crop for the home-grid card (`scripts/card-crop.mjs`).
+Descriptions, option labels and fabric notes live in `lib/catalog/copy.ts`.
 `npm test` checks the generated data (every variant has a Printful sync variant, credits and
 royalties follow the spec) and the order code.

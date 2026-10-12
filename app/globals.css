@@ -7,6 +7,9 @@
    top of the z-index:-2 backdrop and hide it. */
 :root {
   --page-bg: #8eb1be;
+  /* Behind every product photo (cards and galleries): close to the light grey of
+     Printful's studio shots, so cut-outs and photos read as one set. */
+  --photo-tile: #ecedee;
 }
 html,
 body {

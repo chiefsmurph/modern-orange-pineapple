@@ -115,7 +115,7 @@ test("generated catalog: every variant has a sync id, images and valid credits",
       assert.ok(v.price > 0);
     }
     assert.ok(p.images.length > 0 && p.images.every((s) => s.images.length > 0), `${p.slug}: images`);
-    for (const c of p.credits) for (const l of c.lines) assert.match(l, / by /);
+    for (const c of p.credits) for (const l of c.lines) assert.ok(l.trim().length > 0);
   }
 });
 

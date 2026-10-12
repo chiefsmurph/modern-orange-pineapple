@@ -42,7 +42,8 @@ export default function CatalogProductView({
   useEffect(() => {
     const qs = new URLSearchParams();
     for (const n of names) if (sel[n]) qs.set(n, sel[n]!);
-    const url = `${window.location.pathname}?${qs}`;
+    const query = qs.toString();
+    const url = query ? `${window.location.pathname}?${query}` : window.location.pathname;
     window.history.replaceState(window.history.state, "", url);
   }, [sel, names]);
 

@@ -11,7 +11,10 @@ type ProductPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const findLegacy = (id: string) => products.products.find((p) => p.id === id);
+// Superseded legacy entries are only kept for old checkouts; the catalog product
+// with the same id owns the page.
+const findLegacy = (id: string) =>
+  products.products.find((p) => p.id === id && (!p.superseded || !getShopProduct(id)));
 
 export async function generateMetadata({
   params,

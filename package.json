@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test test/*.test.ts",
-    "catalog": "node scripts/gen-catalog.mjs"
+    "catalog": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-catalog.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.70.0",

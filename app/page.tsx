@@ -43,6 +43,9 @@ export default function HomePage() {
         </p>
       </header>
 
+      <p className={`${styles.materialNote} ${styles.fadeIn}`}>
+        Real cotton — even the all-overs.
+      </p>
       <section
         className={`${styles.grid} ${styles.fadeIn}`}
         aria-label="Products"

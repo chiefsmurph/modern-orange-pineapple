@@ -11,6 +11,7 @@ import { optionTitle, valueLabel } from "../lib/catalog/copy.ts";
 import { buildItem, itemSummary } from "../lib/orders/build-items.ts";
 import { itemsFromLineItems } from "../lib/orders/session.ts";
 import { rulesFor } from "../lib/orders/royalties.ts";
+import { creditText, designFromCreditLines } from "../lib/artists.ts";
 
 test("the old $27 pelican is off the home grid but still in the product data", () => {
   const hrefs = shopCards().map((c) => c.href);
@@ -58,4 +59,29 @@ test('"Print: Big / Small" is a label only: the option keys stay large/small', (
     assert.match(itemSummary(item), /^Big · Grind Beanie/);
     assert.deepEqual(p.options.version, ["large", "small"]);
   }
+});
+
+test("the skater dress is the Printful catalog product now; the legacy one only maps old checkouts", { skip: !getShopProduct("clouds-skater-dress") }, () => {
+  const cards = shopCards().filter((c) => c.href === "/clouds-skater-dress");
+  assert.equal(cards.length, 1);
+  assert.equal(cards[0].price, "$55");
+  const { item } = buildItem("clouds-skater-dress", { size: "M" }, 1, {});
+  assert.equal(item.supplier, "printful");
+  assert.equal(item.unitAmount, 5500);
+  assert.ok(item.printful?.syncVariantId);
+  // a checkout started on the old page (no mop_* metadata) still maps the old way
+  const [old] = itemsFromLineItems(
+    [{ quantity: 1, price: { unit_amount: 5500, product: { name: "All-Over Clouds Skater Dress", metadata: { productId: "clouds-skater-dress", size: "M" } } } }],
+    {}
+  );
+  assert.equal(old.supplier, "manual");
+  assert.match(old.manual ?? "", /73677360/);
+  assert.ok(legacy.products.some((p) => p.id === "clouds-skater-dress" && p.superseded));
+});
+
+test("a plain credit line (CC0 photo) shows as written, with no avatar", () => {
+  const d = designFromCreditLines(["Sky photo: John Robert McPherson (CC0, Wikimedia Commons)"])!;
+  assert.deepEqual(d.credits, []);
+  assert.deepEqual(d.notes, ["Sky photo: John Robert McPherson (CC0, Wikimedia Commons)"]);
+  assert.equal(creditText(d), "Sky photo: John Robert McPherson (CC0, Wikimedia Commons)");
 });

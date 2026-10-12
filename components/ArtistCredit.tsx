@@ -22,7 +22,8 @@ export default function ArtistCredit({
   className?: string;
 }) {
   const design = getDesign(designOrId);
-  if (!design || design.credits.length === 0) return null;
+  const notes = design?.notes ?? [];
+  if (!design || (design.credits.length === 0 && notes.length === 0)) return null;
 
   const people = creditedArtists(design);
   const line = people.find((a) => a.line)?.line;
@@ -32,7 +33,9 @@ export default function ArtistCredit({
 
   return (
     <aside
-      className={[styles.credit, className].filter(Boolean).join(" ")}
+      className={[styles.credit, people.length === 0 && styles.textOnly, className]
+        .filter(Boolean)
+        .join(" ")}
       aria-label="Artist credit"
     >
       {people.length > 0 && (
@@ -62,6 +65,12 @@ export default function ArtistCredit({
               {i > 0 && <span className={styles.sep}> · </span>}
               {role && `${role} by `}
               <b className={styles.name}>{getArtist(artist).name}</b>
+            </span>
+          ))}
+          {notes.map((note, i) => (
+            <span key={note}>
+              {(i > 0 || design.credits.length > 0) && <span className={styles.sep}> · </span>}
+              {note}
             </span>
           ))}
         </p>

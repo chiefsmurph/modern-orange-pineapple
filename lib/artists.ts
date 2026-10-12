@@ -49,6 +49,8 @@ export type Design = {
   title: string;
   /** In display order. Empty = no credit line. */
   credits: Credit[];
+  /** Plain credit lines shown as written, with no avatar, e.g. a CC0 photo source. */
+  notes?: string[];
 };
 
 export const designs = {
@@ -89,8 +91,10 @@ export const getDesign = (
 
 /**
  * A design from free-text credit lines (the Printful catalog's `credit`), e.g.
- * ["Beanie by Janette Garcia"]. Names in the registry get their avatar and
- * links; anyone else is credited by name with initials.
+ * ["Beanie by Janette Garcia"]. "<role> by <name>" lines become credits: names
+ * in the registry get their avatar and links, anyone else their initials. Any
+ * other line (e.g. "Sky photo: John Robert McPherson (CC0, Wikimedia Commons)")
+ * is shown exactly as written, with no avatar.
  */
 export const designFromCreditLines = (lines: string[]): Design | undefined => {
   if (lines.length === 0) return undefined;
@@ -100,21 +104,28 @@ export const designFromCreditLines = (lines: string[]): Design | undefined => {
       id,
     ])
   );
-  const credits = lines.map((line): Credit => {
+  const credits: Credit[] = [];
+  const notes: string[] = [];
+  for (const line of lines) {
     const m = /^(.*?)\s+by\s+(.+)$/i.exec(line.trim());
-    const [role, name] = m ? [m[1], m[2].trim()] : ["", line.trim()];
-    return { role, artist: byName.get(name.toLowerCase()) ?? name };
-  });
-  return { title: "", credits };
+    if (!m) {
+      notes.push(line.trim());
+      continue;
+    }
+    const name = m[2].trim();
+    credits.push({ role: m[1], artist: byName.get(name.toLowerCase()) ?? name });
+  }
+  return { title: "", credits, ...(notes.length ? { notes } : {}) };
 };
 
 /** "Original drawing by Austin Maxwell · Colour & design by MOP" */
 export const creditText = (design: Design) =>
-  design.credits
-    .map(({ artist, role }) =>
+  [
+    ...design.credits.map(({ artist, role }) =>
       role ? `${role} by ${getArtist(artist).name}` : getArtist(artist).name
-    )
-    .join(" · ");
+    ),
+    ...(design.notes ?? []),
+  ].join(" · ");
 
 /** The people to show avatars (and links) for: every credited non-house artist, once. */
 export const creditedArtists = (design: Design): Artist[] => {

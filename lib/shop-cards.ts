@@ -33,7 +33,7 @@ export const legacyCard = (product: Product): ShopCard => ({
 export const catalogCard = (product: ShopProduct): ShopCard => ({
   href: `/${product.slug}`,
   title: product.title,
-  image: imagesFor(product, normalizeSelection(product))[0],
+  image: product.card ?? imagesFor(product, normalizeSelection(product))[0],
   price: priceLabel(product),
   // The catalog prices include US shipping.
   freeShipping: true,
@@ -43,5 +43,7 @@ export const catalogCard = (product: ShopProduct): ShopCard => ({
 
 export const shopCards = (): ShopCard[] => [
   ...shopProducts.map(catalogCard),
-  ...legacy.products.filter((p) => !p.retired).map(legacyCard),
+  ...legacy.products
+    .filter((p) => !p.retired && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
+    .map(legacyCard),
 ];

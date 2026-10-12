@@ -50,6 +50,8 @@ export type CatalogProduct = {
   options: Record<string, string[]>;
   variants: CatalogVariant[];
   images: CatalogImageSet[];
+  /** Home-grid card image, when the hero needed cropping (a full-body shot); else the hero itself is used. */
+  card?: string;
   credits: CatalogCredit[];
 };
 
