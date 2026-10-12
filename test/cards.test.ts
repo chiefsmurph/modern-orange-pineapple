@@ -44,12 +44,15 @@ test("generated images: content-hashed names, model shots before the flat, cards
         assert.match(src, /\.[0-9a-f]{8}\.(webp|png|jpe?g)$/, src);
         assert.ok(existsSync(path.join("public", src)), `missing ${src}`);
       }
-      // model, then model2, then flat, then extras (detail, back...): the hero is a
-      // model shot and the flat comes after the model shots.
+      // model, then model2, then flat, then extras (detail, back...). The hero is a model
+      // shot, or the flat itself when Printful has no second model (the all-over line:
+      // one model, so some heroes are flat shots); either way no image repeats.
       const stems = set.images.map((src) => path.basename(src).replace(/\.[0-9a-f]{8}\.\w+$/, ""));
-      assert.match(stems[0], /model/, `${p.slug}: hero ${stems[0]}`);
+      assert.equal(new Set(set.images).size, set.images.length, `${p.slug}: repeated image`);
+      const flatHero = /(^|-)flat$/.test(stems[0]);
+      assert.ok(/model/.test(stems[0]) || (flatHero && p.group === "allover"), `${p.slug}: hero ${stems[0]}`);
       const flat = stems.findIndex((s) => /(^|-)flat$/.test(s));
-      if (flat >= 0) assert.ok(stems.slice(0, flat).every((s) => /model/.test(s)), `${p.slug}: ${stems.join(", ")}`);
+      if (flat > 0) assert.ok(stems.slice(0, flat).every((s) => /model/.test(s)), `${p.slug}: ${stems.join(", ")}`);
     }
     if (p.card) {
       assert.match(p.card, /-card\.webp$/);

@@ -150,6 +150,8 @@ for (const p of catalog.products ?? []) {
       files = [...order.filter((k) => val[k]).map((k) => val[k]),
                ...Object.entries(val).filter(([k]) => !order.includes(k)).map(([, f]) => f)];
     }
+    // A flat-shot hero is the same file as `flat`: show it once.
+    files = [...new Set(files)];
     const srcs = [];
     let checkout;
     let swatch;
