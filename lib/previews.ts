@@ -114,10 +114,10 @@ export const previews: Preview[] = [
     line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cMorro Bay, CA\u201d on the front.",
     gallery: [
       img(MORRO, "set", 1400, 650, "The Morro Rock shirt and the sea otter shirt side by side", "The pair", true),
-      img(MORRO, "morro-rock-front", 1000, 917, "All-over tee with Morro Rock at sunrise and Morro Bay, CA script", "Morro Rock \u00b7 front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
-      img(MORRO, "morro-rock-back", 1000, 917, "Back of the Morro Rock tee: sky fading to sand", "Morro Rock \u00b7 back"),
-      img(MORRO, "otter-front", 1000, 917, "All-over tee with a sea otter floating on its back and Morro Bay, CA script", "Sea Otter \u00b7 front"),
-      img(MORRO, "otter-back", 1000, 917, "Back of the sea otter tee: soft water fade", "Sea Otter \u00b7 back"),
+      img(MORRO, "morro-rock-front", 1000, 941, "All-over tee with Morro Rock at sunrise and Morro Bay, CA script", "Morro Rock \u00b7 front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
+      img(MORRO, "morro-rock-back", 1000, 941, "Back of the Morro Rock tee with a round sea otter badge", "Morro Rock \u00b7 back (otter badge)"),
+      img(MORRO, "otter-front", 1000, 941, "All-over tee with a sea otter floating on its back and Morro Bay, CA script", "Sea Otter \u00b7 front"),
+      img(MORRO, "otter-back", 1000, 941, "Back of the sea otter tee with a round Morro Rock badge", "Sea Otter \u00b7 back (Morro Rock badge)"),
     ],
   },
 ];
