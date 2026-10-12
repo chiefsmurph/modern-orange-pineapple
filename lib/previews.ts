@@ -17,7 +17,8 @@ export type PreviewImage = {
 
 export type Preview = {
   slug: string;
-  design: DesignId;
+  /** The credited design; store previews have none. */
+  design?: DesignId;
   headline: string;
   line: string;
   sketch?: SketchStep[];
@@ -53,6 +54,7 @@ const step = (
 const ALPACA = "alpaca-79015f8f";
 const STAR = "star-95c35cbf";
 const BEANIE = "beanie-ad578892";
+const MORRO = "morro-bay-0b7d6793";
 
 export const previews: Preview[] = [
   {
@@ -104,6 +106,18 @@ export const previews: Preview[] = [
       img(BEANIE, "crop-top", 1000, 1000, "White crop top with the beanie pelican, worn", "Crop top"),
       img(BEANIE, "tee-closeup", 560, 560, "Close-up of the pelican in the beanie", "Close-up"),
       img(BEANIE, "tee-flat", 1000, 1000, "Classic tee with the beanie pelican, laid flat", "Classic tee, flat"),
+    ],
+  },
+  {
+    slug: MORRO,
+    headline: "Morro Bay exclusives",
+    line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cMorro Bay, CA\u201d on the front.",
+    gallery: [
+      img(MORRO, "set", 1400, 650, "The Morro Rock shirt and the sea otter shirt side by side", "The pair", true),
+      img(MORRO, "morro-rock-front", 1000, 917, "All-over tee with Morro Rock at sunrise and Morro Bay, CA script", "Morro Rock \u00b7 front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
+      img(MORRO, "morro-rock-back", 1000, 917, "Back of the Morro Rock tee: sky fading to sand", "Morro Rock \u00b7 back"),
+      img(MORRO, "otter-front", 1000, 917, "All-over tee with a sea otter floating on its back and Morro Bay, CA script", "Sea Otter \u00b7 front"),
+      img(MORRO, "otter-back", 1000, 917, "Back of the sea otter tee: soft water fade", "Sea Otter \u00b7 back"),
     ],
   },
 ];
