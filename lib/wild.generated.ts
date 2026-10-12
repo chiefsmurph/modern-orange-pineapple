@@ -14,6 +14,8 @@ export type WildPhoto = {
   height: number;
   /** Home-grid square (500 px). */
   square: string;
+  /** The same square at 240 px (the strip at the top of the home page). */
+  small: string;
 };
 
 export const wildPhotos: WildPhoto[] = [
@@ -25,7 +27,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/01.a24fbcff.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/01-sq.a05e8712.webp"
+    "square": "/images/wild/01-sq.a05e8712.webp",
+    "small": "/images/wild/01-sm.250c4b0b.webp"
   },
   {
     "n": "02",
@@ -35,7 +38,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/02.9e2ca756.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/02-sq.1287dbfc.webp"
+    "square": "/images/wild/02-sq.1287dbfc.webp",
+    "small": "/images/wild/02-sm.ddcbaa50.webp"
   },
   {
     "n": "03",
@@ -45,7 +49,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/03.7d75a8e0.webp",
     "width": 800,
     "height": 1000,
-    "square": "/images/wild/03-sq.58d8f59f.webp"
+    "square": "/images/wild/03-sq.58d8f59f.webp",
+    "small": "/images/wild/03-sm.ca18ad6c.webp"
   },
   {
     "n": "04",
@@ -55,7 +60,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/04.4ce0696c.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/04-sq.b64af959.webp"
+    "square": "/images/wild/04-sq.b64af959.webp",
+    "small": "/images/wild/04-sm.1bd5d6b0.webp"
   },
   {
     "n": "05",
@@ -65,7 +71,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/05.3f44fe65.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/05-sq.f4309eb2.webp"
+    "square": "/images/wild/05-sq.f4309eb2.webp",
+    "small": "/images/wild/05-sm.97ac2cb9.webp"
   },
   {
     "n": "06",
@@ -75,7 +82,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/06.7d7820f0.webp",
     "width": 800,
     "height": 1000,
-    "square": "/images/wild/06-sq.7845cc2b.webp"
+    "square": "/images/wild/06-sq.7845cc2b.webp",
+    "small": "/images/wild/06-sm.02b4a21f.webp"
   },
   {
     "n": "07",
@@ -85,7 +93,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/07.7a979402.webp",
     "width": 1000,
     "height": 667,
-    "square": "/images/wild/07-sq.e526d204.webp"
+    "square": "/images/wild/07-sq.e526d204.webp",
+    "small": "/images/wild/07-sm.db6b856d.webp"
   },
   {
     "n": "08",
@@ -95,7 +104,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/08.fc727e44.webp",
     "width": 819,
     "height": 1000,
-    "square": "/images/wild/08-sq.cce6a9d6.webp"
+    "square": "/images/wild/08-sq.cce6a9d6.webp",
+    "small": "/images/wild/08-sm.e765d6ba.webp"
   },
   {
     "n": "09",
@@ -105,7 +115,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/09.1cef1f91.webp",
     "width": 562,
     "height": 1000,
-    "square": "/images/wild/09-sq.577a01cd.webp"
+    "square": "/images/wild/09-sq.577a01cd.webp",
+    "small": "/images/wild/09-sm.2f8a71a4.webp"
   },
   {
     "n": "10",
@@ -115,7 +126,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/10.6a215296.webp",
     "width": 1000,
     "height": 820,
-    "square": "/images/wild/10-sq.b00ed81d.webp"
+    "square": "/images/wild/10-sq.b00ed81d.webp",
+    "small": "/images/wild/10-sm.23324da3.webp"
   },
   {
     "n": "11",
@@ -125,7 +137,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/11.3cbb479a.webp",
     "width": 800,
     "height": 1000,
-    "square": "/images/wild/11-sq.e9877b87.webp"
+    "square": "/images/wild/11-sq.e9877b87.webp",
+    "small": "/images/wild/11-sm.9656a691.webp"
   },
   {
     "n": "12",
@@ -135,7 +148,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/12.a60d6b77.webp",
     "width": 800,
     "height": 1000,
-    "square": "/images/wild/12-sq.07c8ae46.webp"
+    "square": "/images/wild/12-sq.07c8ae46.webp",
+    "small": "/images/wild/12-sm.3d4d76a2.webp"
   },
   {
     "n": "14",
@@ -145,7 +159,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/14.d108fc13.webp",
     "width": 800,
     "height": 1000,
-    "square": "/images/wild/14-sq.47042962.webp"
+    "square": "/images/wild/14-sq.47042962.webp",
+    "small": "/images/wild/14-sm.6b7d6fe2.webp"
   },
   {
     "n": "15",
@@ -155,7 +170,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/15.41cd4123.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/15-sq.5a4701ce.webp"
+    "square": "/images/wild/15-sq.5a4701ce.webp",
+    "small": "/images/wild/15-sm.728c973c.webp"
   },
   {
     "n": "16",
@@ -165,7 +181,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/16.6511a9c2.webp",
     "width": 929,
     "height": 1000,
-    "square": "/images/wild/16-sq.488408c0.webp"
+    "square": "/images/wild/16-sq.488408c0.webp",
+    "small": "/images/wild/16-sm.c9f755d6.webp"
   },
   {
     "n": "17",
@@ -175,7 +192,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/17.3c39017c.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/17-sq.5c2a2639.webp"
+    "square": "/images/wild/17-sq.5c2a2639.webp",
+    "small": "/images/wild/17-sm.bf508298.webp"
   },
   {
     "n": "18",
@@ -185,7 +203,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/18.af201487.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/18-sq.6259799d.webp"
+    "square": "/images/wild/18-sq.6259799d.webp",
+    "small": "/images/wild/18-sm.15a101e1.webp"
   },
   {
     "n": "19",
@@ -195,7 +214,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/19.60edd065.webp",
     "width": 803,
     "height": 1000,
-    "square": "/images/wild/19-sq.7b9d5dc5.webp"
+    "square": "/images/wild/19-sq.7b9d5dc5.webp",
+    "small": "/images/wild/19-sm.6cbf9ab3.webp"
   },
   {
     "n": "20",
@@ -205,7 +225,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/20.5897b5f0.webp",
     "width": 750,
     "height": 1000,
-    "square": "/images/wild/20-sq.d21b65b5.webp"
+    "square": "/images/wild/20-sq.d21b65b5.webp",
+    "small": "/images/wild/20-sm.70099b7c.webp"
   },
   {
     "n": "21",
@@ -215,7 +236,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/21.98ded3ce.webp",
     "width": 896,
     "height": 1000,
-    "square": "/images/wild/21-sq.8586cc44.webp"
+    "square": "/images/wild/21-sq.8586cc44.webp",
+    "small": "/images/wild/21-sm.fbf49c3b.webp"
   },
   {
     "n": "22",
@@ -225,7 +247,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/22.91b0bb79.webp",
     "width": 794,
     "height": 1000,
-    "square": "/images/wild/22-sq.406b5295.webp"
+    "square": "/images/wild/22-sq.406b5295.webp",
+    "small": "/images/wild/22-sm.e97c6e98.webp"
   },
   {
     "n": "23",
@@ -235,7 +258,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/23.9016e325.webp",
     "width": 667,
     "height": 1000,
-    "square": "/images/wild/23-sq.5be5d8eb.webp"
+    "square": "/images/wild/23-sq.5be5d8eb.webp",
+    "small": "/images/wild/23-sm.27a939a0.webp"
   },
   {
     "n": "24",
@@ -245,7 +269,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/24.55eefbb9.webp",
     "width": 800,
     "height": 1000,
-    "square": "/images/wild/24-sq.ed4172f9.webp"
+    "square": "/images/wild/24-sq.ed4172f9.webp",
+    "small": "/images/wild/24-sm.313e049b.webp"
   },
   {
     "n": "25",
@@ -255,7 +280,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/25.3f26d338.webp",
     "width": 563,
     "height": 1000,
-    "square": "/images/wild/25-sq.6344061a.webp"
+    "square": "/images/wild/25-sq.6344061a.webp",
+    "small": "/images/wild/25-sm.4eebf80f.webp"
   },
   {
     "n": "26",
@@ -265,7 +291,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/26.f5adcc23.webp",
     "width": 579,
     "height": 1000,
-    "square": "/images/wild/26-sq.79d7a67c.webp"
+    "square": "/images/wild/26-sq.79d7a67c.webp",
+    "small": "/images/wild/26-sm.71a190cf.webp"
   },
   {
     "n": "27",
@@ -275,7 +302,8 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/27.d77ecef4.webp",
     "width": 577,
     "height": 1000,
-    "square": "/images/wild/27-sq.8601d169.webp"
+    "square": "/images/wild/27-sq.8601d169.webp",
+    "small": "/images/wild/27-sm.7ac8dca1.webp"
   },
   {
     "n": "28",
@@ -285,6 +313,7 @@ export const wildPhotos: WildPhoto[] = [
     "src": "/images/wild/28.fa08eb0e.webp",
     "width": 794,
     "height": 1000,
-    "square": "/images/wild/28-sq.f034a0f6.webp"
+    "square": "/images/wild/28-sq.f034a0f6.webp",
+    "small": "/images/wild/28-sm.9bf5d088.webp"
   }
 ];

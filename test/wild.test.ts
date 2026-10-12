@@ -5,7 +5,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { wildPhotos } from "../lib/wild.generated.ts";
-import { pickRandom } from "../lib/wild.ts";
+import { pickRandom, splitWild } from "../lib/wild.ts";
 import { getShopProduct } from "../lib/catalog/index.ts";
 
 const config = JSON.parse(readFileSync("scripts/wild/photos.json", "utf8")).photos as { n: string; hidden?: boolean }[];
@@ -16,7 +16,7 @@ test("every photo but the hidden ones is on the site; hidden ones have no files 
   assert.deepEqual(wildPhotos.map((p) => p.n), config.filter((p) => !p.hidden).map((p) => p.n));
   const files = readdirSync("public/images/wild");
   for (const n of hidden) assert.ok(!files.some((f) => f.startsWith(`${n}.`) || f.startsWith(`${n}-`)), `no files for ${n}`);
-  assert.equal(files.length, wildPhotos.length * 2);
+  assert.equal(files.length, wildPhotos.length * 3); // lightbox, grid square, strip square
 });
 
 test("captions link to products that exist; alt text describes the shirt, with no names", () => {
@@ -57,4 +57,21 @@ test("pickRandom: n different photos, a fresh order each time", () => {
   const c = pickRandom(items, 9, rnd);
   assert.notDeepEqual(b, c);
   assert.deepEqual(items, Array.from({ length: 27 }, (_, i) => i)); // the input isn't shuffled in place
+});
+
+test("one shuffle feeds both spots: 5 in the top strip, the next 9 in the grid, none twice", () => {
+  const order = pickRandom(wildPhotos, wildPhotos.length);
+  const { strip, grid } = splitWild(order);
+  assert.equal(strip.length, 5);
+  assert.equal(grid.length, 9);
+  const both = strip.filter((p) => grid.includes(p));
+  assert.deepEqual(both, []);
+  assert.equal(new Set([...strip, ...grid].map((p) => p.n)).size, 14);
+});
+
+test("strip thumbnails are 240×240", async () => {
+  for (const p of wildPhotos) {
+    const m = await sharp(path.join("public", p.small)).metadata();
+    assert.deepEqual([m.width, m.height], [240, 240], p.n);
+  }
 });

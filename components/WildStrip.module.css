@@ -1,0 +1,68 @@
+/* One row of small rounded squares, scrolled sideways on phones (snap, no scrollbar).
+   The height is fixed so the shuffle after hydration can't shift the page. */
+.strip {
+  margin: 0 0 1.25rem;
+}
+
+.label {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
+.row {
+  --tile: 100px;
+  display: flex;
+  gap: 8px;
+  height: var(--tile);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  justify-content: safe center;
+}
+
+.row::-webkit-scrollbar {
+  display: none;
+}
+
+.cell {
+  flex: 0 0 var(--tile);
+  scroll-snap-align: start;
+}
+
+.tile {
+  display: block;
+  width: var(--tile);
+  height: var(--tile);
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: var(--photo-tile);
+  box-shadow: 0 1px 4px rgba(0, 30, 60, 0.18);
+  cursor: zoom-in;
+}
+
+.tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 769px) {
+  .row {
+    --tile: 110px;
+  }
+}

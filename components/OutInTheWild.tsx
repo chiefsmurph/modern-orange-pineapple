@@ -1,22 +1,27 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { wildPhotos, type WildPhoto } from "@/lib/wild.generated";
-import { pickRandom } from "@/lib/wild";
-import WildLightbox from "./WildLightbox";
+import type { WildPhoto } from "@/lib/wild.generated";
+import { GRID_COUNT } from "@/lib/wild";
 import styles from "./OutInTheWild.module.css";
 
-const GRID = 9;
-
-// "Out in the wild": 9 random photos of people wearing MOP (3×3 squares), and
-// "See all" opens a swipeable lightbox of every photo. Nothing loads until the
-// section scrolls near the screen, and the random pick happens in the browser
-// after hydration, so the page's HTML stays the same for everyone (cacheable,
-// no hydration mismatch). Not for sale here: captions link to the product pages.
-export default function OutInTheWild({ photos = wildPhotos }: { photos?: WildPhoto[] }) {
+// "Out in the wild" near the bottom of the home page: 9 photos (3×3 squares) and
+// "See all". The page decides which 9 (one shuffle per visit, shared with the
+// strip at the top: lib/wild.ts splitWild) and owns the lightbox. Nothing loads
+// until the section scrolls near the screen. Not for sale here: the lightbox
+// captions link to the product pages.
+export default function OutInTheWild({
+  photos,
+  total,
+  onOpen,
+}: {
+  /** The 9 to show, or null before the visit's shuffle (placeholders keep the size). */
+  photos: WildPhoto[] | null;
+  total: number;
+  /** Open the lightbox at this photo (null = from the first). */
+  onOpen: (photo: WildPhoto | null) => void;
+}) {
   const section = useRef<HTMLElement>(null);
   const [near, setNear] = useState(false);
-  const [shown, setShown] = useState<WildPhoto[] | null>(null);
-  const [open, setOpen] = useState<number | null>(null);
 
   // Load only when the section is within ~1.5 screens.
   useEffect(() => {
@@ -39,11 +44,7 @@ export default function OutInTheWild({ photos = wildPhotos }: { photos?: WildPho
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => {
-    setShown(pickRandom(photos, GRID));
-  }, [photos]);
-
-  if (photos.length === 0) return null;
+  if (total === 0) return null;
 
   return (
     <section ref={section} className={styles.wild} aria-labelledby="out-in-the-wild">
@@ -52,15 +53,15 @@ export default function OutInTheWild({ photos = wildPhotos }: { photos?: WildPho
       </h2>
       <p className={styles.sub}>Real people, real shirts.</p>
       <ul className={styles.grid}>
-        {Array.from({ length: Math.min(GRID, photos.length) }, (_, i) => {
-          const p = near && shown ? shown[i] : undefined;
+        {Array.from({ length: Math.min(GRID_COUNT, total) }, (_, i) => {
+          const p = near && photos ? photos[i] : undefined;
           return (
             <li key={p?.n ?? `slot-${i}`} className={styles.cell}>
               {p ? (
                 <button
                   type="button"
                   className={styles.tile}
-                  onClick={() => setOpen(photos.indexOf(p))}
+                  onClick={() => onOpen(p)}
                   aria-label={`${p.alt}: open the photo`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -73,10 +74,9 @@ export default function OutInTheWild({ photos = wildPhotos }: { photos?: WildPho
           );
         })}
       </ul>
-      <button type="button" className={styles.seeAll} onClick={() => setOpen(0)}>
-        See all {photos.length} photos
+      <button type="button" className={styles.seeAll} onClick={() => onOpen(null)}>
+        See all {total} photos
       </button>
-      {open !== null && <WildLightbox photos={photos} start={open} onClose={() => setOpen(null)} />}
     </section>
   );
 }

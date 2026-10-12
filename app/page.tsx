@@ -7,6 +7,10 @@ import styles from "./HomeGrid.module.css";
 import "./styles.css";
 import ProductCard from "@/components/ProductCard";
 import OutInTheWild from "@/components/OutInTheWild";
+import WildStrip from "@/components/WildStrip";
+import WildLightbox from "@/components/WildLightbox";
+import { wildPhotos, type WildPhoto } from "@/lib/wild.generated";
+import { pickRandom, splitWild } from "@/lib/wild";
 import InViewVideo from "@/components/InViewVideo";
 import { useEffect, useRef, useState } from "react";
 import { takeHomeRestore } from "@/lib/home-scroll";
@@ -19,6 +23,16 @@ export default function HomePage() {
   const [isCouponHovered, setIsCouponHovered] = useState(false);
   const [isHoveredBtn2, setIsHoveredBtn2] = useState(false);
   const glowRef = useRef<HTMLHeadingElement>(null);
+
+  // "Out in the wild": one shuffle per visit, after hydration (the HTML stays
+  // the same for everyone), shared by the strip at the top (first 5) and the
+  // grid at the bottom (next 9). One lightbox for both, over all the photos.
+  const [wild, setWild] = useState<{ strip: WildPhoto[]; grid: WildPhoto[] } | null>(null);
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  useEffect(() => {
+    setWild(splitWild(pickRandom(wildPhotos, wildPhotos.length)));
+  }, []);
+  const openWild = (p: WildPhoto | null) => setLightbox(p ? Math.max(0, wildPhotos.indexOf(p)) : 0);
 
   // Back from a product page via "← Home": return to the same place in the grid
   // (lib/home-scroll.ts). Applied now and again once late layout has settled,
@@ -68,6 +82,7 @@ export default function HomePage() {
       <p className={`${styles.materialNote} ${styles.fadeIn}`}>
         Real cotton — even the all-overs.
       </p>
+      {wildPhotos.length > 0 && <WildStrip photos={wild?.strip ?? null} onOpen={openWild} />}
       {/* Catalog groups (e.g. Premium all-over) get their own section above the main grid. */}
       {Object.entries(groupSections).map(([group, { title, line }]) => {
         const cards = shopCards().filter((c) => c.group === group);
@@ -154,7 +169,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <OutInTheWild />
+      <OutInTheWild photos={wild?.grid ?? null} total={wildPhotos.length} onOpen={openWild} />
+      {lightbox !== null && (
+        <WildLightbox photos={wildPhotos} start={lightbox} onClose={() => setLightbox(null)} />
+      )}
 
       <nav className={`button-container ${styles.links}`} aria-label="More">
         <Link
