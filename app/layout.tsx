@@ -43,6 +43,13 @@ export default function RootLayout({
         {/* self-visit opt-out: ?nostats to disable Umami on THIS browser; ?nostats=off to re-enable */}
         <script dangerouslySetInnerHTML={{ __html: "(function(){var m=/[?&]nostats(=([^&#]*))?/i.exec(location.search);if(!m)return;var off=(m[2]||\"\").toLowerCase()===\"off\";try{off?localStorage.removeItem(\"umami.disabled\"):localStorage.setItem(\"umami.disabled\",\"1\");}catch(e){}window.addEventListener(\"DOMContentLoaded\",function(){var b=document.createElement(\"div\");b.textContent=(off?\"✓ Umami tracking re-enabled\":\"✓ Umami tracking disabled\")+\" on this browser\";b.style.cssText=\"position:fixed;top:0;left:0;right:0;z-index:2147483647;background:#15C7E6;color:#012;font:600 14px/1.4 system-ui,-apple-system,sans-serif;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.25)\";document.body.appendChild(b);});})();" }} />
 
+        {/* Product pages: mark the main photo's frame ready the moment its photo
+            loads, even before React hydrates (components/CatalogGallery.tsx). */}
+        <script dangerouslySetInnerHTML={{ __html: "(function(){function m(e){var t=e.target;if(t&&t.hasAttribute&&t.hasAttribute('data-main-photo')&&t.parentNode)t.parentNode.setAttribute('data-ready','')}document.addEventListener('load',m,true);document.addEventListener('error',m,true)})();" }} />
+        <noscript>
+          <style>{"[data-main-photo]{opacity:1!important}"}</style>
+        </noscript>
+
         <script
           defer
           src="https://stats.chiefsmurph.com/script.js"

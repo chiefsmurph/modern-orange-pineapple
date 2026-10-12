@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import HomeLink from "@/components/HomeLink";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,7 +24,9 @@ import { designFromCreditLines } from "@/lib/artists";
 import { vendorDelivery } from "@/public/products";
 import CatalogGallery from "@/components/CatalogGallery";
 import ArtistCredit from "@/components/ArtistCredit";
-import ProductPageBackground from "./ProductPageBackground";
+import { createPreloadQueue, type PreloadQueue } from "@/lib/preload-queue";
+import { preloadKey, preloadPlan, type PreloadKind } from "@/lib/catalog/preload-plan";
+import { imageAttrs, preloadImage, wantsLessData } from "@/lib/product-image";
 import StripeButton from "./StripeButton";
 import styles from "./ProductClientView.module.css";
 import own from "./CatalogProductView.module.css";
@@ -80,6 +82,30 @@ export default function CatalogProductView({
   const [photoIndex, setPhoto] = useState(0);
   const photo = keepPhotoPosition(photoIndex, images.length);
   const credit = designFromCreditLines(creditLinesFor(product, sel));
+
+  // Background preloading (lib/preload-queue.ts): starts once the first photo is
+  // showing, 2 at a time, most useful first (lib/catalog/preload-plan.ts), and
+  // stops when the visitor leaves the page.
+  const queue = useRef<PreloadQueue<HTMLImageElement> | null>(null);
+  if (!queue.current && typeof window !== "undefined") {
+    queue.current = createPreloadQueue<HTMLImageElement>({
+      concurrency: 2,
+      run: (key, urgent, signal) => {
+        const bar = key.indexOf("|");
+        return preloadImage(key.slice(0, bar) as PreloadKind, key.slice(bar + 1), urgent, signal);
+      },
+    });
+  }
+  useEffect(() => () => queue.current?.abort(), []);
+  const visualKey = names.filter((n) => n !== "size").map((n) => sel[n]).join("|");
+  useEffect(() => {
+    queue.current?.setPlan(
+      preloadPlan(product, sel, photo, { saveData: wantsLessData() }).map(preloadKey)
+    );
+    // the plan only depends on the version/style/colour/sky picks and the photo position
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, visualKey, photo]);
+  const [photosReady, setPhotosReady] = useState(false);
   const { size: _size, ...withoutSize } = sel;
   const price = variant ? formatPrice(variant.price) : priceLabel(product, withoutSize);
   const delivery = vendorDelivery[product.delivery];
@@ -104,6 +130,11 @@ export default function CatalogProductView({
           <CatalogGallery
             index={photo}
             onIndexChange={setPhoto}
+            queue={queue.current}
+            onReady={() => {
+              setPhotosReady(true);
+              queue.current?.start();
+            }}
             images={images}
             alt={`${product.title}${summary ? `: ${summary}` : ""}`}
           />
@@ -137,7 +168,12 @@ export default function CatalogProductView({
                           onClick={() => pick(name, value)}
                           className={[own.thumbChoice, sel.sky === value ? own.selected : ""].join(" ")}
                         >
-                          <Image src={thumb} alt="" width={120} height={120} sizes="64px" className={own.thumbImage} />
+                          {/* tiles wait for the big photo, so it gets the bandwidth first */}
+                          {photosReady ? (
+                            <Image src={thumb} alt="" width={120} height={120} sizes="64px" fetchPriority="low" className={own.thumbImage} />
+                          ) : (
+                            <span className={own.thumbImage} />
+                          )}
                           <span className={own.thumbLabel}>{valueLabel(name, value, product.optionLabels)}</span>
                         </button>
                       );
@@ -225,8 +261,26 @@ export default function CatalogProductView({
         />
       </div>
 
-      <ProductPageBackground src={images[0]} side="left" />
-      <ProductPageBackground src={images[1]} side="right" />
+      {/* Desktop-only faint ghosts at the sides: the same URLs as the big photo
+          (no extra downloads), once the photos are in. */}
+      {photosReady && <Ghost src={images[0]} side="left" />}
+      {photosReady && images[1] && queue.current?.status(preloadKey({ kind: "main", src: images[1] })) === "loaded" && (
+        <Ghost src={images[1]} side="right" />
+      )}
     </div>
+  );
+}
+
+function Ghost({ src, side }: { src: string; side: "left" | "right" }) {
+  const attrs = imageAttrs("main", src);
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      {...attrs}
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      className={`${styles["product-page-background"]} ${styles["background-ghost"]} ${styles["loaded"]} ${styles["bg-" + side]}`}
+    />
   );
 }

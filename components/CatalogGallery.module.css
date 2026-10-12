@@ -2,15 +2,69 @@
   width: 100%;
 }
 
+/* The big photo's frame: a fixed square, so nothing moves while photos load. */
+.frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--photo-tile);
+  box-shadow: 0 2px 10px rgba(0, 30, 60, 0.15);
+}
+
 .main {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: cover;
-  border-radius: 14px;
-  background: var(--photo-tile);
-  box-shadow: 0 2px 10px rgba(0, 30, 60, 0.15);
+  transition: opacity 0.25s ease;
+}
+
+/* First load: hidden until it has loaded (data-ready), then it fades in. */
+.frame:not([data-ready]) .main {
+  opacity: 0;
+}
+
+/* Waiting for a pick that isn't loaded yet: the old photo dims under the spinner. */
+.busy .main {
+  opacity: 0.55;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 3px solid rgba(0, 0, 0, 0.12);
+  border-top-color: #ff8800;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: spin 0.8s linear infinite;
+  transition: opacity 0.15s ease;
+}
+
+.frame:not([data-ready]) .spinner,
+.busy .spinner {
+  opacity: 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
+  }
+  .main {
+    transition: none;
+  }
 }
 
 .thumbs {
