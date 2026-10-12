@@ -8,8 +8,9 @@ import { creditText, getDesign } from "@/lib/artists";
 import { getPreview, previews } from "@/lib/previews";
 import styles from "./preview.module.css";
 
-// Private, link-only pages: built at deploy time, any other slug is a 404.
-export const dynamicParams = false;
+// Private, link-only pages, built at deploy time. Any other slug renders
+// notFound() below (a 404). Not `dynamicParams = false`: in Next 15.5 that
+// logs "Error: Internal: NoFallbackError" for every unknown slug.
 
 export function generateStaticParams() {
   return previews.map(({ slug }) => ({ slug }));
