@@ -26,6 +26,10 @@ a.home {
   margin-bottom: 24px;
 }
 
+.credit {
+  margin: -8px 0 24px;
+}
+
 .fabricNote {
   display: inline-block;
   margin: -8px 0 16px;

@@ -10,6 +10,15 @@ const nextConfig: NextConfig = {
     // tomorrow; new filenames show up immediately.
     minimumCacheTTL: 86400,
   },
+  // The private artist previews (app/preview) are never indexed, page or images.
+  async headers() {
+    return [
+      {
+        source: "/preview/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
   // experimental: {
   //   serverActions: true
   // },

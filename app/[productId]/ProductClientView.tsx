@@ -5,12 +5,14 @@ import {
   getTotalPrice,
   getProductImages,
   getDelivery,
+  getProductDesignId,
   type Product,
 } from "@/public/products";
 import Link from "next/link";
 import ProductPageBackground from "./ProductPageBackground";
 import PurchaseForm from "./PurchaseForm";
 import ProductGallery from "@/components/ProductGallery";
+import ArtistCredit from "@/components/ArtistCredit";
 import styles from "./ProductClientView.module.css";
 
 export type Options = { color?: string; size?: string };
@@ -53,6 +55,11 @@ export default function ProductClientView({
             dangerouslySetInnerHTML={{
               __html: product.description.split("\n").join("<br/>"),
             }}
+          />
+          {/* follows the selected option when the product maps one to designs */}
+          <ArtistCredit
+            design={getProductDesignId(product, options)}
+            className={styles.credit}
           />
           {/* price, sizes, buy button etc */}
         </div>

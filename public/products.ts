@@ -1,4 +1,22 @@
+import type { DesignId } from "@/lib/artists";
+
 export type ProductOptions = Partial<Record<"color" | "size", string[]>>;
+
+/**
+ * Which artwork (lib/artists.ts `designs`) a product shows, for its artist
+ * credit. Either one design for the whole product, or one per value of an
+ * option so the credit follows the customer's pick, e.g.
+ * `{ option: "style", designs: { Classic: "pelican-classic", Beanie: "pelican-beanie" } }`.
+ */
+export type ProductDesign =
+  | DesignId
+  | {
+      option: string;
+      designs: Record<string, DesignId>;
+      /** Used before anything is selected; defaults to the option's first value. */
+      fallback?: DesignId;
+    };
+
 export type Product = {
   id: string;
   title: string;
@@ -22,6 +40,8 @@ export type Product = {
   freeShippingMode?: boolean;
   /** Shown as a label on the card and product page when the item isn't 100% cotton. */
   fabricNote?: string;
+  /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
+  design?: ProductDesign;
 };
 
 export type Delivery = {
@@ -54,6 +74,21 @@ export const getProductImages = (
   { images, options: { color: colorOptions = [] } }: Product,
   color: string | undefined = colorOptions[0]
 ) => (Array.isArray(images) ? images : images[color]);
+
+/** The design for the current selection (option name → chosen value). */
+export const getProductDesignId = (
+  product: Product,
+  selected: Record<string, string | undefined> = {}
+): DesignId | undefined => {
+  const { design } = product;
+  if (!design) return undefined;
+  if (typeof design === "string") return design;
+  const values = (product.options as Record<string, string[] | undefined>)[
+    design.option
+  ];
+  const value = selected[design.option] ?? values?.[0];
+  return (value && design.designs[value]) || design.fallback;
+};
 
 export const getTotalPrice = ({ shipping, price }: Product) =>
   parseFloat((shipping.cost / 100 + price).toFixed(2));
@@ -151,6 +186,8 @@ const products: { products: Product[] } = {
         platform: "printful",
         productTemplate: "85446338",
       },
+      // Every colour of this tee is the beanie pelican.
+      design: "pelican-beanie",
       images: {
         Yellow: [
           "/images/pelican-beanie-t-shirt/erasebg-transformed(11).png",
