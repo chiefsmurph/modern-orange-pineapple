@@ -120,7 +120,7 @@ export const catalogSizeNote = (printfulCatalogProductId?: number) =>
 
 /** Home-page sections for catalog `group`s, shown above the main grid in this order. */
 export const groupSections: Record<string, { title: string; line: string }> = {
-  allover: { title: "Premium all-over", line: "Printed edge to edge on cotton." },
+  allover: { title: "Premium all-over", line: "Printed edge to edge." },
 };
 
 /**
