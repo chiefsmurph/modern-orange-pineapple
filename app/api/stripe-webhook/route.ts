@@ -1,85 +1,54 @@
+// Stripe webhook: https://mopclothing.com/api/stripe-webhook
+// Event: checkout.session.completed (+ checkout.session.async_payment_succeeded).
+// Verifies the signature on the raw body, then records the order, creates the
+// Printful draft / Yoycol unpaid order, logs royalties and emails John
+// (lib/orders/process.ts). Idempotent per Checkout Session.
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+import { verifyStripeEvent } from "@/lib/orders/stripe-verify";
+import { handleStripeEvent } from "@/lib/orders/process";
+import { dataDir, orderStore } from "@/lib/orders/store";
+import type { LineItemLike } from "@/lib/orders/session";
+
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import Stripe from "stripe";
-
-export const config = {
-  api: {
-    bodyParser: false, // Required for Stripe signature verification
-  },
-};
-
-function getStripe() {
+// Only for sessions created before the mop_* metadata existed. Needs the
+// restricted key's "Checkout Sessions: Read" + "Products: Read".
+async function listLineItems(sessionId: string): Promise<LineItemLike[]> {
   const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) {
-    throw new Error("STRIPE_SECRET_KEY is not set");
-  }
-
-  return new Stripe(key);
+  if (!key) throw new Error("STRIPE_SECRET_KEY is not set");
+  const res = await new Stripe(key).checkout.sessions.listLineItems(sessionId, {
+    limit: 100,
+    expand: ["data.price.product"],
+  });
+  return res.data as unknown as LineItemLike[];
 }
 
 export async function POST(req: NextRequest) {
-  const stripe = getStripe();
-  const sig = req.headers["stripe-signature"]!;
   const body = await req.text();
-
-  let event: Stripe.Event;
-
+  let event: ReturnType<typeof verifyStripeEvent>;
   try {
-    event = stripe.webhooks.constructEvent(
+    event = verifyStripeEvent(
       body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      req.headers.get("stripe-signature"),
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    console.error("Webhook Error:", err.message);
-    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
+    const message = (err as Error).message;
+    console.error(`[stripe-webhook] rejected: ${message.split("\n")[0]}`);
+    // Missing secret is our problem (500: Stripe keeps retrying until it's set); a bad signature is the caller's.
+    const status = /not set/.test(message) ? 500 : 400;
+    return NextResponse.json({ error: "invalid webhook" }, { status });
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
-
-    console.log("EVENT: checkout.session.completed");
-    console.log(JSON.stringify({ session }, null, 2));
-    const record = {
-      id: session.id,
-      created: new Date(session.created * 1000).toISOString(),
-      amount_total: session.amount_total,
-      currency: session.currency,
-      customer_email: session.customer_details?.email,
-      customer_name: session.customer_details?.name,
-      customer_phone: session.customer_details?.phone,
-      shipping_name: session.customer_details?.name,
-      payment_status: session.payment_status,
-      metadata: session.metadata,
-      lineItemDesc: (session.line_items[0] as Stripe.LineItem).description,
-      lineItemPriceProduct: (session.line_items[0] as Stripe.LineItem).price
-        .product,
-      status: session.status,
-      mode: session.mode,
-    };
-
-    const filePath = path.resolve(process.cwd(), "stripe_orders.json");
-    let data: any[] = [];
-
-    try {
-      if (fs.existsSync(filePath)) {
-        const file = fs.readFileSync(filePath, "utf-8");
-        data = JSON.parse(file);
-      }
-    } catch (err) {
-      console.error("Failed to read existing order file:", err);
-    }
-
-    data.push(record);
-
-    try {
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    } catch (err) {
-      console.error("Failed to write order file:", err);
-    }
-  }
-  return NextResponse.json({ received: true });
+  const result = await handleStripeEvent(event, {
+    env: process.env,
+    store: orderStore(dataDir()),
+    fetch: (url, init) => fetch(url, init),
+    now: () => new Date(),
+    log: (msg) => console.log(msg),
+    listLineItems,
+  });
+  return NextResponse.json(result.body, { status: result.status });
 }
