@@ -80,6 +80,68 @@
   outline-offset: 2px;
 }
 
+.sizeNote {
+  margin: -0.15rem 0 0.45rem;
+  font-size: 0.72rem;
+  color: #4a5a64;
+}
+
+/* Sky picker: labelled thumbnails of each print. */
+.thumbChoices {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 0.5rem;
+}
+
+.thumbChoice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #000;
+  font: inherit;
+  cursor: pointer;
+}
+
+.thumbImage {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: contain;
+  background: var(--photo-tile);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.thumbChoice.selected .thumbImage {
+  outline: 3px solid #ff8800;
+  outline-offset: 2px;
+}
+
+.thumbLabel {
+  font-size: 0.6rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.thumbChoice.selected .thumbLabel {
+  font-weight: 700;
+}
+
+.crossLink {
+  margin: -0.5rem 0 1.25rem;
+  font-size: 0.85rem;
+}
+
+.crossLink a {
+  color: #d96f00;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .buyBar {
   display: flex;
   flex-direction: column;

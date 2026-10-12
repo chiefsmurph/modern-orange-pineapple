@@ -58,3 +58,21 @@
   color: #6b5200;
   font-size: 0.8rem;
 }
+
+/* A row of small choices on the card (the Sky Tee's skies). */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin: -0.4rem 0 0.6rem;
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+}

@@ -1,0 +1,105 @@
+// The Premium all-over line (Printful 1414): home section, sky picker, cross-links,
+// metadata and royalties (John said yes, 2026-10-12).
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { getShopProduct, crossLinkFor } from "../lib/catalog/index.ts";
+import { catalogFulfilment } from "../lib/catalog/fulfilment.generated.ts";
+import { creditLinesFor, findVariant, normalizeSelection, variantKey } from "../lib/catalog/select.ts";
+import { groupSections } from "../lib/catalog/copy.ts";
+import { shopCards, skySwatches } from "../lib/shop-cards.ts";
+import { buildItem, itemSummary } from "../lib/orders/build-items.ts";
+import { itemsFromSessionMetadata, sessionMetadata } from "../lib/orders/metadata.ts";
+import { royaltyRows } from "../lib/orders/royalties.ts";
+import { buildOrderRecord } from "../lib/orders/session.ts";
+import { makeSession } from "./helpers.ts";
+
+const ALLOVER = ["day-all-over", "dusk-all-over", "night-all-over", "sky-tee", "gold-stripes"];
+const present = ALLOVER.every((s) => getShopProduct(s));
+
+const recordFor = async (slug: string, opts: Record<string, string>) =>
+  buildOrderRecord(makeSession([buildItem(slug, opts, 1, {}).item]));
+
+test("all five all-overs are in the catalog: $49, XS–2XL, group allover, Printful", { skip: !present }, () => {
+  for (const slug of ALLOVER) {
+    const p = getShopProduct(slug)!;
+    assert.equal(p.group, "allover", slug);
+    assert.equal(p.printfulCatalogProductId, 1414, slug);
+    assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL"], slug);
+    assert.ok(p.variants.every((v) => v.price === 49 && v.status === "DECIDED"), `${slug} prices`);
+    assert.equal(p.sizeNote, "96% cotton, 4% elastane · runs slim — size up");
+    assert.equal(p.delivery, "printful");
+  }
+});
+
+test("home: a Premium all-over section of five cards above the main grid; the Sky Tee card shows its skies", { skip: !present }, () => {
+  assert.equal(groupSections.allover.title, "Premium all-over");
+  const cards = shopCards().filter((c) => c.group === "allover");
+  assert.deepEqual(cards.map((c) => c.href), ALLOVER.map((s) => `/${s}`));
+  for (const c of cards) assert.equal(c.price, "$49");
+  const sky = cards.find((c) => c.href === "/sky-tee")!;
+  assert.equal(sky.swatches?.length, getShopProduct("sky-tee")!.options.sky.length);
+  assert.equal(skySwatches(getShopProduct("day-all-over")!).length, 0);
+});
+
+test("every all-over variant builds a Printful item whose metadata round-trips", { skip: !present }, () => {
+  for (const slug of ALLOVER) {
+    const p = getShopProduct(slug)!;
+    for (const v of p.variants) {
+      const { item } = buildItem(slug, v.opts, 1, {});
+      assert.equal(item.supplier, "printful");
+      assert.equal(item.unitAmount, 4900);
+      assert.equal(item.printful?.syncVariantId, catalogFulfilment[slug].variants[variantKey(v.opts)].syncVariantId);
+      assert.deepEqual(itemsFromSessionMetadata(sessionMetadata([item])), [item]);
+    }
+  }
+});
+
+test("royalties: Janette on the Day Grind Beanie only, Austin on Dusk, nobody on Night", { skip: !present }, async () => {
+  const day = getShopProduct("day-all-over")!;
+  const beanie = await recordFor("day-all-over", { ...normalizeSelection(day), style: "beanie", size: "M" } as Record<string, string>);
+  const classic = await recordFor("day-all-over", { ...normalizeSelection(day), style: "classic", size: "M" } as Record<string, string>);
+  assert.deepEqual(royaltyRows(beanie, "t", {}).map((r) => [r.artist, r.amount]), [["janette", 1.5]]);
+  assert.deepEqual(royaltyRows(classic, "t", {}), []);
+  const dusk = await recordFor("dusk-all-over", { ...normalizeSelection(getShopProduct("dusk-all-over")!), size: "L" } as Record<string, string>);
+  assert.deepEqual(royaltyRows(dusk, "t", {}).map((r) => [r.artist, r.amount]), [["austin", 1.5]]);
+  const night = await recordFor("night-all-over", { ...normalizeSelection(getShopProduct("night-all-over")!), size: "S" } as Record<string, string>);
+  assert.deepEqual(royaltyRows(night, "t", {}), []);
+});
+
+test("credits follow the pick: the beanie credit on Day Grind Beanie, a credit per sky on the Sky Tee", { skip: !present }, () => {
+  const day = getShopProduct("day-all-over")!;
+  assert.ok(creditLinesFor(day, { ...normalizeSelection(day), style: "beanie" }).includes("Beanie by Janette Garcia"));
+  assert.ok(!creditLinesFor(day, { ...normalizeSelection(day), style: "classic" }).includes("Beanie by Janette Garcia"));
+  // the sky's own credit shows on both styles (catalog `credits`, each line with its own condition)
+  assert.ok(creditLinesFor(day, { ...normalizeSelection(day), style: "classic" }).some((l) => /McPherson/.test(l)));
+  const sky = getShopProduct("sky-tee")!;
+  const seen = new Set<string>();
+  for (const s of sky.options.sky) {
+    const sel = { ...normalizeSelection(sky), sky: s };
+    assert.ok(findVariant(sky, { ...sel, size: "M" }), `${s}: variant`);
+    const lines = creditLinesFor(sky, sel);
+    assert.equal(lines.length, 1, `${s}: one credit line`);
+    seen.add(lines[0]);
+  }
+  assert.ok(seen.size > 1, "different skies credit different sources");
+});
+
+test("Sky picker values show their labels (catalog option_labels) on the page, in Stripe and in emails", { skip: !present }, () => {
+  const sky = getShopProduct("sky-tee")!;
+  assert.equal(sky.optionLabels?.sky?.["golden-hour"], "Golden Hour");
+  const { item, description } = buildItem("sky-tee", { sky: "golden-hour", size: "M" }, 1, {});
+  assert.equal(item.opts.sky, "golden-hour"); // the key stays the code
+  assert.equal(description, "Sky: Golden Hour, Size: M");
+  assert.equal(itemSummary(item), "Golden Hour · M");
+  assert.equal(shopCards().find((c) => c.href === "/sky-tee")!.swatches![0].label, "Golden Hour");
+});
+
+test("cross-links: pelican → Day (style carried), alpaca → Dusk, rabbit → Night", { skip: !present }, () => {
+  assert.deepEqual(crossLinkFor("pelican-tee", { version: "large", style: "beanie", color: "Ivory" }), {
+    text: "Also as an all-over: Day",
+    href: "/day-all-over?style=beanie",
+  });
+  assert.equal(crossLinkFor("alpaca-tee", { version: "small" })?.href, "/dusk-all-over");
+  assert.equal(crossLinkFor("rabbit-tee", {})?.href, "/night-all-over");
+  assert.equal(crossLinkFor("star-polo", {}), null);
+});

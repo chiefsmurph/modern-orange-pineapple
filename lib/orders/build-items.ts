@@ -56,15 +56,17 @@ export type PricedItem = {
 
 const cents = (dollars: number) => Math.round(dollars * 100);
 
-/** "Big · Grind Beanie · Ivory · M" */
-export const itemSummary = (item: Pick<OrderItem, "opts">) =>
-  Object.entries(item.opts)
-    .map(([k, v]) => valueLabel(k, v))
+/** "Big · Grind Beanie · Ivory · M" (with the product's own labels, e.g. "Golden Hour" for golden-hour). */
+export const itemSummary = (item: Pick<OrderItem, "opts"> & { slug?: string }) => {
+  const labels = item.slug ? getShopProduct(item.slug)?.optionLabels : undefined;
+  return Object.entries(item.opts)
+    .map(([k, v]) => valueLabel(k, v, labels))
     .join(" · ");
+};
 
-const describe = (opts: Record<string, string>) =>
+const describe = (opts: Record<string, string>, labels?: Record<string, Record<string, string>>) =>
   Object.entries(opts)
-    .map(([k, v]) => `${optionTitle(k)}: ${valueLabel(k, v)}`)
+    .map(([k, v]) => `${optionTitle(k)}: ${valueLabel(k, v, labels)}`)
     .join(", ");
 
 export function buildItem(
@@ -153,6 +155,6 @@ export function buildItem(
     shippingName: "Free shipping",
     delivery: vendorDelivery[product.delivery],
     image: imageSetFor(product, sel)?.checkout ?? imagesFor(product, sel)[0],
-    description: describe(variant.opts),
+    description: describe(variant.opts, product.optionLabels),
   };
 }

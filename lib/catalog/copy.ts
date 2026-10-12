@@ -5,7 +5,13 @@
 // A description is the design's intro line (matched on the slug) followed by
 // the garment's details (matched on the Printful catalog product).
 
-type Garment = { details: string; fabricNote?: string };
+type Garment = {
+  details: string;
+  /** Pill under the price (the site flags anything that isn't 100% cotton). */
+  fabricNote?: string;
+  /** One line under the size picker. */
+  sizeNote?: string;
+};
 
 /** Garment details per Printful catalog product id (from Printful's catalog). */
 const garments: Record<number, Garment> = {
@@ -24,6 +30,12 @@ const garments: Record<number, Garment> = {
     details:
       "- Embroidered on the left chest\n- Fabric: 100% combed ring-spun cotton piqué\n- Fabric weight: 6.2 oz/yd² (210 g/m²)\n- Classic fit, ribbed collar, 3-button placket\n- Straight hem with side slits",
   },
+  // All-Over Print Men's Cotton Crew Neck T-Shirt (the Premium all-over line)
+  1414: {
+    details:
+      "- Printed edge to edge: front, back and both sleeves\n- Fabric: 96% cotton, 4% elastane\n- Midweight: 5.6 oz/yd² (189 g/m²)\n- Slight stretch, keeps its shape",
+    sizeNote: "96% cotton, 4% elastane · runs slim — size up",
+  },
   // All-Over Print Skater Dress (US fulfilment)
   315: {
     details:
@@ -40,6 +52,16 @@ const garments: Record<number, Garment> = {
 
 /** Intro line per design, matched against the slug (first match wins). */
 const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] = [
+  // Premium all-over (their own home section, in catalog order)
+  {
+    match: /^day-all-over/,
+    text: () => "The pelican on a bright day sky, printed edge to edge. Pick the Classic or the Grind Beanie.",
+    rank: 1,
+  },
+  { match: /^dusk-all-over/, text: () => "The smoking alpaca at dusk, printed edge to edge.", rank: 1 },
+  { match: /^night-all-over/, text: () => "The rabbit under a night sky, printed edge to edge.", rank: 1 },
+  { match: /^sky-tee/, text: () => "Pick your sky. Every one is printed edge to edge.", rank: 1 },
+  { match: /stripes/, text: () => "Gold stripes, printed edge to edge.", rank: 1 },
   {
     match: /dress/,
     text: () => "Dress to impress with this all-over cloud print skater dress!",
@@ -93,6 +115,24 @@ export const catalogDescription = (slug: string, printfulCatalogProductId?: numb
 export const catalogFabricNote = (printfulCatalogProductId?: number) =>
   garments[printfulCatalogProductId ?? -1]?.fabricNote;
 
+export const catalogSizeNote = (printfulCatalogProductId?: number) =>
+  garments[printfulCatalogProductId ?? -1]?.sizeNote;
+
+/** Home-page sections for catalog `group`s, shown above the main grid in this order. */
+export const groupSections: Record<string, { title: string; line: string }> = {
+  allover: { title: "Premium all-over", line: "Printed edge to edge on cotton." },
+};
+
+/**
+ * "Also as an all-over" links between a character tee and its all-over. `carry`
+ * passes the visitor's pick across when both have that option (the pelican's style).
+ */
+export const crossLinks: Record<string, { to: string; text: string; carry?: string[] }> = {
+  "pelican-tee": { to: "day-all-over", text: "Also as an all-over: Day", carry: ["style"] },
+  "alpaca-tee": { to: "dusk-all-over", text: "Also as an all-over: Dusk" },
+  "rabbit-tee": { to: "night-all-over", text: "Also as an all-over: Night" },
+};
+
 /** Home-page order: lower first. Generated products come before the older ones. */
 export const catalogRank = (slug: string) => introFor(slug)?.rank ?? 90;
 
@@ -101,6 +141,7 @@ export const optionTitles: Record<string, string> = {
   version: "Print",
   style: "Style",
   emblem: "Emblem",
+  sky: "Sky",
   color: "Color",
   size: "Size",
 };
@@ -115,6 +156,12 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export const optionTitle = (name: string) => optionTitles[name] ?? capitalize(name);
 
-export const valueLabel = (name: string, value: string) =>
+/** `labels`: the product's own labels from catalog.json (option_labels), which win. */
+export const valueLabel = (
+  name: string,
+  value: string,
+  labels?: Record<string, Record<string, string>>
+) =>
+  labels?.[name]?.[value] ??
   valueLabels[name]?.[value.toLowerCase()] ??
   (name === "color" || name === "size" ? value : capitalize(value));

@@ -91,7 +91,7 @@ export function orderEmail(
   if (royalties.length) {
     lines.push("", "ROYALTIES");
     for (const r of royalties)
-      lines.push(`- ${r.artist}: $${r.amount.toFixed(2)} (${r.qty} x ${r.product}, ${itemSummary({ opts: r.options })})`);
+      lines.push(`- ${r.artist}: $${r.amount.toFixed(2)} (${r.qty} x ${r.product}, ${itemSummary({ opts: r.options, slug: r.slug })})`);
   }
   lines.push(
     "",

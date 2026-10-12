@@ -8,7 +8,8 @@ import legacy, {
   type Product,
 } from "../public/products.ts";
 import { shopProducts, type ShopProduct } from "./catalog/index.ts";
-import { imagesFor, normalizeSelection, priceLabel } from "./catalog/select.ts";
+import { imageSetFor, imagesFor, normalizeSelection, priceLabel } from "./catalog/select.ts";
+import { valueLabel } from "./catalog/copy.ts";
 
 export type ShopCard = {
   href: string;
@@ -18,6 +19,10 @@ export type ShopCard = {
   freeShipping: boolean;
   delivery: string;
   fabricNote?: string;
+  /** Home-page section (catalog `group`); unset = the main grid. */
+  group?: string;
+  /** A small row of choices to show on the card (the Sky Tee's skies). */
+  swatches?: { src: string; label: string }[];
 };
 
 export const legacyCard = (product: Product): ShopCard => ({
@@ -39,7 +44,16 @@ export const catalogCard = (product: ShopProduct): ShopCard => ({
   freeShipping: true,
   delivery: vendorDelivery[product.delivery].text,
   fabricNote: product.fabricNote,
+  ...(product.group ? { group: product.group } : {}),
+  ...(skySwatches(product).length ? { swatches: skySwatches(product) } : {}),
 });
+
+/** One swatch per sky, in picker order (products with a "sky" picker). */
+export const skySwatches = (product: ShopProduct) =>
+  (product.options.sky ?? []).flatMap((sky) => {
+    const set = imageSetFor(product, { ...normalizeSelection(product), sky });
+    return set?.swatch ? [{ src: set.swatch, label: valueLabel("sky", sky, product.optionLabels) }] : [];
+  });
 
 export const shopCards = (): ShopCard[] => [
   ...shopProducts.map(catalogCard),

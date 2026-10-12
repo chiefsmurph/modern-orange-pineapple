@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function ProductCard({ card, priority = false }: Props) {
-  const { href, title, image, price, freeShipping, delivery, fabricNote } = card;
+  const { href, title, image, price, freeShipping, delivery, fabricNote, swatches } = card;
   return (
     <Link
       href={href}
@@ -32,6 +32,22 @@ export default function ProductCard({ card, priority = false }: Props) {
       />
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.price}>{price}</p>
+      {swatches && swatches.length > 0 && (
+        <div className={styles.swatches} aria-label={`${swatches.length} skies`}>
+          {swatches.map((s) => (
+            <Image
+              key={s.src}
+              src={s.src}
+              alt=""
+              title={s.label}
+              width={40}
+              height={40}
+              sizes="20px"
+              className={styles.swatch}
+            />
+          ))}
+        </div>
+      )}
       {freeShipping && <p className={styles.freeShipping}>FREE SHIPPING</p>}
       <p className={styles.delivery}>{delivery}</p>
       {fabricNote && <p className={styles.fabricNote}>{fabricNote}</p>}

@@ -15,7 +15,9 @@
 // Extra files it makes:
 //   *-checkout.jpg  a small JPEG of each photo set's first photo, for Stripe Checkout;
 //   *-card.webp     the home-grid card, cropped to head-to-hips when the hero is a
-//                   full-body shot (scripts/card-crop.mjs).
+//                   full-body shot (scripts/card-crop.mjs);
+//   *-swatch.webp   for products with a "sky" picker: a small square of each
+//                   sky (the flat front's body) for the home card's swatch row.
 //
 // Costs (cost_item, cost_ship_*) are NOT copied: the repo is public.
 // Flags: --dry-run (validate + report, write nothing).
@@ -29,7 +31,7 @@ import { cardCrop, writeCard } from "./card-crop.mjs";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = path.join(ROOT, "lib/catalog");
 const PUBLIC_DIR = path.join(ROOT, "public/images/catalog");
-const OPTION_ORDER = ["version", "style", "emblem", "color", "size"];
+const OPTION_ORDER = ["version", "style", "emblem", "sky", "color", "size"];
 // Top-level routes a slug must not shadow.
 const RESERVED = ["api", "preview", "redeem", "banana-suit-42", "images", "videos", "_next"];
 
@@ -150,6 +152,8 @@ for (const p of catalog.products ?? []) {
     }
     const srcs = [];
     let checkout;
+    let swatch;
+    const flatRel = typeof val === "object" && !Array.isArray(val) ? val.flat : undefined;
     for (const rel of files.filter(Boolean)) {
       const from = path.resolve(CATALOG_DIR, rel);
       if (!fs.existsSync(from)) { fail(`${where}: image missing: ${rel}`); continue; }
@@ -173,8 +177,14 @@ for (const p of catalog.products ?? []) {
         imageCopies.push({ from, to: path.join(PUBLIC_DIR, p.slug, jpg), jpeg: true });
         checkout = `/images/catalog/${p.slug}/${jpg}`;
       }
+      if (rel === flatRel && options.sky) {
+        const name = safe.replace(/\.[a-z0-9]+$/, "") + "-swatch.webp";
+        imageCopies.push({ from, to: path.join(PUBLIC_DIR, p.slug, name), swatch: true });
+        swatch = `/images/catalog/${p.slug}/${name}`;
+      }
     }
-    if (srcs.length) images.push({ when, images: srcs, checkout, firstFrom: files.filter(Boolean)[0] });
+    if (srcs.length)
+      images.push({ when, images: srcs, checkout, ...(swatch ? { swatch } : {}), firstFrom: files.filter(Boolean)[0] });
   }
   if (images.length === 0) fail(`${where}: no images`);
 
@@ -208,7 +218,9 @@ for (const p of catalog.products ?? []) {
 
   // Credits: string[] + credit_when, or [{ text|lines, when }].
   const credits = [];
-  const rawCredit = p.credit;
+  // `credits` ([{ text, when }], the full list incl. photo sources) wins over the
+  // older `credit` + `credit_when` pair.
+  const rawCredit = Array.isArray(p.credits) && p.credits.length ? p.credits : p.credit;
   if (Array.isArray(rawCredit) && rawCredit.length && typeof rawCredit[0] === "object") {
     for (const c of rawCredit) {
       const lines = [c.lines ?? c.text ?? []].flat().map(String).filter(Boolean);
@@ -223,6 +235,14 @@ for (const p of catalog.products ?? []) {
       if (!options[k] || (v !== "*" && !options[k].some((x) => eq(x, v)))) fail(`${where}: credit_when ${k}=${v} matches nothing`);
     for (const l of c.lines)
       if (!/ by /.test(l)) console.log(`note: ${where}: credit "${l}" shows as written, without an avatar`);
+  }
+
+  // Display labels for coded values (catalog `option_labels`).
+  let optionLabels;
+  for (const [name, map] of Object.entries(p.option_labels ?? {})) {
+    if (!options[name]) { fail(`${where}: option_labels for unknown option ${name}`); continue; }
+    for (const v of Object.keys(map)) if (!options[name].includes(v)) fail(`${where}: option_labels ${name}.${v} matches no value`);
+    (optionLabels ??= {})[name] = Object.fromEntries(Object.entries(map).map(([k, l]) => [k, String(l)]));
   }
 
   // Royalties.
@@ -241,6 +261,9 @@ for (const p of catalog.products ?? []) {
     supplier: "printful",
     delivery: "printful",
     ...(p.printful_catalog_product_id ? { printfulCatalogProductId: p.printful_catalog_product_id } : {}),
+    ...(p.group ? { group: String(p.group) } : {}),
+    ...(optionLabels ? { optionLabels } : {}),
+    ...(p.fabric_note ? { sizeNote: String(p.fabric_note) } : {}),
     options,
     variants,
     images,
@@ -277,7 +300,7 @@ const fulfilmentTs =
 
 const totalVariants = products.reduce((n, p) => n + p.variants.length, 0);
 const count = (f) => imageCopies.filter(f).length;
-console.log(`${products.length} products, ${totalVariants} variants, ${count((c) => !c.jpeg && !c.crop)} images (+ ${count((c) => c.jpeg)} checkout JPEGs, ${count((c) => c.crop)} cropped cards)`);
+console.log(`${products.length} products, ${totalVariants} variants, ${count((c) => !c.jpeg && !c.crop && !c.swatch)} images (+ ${count((c) => c.jpeg)} checkout JPEGs, ${count((c) => c.crop)} cropped cards, ${count((c) => c.swatch)} swatches)`);
 for (const p of products)
   console.log(`  /${p.slug}  pickers: ${Object.keys(p.options).join(", ") || "none"}  variants: ${p.variants.length}${p.card ? "  card: cropped" : ""}`);
 if (proposed.length) console.log(`${proposed.length} PROPOSED price(s), e.g. ${proposed.slice(0, 3).join("; ")}`);
@@ -287,9 +310,19 @@ if (dryRun) {
 }
 
 fs.rmSync(PUBLIC_DIR, { recursive: true, force: true });
-for (const { from, to, jpeg, crop } of imageCopies) {
+for (const { from, to, jpeg, crop, swatch } of imageCopies) {
   fs.mkdirSync(path.dirname(to), { recursive: true });
-  if (crop) {
+  if (swatch) {
+    // A square of the flat front's body (chest to near the hem): the sky's colours
+    // at a glance for the home card's small round swatches.
+    const { width: W, height: H } = await sharp(from).metadata();
+    const side = Math.round(Math.min(W, H) * 0.56);
+    await sharp(from)
+      .extract({ left: Math.round(W / 2 - side / 2), top: Math.round(H * 0.58 - side / 2), width: side, height: side })
+      .resize({ width: 160, height: 160 })
+      .webp({ quality: 80 })
+      .toFile(to);
+  } else if (crop) {
     await writeCard(from, crop, to);
   } else if (jpeg) {
     await sharp(from)

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { shopCards } from "@/lib/shop-cards";
+import { groupSections } from "@/lib/catalog/copy";
 
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
@@ -66,15 +67,44 @@ export default function HomePage() {
       <p className={`${styles.materialNote} ${styles.fadeIn}`}>
         Real cotton — even the all-overs.
       </p>
+      {/* Catalog groups (e.g. Premium all-over) get their own section above the main grid. */}
+      {Object.entries(groupSections).map(([group, { title, line }]) => {
+        const cards = shopCards().filter((c) => c.group === group);
+        if (cards.length === 0) return null;
+        return (
+          <section
+            key={group}
+            className={`${styles.group} ${styles.fadeIn}`}
+            aria-labelledby={`group-${group}`}
+          >
+            <h2 id={`group-${group}`} className={styles.groupTitle}>
+              {title}
+            </h2>
+            <p className={styles.groupLine}>{line}</p>
+            <div className={styles.grid}>
+              {cards.map((card, index) => (
+                <div key={card.href} className={styles.cell}>
+                  <ProductCard card={card} priority={index === 0} />
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })}
       <section
         className={`${styles.grid} ${styles.fadeIn}`}
         aria-label="Products"
       >
-        {shopCards().map((card, index) => (
-          <div key={card.href} className={styles.cell}>
-            <ProductCard card={card} priority={index === 0} />
-          </div>
-        ))}
+        {shopCards()
+          .filter((c) => !c.group || !groupSections[c.group])
+          .map((card, index) => (
+            <div key={card.href} className={styles.cell}>
+              <ProductCard
+                card={card}
+                priority={index === 0 && !shopCards().some((c) => c.group && groupSections[c.group])}
+              />
+            </div>
+          ))}
         <div className={styles.cell}>
           <div className="product-card featured-store">
             <a

@@ -2,12 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import HomeLink from "@/components/HomeLink";
+import Image from "next/image";
+import Link from "next/link";
 import type { ShopProduct } from "@/lib/catalog";
 import type { Selection } from "@/lib/catalog/types";
 import {
   creditLinesFor,
   findVariant,
   formatPrice,
+  imageSetFor,
   imagesFor,
   isAvailable,
   optionNames,
@@ -15,6 +18,7 @@ import {
   priceLabel,
 } from "@/lib/catalog/select";
 import { optionTitle, valueLabel } from "@/lib/catalog/copy";
+import { crossLinkFor } from "@/lib/catalog";
 import { swatchFor } from "@/lib/catalog/colors";
 import { designFromCreditLines } from "@/lib/artists";
 import { vendorDelivery } from "@/public/products";
@@ -68,6 +72,8 @@ export default function CatalogProductView({
     });
 
   const variant = findVariant(product, sel);
+  // "Also as an all-over: Day" (lib/catalog/copy.ts), only when that product is on sale.
+  const crossLink = crossLinkFor(product.slug, sel);
   const images = imagesFor(product, sel);
   // Which photo is showing (model, model2, flat...). A size change keeps the same
   // photo set; another colour/print/style keeps the same position if it has one.
@@ -79,7 +85,7 @@ export default function CatalogProductView({
   const delivery = vendorDelivery[product.delivery];
   const summary = names
     .filter((n) => sel[n])
-    .map((n) => valueLabel(n, sel[n]!))
+    .map((n) => valueLabel(n, sel[n]!, product.optionLabels))
     .join(" · ");
   const missing = names.filter((n) => !sel[n]);
 
@@ -108,12 +114,34 @@ export default function CatalogProductView({
               <fieldset key={name} className={own.picker}>
                 <legend className={own.legend}>
                   {optionTitle(name)}
-                  {name === "color" && sel.color && (
-                    <span className={own.current}>: {sel.color}</span>
+                  {(name === "color" || name === "sky") && sel[name] && (
+                    <span className={own.current}>: {valueLabel(name, sel[name]!, product.optionLabels)}</span>
                   )}
                 </legend>
-                <div className={own.choices}>
+                {name === "size" && product.sizeNote && (
+                  <p className={own.sizeNote}>{product.sizeNote}</p>
+                )}
+                <div className={name === "sky" ? own.thumbChoices : own.choices}>
                   {product.options[name].map((value) => {
+                    // Skies are picked from labelled thumbnails of the shirt itself
+                    // (its flat front: the whole sky, top to hem).
+                    if (name === "sky") {
+                      const set = imageSetFor(product, { ...sel, sky: value });
+                      const thumb =
+                        set?.images.find((src) => /(^|[-/])flat\./.test(src)) ?? set?.images[0];
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          aria-pressed={sel.sky === value}
+                          onClick={() => pick(name, value)}
+                          className={[own.thumbChoice, sel.sky === value ? own.selected : ""].join(" ")}
+                        >
+                          <Image src={thumb} alt="" width={120} height={120} sizes="64px" className={own.thumbImage} />
+                          <span className={own.thumbLabel}>{valueLabel(name, value, product.optionLabels)}</span>
+                        </button>
+                      );
+                    }
                     const selected = sel[name] === value;
                     // Only sizes are greyed out (for the current version/style/colour);
                     // any other pick is always allowed and pick() adjusts the rest.
@@ -144,7 +172,7 @@ export default function CatalogProductView({
                             : undefined
                         }
                       >
-                        {swatch ? null : valueLabel(name, value)}
+                        {swatch ? null : valueLabel(name, value, product.optionLabels)}
                       </button>
                     );
                   })}
@@ -154,6 +182,12 @@ export default function CatalogProductView({
           </div>
 
           <ArtistCredit design={credit} className={styles.credit} />
+
+          {crossLink && (
+            <p className={own.crossLink}>
+              <Link href={crossLink.href}>{crossLink.text} →</Link>
+            </p>
+          )}
 
           <p
             className={styles.desc}

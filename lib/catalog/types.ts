@@ -6,7 +6,7 @@
 // Costs from catalog.json are never copied into the repo (it's public).
 
 /** Picker order on the page. Unknown option names sort after these. */
-export const OPTION_ORDER = ["version", "style", "emblem", "color", "size"] as const;
+export const OPTION_ORDER = ["version", "style", "emblem", "sky", "color", "size"] as const;
 
 /** Option name -> chosen value. */
 export type Selection = Record<string, string | undefined>;
@@ -30,6 +30,8 @@ export type CatalogImageSet = {
   images: string[];
   /** A small JPEG of the first photo, for Stripe Checkout. */
   checkout?: string;
+  /** Products with a "sky" picker: a small square of this sky (picker thumbnail, home card row). */
+  swatch?: string;
 };
 
 export type CatalogCredit = {
@@ -46,6 +48,12 @@ export type CatalogProduct = {
   /** Key into vendorDelivery (public/products.ts). */
   delivery: "printful";
   printfulCatalogProductId?: number;
+  /** A home-page section, e.g. "allover" (Premium all-over). Unset = the main grid. */
+  group?: string;
+  /** Display labels for coded option values, e.g. { sky: { "golden-hour": "Golden Hour" } }. */
+  optionLabels?: Record<string, Record<string, string>>;
+  /** catalog.json `fabric_note`: one line under the size picker (fabric and fit). */
+  sizeNote?: string;
   /** Option name -> values, in OPTION_ORDER. */
   options: Record<string, string[]>;
   variants: CatalogVariant[];

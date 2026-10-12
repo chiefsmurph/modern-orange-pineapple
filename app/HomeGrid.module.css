@@ -57,6 +57,28 @@ main.main {
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
 }
 
+/* ---- product groups (Premium all-over) above the main grid ---- */
+.group {
+  margin: 0 0 2rem;
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
+.groupLine {
+  margin: 0.25rem 0 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
 /* ---- products ---- */
 .grid {
   display: grid;
@@ -151,6 +173,18 @@ main.main {
 
   .materialNote {
     margin-bottom: 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .group {
+    margin-bottom: 1.5rem;
+  }
+
+  .groupTitle {
+    font-size: 1.15rem;
+  }
+
+  .groupLine {
     font-size: 0.72rem;
   }
 
