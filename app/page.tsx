@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import products from "../public/products";
+import { shopCards } from "@/lib/shop-cards";
 
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
@@ -47,9 +47,9 @@ export default function HomePage() {
         className={`${styles.grid} ${styles.fadeIn}`}
         aria-label="Products"
       >
-        {products.products.map((p, index) => (
-          <div key={p.id} className={styles.cell}>
-            <ProductCard product={p} priority={index === 0} />
+        {shopCards().map((card, index) => (
+          <div key={card.href} className={styles.cell}>
+            <ProductCard card={card} priority={index === 0} />
           </div>
         ))}
         <div className={styles.cell}>

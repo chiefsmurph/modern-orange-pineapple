@@ -1,4 +1,4 @@
-import { Product } from "@/public/products";
+import { getTotalPrice, Product } from "@/public/products";
 import StripeButton from "./StripeButton";
 import { Options } from "./ProductClientView";
 
@@ -41,7 +41,9 @@ export default function PurchaseForm(props: PurchaseFormProps) {
       ))}
 
       <StripeButton
-        product={product}
+        productId={product.id}
+        title={product.title}
+        value={getTotalPrice(product)}
         disabled={missing.length > 0}
         options={options}
       />

@@ -4,6 +4,7 @@ import {
   getArtist,
   getDesign,
   initials,
+  type Design,
   type DesignId,
 } from "@/lib/artists";
 import styles from "./ArtistCredit.module.css";
@@ -11,14 +12,16 @@ import styles from "./ArtistCredit.module.css";
 // A small side note under a design: round avatar(s) (photo, or initials),
 // "<role> by <name> · ...", and the artists' links when they have any.
 // Renders nothing for an unknown design or one without credits.
+// `design` is a registry id, or a Design built from catalog credit lines
+// (designFromCreditLines).
 export default function ArtistCredit({
-  design: designId,
+  design: designOrId,
   className,
 }: {
-  design: DesignId | undefined;
+  design: DesignId | Design | undefined;
   className?: string;
 }) {
-  const design = getDesign(designId);
+  const design = getDesign(designOrId);
   if (!design || design.credits.length === 0) return null;
 
   const people = creditedArtists(design);
@@ -57,7 +60,8 @@ export default function ArtistCredit({
           {design.credits.map(({ artist, role }, i) => (
             <span key={`${artist}-${role}`}>
               {i > 0 && <span className={styles.sep}> · </span>}
-              {role} by <b className={styles.name}>{getArtist(artist).name}</b>
+              {role && `${role} by `}
+              <b className={styles.name}>{getArtist(artist).name}</b>
             </span>
           ))}
         </p>

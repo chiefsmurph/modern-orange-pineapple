@@ -38,7 +38,8 @@ export const artists = {
 export type ArtistId = keyof typeof artists;
 
 export type Credit = {
-  artist: ArtistId;
+  /** A registry id, or (for a catalog credit naming someone not in the registry) the name itself. */
+  artist: ArtistId | (string & {});
   /** "Original drawing", "Colour & design", "Beanie", ... */
   role: string;
 };
@@ -78,15 +79,41 @@ export const designs = {
 
 export type DesignId = keyof typeof designs;
 
-export const getArtist = (id: ArtistId): Artist => artists[id];
+export const getArtist = (id: Credit["artist"]): Artist =>
+  (artists as Record<string, Artist>)[id] ?? { name: id };
 
-export const getDesign = (id: DesignId | undefined): Design | undefined =>
-  id ? designs[id] : undefined;
+export const getDesign = (
+  design: DesignId | Design | undefined
+): Design | undefined =>
+  !design ? undefined : typeof design === "string" ? designs[design] : design;
+
+/**
+ * A design from free-text credit lines (the Printful catalog's `credit`), e.g.
+ * ["Beanie by Janette Garcia"]. Names in the registry get their avatar and
+ * links; anyone else is credited by name with initials.
+ */
+export const designFromCreditLines = (lines: string[]): Design | undefined => {
+  if (lines.length === 0) return undefined;
+  const byName = new Map(
+    Object.entries(artists as Record<string, Artist>).map(([id, a]) => [
+      a.name.toLowerCase(),
+      id,
+    ])
+  );
+  const credits = lines.map((line): Credit => {
+    const m = /^(.*?)\s+by\s+(.+)$/i.exec(line.trim());
+    const [role, name] = m ? [m[1], m[2].trim()] : ["", line.trim()];
+    return { role, artist: byName.get(name.toLowerCase()) ?? name };
+  });
+  return { title: "", credits };
+};
 
 /** "Original drawing by Austin Maxwell · Colour & design by MOP" */
 export const creditText = (design: Design) =>
   design.credits
-    .map(({ artist, role }) => `${role} by ${getArtist(artist).name}`)
+    .map(({ artist, role }) =>
+      role ? `${role} by ${getArtist(artist).name}` : getArtist(artist).name
+    )
     .join(" · ");
 
 /** The people to show avatars (and links) for: every credited non-house artist, once. */

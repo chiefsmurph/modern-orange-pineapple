@@ -2,28 +2,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./ProductCard.module.css";
-import {
-  getTotalPrice,
-  getProductImages,
-  getDelivery,
-  Product,
-} from "@/public/products";
+import type { ShopCard } from "@/lib/shop-cards";
 
 type Props = {
-  product: Product;
+  card: ShopCard;
   /** above the fold (the home page's first card): load eagerly, preloaded */
   priority?: boolean;
 };
 
-export default function ProductCard({ product, priority = false }: Props) {
-  const { id, title, freeShippingMode, fabricNote } = product;
-  const displayPrice = getTotalPrice(product);
-  const img = getProductImages(product)[0];
+export default function ProductCard({ card, priority = false }: Props) {
+  const { href, title, image, price, freeShipping, delivery, fabricNote } = card;
   return (
-    <Link href={`/${id}`} className={styles.card}>
+    <Link href={href} className={styles.card}>
       {/* next/image: served as AVIF/WebP at the card's real width (was a raw 0.5–1.9 MB PNG) */}
       <Image
-        src={img}
+        src={image}
         alt={title}
         className={styles.image}
         width={900}
@@ -32,9 +25,9 @@ export default function ProductCard({ product, priority = false }: Props) {
         sizes="(max-width: 768px) calc(100vw - 56px), (max-width: 1200px) calc(50vw - 84px), 460px"
       />
       <h3 className={styles.title}>{title}</h3>
-      <p className={styles.price}>${displayPrice}</p>
-      {freeShippingMode && <p className={styles.freeShipping}>FREE SHIPPING</p>}
-      <p className={styles.delivery}>{getDelivery(product).text}</p>
+      <p className={styles.price}>{price}</p>
+      {freeShipping && <p className={styles.freeShipping}>FREE SHIPPING</p>}
+      <p className={styles.delivery}>{delivery}</p>
       {fabricNote && <p className={styles.fabricNote}>{fabricNote}</p>}
     </Link>
   );
