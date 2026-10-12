@@ -59,7 +59,7 @@ test("a paid session: recorded, Printful draft + Yoycol order, royalties, one em
   assert.equal(pf.url, "https://api.printful.com/orders"); // draft: no confirm=true
   assert.equal(pf.headers.Authorization, "Bearer pf_test_token");
   assert.equal(pf.body.external_id, ref);
-  assert.deepEqual(pf.body.items, [{ sync_variant_id: 4242, quantity: 1, retail_price: "29.00", name: "Pelican Tee (Large · Grind Beanie · Ivory · M)" }]);
+  assert.deepEqual(pf.body.items, [{ sync_variant_id: 4242, quantity: 1, retail_price: "29.00", name: "Pelican Tee (Big · Grind Beanie · Ivory · M)" }]);
   assert.deepEqual(pf.body.recipient, {
     name: "Ana Maria Diaz",
     address1: "123 Main St",

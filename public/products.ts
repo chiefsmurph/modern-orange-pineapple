@@ -40,6 +40,12 @@ export type Product = {
   freeShippingMode?: boolean;
   /** Shown as a label on the card and product page when the item isn't 100% cotton. */
   fabricNote?: string;
+  /**
+   * Retired: off the home grid, its URL redirects (next.config.ts) and new
+   * checkouts are refused. It stays here so orders from checkouts started
+   * before it was retired still map to a supplier and royalty.
+   */
+  retired?: { redirectTo: string };
   /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
   design?: ProductDesign;
 };
@@ -188,6 +194,8 @@ const products: { products: Product[] } = {
       },
       // Every colour of this tee is the beanie pelican.
       design: "pelican-beanie",
+      // Replaced by the Pelican Tee's Grind Beanie style (John, 2026-10-12).
+      retired: { redirectTo: "/pelican-tee?style=beanie" },
       images: {
         Yellow: [
           "/images/pelican-beanie-t-shirt/erasebg-transformed(11).png",

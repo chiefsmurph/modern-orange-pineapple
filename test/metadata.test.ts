@@ -119,7 +119,7 @@ test("Checkout collects address + phone, carries the metadata, keeps the price r
     const v = p.variants[0];
     const params = checkoutSessionParams(buildItem(p.slug, v.opts, 1, {}));
     assert.equal(params.phone_number_collection?.enabled, true);
-    assert.ok(params.shipping_address_collection?.allowed_countries.includes("US"));
+    assert.deepEqual(params.shipping_address_collection?.allowed_countries, ["US"]); // US only
     assert.equal(params.line_items![0].price_data!.unit_amount, Math.round(v.price * 100));
     assert.equal(params.shipping_options![0].shipping_rate_data!.fixed_amount!.amount, 0);
     assert.equal(params.metadata!.mop_v, "1");
@@ -132,5 +132,6 @@ test("Checkout collects address + phone, carries the metadata, keeps the price r
   assert.equal(shirt.line_items![0].price_data!.unit_amount, 3600);
   assert.equal(shirt.shipping_options![0].shipping_rate_data!.fixed_amount!.amount, 0);
   assert.equal(shirt.phone_number_collection?.enabled, true);
+  assert.deepEqual(shirt.shipping_address_collection?.allowed_countries, ["US"]);
   assert.equal(shirt.success_url, "https://mopclothing.com/clouds-in-sky-shirt?status=success");
 });

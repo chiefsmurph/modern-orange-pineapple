@@ -5,8 +5,9 @@ import { lineItemMetadata, sessionMetadata } from "./metadata.ts";
 
 export const SITE_ORIGIN = "https://mopclothing.com";
 
+// US only (John, 2026-10-12): the free-shipping prices are built on Printful's US rates.
 export const SHIPPING_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] =
-  ["US", "CA", "GB", "AU", "NZ", "DE", "FR", "NL", "SE", "NO"];
+  ["US"];
 
 export function checkoutSessionParams(
   priced: PricedItem,

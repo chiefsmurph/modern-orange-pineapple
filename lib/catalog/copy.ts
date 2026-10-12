@@ -85,9 +85,9 @@ export const catalogFabricNote = (printfulCatalogProductId?: number) =>
 /** Home-page order: lower first. Generated products come before the older ones. */
 export const catalogRank = (slug: string) => introFor(slug)?.rank ?? 90;
 
-/** Picker headings. */
+/** Picker headings. The option keys (version: large/small) stay as they are in catalog.json. */
 export const optionTitles: Record<string, string> = {
-  version: "Version",
+  version: "Print",
   style: "Style",
   emblem: "Emblem",
   color: "Color",
@@ -96,7 +96,7 @@ export const optionTitles: Record<string, string> = {
 
 /** Display labels for coded option values (colours and sizes show as they are). */
 const valueLabels: Record<string, Record<string, string>> = {
-  version: { large: "Large", small: "Small" },
+  version: { large: "Big", small: "Small" },
   style: { classic: "Classic", beanie: "Grind Beanie" },
 };
 

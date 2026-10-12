@@ -1,5 +1,6 @@
 // next.config.ts
 import type { NextConfig } from 'next';
+import products from './public/products.ts';
 
 const nextConfig: NextConfig = {
   images: {
@@ -18,6 +19,18 @@ const nextConfig: NextConfig = {
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];
+  },
+  // Retired products (public/products.ts `retired`) move permanently to their
+  // replacement, so old links and QR codes still land somewhere. Query strings
+  // (e.g. Stripe's ?status=success) are passed through.
+  async redirects() {
+    return products.products
+      .filter((p) => p.retired)
+      .map((p) => ({
+        source: `/${p.id}`,
+        destination: p.retired!.redirectTo,
+        statusCode: 301 as const,
+      }));
   },
   // experimental: {
   //   serverActions: true

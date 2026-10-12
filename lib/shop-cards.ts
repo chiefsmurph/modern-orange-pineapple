@@ -6,9 +6,9 @@ import legacy, {
   getTotalPrice,
   vendorDelivery,
   type Product,
-} from "@/public/products";
-import { shopProducts, type ShopProduct } from "@/lib/catalog";
-import { imagesFor, normalizeSelection, priceLabel } from "@/lib/catalog/select";
+} from "../public/products.ts";
+import { shopProducts, type ShopProduct } from "./catalog/index.ts";
+import { imagesFor, normalizeSelection, priceLabel } from "./catalog/select.ts";
 
 export type ShopCard = {
   href: string;
@@ -43,5 +43,5 @@ export const catalogCard = (product: ShopProduct): ShopCard => ({
 
 export const shopCards = (): ShopCard[] => [
   ...shopProducts.map(catalogCard),
-  ...legacy.products.map(legacyCard),
+  ...legacy.products.filter((p) => !p.retired).map(legacyCard),
 ];

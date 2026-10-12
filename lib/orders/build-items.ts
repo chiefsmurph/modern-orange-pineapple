@@ -39,13 +39,13 @@ export type PricedItem = {
   delivery: Delivery;
   /** Site path of the photo for this pick (a JPEG for the Printful line-up), shown in Stripe Checkout. */
   image: string;
-  /** "Version: Large, Style: Grind Beanie, Color: Ivory, Size: M" */
+  /** "Print: Big, Style: Grind Beanie, Color: Ivory, Size: M" */
   description: string;
 };
 
 const cents = (dollars: number) => Math.round(dollars * 100);
 
-/** "Large · Grind Beanie · Ivory · M" */
+/** "Big · Grind Beanie · Ivory · M" */
 export const itemSummary = (item: Pick<OrderItem, "opts">) =>
   Object.entries(item.opts)
     .map(([k, v]) => valueLabel(k, v))
