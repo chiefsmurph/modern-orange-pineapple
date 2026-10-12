@@ -8,7 +8,7 @@ import {
   getProductDesignId,
   type Product,
 } from "@/public/products";
-import Link from "next/link";
+import HomeLink from "@/components/HomeLink";
 import ProductPageBackground from "./ProductPageBackground";
 import PurchaseForm from "./PurchaseForm";
 import ProductGallery from "@/components/ProductGallery";
@@ -35,13 +35,7 @@ export default function ProductClientView({
   }, [product.title]);
   return (
     <div className={styles.container}>
-      <Link
-        href="/"
-        className={styles.home}
-        onClick={() => sessionStorage.setItem("fromClientNav", "true")}
-      >
-        ← Home
-      </Link>
+      <HomeLink className={styles.home} />
 
       <h1 className={styles.title}>{product.title}</h1>
       <p className={styles.price}>${getTotalPrice(product)}</p>

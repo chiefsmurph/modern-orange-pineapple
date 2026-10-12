@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import HomeLink from "@/components/HomeLink";
 import type { ShopProduct } from "@/lib/catalog";
 import type { Selection } from "@/lib/catalog/types";
 import {
@@ -11,6 +11,7 @@ import {
   imagesFor,
   isAvailable,
   optionNames,
+  keepPhotoPosition,
   priceLabel,
 } from "@/lib/catalog/select";
 import { optionTitle, valueLabel } from "@/lib/catalog/copy";
@@ -68,6 +69,10 @@ export default function CatalogProductView({
 
   const variant = findVariant(product, sel);
   const images = imagesFor(product, sel);
+  // Which photo is showing (model, model2, flat...). A size change keeps the same
+  // photo set; another colour/print/style keeps the same position if it has one.
+  const [photoIndex, setPhoto] = useState(0);
+  const photo = keepPhotoPosition(photoIndex, images.length);
   const credit = designFromCreditLines(creditLinesFor(product, sel));
   const { size: _size, ...withoutSize } = sel;
   const price = variant ? formatPrice(variant.price) : priceLabel(product, withoutSize);
@@ -80,13 +85,7 @@ export default function CatalogProductView({
 
   return (
     <div className={styles.container}>
-      <Link
-        href="/"
-        className={styles.home}
-        onClick={() => sessionStorage.setItem("fromClientNav", "true")}
-      >
-        ← Home
-      </Link>
+      <HomeLink className={styles.home} />
 
       <h1 className={styles.title}>{product.title}</h1>
       <p className={styles.price}>{price}</p>
@@ -96,9 +95,9 @@ export default function CatalogProductView({
 
       <div className={styles.productPage}>
         <div className={`${styles.gallerySide} ${own.gallery}`}>
-          {/* remount on a new photo set so it starts at the first photo */}
           <CatalogGallery
-            key={images.join("|")}
+            index={photo}
+            onIndexChange={setPhoto}
             images={images}
             alt={`${product.title}${summary ? `: ${summary}` : ""}`}
           />

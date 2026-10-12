@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./ProductCard.module.css";
 import type { ShopCard } from "@/lib/shop-cards";
+import { rememberHomeCard } from "@/lib/home-scroll";
 
 type Props = {
   card: ShopCard;
@@ -13,7 +14,12 @@ type Props = {
 export default function ProductCard({ card, priority = false }: Props) {
   const { href, title, image, price, freeShipping, delivery, fabricNote } = card;
   return (
-    <Link href={href} className={styles.card}>
+    <Link
+      href={href}
+      className={styles.card}
+      // so "← Home" on the product page can bring the visitor back to this spot
+      onClick={() => rememberHomeCard(href, window.scrollY)}
+    >
       {/* next/image: served as AVIF/WebP at the card's real width (was a raw 0.5–1.9 MB PNG) */}
       <Image
         src={image}

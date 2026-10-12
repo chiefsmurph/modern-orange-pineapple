@@ -155,3 +155,11 @@ export const creditLinesFor = (
   }
   return lines;
 };
+
+/**
+ * The photo to show after the photo set changes (another colour, print or
+ * style): the same position (model, model2, flat...) if the new set has it,
+ * else the first. A size change doesn't change the set, so it keeps the photo.
+ */
+export const keepPhotoPosition = (index: number, nextLength: number) =>
+  index >= 0 && index < nextLength ? index : 0;

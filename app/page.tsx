@@ -7,6 +7,7 @@ import "./styles.css";
 import ProductCard from "@/components/ProductCard";
 import InViewVideo from "@/components/InViewVideo";
 import { useEffect, useRef, useState } from "react";
+import { takeHomeRestore } from "@/lib/home-scroll";
 
 // Products first: a compact title + one tagline line, then the grid, then the
 // links and the brand story. Everything is server-rendered visible — no
@@ -16,6 +17,25 @@ export default function HomePage() {
   const [isCouponHovered, setIsCouponHovered] = useState(false);
   const [isHoveredBtn2, setIsHoveredBtn2] = useState(false);
   const glowRef = useRef<HTMLHeadingElement>(null);
+
+  // Back from a product page via "← Home": return to the same place in the grid
+  // (lib/home-scroll.ts). Applied now and again once late layout has settled,
+  // so it holds whatever the router or the browser does with scroll on its own.
+  useEffect(() => {
+    let y: number | null = null;
+    try {
+      y = takeHomeRestore(window.sessionStorage);
+    } catch {}
+    if (y == null) return;
+    const go = () => window.scrollTo(0, y!);
+    go();
+    const raf = requestAnimationFrame(go);
+    const timers = [60, 250].map((ms) => setTimeout(go, ms));
+    return () => {
+      cancelAnimationFrame(raf);
+      timers.forEach(clearTimeout);
+    };
+  }, []);
 
   // The title's glow animates text-shadow, which repaints every frame; pause it
   // while the title is scrolled out of view so it can't compete with scrolling.

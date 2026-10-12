@@ -1,19 +1,23 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import styles from "./CatalogGallery.module.css";
 
-// Photos for the Printful line-up: Printful's square mockups (on-model, flat),
-// one big photo plus thumbnails. Remount it (key) when the photo set changes.
+// Photos for the Printful line-up: Printful's square mockups (on-model, model2,
+// flat, ...), one big photo plus thumbnails. The page owns which photo is shown
+// (index), so it survives picker changes: see keepPhotoPosition().
 export default function CatalogGallery({
   images,
   alt,
+  index,
+  onIndexChange,
 }: {
   images: string[];
   alt: string;
+  index: number;
+  onIndexChange: (index: number) => void;
 }) {
-  const [index, setIndex] = useState(0);
-  const current = images[Math.min(index, images.length - 1)];
+  const setIndex = onIndexChange;
+  const current = images[index] ?? images[0];
   if (!current) return null;
 
   return (
