@@ -31,3 +31,16 @@
 .glitch.glow-paused {
   animation-play-state: paused;
 }
+
+/* No pulsing for reduced-motion users; the glow stays (the 0% frame). */
+@media (prefers-reduced-motion: reduce) {
+  .glitch {
+    animation: none;
+    text-shadow:
+      0 0 8px #ff8c00,
+      0 0 16px #ff8c00,
+      0 0 32px #ff8c00,
+      0 0 48px #ff8c00,
+      0 0 64px #ff8c00;
+  }
+}

@@ -11,9 +11,11 @@ import {
 
 type Props = {
   product: Product;
+  /** above the fold (the home page's first card): load eagerly, preloaded */
+  priority?: boolean;
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, priority = false }: Props) {
   const { id, title, freeShippingMode, fabricNote } = product;
   const displayPrice = getTotalPrice(product);
   const img = getProductImages(product)[0];
@@ -26,7 +28,8 @@ export default function ProductCard({ product }: Props) {
         className={styles.image}
         width={900}
         height={900}
-        sizes="(max-width: 820px) calc(100vw - 120px), (max-width: 1200px) calc(50vw - 84px), 460px"
+        priority={priority}
+        sizes="(max-width: 768px) calc(100vw - 56px), (max-width: 1200px) calc(50vw - 84px), 460px"
       />
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.price}>${displayPrice}</p>

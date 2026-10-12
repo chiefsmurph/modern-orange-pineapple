@@ -1,3 +1,52 @@
+main.main {
+  padding: 1.25rem 3rem 3rem;
+  text-align: center;
+  font-family: var(--font-orbitron), sans-serif;
+}
+
+/* ---- compact header: glowing title + one tagline line ---- */
+.header {
+  margin: 0 auto 1.5rem;
+}
+
+/* sizes override .glitch (app/styles.css), which keeps the glow */
+.header .title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.rule {
+  display: block;
+  height: 0;
+  max-width: 13em;
+  margin: 0.3em auto;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.subtitle {
+  display: block;
+  font-size: 0.6em;
+  letter-spacing: 1px;
+}
+
+.tagline {
+  display: inline-block;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0.75rem 0 0;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+/* ---- products ---- */
 .grid {
   display: grid;
   gap: 24px;
@@ -5,14 +54,102 @@
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
+/* was an <h2> per card; keeps the bold text the cards inherited from it */
+.cell {
+  min-width: 0;
+  font-weight: bold;
+}
+
+/* ---- coupon / Instagram ---- */
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 2rem 0 0;
+}
+
+/* ---- brand story, last ---- */
+.story {
+  box-sizing: border-box;
+  max-width: 46rem;
+  margin: 2.5rem auto 0;
+  padding: 1rem 1.5rem 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+.storyHeading {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+}
+
+.story p {
+  margin: 0 0 1rem;
+}
+
+/* ---- a short, non-blocking fade; content is in the HTML from the start ---- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
-main.main {
-  padding: 3rem;
-  text-align: center;
-  font-family: var(--font-orbitron), sans-serif;
+.fadeIn {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fadeIn {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  main.main {
+    padding: 0.75rem 1rem 2rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .header .title {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.66em;
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .links {
+    margin-top: 1.5rem;
+  }
+
+  .story {
+    margin-top: 2rem;
+    padding: 0.75rem 1rem 0.1rem;
+    font-size: 0.95rem;
+  }
 }

@@ -1,6 +1,7 @@
 import { QueryProvider } from "@/components/QueryProvider";
 import { Analytics } from "@/components/Analytics";
 import { Orbitron } from "next/font/google";
+import type { Viewport } from "next";
 import "./globals.css";
 
 // Self-hosted at build time by next/font: no render-blocking Google Fonts @import.
@@ -25,6 +26,12 @@ export const metadata = {
   manifest: "/manifest.json",
 };
 
+// Browser chrome tint (status bar / Android address bar) = the sky's top edge.
+// The page background (globals.css) covers the bottom edge and overscroll.
+export const viewport: Viewport = {
+  themeColor: "#dae1e2",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -47,7 +54,6 @@ export default function RootLayout({
         <div className="site-bg" aria-hidden="true" />
         <QueryProvider>{children}</QueryProvider>
         <Analytics />
-        <div className="overlay" />
       </body>
     </html>
   );

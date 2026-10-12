@@ -1,17 +1,27 @@
-html, body {
+/* The page colour is the backdrop's bottom edge (sky image + its darkening
+   gradient, as rendered). It is what shows anywhere the fixed backdrop doesn't
+   reach: iOS Safari's rubber-band overscroll, the strip behind/under the
+   collapsing toolbar, and the colour Safari samples to tint its bars. It used
+   to be white (body), which showed as a bright band at the bottom on iPhones.
+   It goes on html (the canvas) only: a body background would be painted on
+   top of the z-index:-2 backdrop and hide it. */
+:root {
+  --page-bg: #8eb1be;
+}
+html,
+body {
   height: 100%;
+}
+html {
+  background-color: var(--page-bg);
 }
 body {
   position: relative;
   font-family: var(--font-orbitron), sans-serif;
   font-size: 130%;
-  background: white;
   color: #000;
   margin: 0;
   padding: 0;
-}
-body.loading {
-  overflow: hidden;
 }
 
 hr {
@@ -21,22 +31,36 @@ hr {
 
 /* Fixed backdrop: a still from the old background video, pre-blended at the
    video's 40% opacity over white, so it looks the same but costs ~10 KB and
-   never repaints. Sized to the large viewport (lvh) so mobile toolbars
-   showing/hiding don't resize it mid-scroll. The gradient (sampled from the
-   image) shows while the image loads. */
+   never repaints. The top layer is the darkening gradient that used to be a
+   second fixed .overlay element (one layer now, so both always cover exactly
+   the same box). Sized to the large viewport (lvh) so mobile toolbars
+   showing/hiding don't resize it mid-scroll and it reaches the screen's bottom
+   edge when the toolbar collapses. The sky gradient (sampled from the image)
+   shows while the image loads; background-color = the page colour, since iOS
+   Safari can tint its toolbars from a fixed element's background-color. */
 .site-bg {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  right: 0;
   height: 100vh;
   height: 100lvh;
   z-index: -2;
   pointer-events: none;
-  background-color: #bddae4;
-  background-image: url("/images/bg/sea-light.webp"),
+  background-color: var(--page-bg);
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 30, 0.1),
+      rgba(0, 30, 60, 0.2)
+    ),
+    url("/images/bg/sea-light.webp"),
     linear-gradient(to bottom, #d5eaf0, #bddae4 35%, #a9c8d2);
-  background-image: image-set(
+  background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 30, 0.1),
+      rgba(0, 30, 60, 0.2)
+    ),
+    image-set(
       url("/images/bg/sea-light.avif") type("image/avif"),
       url("/images/bg/sea-light.webp") type("image/webp")
     ),
@@ -44,41 +68,6 @@ hr {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-}
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 30, 0.1),
-    rgba(0, 30, 60, 0.2)
-  );
-  z-index: -1;
-  opacity: 1;
-}
-
-.subheader {
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: white;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-  background: rgba(0, 0, 0, 0.25); /* optional soft container */
-  padding: 0.75rem 2.5rem;
-  margin-bottom: 1rem;
-  letter-spacing: 2px;
-  border-radius: 8px;
-  display: inline-block;
-  max-width: 80%;
-  user-select: none;
-}
-
-@media (max-width: 768px) {
-  .button-container > a:nth-child(1) {
-    margin-bottom: 0.75rem;
-  }
 }
 
 .button-container > * {
