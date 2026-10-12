@@ -115,9 +115,9 @@ export const previews: Preview[] = [
     gallery: [
       img(MORRO, "set", 1400, 650, "The Morro Rock shirt and the sea otter shirt side by side", "The pair", true),
       img(MORRO, "morro-rock-front", 1000, 941, "All-over tee with Morro Rock at sunrise and Morro Bay, CA script", "Morro Rock \u00b7 front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
-      img(MORRO, "morro-rock-back", 1000, 941, "Back of the Morro Rock tee with a round sea otter badge", "Morro Rock \u00b7 back (otter badge)"),
+      img(MORRO, "morro-rock-back", 1000, 941, "Back of the Morro Rock tee: MOP logo and a small sea otter badge", "Morro Rock \u00b7 back"),
       img(MORRO, "otter-front", 1000, 941, "All-over tee with a sea otter floating on its back and Morro Bay, CA script", "Sea Otter \u00b7 front"),
-      img(MORRO, "otter-back", 1000, 941, "Back of the sea otter tee with a round Morro Rock badge", "Sea Otter \u00b7 back (Morro Rock badge)"),
+      img(MORRO, "otter-back", 1000, 941, "Back of the sea otter tee: MOP logo and a small Morro Rock badge", "Sea Otter \u00b7 back"),
     ],
   },
 ];
