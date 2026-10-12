@@ -31,6 +31,17 @@ export class CheckoutError extends Error {
   }
 }
 
+/**
+ * Why a NEW checkout for this product isn't allowed (retired or coming back
+ * soon), or null. The webhook never asks: orders already paid always go through.
+ */
+export const checkoutBlock = (productId: string): { status: number; error: string } | null => {
+  const p = legacyProducts.products.find((x) => x.id === productId);
+  if (p?.retired) return { status: 410, error: "no longer available" };
+  if (p?.comingSoon) return { status: 409, error: p.comingSoon.message.toLowerCase() };
+  return null;
+};
+
 export type PricedItem = {
   item: OrderItem;
   /** Shipping charged once on top, in cents (0 for free-shipping items). */

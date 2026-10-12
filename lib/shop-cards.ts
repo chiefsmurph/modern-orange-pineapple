@@ -44,6 +44,6 @@ export const catalogCard = (product: ShopProduct): ShopCard => ({
 export const shopCards = (): ShopCard[] => [
   ...shopProducts.map(catalogCard),
   ...legacy.products
-    .filter((p) => !p.retired && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
+    .filter((p) => !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
     .map(legacyCard),
 ];

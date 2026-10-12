@@ -8,7 +8,7 @@ import { shopCards } from "../lib/shop-cards.ts";
 import { getShopProduct } from "../lib/catalog/index.ts";
 import { creditLinesFor, imagesFor, normalizeSelection } from "../lib/catalog/select.ts";
 import { optionTitle, valueLabel } from "../lib/catalog/copy.ts";
-import { buildItem, itemSummary } from "../lib/orders/build-items.ts";
+import { buildItem, checkoutBlock, itemSummary } from "../lib/orders/build-items.ts";
 import { itemsFromLineItems } from "../lib/orders/session.ts";
 import { rulesFor } from "../lib/orders/royalties.ts";
 import { creditText, designFromCreditLines } from "../lib/artists.ts";
@@ -16,8 +16,7 @@ import { creditText, designFromCreditLines } from "../lib/artists.ts";
 test("the old $27 pelican is off the home grid but still in the product data", () => {
   const hrefs = shopCards().map((c) => c.href);
   assert.ok(!hrefs.includes("/pelican-beanie-t-shirt"));
-  for (const id of ["clouds-in-sky-shirt", "clouds-skater-dress", "blue-sky-cotton-shorts"])
-    assert.ok(hrefs.includes(`/${id}`), `${id} still listed`);
+  assert.ok(hrefs.includes("/clouds-skater-dress"), "the dress is still listed");
   assert.ok(legacy.products.some((p) => p.id === "pelican-beanie-t-shirt" && p.retired));
 });
 
@@ -84,4 +83,20 @@ test("a plain credit line (CC0 photo) shows as written, with no avatar", () => {
   assert.deepEqual(d.credits, []);
   assert.deepEqual(d.notes, ["Sky photo: John Robert McPherson (CC0, Wikimedia Commons)"]);
   assert.equal(creditText(d), "Sky photo: John Robert McPherson (CC0, Wikimedia Commons)");
+});
+
+test("the old-sky Yoycol shirt and shorts are 'coming back soon': off the grid, no new checkouts, old orders still map", () => {
+  const hrefs = shopCards().map((c) => c.href);
+  for (const id of ["clouds-in-sky-shirt", "blue-sky-cotton-shorts"]) {
+    assert.ok(!hrefs.includes(`/${id}`), `${id} hidden`);
+    const p = legacy.products.find((x) => x.id === id)!;
+    assert.equal(p.comingSoon?.message, "Coming back soon with a new sky");
+    assert.deepEqual(checkoutBlock(id), { status: 409, error: "coming back soon with a new sky" });
+    // a paid order from a checkout started before still goes to Yoycol
+    const { item } = buildItem(id, { size: "M" }, 1, {});
+    assert.equal(item.supplier, "yoycol");
+  }
+  assert.deepEqual(checkoutBlock("pelican-beanie-t-shirt"), { status: 410, error: "no longer available" });
+  assert.equal(checkoutBlock("pelican-tee"), null);
+  assert.equal(checkoutBlock("clouds-skater-dress"), null);
 });

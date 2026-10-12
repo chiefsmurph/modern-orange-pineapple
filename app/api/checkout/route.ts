@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { buildItem, CheckoutError } from "@/lib/orders/build-items";
+import { buildItem, checkoutBlock, CheckoutError } from "@/lib/orders/build-items";
 import { checkoutSessionParams } from "@/lib/orders/checkout";
-import products from "@/public/products";
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -23,10 +22,10 @@ export async function POST(req: NextRequest) {
   const { productId, ...options } = body;
   if (typeof productId !== "string")
     return NextResponse.json({ error: "invalid product" }, { status: 400 });
-  // Retired products can't be bought any more (their page redirects); orders
-  // from checkouts started before still go through the webhook as usual.
-  if (products.products.some((p) => p.id === productId && p.retired))
-    return NextResponse.json({ error: "no longer available" }, { status: 410 });
+  // Retired / coming-back-soon products can't be bought now; orders from
+  // checkouts started before still go through the webhook as usual.
+  const blocked = checkoutBlock(productId);
+  if (blocked) return NextResponse.json({ error: blocked.error }, { status: blocked.status });
 
   // Price, options and the supplier mapping all come from the server's own
   // product data; the client only names a product and its picks.

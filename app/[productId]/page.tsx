@@ -4,6 +4,7 @@ import products, { getProductImages } from "@/public/products";
 import { getShopProduct } from "@/lib/catalog";
 import { normalizeSelection } from "@/lib/catalog/select";
 import ProductClientView from "./ProductClientView";
+import ComingSoonView from "./ComingSoonView";
 import CatalogProductView from "./CatalogProductView";
 
 type ProductPageProps = {
@@ -31,6 +32,7 @@ export default async function ProductPage({
   const { productId } = await params;
 
   const product = findLegacy(productId);
+  if (product?.comingSoon) return <ComingSoonView product={product} />;
   if (product) {
     const defaultColor = product.options.color?.[0];
     const images = getProductImages(product, defaultColor);

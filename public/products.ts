@@ -52,6 +52,13 @@ export type Product = {
    * so checkouts started before the switch still map to their old supplier.
    */
   superseded?: true;
+  /**
+   * Temporarily off sale: off the home grid, its page says it's coming back
+   * soon (no price, no buy button) and new checkouts are refused. Orders from
+   * checkouts started before still go to the supplier. Delete the line to bring
+   * the product back.
+   */
+  comingSoon?: { message: string };
   /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
   design?: ProductDesign;
 };
@@ -109,6 +116,8 @@ const products: { products: Product[] } = {
   products: [
     {
       id: "clouds-in-sky-shirt",
+      // Old stock sky: back when John re-saves the new design in Yoycol (2026-10-12).
+      comingSoon: { message: "Coming back soon with a new sky" },
       title: "Clouds In Sky Shirt",
       description:
         "Bring the sky everywhere you go with this all‑over cloud print T‑shirt!\n\n- Fabric: 100% cotton\n- Regular fit with classic O‑neck\n- Fabric weight: 190 g/m²",
@@ -229,6 +238,8 @@ const products: { products: Product[] } = {
     },
     {
       id: "blue-sky-cotton-shorts",
+      // Old stock sky: back when John re-saves the new design in Yoycol (2026-10-12).
+      comingSoon: { message: "Coming back soon with a new sky" },
       title: "Blue Sky Cotton Shorts",
       description:
         "Made of natural fiber fabric, it is comfortable and breathable, and will not tighten when worn against the skin.  Pair it with casual tops or sweatshirts to wear in many scenarios.\n\n- Fabric: 100% cotton\n- Regular fit\n- Side pocket, back pocket, waist elastic\n- Fabric: 245 g/m²",
