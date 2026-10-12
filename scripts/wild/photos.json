@@ -1,0 +1,206 @@
+{
+  "note": "Out in the wild (home page). One entry per photo in the gallery manifest; `hidden: true` keeps a photo off the site (and out of the repo). Flip it and re-run: node scripts/gen-wild.mjs <manifest.json>. design/href/alt are shown on the site: describe the shirt, never the person.",
+  "photos": [
+    {
+      "n": "01",
+      "design": "The Pelican",
+      "href": "/pelican-tee",
+      "alt": "Pink tank top with the MOP pelican print",
+      "faces": [[0.1923, 0.1894, 0.1765, 0.1177]]
+    },
+    {
+      "n": "02",
+      "design": "The Pelican",
+      "href": "/pelican-tee",
+      "alt": "Pink tank top with the MOP pelican print",
+      "faces": [[0.3278, 0.0914, 0.267, 0.1781]]
+    },
+    {
+      "n": "03",
+      "design": "The Pelican",
+      "href": "/pelican-tee",
+      "alt": "Pink tank top with the MOP pelican print",
+      "faces": [[0.4618, 0.1836, 0.2096, 0.1677]]
+    },
+    {
+      "n": "04",
+      "design": "The Pelican",
+      "href": "/pelican-tee",
+      "alt": "Pink tank top with the MOP pelican print",
+      "faces": [[0.6348, 0.2022, 0.234, 0.156]]
+    },
+    {
+      "n": "05",
+      "design": "The Pelican",
+      "href": "/pelican-crop-top",
+      "alt": "Peach crop top with the MOP pelican print",
+      "faces": [[0.4719, 0.1267, 0.1568, 0.1046]]
+    },
+    {
+      "n": "06",
+      "design": "The Pelican",
+      "href": "/pelican-crop-top",
+      "alt": "White crop top with the MOP pelican print",
+      "faces": [[0.3586, 0.1448, 0.1775, 0.142]]
+    },
+    {
+      "n": "07",
+      "design": "The Pelican",
+      "href": "/pelican-crop-top",
+      "alt": "White crop top with the MOP pelican print",
+      "faces": [[0.3719, 0.1672, 0.1128, 0.1692]]
+    },
+    {
+      "n": "08",
+      "design": "The Pelican",
+      "href": "/pelican-tee",
+      "alt": "Pink tank top with the MOP pelican print",
+      "faces": [[0.2797, 0.2809, 0.1892, 0.155]]
+    },
+    {
+      "n": "09",
+      "design": "The Pelican",
+      "href": "/pelican-crop-top",
+      "alt": "White crop top with the MOP pelican print",
+      "faces": [[0.5355, 0.1616, 0.1793, 0.1008]]
+    },
+    {
+      "n": "10",
+      "design": "Pelican on Sky",
+      "href": "/day-all-over",
+      "alt": "Two all-over sky tees with the pelican and “Morro Bay, CA”",
+      "faces": [[0.267, 0.322, 0.1226, 0.0924], [0.5455, 0.2559, 0.1071, 0.0807]],
+      "source": "source",
+      "crop": [0.091, 0.1875, 0.913, 0.695],
+      "note": "Re-cropped from the full-size photo to leave out the cardboard sign low between them."
+    },
+    {
+      "n": "11",
+      "design": "Pelican on Sky",
+      "href": "/day-all-over",
+      "alt": "All-over sky tee with the pelican and “Morro Bay, CA”",
+      "faces": [[0.4793, 0.1801, 0.1791, 0.1433]]
+    },
+    {
+      "n": "12",
+      "design": "Pelican on Sky",
+      "href": "/day-all-over",
+      "alt": "All-over sky tee with the pelican",
+      "faces": [[0.3911, 0.0992, 0.2079, 0.1663]]
+    },
+    {
+      "n": "13",
+      "design": "Pelican on Sky",
+      "href": "/day-all-over",
+      "alt": "All-over tees: the pelican, the alpaca and the rabbit",
+      "faces": [[0.6967, 0.2974, 0.0589, 0.0533]],
+      "hidden": true,
+      "note": "Waiting for the camera original (this is a photo of the camera screen)."
+    },
+    {
+      "n": "14",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "Purple tee with the smoking alpaca",
+      "faces": [[0.4642, 0.1099, 0.1614, 0.1292]]
+    },
+    {
+      "n": "15",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "Purple tee with the smoking alpaca",
+      "faces": [[0.2727, 0.187, 0.2308, 0.1539]]
+    },
+    {
+      "n": "16",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "Purple crop top with the smoking alpaca",
+      "faces": [[0.3258, 0.0683, 0.1015, 0.0943]]
+    },
+    {
+      "n": "17",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "White tank top with the smoking alpaca",
+      "faces": [[0.6121, 0.1871, 0.2177, 0.1452]]
+    },
+    {
+      "n": "18",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "White tee with the smoking alpaca",
+      "faces": [[0.3915, 0.156, 0.1464, 0.0976]]
+    },
+    {
+      "n": "19",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "White tee with the smoking alpaca",
+      "faces": [[0.5759, 0.1589, 0.1894, 0.152]]
+    },
+    {
+      "n": "20",
+      "design": "The Smoking Alpaca",
+      "href": "/alpaca-tee",
+      "alt": "Basketball jersey with the smoking alpaca",
+      "faces": [[0.3802, 0.2367, 0.0964, 0.0723]]
+    },
+    {
+      "n": "21",
+      "design": "The Classy Rabbit",
+      "href": "/rabbit-tee",
+      "alt": "Sky-print crop top with the classy rabbit",
+      "faces": [[0.2939, 0.2609, 0.206, 0.1847]]
+    },
+    {
+      "n": "22",
+      "design": "The Classy Rabbit",
+      "href": "/rabbit-tee",
+      "alt": "Sky-print crop top with the classy rabbit",
+      "faces": [[0.3406, 0.2571, 0.2421, 0.1923]]
+    },
+    {
+      "n": "23",
+      "design": "The Classy Rabbit",
+      "href": "/rabbit-tee",
+      "alt": "Pale-sky crop top with the classy rabbit",
+      "faces": [[0.4808, 0.1176, 0.1748, 0.1165]]
+    },
+    {
+      "n": "24",
+      "design": "The Classy Rabbit",
+      "href": "/rabbit-tee",
+      "alt": "Black crop top with the classy rabbit",
+      "faces": [[0.5358, 0.2639, 0.1795, 0.1435]]
+    },
+    {
+      "n": "25",
+      "design": "The Classy Rabbit",
+      "href": "/rabbit-tee",
+      "alt": "Black crop top with the classy rabbit",
+      "faces": [[0.2316, 0.132, 0.2462, 0.1385]]
+    },
+    {
+      "n": "26",
+      "design": "Clouds",
+      "href": "/clouds-skater-dress",
+      "alt": "All-over clouds skater dress",
+      "faces": [[0.4493, 0.1472, 0.2398, 0.1388]]
+    },
+    {
+      "n": "27",
+      "design": "Clouds",
+      "href": "/clouds-skater-dress",
+      "alt": "All-over clouds skater dress",
+      "faces": [[0.4733, 0.194, 0.0948, 0.0547]]
+    },
+    {
+      "n": "28",
+      "design": "The Original Star",
+      "href": "/original-star-tee",
+      "alt": "Tee with the original painted star",
+      "faces": [[0.4387, 0.1075, 0.1076, 0.0855]]
+    }
+  ]
+}

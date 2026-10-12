@@ -6,6 +6,7 @@ import { groupSections } from "@/lib/catalog/copy";
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
 import ProductCard from "@/components/ProductCard";
+import OutInTheWild from "@/components/OutInTheWild";
 import InViewVideo from "@/components/InViewVideo";
 import { useEffect, useRef, useState } from "react";
 import { takeHomeRestore } from "@/lib/home-scroll";
@@ -152,6 +153,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <OutInTheWild />
 
       <nav className={`button-container ${styles.links}`} aria-label="More">
         <Link

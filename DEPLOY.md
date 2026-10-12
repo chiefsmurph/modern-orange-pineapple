@@ -190,5 +190,11 @@ result. Image names carry a content hash, so refreshed mockups (e.g. the skater 
 new colour grade) get new URLs on the next run and no cache serves the old ones. Full-body
 hero shots get a head-to-hips crop for the home-grid card (`scripts/card-crop.mjs`).
 Descriptions, option labels and fabric notes live in `lib/catalog/copy.ts`.
+
+"Out in the wild" (home page) photos come from the gallery manifest:
+`node scripts/gen-wild.mjs /path/to/mop-gallery/manifest.json` writes `public/images/wild/`
+and `lib/wild.generated.ts`. Which photos show, their captions, links and alt text are in
+`scripts/wild/photos.json`; a photo marked `"hidden": true` gets no files at all (it stays out
+of the public repo) until the flag goes and the script runs again.
 `npm test` checks the generated data (every variant has a Printful sync variant, credits and
 royalties follow the spec) and the order code.
