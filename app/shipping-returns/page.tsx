@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { shareMeta } from "@/lib/share-meta";
 import Link from "next/link";
 import HomeLink from "@/components/HomeLink";
 import { vendorDelivery } from "@/public/products";
@@ -8,6 +9,11 @@ import own from "./shipping.module.css";
 export const metadata: Metadata = {
   title: "Shipping & returns | Modern Orange Pineapple",
   description: "Made to order, free US shipping, and free replacements for misprints, damage or defects.",
+  ...shareMeta({
+    title: "Shipping & returns · Modern Orange Pineapple",
+    description: "Made to order, free US shipping, and free replacements for misprints, damage or defects.",
+    path: "/shipping-returns",
+  }),
 };
 
 // Set MOP_CONTACT_EMAIL on the box to show an email address; without it the

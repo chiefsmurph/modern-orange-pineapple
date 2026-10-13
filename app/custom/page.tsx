@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { shareMeta } from "@/lib/share-meta";
 import HomeLink from "@/components/HomeLink";
 import CustomRequestForm from "@/components/CustomRequestForm";
 import styles from "../[productId]/ProductClientView.module.css";
@@ -7,6 +8,11 @@ import own from "./custom.module.css";
 export const metadata: Metadata = {
   title: "Custom orders | Modern Orange Pineapple",
   description: "Your own custom shirt, or custom clothing for your company. From one shirt to a whole team.",
+  ...shareMeta({
+    title: "Custom orders · Modern Orange Pineapple",
+    description: "Your own custom shirt, or custom clothing for your company. From one shirt to a whole team.",
+    path: "/custom",
+  }),
 };
 
 export default function CustomPage() {

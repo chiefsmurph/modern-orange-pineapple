@@ -4,6 +4,7 @@ import { Orbitron } from "next/font/google";
 import type { Viewport } from "next";
 import "./globals.css";
 import { UMAMI_BEFORE_SEND, UMAMI_BEFORE_SEND_JS, UMAMI_HOST, UMAMI_WEBSITE_ID } from "@/lib/umami";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, shareMeta } from "@/lib/share-meta";
 
 // Self-hosted at build time by next/font: no render-blocking Google Fonts @import.
 // Same single 500 weight as before (bold text is synthesized, exactly as it was).
@@ -18,8 +19,12 @@ const orbitron = Orbitron({
 });
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "MOP Clothing",
-  description: "Escape the Ordinary—Own a Collectible Piece of Paradise.",
+  description: SITE_DESCRIPTION,
+  // Link previews (Instagram DMs, Messages, Facebook, X...): the designed home image.
+  // Product pages and the other pages set their own (lib/share-meta.ts).
+  ...shareMeta({ title: SITE_NAME, description: SITE_DESCRIPTION }),
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-icon.png",

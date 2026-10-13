@@ -323,6 +323,24 @@ systemctl start mopclothing-scorecard.service && journalctl -u mopclothing-score
 Use the same `node` binary as `mopclothing.service` (`systemctl cat mopclothing`). A failed
 send exits 1 with the whole email in the journal.
 
+## Link previews (Open Graph / Twitter cards)
+
+A mopclothing.com link in Instagram DMs, Messages, Facebook or X shows a 1200×630 image,
+a title and a line (`lib/share-meta.ts`):
+- **Home** (and /custom, /register, /shipping-returns, other pages): the designed image in
+  `public/images/share/home.<hash>.jpg` (wordmark in Orbitron on the site's backdrop, Day,
+  Dusk, Night and the Orbital Sunset Sky Tee, "Art-inspired shirts on real cotton"); title
+  "Modern Orange Pineapple"; the site description.
+- **Product pages**: the product's photo letterboxed on the photo-tile grey
+  (`public/images/share/<slug>.<hash>.jpg`), "Pelican Tee · from $29" / "Sky Tee · $44", and
+  the first sentence of the product copy.
+
+The images are made by `npm run share-images` (`scripts/gen-share-images.mjs`, sharp + the
+bundled Orbitron in `scripts/share/`, SIL OFL) and committed; `npm run catalog` re-runs it.
+File names carry a content hash, because Facebook and Instagram cache a preview per image
+URL. They also cache the page's tags: after a deploy that changes them, paste the URL into
+Facebook's Sharing Debugger (developers.facebook.com/tools/debug) and press **Scrape Again**.
+
 ## Custom orders (/custom)
 
 `POST /api/custom-request` saves each request to `$MOP_DATA_DIR/custom-requests.jsonl` (with

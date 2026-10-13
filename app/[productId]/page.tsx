@@ -8,6 +8,7 @@ import ComingSoonView from "./ComingSoonView";
 import CatalogProductView from "./CatalogProductView";
 import { approvedReviews, reviewStore } from "@/lib/reviews";
 import { dataDir } from "@/lib/orders/store";
+import { SITE_DESCRIPTION, productShareMeta, shareMeta } from "@/lib/share-meta";
 
 type ProductPageProps = {
   params: Promise<{ productId: string }>;
@@ -23,8 +24,21 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { productId } = await params;
-  const title = findLegacy(productId)?.title ?? getShopProduct(productId)?.title;
-  return title ? { title: `${title} | Modern Orange Pineapple` } : {};
+  const legacy = findLegacy(productId);
+  if (legacy)
+    return {
+      title: `${legacy.title} | Modern Orange Pineapple`,
+      ...shareMeta({ title: legacy.title, description: SITE_DESCRIPTION, path: `/${legacy.id}` }),
+    };
+  const product = getShopProduct(productId);
+  if (!product) return {};
+  // Link preview: the product photo, "<name> · $<price>", the copy's first sentence.
+  const share = productShareMeta(product);
+  return {
+    title: `${product.title} | Modern Orange Pineapple`,
+    description: share.openGraph?.description,
+    ...share,
+  };
 }
 
 export default async function ProductPage({

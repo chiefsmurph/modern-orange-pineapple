@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test test/*.test.ts",
-    "catalog": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-catalog.mjs"
+    "catalog": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-catalog.mjs",
+    "share-images": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-share-images.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.70.0",

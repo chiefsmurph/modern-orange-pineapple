@@ -1,6 +1,7 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Modern Orange Pineapple",
+  "short_name": "MOP",
+  "description": "Art-inspired shirts on real cotton — even the all-overs. Made to order in the USA · Morro Bay, CA",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

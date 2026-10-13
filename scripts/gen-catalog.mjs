@@ -339,3 +339,12 @@ for (const { from, to, jpeg, crop, swatch } of imageCopies) {
 fs.writeFileSync(path.join(OUT_DIR, "products.generated.ts"), productsTs);
 fs.writeFileSync(path.join(OUT_DIR, "fulfilment.generated.ts"), fulfilmentTs);
 console.log(`wrote lib/catalog/{products,fulfilment}.generated.ts and public/images/catalog/`);
+
+// The link-preview images are made from these photos: remake them. A separate
+// process, as it points fontconfig at the bundled Orbitron before sharp loads.
+const { spawnSync } = await import("node:child_process");
+const share = spawnSync(process.execPath, ["--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", path.join(ROOT, "scripts", "gen-share-images.mjs")], { stdio: "inherit" });
+if (share.status !== 0) {
+  console.error("gen-share-images.mjs failed: run `npm run share-images` after fixing it");
+  process.exit(1);
+}
