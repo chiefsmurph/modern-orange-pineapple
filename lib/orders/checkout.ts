@@ -36,6 +36,8 @@ export function checkoutSessionParams(
     ],
     // Everything fulfilment needs (supplier, sync variant / Yoycol design + SKU, options, qty).
     metadata: sessionMetadata([item]),
+    // "Add promotion code" in Checkout (e.g. WELCOME10 for new subscribers; the codes are made in the Stripe dashboard).
+    allow_promotion_codes: true,
     shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
     // Printful and Yoycol both want the recipient's phone (Yoycol requires it).
     phone_number_collection: { enabled: true },

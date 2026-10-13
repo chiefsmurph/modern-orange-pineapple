@@ -30,6 +30,8 @@ import { preloadKey, preloadPlan, type PreloadKind } from "@/lib/catalog/preload
 import { imageAttrs, preloadImage, wantsLessData } from "@/lib/product-image";
 import StripeButton from "./StripeButton";
 import DropsSignup from "@/components/DropsSignup";
+import SizeGuide from "@/components/SizeGuide";
+import { sizeGuides } from "@/lib/catalog/sizes.generated";
 import { track } from "@/lib/umami";
 import styles from "./ProductClientView.module.css";
 import own from "./CatalogProductView.module.css";
@@ -215,6 +217,14 @@ export default function CatalogProductView({
                     );
                   })}
                 </div>
+                {name === "size" && sizeGuides[product.printfulCatalogProductId ?? -1] && (
+                  <SizeGuide
+                    guide={sizeGuides[product.printfulCatalogProductId!]}
+                    title={product.title}
+                    sizes={product.options.size}
+                    selected={sel.size}
+                  />
+                )}
               </fieldset>
             ))}
           </div>
@@ -251,7 +261,14 @@ export default function CatalogProductView({
         </div>
       </div>
 
-      <p className={styles.shipping}>Shipping: $0.00 (free) — {delivery.text}</p>
+      <p className={styles.shipping}>
+        <span>
+          Free US shipping — {delivery.text}.{" "}
+          <Link href="/shipping-returns" className={own.policyLink}>
+            Shipping &amp; returns
+          </Link>
+        </span>
+      </p>
 
       <div className={own.buyBar}>
         <p className={own.buySummary}>
@@ -272,6 +289,9 @@ export default function CatalogProductView({
                 : `Choose ${missing.map(optionTitle).join(", ").toLowerCase()}`
           }
         />
+        <Link href="/shipping-returns" className={own.buyPolicy}>
+          Free US shipping · Misprints replaced free · Shipping &amp; returns
+        </Link>
       </div>
 
       {/* Desktop-only faint ghosts at the sides: the same URLs as the big photo

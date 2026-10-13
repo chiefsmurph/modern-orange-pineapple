@@ -29,6 +29,8 @@ export async function POST(req: NextRequest) {
       productExists: (slug) => !!getShopProduct(slug),
       now: () => new Date(),
       log: (m) => console.log(m),
+      // shown only once John has made the promotion code in Stripe and set this
+      welcomeCode: process.env.MOP_WELCOME_CODE?.trim() || undefined,
       notify: (count, source) =>
         sendEmail(
           {

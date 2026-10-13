@@ -155,6 +155,21 @@
   text-underline-offset: 3px;
 }
 
+.policyLink {
+  color: #0050c8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
+.buyPolicy {
+  align-self: center;
+  font-size: 0.66rem;
+  color: #3b4a54;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .buyBar {
   display: flex;
   flex-direction: column;

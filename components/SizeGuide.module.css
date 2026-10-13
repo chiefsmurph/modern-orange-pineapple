@@ -1,0 +1,118 @@
+.link {
+  align-self: flex-start;
+  margin-top: 0.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #d96f00;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(8, 14, 20, 0.55);
+}
+
+/* A bottom sheet on phones, a centred card on wider screens. */
+.sheet {
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 1rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+  border-radius: 18px 18px 0 0;
+  background: #fff;
+  color: #000;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 769px) {
+  .backdrop {
+    align-items: center;
+  }
+  .sheet {
+    border-radius: 18px;
+  }
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.close {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #eef0f1;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.fit {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #d96f00;
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid #e3e6e8;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.table thead th {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #4a5a64;
+  white-space: normal;
+}
+
+.table tbody th {
+  font-weight: 700;
+}
+
+.picked {
+  background: #fff3e0;
+}
+
+.note {
+  margin: 0.75rem 0 0;
+  font-size: 0.72rem;
+  color: #4a5a64;
+}

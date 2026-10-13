@@ -25,6 +25,10 @@ export const metadata = {
     apple: "/apple-icon.png",
   },
   manifest: "/manifest.json",
+  // Google Merchant Center / Search Console: <meta name="google-site-verification"> when set.
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 // Browser chrome tint (status bar / Android address bar) = the sky's top edge.

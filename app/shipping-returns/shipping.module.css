@@ -1,0 +1,34 @@
+.page {
+  padding-bottom: 3rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.page p,
+.page ul {
+  margin: 0 0 0.9rem;
+}
+
+.page ul {
+  padding-left: 1.2rem;
+}
+
+.page a {
+  color: #d96f00;
+}
+
+.title {
+  margin: 0.75rem 0 1rem;
+  font-size: 1.4rem;
+}
+
+.h2 {
+  margin: 1.4rem 0 0.4rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-bottom: 3rem !important;
+  }
+}

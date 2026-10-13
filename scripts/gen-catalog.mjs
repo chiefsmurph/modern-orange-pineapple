@@ -33,7 +33,7 @@ const OUT_DIR = path.join(ROOT, "lib/catalog");
 const PUBLIC_DIR = path.join(ROOT, "public/images/catalog");
 const OPTION_ORDER = ["version", "style", "emblem", "sky", "color", "size"];
 // Top-level routes a slug must not shadow.
-const RESERVED = ["api", "preview", "redeem", "custom", "banana-suit-42", "images", "videos", "_next"];
+const RESERVED = ["api", "preview", "redeem", "custom", "shipping-returns", "feeds", "banana-suit-42", "images", "videos", "_next"];
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");

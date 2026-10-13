@@ -64,6 +64,49 @@
   font-weight: 700;
 }
 
+.done p {
+  margin: 0;
+}
+
+.codeRow {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.5rem 0 !important;
+}
+
+.code {
+  padding: 0.35rem 0.8rem;
+  border: 2px dashed #ff8800;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  user-select: all;
+}
+
+.copy {
+  padding: 0.45rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.codeHint {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #4a5a64;
+}
+
+.compact .codeRow {
+  justify-content: flex-start;
+}
+
 .error {
   margin: 0.5rem 0 0;
   color: #b00020;

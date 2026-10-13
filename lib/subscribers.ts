@@ -104,9 +104,11 @@ export type SubscribeDeps = {
   /** Tell John (best effort; errors are swallowed by the caller of this result). */
   notify: (count: number, source: string) => Promise<unknown>;
   log: (msg: string) => void;
+  /** First-order discount code to show after signing up (MOP_WELCOME_CODE); none = plain thanks. */
+  welcomeCode?: string;
 };
 
-export type SubscribeResult = { status: number; body: { ok: boolean; error?: string } };
+export type SubscribeResult = { status: number; body: { ok: boolean; error?: string; code?: string } };
 
 /** The POST /api/subscribe logic, independent of Next for testing. */
 export async function handleSubscribe(
@@ -127,11 +129,12 @@ export async function handleSubscribe(
     deps.log(`[subscribe] could not save a signup (${source}): ${(err as Error).message}`);
     return { status: 500, body: { ok: false, error: "Something went wrong, please try again." } };
   }
-  if (!result.added) return { status: 200, body: { ok: true } }; // same answer: don't reveal who's on the list
+  const ok = { ok: true, ...(deps.welcomeCode ? { code: deps.welcomeCode } : {}) };
+  if (!result.added) return { status: 200, body: ok }; // same answer: don't reveal who's on the list
   deps.log(`[subscribe] new subscriber #${result.count} (${source})`);
   return {
     status: 200,
-    body: { ok: true },
+    body: ok,
     after: async () => {
       try {
         await deps.notify(result.count, source);

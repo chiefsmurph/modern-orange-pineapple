@@ -252,3 +252,55 @@ location = /api/custom-request {
 ```
 
 (or `client_max_body_size 12m;` in the mopclothing.com server block). Then `nginx -t` and reload.
+
+## Welcome code (10% off a first order)
+
+Checkout shows "Add promotion code" (`allow_promotion_codes`; no extra restricted-key scope
+needed: the code is checked on Stripe's own page). The signup forms show the code only when
+`MOP_WELCOME_CODE` is set, so make the code in Stripe FIRST, then set it.
+
+John's steps (dashboard.stripe.com in the phone browser, **live mode**):
+1. ☰ → **Product catalog** → **Coupons** tab → **+ New** (or **Create coupon**).
+2. Name: `Welcome 10%`. Type: **Percentage discount**, `10` %. Duration: **Once**. Leave
+   "Apply to specific products" off.
+3. Turn on **Use customer-facing coupon codes** (promotion codes). Code: `WELCOME10`.
+4. Tick **Eligible for first-time order only** and **Limit to one redemption per customer**.
+   (Optional: an expiry date or a total redemption limit.)
+5. **Create coupon**.
+6. On the box: add `MOP_WELCOME_CODE=WELCOME10` to `/srv/mopclothing/.env` and restart.
+
+Test: sign up on the site with a fresh address (the code shows), then open a checkout and
+apply WELCOME10 (the total drops 10%; close the tab without paying). Orders with a code arrive
+at the webhook with `amount_discount` set; the Printful draft's retail costs and John's email
+show the discounted total, and royalties are unchanged (per item).
+
+## Shipping & returns, size guides
+
+`/shipping-returns` is linked under the buy button and next to the delivery line on product
+pages. Set `MOP_CONTACT_EMAIL` to show an email address there (otherwise it points to the
+contact form; the page is built at build time, so rebuild after setting it).
+
+Size guides come from Printful's public catalog (no token): `node scripts/gen-sizes.mjs`
+rewrites `lib/catalog/sizes.generated.ts` (run it when a new garment joins the line-up); fit
+notes are in the script.
+
+## Google free listings (Merchant Center)
+
+The feed is `https://mopclothing.com/feeds/google.xml` (built at build time from the catalog:
+one item per variant, free US shipping, in stock). Redeploy to refresh it.
+
+John's steps:
+1. **merchants.google.com** → sign in → create a Merchant Center account (business name
+   Modern Orange Pineapple, website https://mopclothing.com, country United States).
+2. **Verify the website**: choose the **HTML tag** method and copy the `content="…"` value.
+   Put it in `/srv/mopclothing/.env` as `GOOGLE_SITE_VERIFICATION=<that value>`, rebuild +
+   restart (it's a build-time tag), check `view-source:https://mopclothing.com` shows
+   `<meta name="google-site-verification" …>`, then press **Verify** and **Claim**.
+3. **Products → Add products → Add products from a file → Enter a link to your file**:
+   `https://mopclothing.com/feeds/google.xml`, fetch daily.
+4. **Shipping**: Settings → Shipping and returns → Shipping policy → add a US policy:
+   free shipping, handling 2–7 business days, transit 3–8 business days (Printful).
+5. **Returns**: add a return policy: no returns or exchanges for change of mind; free
+   replacement for misprints, damage or defects reported within 30 days; policy URL
+   `https://mopclothing.com/shipping-returns`.
+6. Turn on **free listings** (Growth → Manage programs → Free listings) and wait for review.

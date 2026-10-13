@@ -9,6 +9,8 @@ export default function DropsSignup({ source, compact = false }: { source: strin
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [code, setCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ export default function DropsSignup({ source, compact = false }: { source: strin
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok || !j.ok) throw new Error(j.error || "Something went wrong, please try again.");
+      setCode(typeof j.code === "string" && j.code ? j.code : null);
       setState("done");
       track("signup", { source });
     } catch (err) {
@@ -39,9 +42,37 @@ export default function DropsSignup({ source, compact = false }: { source: strin
       </h2>
       <p className={styles.line}>New skies and drops, first. No spam.</p>
       {state === "done" ? (
-        <p className={styles.done} role="status">
-          You&apos;re on the list. Thanks!
-        </p>
+        code ? (
+          <div className={styles.done} role="status">
+            <p>
+              You&apos;re on the list. Here&apos;s 10% off your first order:
+            </p>
+            <p className={styles.codeRow}>
+              <b className={styles.code}>{code}</b>
+              <button
+                type="button"
+                className={styles.copy}
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(code);
+                  } catch {
+                    // older browsers: select the code so it can be copied by hand
+                    const el = document.querySelector(`.${styles.code}`);
+                    if (el) window.getSelection()?.selectAllChildren(el);
+                  }
+                  setCopied(true);
+                }}
+              >
+                {copied ? "Copied" : "Copy"}
+              </button>
+            </p>
+            <p className={styles.codeHint}>Enter it at checkout under &ldquo;Add promotion code&rdquo;.</p>
+          </div>
+        ) : (
+          <p className={styles.done} role="status">
+            You&apos;re on the list. Thanks!
+          </p>
+        )
       ) : (
         <form className={styles.form} onSubmit={submit} noValidate>
           <label className={styles.visuallyHidden} htmlFor={`drops-email-${source}`}>
