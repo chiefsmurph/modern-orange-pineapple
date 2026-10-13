@@ -96,7 +96,10 @@ export default function HomePage() {
           <h2 id="featured" className={styles.groupTitle}>
             {featured.title}
           </h2>
-          <p className={styles.groupLine}>{featured.line}</p>
+          <p className={styles.groupLine}>
+            {/* hyphenated words ("all-overs") never split across lines */}
+            {featured.line.split(/(\S+-\S+)/).map((w, i) => (i % 2 ? <span key={i} className={styles.nowrap}>{w}</span> : w))}
+          </p>
           {/* phones only: the cards there are compact, so this is said once here */}
           <p className={styles.phoneNote}>
             <b>Free shipping</b> · made to order, {vendorDelivery.printful.text.replace(/^Made to order · /, "")}

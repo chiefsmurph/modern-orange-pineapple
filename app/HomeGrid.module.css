@@ -79,6 +79,10 @@ main.main {
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 /* "Custom orders" card under the new-drops signup */
 .customCard {
   display: flex;
