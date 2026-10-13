@@ -19,13 +19,13 @@ const present = ALLOVER.every((s) => getShopProduct(s));
 const recordFor = async (slug: string, opts: Record<string, string>) =>
   buildOrderRecord(makeSession([buildItem(slug, opts, 1, {}).item]));
 
-test("all five all-overs are in the catalog: $49, XS–2XL, group allover, Printful", { skip: !present }, () => {
+test("all five all-overs are in the catalog: $44 (was $49 until 10/12), XS–2XL, group allover, Printful", { skip: !present }, () => {
   for (const slug of ALLOVER) {
     const p = getShopProduct(slug)!;
     assert.equal(p.group, "allover", slug);
     assert.equal(p.printfulCatalogProductId, 1414, slug);
     assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL"], slug);
-    assert.ok(p.variants.every((v) => v.price === 49 && v.status === "DECIDED"), `${slug} prices`);
+    assert.ok(p.variants.every((v) => v.price === 44 && v.status === "DECIDED"), `${slug} prices`);
     assert.equal(p.sizeNote, "96% cotton, 4% elastane · runs slim — size up");
     assert.equal(p.delivery, "printful");
   }
@@ -35,7 +35,7 @@ test("home: a Premium all-over section of five cards above the main grid; the Sk
   assert.equal(groupSections.allover.title, "Premium all-over");
   const cards = shopCards().filter((c) => c.group === "allover");
   assert.deepEqual(cards.map((c) => c.href), ALLOVER.map((s) => `/${s}`));
-  for (const c of cards) assert.equal(c.price, "$49");
+  for (const c of cards) assert.equal(c.price, "$44");
   const sky = cards.find((c) => c.href === "/sky-tee")!;
   assert.equal(sky.swatches?.length, getShopProduct("sky-tee")!.options.sky.length);
   assert.equal(skySwatches(getShopProduct("day-all-over")!).length, 0);
@@ -47,7 +47,7 @@ test("every all-over variant builds a Printful item whose metadata round-trips",
     for (const v of p.variants) {
       const { item } = buildItem(slug, v.opts, 1, {});
       assert.equal(item.supplier, "printful");
-      assert.equal(item.unitAmount, 4900);
+      assert.equal(item.unitAmount, 4400);
       assert.equal(item.printful?.syncVariantId, catalogFulfilment[slug].variants[variantKey(v.opts)].syncVariantId);
       assert.deepEqual(itemsFromSessionMetadata(sessionMetadata([item])), [item]);
     }
@@ -102,4 +102,24 @@ test("cross-links: pelican → Day (style carried), alpaca → Dusk, rabbit → 
   assert.equal(crossLinkFor("alpaca-tee", { version: "small" })?.href, "/dusk-all-over");
   assert.equal(crossLinkFor("rabbit-tee", {})?.href, "/night-all-over");
   assert.equal(crossLinkFor("star-polo", {}), null);
+});
+
+test("$44 all the way through: feeds, Meta checkout and the Stripe line item", { skip: !present }, async () => {
+  const { googleFeedXml, feedId } = await import("../lib/google-feed.ts");
+  const { shopProducts } = await import("../lib/catalog/index.ts");
+  const { checkoutSessionParams } = await import("../lib/orders/checkout.ts");
+  const { resolveMetaCart } = await import("../lib/orders/meta-checkout.ts");
+  for (const flavor of ["google", "meta"] as const) {
+    const xml = googleFeedXml(shopProducts, new Date(), flavor);
+    for (const slug of ALLOVER) {
+      const items = xml.split("<item>").filter((i) => i.includes(`<g:item_group_id>${slug}</g:item_group_id>`));
+      assert.ok(items.length > 0, slug);
+      for (const i of items) assert.match(i, /<g:price>44\.00 USD<\/g:price>/, `${flavor} ${slug}`);
+    }
+  }
+  for (const slug of ALLOVER) {
+    const v = getShopProduct(slug)!.variants[0];
+    assert.equal(checkoutSessionParams(buildItem(slug, v.opts, 1, {})).line_items![0].price_data!.unit_amount, 4400, slug);
+    assert.equal(resolveMetaCart([{ id: feedId(slug, v.opts), qty: 1 }], {}).priced[0].item.unitAmount, 4400, slug);
+  }
 });
