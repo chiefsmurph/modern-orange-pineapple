@@ -20,19 +20,20 @@ test("Featured: all-overs alternating with the $29 tees, in the order John chose
       ["/day-all-over?style=beanie", "$44"],
       ["/pelican-tee?version=large&style=beanie", "From $29"],
       ["/dusk-all-over", "$44"],
-      ["/rabbit-tee", "From $29"],
-      ["/sky-tee", "$44"],
+      ["/rabbit-tee?version=large&color=Blossom", "From $29"],
+      ["/sky-tee?sky=orbital-sunset", "$44"],
       ["/original-star-tee", "From $29"],
     ]
   );
 });
 
-test("Featured photos: the Big Grind Beanie pelican and the rabbit on the women's model, cropped like the other cards", async () => {
+test("Featured photos: no model twice in a row — pelican on the women's model, Blossom rabbit on the men's, Sky Tee flat", async () => {
   const cards = featuredCards();
   const pel = cards.find((c) => c.href.startsWith("/pelican-tee"))!;
   const rabbit = cards.find((c) => c.href.startsWith("/rabbit-tee"))!;
   assert.match(pel.image, /^\/images\/featured\/pelican-tee\.[0-9a-f]{8}\.webp$/);
-  assert.match(rabbit.image, /model-womens.*-card\.webp$/);
+  assert.match(rabbit.image, /^\/images\/featured\/rabbit-tee\.[0-9a-f]{8}\.webp$/);
+  assert.match(cards.find((c) => c.href.startsWith("/sky-tee"))!.image, /\/sky-tee\/orbital-sunset-flat\.[0-9a-f]{8}\.webp$/);
   assert.match(cards.find((c) => c.href.startsWith("/day-all-over"))!.image, /\/day-all-over\/beanie-model\..*-card\.webp$/);
   for (const c of cards) {
     const file = path.join(ROOT, "public", c.image);

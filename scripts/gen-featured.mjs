@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // The home page's "Featured" card photos (lib/catalog/copy.ts `featured`).
 //
-// Each card shows the photo for its pick (and the women's model photo when it
-// says photo: "womens"), cropped head-to-hips like the other home cards when
+// Each card shows the photo for its pick (the women's / men's model photo when
+// it says photo: "womens" / "mens", the flat shot when it says photo: "flat"), cropped head-to-hips like the other home cards when
 // it's a full-body shot (scripts/card-crop.mjs). Made from the site's own
 // catalog images, so it never needs catalog.json. Writes public/images/featured/
 // and lib/catalog/featured.generated.ts. gen-catalog.mjs runs it at the end;
@@ -32,8 +32,9 @@ for (const f of featured.items) {
   const sel = normalizeSelection(p, f.pick ?? {});
   const set = imageSetFor(p, sel);
   const photos = set?.images ?? imagesFor(p, sel);
-  const photo = (f.photo === "womens" && photos.find((s) => /model-womens/.test(s))) || photos[0];
-  if (f.photo === "womens" && !/model-womens/.test(photo)) console.warn(`warn: featured ${f.slug}: no women's model photo for ${JSON.stringify(f.pick ?? {})}`);
+  const want = { womens: /model-womens/, mens: /model-mens/, flat: /-flat\.|\/flat\./ }[f.photo ?? ""];
+  const photo = (want && photos.find((s) => want.test(s))) || photos[0];
+  if (want && !want.test(photo)) console.warn(`warn: featured ${f.slug}: no ${f.photo} photo for ${JSON.stringify(f.pick ?? {})}`);
   // the product's own card already is this photo, cropped
   if (p.card && p.card.startsWith(photo.replace(/\.webp$/, "-card"))) {
     images[f.slug] = p.card;

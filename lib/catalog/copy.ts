@@ -124,11 +124,12 @@ export const catalogSizeNote = (printfulCatalogProductId?: number) =>
  * prices and different models. Everything else follows in the main grid
  * (catalogRank order) without repeating these. Reorder freely here.
  *   pick   the card opens the product with these picks (and shows that photo)
- *   photo  "womens": the card shows the women's model photo for that pick
+ *   photo  "womens" / "mens": the card shows that model's photo for the pick;
+ *          "flat": the flat shot (e.g. so an all-over isn't the Day model again)
  * A new pick or photo needs `npm run catalog` (it makes the card's crop);
  * reordering or removing doesn't.
  */
-export type FeaturedItem = { slug: string; pick?: Record<string, string>; photo?: "womens" };
+export type FeaturedItem = { slug: string; pick?: Record<string, string>; photo?: "womens" | "mens" | "flat" };
 export const featured: { title: string; line: string; items: FeaturedItem[] } = {
   title: "Featured",
   line: "Heavyweight cotton tees and edge-to-edge all-overs.",
@@ -136,8 +137,8 @@ export const featured: { title: string; line: string; items: FeaturedItem[] } = 
     { slug: "day-all-over", pick: { style: "beanie" } },
     { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
     { slug: "dusk-all-over" },
-    { slug: "rabbit-tee", photo: "womens" },
-    { slug: "sky-tee" },
+    { slug: "rabbit-tee", pick: { version: "large", color: "Blossom" }, photo: "mens" },
+    { slug: "sky-tee", pick: { sky: "orbital-sunset" }, photo: "flat" },
     { slug: "original-star-tee" },
   ],
 };

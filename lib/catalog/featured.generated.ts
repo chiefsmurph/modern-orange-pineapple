@@ -3,8 +3,8 @@
 export const featuredCardImages: Record<string, string> = {
   "day-all-over": "/images/catalog/day-all-over/beanie-model.a3ecd116-card.webp",
   "pelican-tee": "/images/featured/pelican-tee.475a4e81.webp",
-  "dusk-all-over": "/images/catalog/dusk-all-over/flat.3d8959af.webp",
-  "rabbit-tee": "/images/catalog/rabbit-tee/large-lagoon-blue-model-womens-2.f8d2a5ec-card.webp",
-  "sky-tee": "/images/catalog/sky-tee/golden-hour-flat.00e10f74.webp",
+  "dusk-all-over": "/images/catalog/dusk-all-over/flat.166d8f3a.webp",
+  "rabbit-tee": "/images/featured/rabbit-tee.29dc4008.webp",
+  "sky-tee": "/images/catalog/sky-tee/orbital-sunset-flat.501d930c.webp",
   "original-star-tee": "/images/catalog/original-star-tee/large-white-model-womens.e44c17f5-card.webp"
 };
