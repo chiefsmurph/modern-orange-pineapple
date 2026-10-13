@@ -2,9 +2,9 @@
 // The home page's Featured card photo per product slug.
 export const featuredCardImages: Record<string, string> = {
   "day-all-over": "/images/catalog/day-all-over/beanie-model.a3ecd116-card.webp",
-  "pelican-tee": "/images/featured/pelican-tee.475a4e81.webp",
-  "dusk-all-over": "/images/catalog/dusk-all-over/flat.166d8f3a.webp",
   "rabbit-tee": "/images/featured/rabbit-tee.29dc4008.webp",
+  "dusk-all-over": "/images/catalog/dusk-all-over/flat.166d8f3a.webp",
+  "pelican-tee": "/images/featured/pelican-tee.475a4e81.webp",
   "sky-tee": "/images/catalog/sky-tee/orbital-sunset-flat.501d930c.webp",
   "original-star-tee": "/images/catalog/original-star-tee/large-white-model-womens.e44c17f5-card.webp"
 };
