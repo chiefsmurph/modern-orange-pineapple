@@ -68,6 +68,11 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
     rank: 85,
   },
   {
+    match: /^star-crop/,
+    text: () => "The painted star that started MOP, on a soft cotton crop top.",
+    rank: 61,
+  },
+  {
     match: /crop/,
     text: () => "The pelican on a soft cotton crop top. Pick the Classic, or the one in the Grind Beanie.",
     rank: 60,
