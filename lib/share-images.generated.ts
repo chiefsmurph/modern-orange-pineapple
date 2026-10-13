@@ -15,6 +15,7 @@ export const shareImages: Record<string, string> = {
   "original-star-tee": "/images/share/original-star-tee.128682dd.jpg",
   "nolli-extra-fancy-tee": "/images/share/nolli-extra-fancy-tee.5689cdc3.jpg",
   "pelican-crop-top": "/images/share/pelican-crop-top.1c06d8a3.jpg",
+  "star-crop-top": "/images/share/star-crop-top.f40f844d.jpg",
   "pelican-polo": "/images/share/pelican-polo.548063fa.jpg",
   "rabbit-polo": "/images/share/rabbit-polo.43c2eb25.jpg",
   "alpaca-polo": "/images/share/alpaca-polo.081032fe.jpg",
