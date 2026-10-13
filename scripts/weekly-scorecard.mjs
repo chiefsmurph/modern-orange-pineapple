@@ -95,20 +95,23 @@ export function sourceOf({ url_query, referrer_domain }) {
 
 /**
  * Meta's catalog-review crawler (seen 10/12, the night the Meta Shop was set up:
- * ~250 "visitors" in 25 minutes): one page view per session, a feed variant link
- * (?color=…&size=…) with fbclid, referred by facebook.com, from desktop Windows
- * (Chrome/Firefox; US, IE, SE). Real Facebook and Instagram visitors are mostly
- * on phones, and come from l.facebook.com / l.instagram.com.
+ * ~250 sessions in 25 minutes): referred by facebook.com (not l.facebook.com, a
+ * person's click-through), desktop Windows (Chrome/Firefox/Edge; US, IE, SE), a
+ * landing with fbclid and either a feed variant link (?color=…&size=…) or fbclid
+ * on every page, and up to 6 page views (mostly 1). Real Facebook and Instagram
+ * visitors are mostly on phones, and come from l.facebook.com / l.instagram.com.
  */
 const FEED_VARIANT_PARAMS = ["size", "color", "sky", "style", "print"];
+const queryOf = (v) => new URLSearchParams(String(v.url_query ?? "").replace(/^\?/, ""));
 export function isMetaCatalogCrawler(session) {
-  if (session.views.length > 1) return false;
-  const v = session.views[0];
-  const ref = host(v.referrer_domain);
+  if (session.views.length < 1 || session.views.length > 6) return false;
+  if (String(session.device ?? "").toLowerCase() !== "desktop" || !/^windows/i.test(String(session.os ?? ""))) return false;
+  const landing = session.views[0];
+  const ref = host(landing.referrer_domain); // www. is dropped
   if (ref !== "facebook.com" && ref !== "m.facebook.com") return false;
-  const q = new URLSearchParams(String(v.url_query ?? "").replace(/^\?/, ""));
-  if (!q.get("fbclid") || !FEED_VARIANT_PARAMS.some((k) => q.has(k))) return false;
-  return String(session.device ?? "").toLowerCase() === "desktop" && /^windows/i.test(String(session.os ?? ""));
+  const q = queryOf(landing);
+  if (!q.get("fbclid")) return false;
+  return FEED_VARIANT_PARAMS.some((k) => q.has(k)) || session.views.every((v) => queryOf(v).get("fbclid"));
 }
 
 /**
@@ -268,7 +271,7 @@ export function scorecardEmail({ windows, traffic, prevTraffic, shop, prevShop, 
       ["Unique visitors", t.visitors, `last week ${prevTraffic.visitors}, ${change(t.visitors, prevTraffic.visitors)}`],
       ["Page views", t.pageviews, `last week ${prevTraffic.pageviews}, ${change(t.pageviews, prevTraffic.pageviews)}`],
       ...(t.bots.metaCrawler || prevTraffic.bots.metaCrawler
-        ? [["Meta catalog crawler (left out)", t.bots.metaCrawler, `last week ${prevTraffic.bots.metaCrawler}; desktop Windows, one feed-link page from facebook.com`]]
+        ? [["Meta catalog crawler (left out)", t.bots.metaCrawler, `last week ${prevTraffic.bots.metaCrawler}; desktop Windows, feed links with fbclid from facebook.com`]]
         : []),
       ...(t.bots.cnSingle + t.bots.instant
         ? [["Other likely bots (left out)", t.bots.cnSingle + t.bots.instant, [t.bots.cnSingle && `${t.bots.cnSingle} single page from CN`, t.bots.instant && `${t.bots.instant} all pages in 0 s`].filter(Boolean).join(", ")]]

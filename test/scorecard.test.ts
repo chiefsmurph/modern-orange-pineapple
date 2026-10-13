@@ -114,11 +114,13 @@ test("traffic: visitors by landing source, top pages, events; bots left out and 
 test("Meta's catalog crawler is left out and counted; real Facebook / Instagram visitors stay", () => {
   const rows = JSON.parse(readFileSync(path.join(FIX, "meta-crawler.json"), "utf8"));
   const t = analyzeTraffic(rows, weekWindows(new Date(), "2026-10-12").cur);
-  assert.equal(t.bots.metaCrawler, 12);
-  // kept: on a phone, a second page, no variant link, a Mac, from Instagram, no fbclid, via l.facebook.com
-  assert.equal(t.visitors, 7);
-  assert.equal(t.pageviews, 8);
-  assert.equal(t.sources.Facebook, 6);
+  // the 12-session burst, plus: 2 pages with a variant link, fbclid on one page with no variant, 4 pages all with fbclid
+  assert.equal(t.bots.metaCrawler, 15);
+  // kept: on a phone, a Mac, from Instagram, no fbclid (1 page and 2 pages), via l.facebook.com,
+  // fbclid on the landing only then browsing, 7 pages
+  assert.equal(t.visitors, 8);
+  assert.equal(t.pageviews, 16);
+  assert.equal(t.sources.Facebook, 7);
   assert.equal(t.sources.Instagram, 1);
   assert.equal(t.events.galleryOpen, 0); // the crawler's events go too
   assert.equal(t.events.buyClick, 1);
@@ -137,24 +139,27 @@ test("Meta's catalog crawler is left out and counted; real Facebook / Instagram 
   assert.equal(one({ url_query: "?color=Khaki&fbclid=IwAR0x" }), true);
   assert.equal(one({ referrer_domain: "l.facebook.com" }), false);
   assert.equal(one({ referrer_domain: "" }), false);
-  assert.equal(one({ url_query: "fbclid=IwAR0x" }), false);
+  assert.equal(one({ url_query: "fbclid=IwAR0x" }), true); // one page, fbclid on it
   assert.equal(one({ url_query: "color=Khaki&size=3XL" }), false);
   assert.equal(one({}, { device: "mobile", os: "iOS" }), false);
   assert.equal(one({}, { device: "laptop" }), false);
   assert.equal(one({}, { os: "Mac OS" }), false);
   assert.equal(one({}, { os: "Windows 11" }), true);
   assert.equal(one({}, { device: null, os: null }), false); // unknown: kept
-  assert.equal(
+  const many = (queries: string[], ref = "facebook.com") =>
     isMetaCatalogCrawler({
-      views: [
-        { url_query: "color=Khaki&size=3XL&fbclid=IwAR0x", referrer_domain: "facebook.com" },
-        { url_query: "", referrer_domain: "" },
-      ],
+      views: queries.map((url_query, i) => ({ url_query, referrer_domain: i ? "" : ref })),
       device: "desktop",
       os: "Windows 10",
-    }),
-    false
-  );
+    });
+  assert.equal(many(["color=Khaki&size=3XL&fbclid=a", ""]), true); // a variant landing with fbclid: any later pages
+  assert.equal(many(["fbclid=a"]), true); // fbclid on every page
+  assert.equal(many(["fbclid=a", "fbclid=b", "size=M&fbclid=c"]), true);
+  assert.equal(many(["fbclid=a", ""]), false); // landed from Facebook, then browsed
+  assert.equal(many(Array(6).fill("size=M&fbclid=a")), true);
+  assert.equal(many(Array(7).fill("size=M&fbclid=a")), false); // more than the crawler does
+  assert.equal(many(["size=M&fbclid=a", ""], "l.facebook.com"), false);
+  assert.equal(many(["size=M", "fbclid=a"]), false); // no fbclid on the landing
 });
 
 test("Umami event rows (one per data key) become events with their data", () => {
@@ -205,7 +210,7 @@ test("the email: headline first, every section, phone-friendly HTML", async () =
   assert.equal(lines[1], email.headline);
   for (const want of [
     "Unique visitors: 11 (last week 4, +175%)",
-    "Meta catalog crawler (left out): 12 (last week 0; desktop Windows, one feed-link page from facebook.com)",
+    "Meta catalog crawler (left out): 12 (last week 0; desktop Windows, feed links with fbclid from facebook.com)",
     "Other likely bots (left out): 2 (1 single page from CN, 1 all pages in 0 s)",
     "Google Shopping: 1 (last week 0)",
     "Other referrers: 3 (last week 0; reddit.com 2, news.ycombinator.com 1)",

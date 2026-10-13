@@ -144,7 +144,7 @@
    "browser": "ios"
   },
   {
-   "session_id": "k2",
+   "session_id": "mc-two-pages",
    "created_at": "2026-10-09T17:10:00Z",
    "url_path": "/sky-tee",
    "url_query": "sky=aurora&size=L&fbclid=IwAR0twopages",
@@ -155,7 +155,7 @@
    "browser": "chrome"
   },
   {
-   "session_id": "k2",
+   "session_id": "mc-two-pages",
    "created_at": "2026-10-09T17:12:30Z",
    "url_path": "/",
    "url_query": "",
@@ -166,7 +166,7 @@
    "browser": "chrome"
   },
   {
-   "session_id": "k3",
+   "session_id": "mc-fbclid-only",
    "created_at": "2026-10-09T17:20:00Z",
    "url_path": "/",
    "url_query": "fbclid=IwAR0home",
@@ -219,6 +219,171 @@
    "device": "desktop",
    "os": "Windows 10",
    "browser": "chrome"
+  },
+  {
+   "session_id": "mc-four-pages",
+   "created_at": "2026-10-11T02:30:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=midnight&size=M&fbclid=IwAR0w1",
+   "referrer_domain": "www.facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "mc-four-pages",
+   "created_at": "2026-10-11T02:30:20Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=aurora&size=M&fbclid=IwAR0w2",
+   "referrer_domain": "www.facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "mc-four-pages",
+   "created_at": "2026-10-11T02:30:40Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=daydream&size=L&fbclid=IwAR0w3",
+   "referrer_domain": "www.facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "mc-four-pages",
+   "created_at": "2026-10-11T02:31:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=midnight&size=XL&fbclid=IwAR0w4",
+   "referrer_domain": "www.facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k8",
+   "created_at": "2026-10-09T18:10:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k8",
+   "created_at": "2026-10-09T18:12:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k9",
+   "created_at": "2026-10-09T18:20:00Z",
+   "url_path": "/",
+   "url_query": "fbclid=IwAR0browse",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k9",
+   "created_at": "2026-10-09T18:21:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:30:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long0",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:31:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long1",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:32:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long2",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:33:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long3",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:34:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long4",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:35:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long5",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
+  },
+  {
+   "session_id": "k10",
+   "created_at": "2026-10-09T18:36:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0long6",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "edge"
   }
  ],
  "events": [
