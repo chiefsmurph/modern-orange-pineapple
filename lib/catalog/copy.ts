@@ -162,9 +162,9 @@ export const featured: { title: string; line: string; items: FeaturedItem[] } = 
   line: "Heavyweight cotton tees and edge-to-edge all-overs.",
   items: [
     { slug: "day-all-over", pick: { style: "beanie" } },
-    { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
-    { slug: "dusk-all-over" },
     { slug: "rabbit-tee", pick: { version: "large", color: "Blossom" }, photo: "mens" },
+    { slug: "dusk-all-over" },
+    { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
     { slug: "sky-tee", pick: { sky: "orbital-sunset" }, photo: "flat" },
     { slug: "original-star-tee" },
   ],

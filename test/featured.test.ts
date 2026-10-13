@@ -18,9 +18,9 @@ test("Featured: all-overs alternating with the $29 tees, in the order John chose
     cards.map((c) => [c.href, c.price]),
     [
       ["/day-all-over?style=beanie", "$44"],
-      ["/pelican-tee?version=large&style=beanie", "From $29"],
-      ["/dusk-all-over", "$44"],
       ["/rabbit-tee?version=large&color=Blossom", "From $29"],
+      ["/dusk-all-over", "$44"],
+      ["/pelican-tee?version=large&style=beanie", "From $29"],
       ["/sky-tee?sky=orbital-sunset", "$44"],
       ["/original-star-tee", "From $29"],
     ]
