@@ -433,6 +433,46 @@
     "slug": "pelican-tee",
     "price": 29
    }
+  },
+  {
+   "session_id": "s03",
+   "created_at": "2026-10-06T20:00:30Z",
+   "event_name": "add-to-bag",
+   "data": {
+    "slug": "sky-tee",
+    "variant": "Aurora \u00b7 M",
+    "price": 44
+   }
+  },
+  {
+   "session_id": "s03",
+   "created_at": "2026-10-06T20:00:50Z",
+   "event_name": "add-to-bag",
+   "data": {
+    "slug": "pelican-tee",
+    "variant": "Big \u00b7 Classic \u00b7 Ivory \u00b7 L",
+    "price": 29
+   }
+  },
+  {
+   "session_id": "s07",
+   "created_at": "2026-10-09T02:01:00Z",
+   "event_name": "add-to-bag",
+   "data": {
+    "slug": "sky-tee",
+    "variant": "Midnight \u00b7 S",
+    "price": 44
+   }
+  },
+  {
+   "session_id": "s03",
+   "created_at": "2026-10-06T20:01:05Z",
+   "event_name": "bag-checkout",
+   "data": {
+    "lines": 2,
+    "items": 2,
+    "value": 73
+   }
   }
  ]
 }

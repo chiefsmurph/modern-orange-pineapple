@@ -103,6 +103,10 @@ test("traffic: visitors by landing source, top pages, events; bots left out and 
   assert.equal(t.topPages.length, 5);
   assert.equal(t.events.buyClick, 3);
   assert.deepEqual(t.events.buyClickTop, [["pelican-tee", 2], ["sky-tee", 1]]);
+  assert.equal(t.events.addToBag, 3);
+  assert.deepEqual(t.events.addToBagTop, [["sky-tee", 2], ["pelican-tee", 1]]);
+  assert.equal(t.events.bagCheckout, 1);
+  assert.equal(t.events.bagCheckoutValue, 73);
   assert.equal(t.events.galleryOpen, 2); // the bot session's gallery-open is left out
   assert.deepEqual(t.events.metaCheckoutByOrigin, [["instagram", 1]]); // server-sent, no page view: kept
   // 23:30 PT on Sunday Oct 4 belongs to the week before; 00:30 PT Monday Oct 12 to neither
@@ -215,7 +219,9 @@ test("the email: headline first, every section, phone-friendly HTML", async () =
     "Google Shopping: 1 (last week 0)",
     "Other referrers: 3 (last week 0; reddit.com 2, news.ycombinator.com 1)",
     "/: 6 (6 visitors)",
-    "Buy clicks: 3 (last week 1; pelican-tee 2, sky-tee 1)",
+    "Added to bag: 3 (last week 0; sky-tee 2, pelican-tee 1)",
+    "Bag checkouts started: 1 ($73.00 in bags; last week 0)",
+    "Buy now clicks: 3 (last week 1; pelican-tee 2, sky-tee 1)",
     "Meta Shop checkouts: 1 (last week 0; instagram 1)",
     "Orders: 2 ($73.10; last week 0, $0.00)",
     "Waiting for approval: 2 (1 review, 1 photo; the approve links are in their emails)",

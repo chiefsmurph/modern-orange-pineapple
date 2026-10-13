@@ -28,7 +28,7 @@ import ArtistCredit from "@/components/ArtistCredit";
 import { createPreloadQueue, type PreloadQueue } from "@/lib/preload-queue";
 import { preloadKey, preloadPlan, type PreloadKind } from "@/lib/catalog/preload-plan";
 import { imageAttrs, preloadImage, wantsLessData } from "@/lib/product-image";
-import StripeButton from "./StripeButton";
+import AddToBag from "./AddToBag";
 import DropsSignup from "@/components/DropsSignup";
 import { ProductReviews, RatingSummary } from "@/components/ProductReviews";
 import reviewStyles from "@/components/ProductReviews.module.css";
@@ -283,18 +283,12 @@ export default function CatalogProductView({
           <b>{price}</b>
           {summary && <span> · {summary}</span>}
         </p>
-        <StripeButton
-          productId={product.slug}
-          title={product.title}
-          value={variant?.price}
-          options={sel}
-          disabled={!variant}
-          label={
-            variant
-              ? "Buy with Stripe"
-              : missing.includes("size")
-                ? "Choose a size"
-                : `Choose ${missing.map(optionTitle).join(", ").toLowerCase()}`
+        <AddToBag
+          product={product}
+          sel={sel}
+          variant={variant}
+          chooseLabel={
+            missing.includes("size") ? "Choose a size" : `Choose ${missing.map(optionTitle).join(", ").toLowerCase()}`
           }
         />
         <Link href="/shipping-returns" className={own.buyPolicy}>

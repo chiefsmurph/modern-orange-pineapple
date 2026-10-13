@@ -3,6 +3,46 @@ import { useState } from "react";
 import styles from "./StripeButton.module.css";
 import { track } from "@/lib/umami";
 
+/**
+ * One item straight to Stripe (POST /api/checkout): "Buy now" next to "Add to bag",
+ * and the older product pages. Returns an error message, or nothing once it's on its way.
+ */
+export async function singleCheckout({
+  productId,
+  title,
+  value,
+  options,
+}: {
+  productId: string;
+  title: string;
+  value: number | undefined;
+  options: Record<string, string | undefined>;
+}): Promise<string | null> {
+  // Never awaited and a no-op when Umami is blocked: checkout never waits on analytics.
+  track("buy-click", { slug: productId, ...options, price: value });
+
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", "begin_checkout", {
+      currency: "USD",
+      value,
+      items: [{ item_id: productId, item_name: title, ...options }],
+    });
+  }
+  try {
+    const r = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId, ...options }),
+    });
+    const { url } = await r.json();
+    if (!r.ok || !url) throw new Error("checkout failed");
+    window.location.href = url;
+    return null;
+  } catch {
+    return "Sorry, checkout didn't open. Please try again.";
+  }
+}
+
 export default function StripeButton({
   productId,
   title,
@@ -26,35 +66,10 @@ export default function StripeButton({
   const checkout = async () => {
     setLoading(true);
     setError(null);
-
-    // Never awaited and a no-op when Umami is blocked: checkout never waits on analytics.
-    track("buy-click", { slug: productId, ...options, price: value });
-
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "begin_checkout", {
-        currency: "USD",
-        value,
-        items: [
-          {
-            item_id: productId,
-            item_name: title,
-            ...options,
-          },
-        ],
-      });
-    }
-    try {
-      const r = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId, ...options }),
-      });
-      const { url } = await r.json();
-      if (!r.ok || !url) throw new Error("checkout failed");
-      window.location.href = url;
-    } catch {
+    const err = await singleCheckout({ productId, title, value, options });
+    if (err) {
       setLoading(false);
-      setError("Sorry, checkout didn't open. Please try again.");
+      setError(err);
     }
   };
 

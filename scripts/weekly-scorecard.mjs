@@ -183,6 +183,10 @@ export function analyzeTraffic(rows, w) {
     events: {
       buyClick: count("buy-click"),
       buyClickTop: by("buy-click", "slug").slice(0, 5),
+      addToBag: count("add-to-bag"),
+      addToBagTop: by("add-to-bag", "slug").slice(0, 5),
+      bagCheckout: count("bag-checkout"),
+      bagCheckoutValue: events.filter((e) => e.event_name === "bag-checkout").reduce((n, e) => n + (Number(e.data?.value) || 0), 0),
       signup: count("signup"),
       customRequest: count("custom-request"),
       galleryOpen: count("gallery-open"),
@@ -287,7 +291,9 @@ export function scorecardEmail({ windows, traffic, prevTraffic, shop, prevShop, 
     const e = t.events;
     const pe = prevTraffic.events;
     sections.push(["What visitors did", [
-      ["Buy clicks", e.buyClick, [`last week ${pe.buyClick}`, list(e.buyClickTop)].filter(Boolean).join("; ")],
+      ["Added to bag", e.addToBag, [`last week ${pe.addToBag}`, list(e.addToBagTop)].filter(Boolean).join("; ")],
+      ["Bag checkouts started", e.bagCheckout, [`${money(Math.round(e.bagCheckoutValue * 100))} in bags`, `last week ${pe.bagCheckout}`].join("; ")],
+      ["Buy now clicks", e.buyClick, [`last week ${pe.buyClick}`, list(e.buyClickTop)].filter(Boolean).join("; ")],
       ["Signups (form)", e.signup, `last week ${pe.signup}`],
       ["Custom requests (form)", e.customRequest, `last week ${pe.customRequest}`],
       ["Gallery opens", e.galleryOpen, `last week ${pe.galleryOpen}`],

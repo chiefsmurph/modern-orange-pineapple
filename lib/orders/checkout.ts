@@ -18,6 +18,9 @@ export type CartOptions = {
   promotionCode?: string;
   /** Extra session metadata (e.g. where a Meta cart came from); never the mop_* keys. */
   metadata?: Record<string, string>;
+  /** Site paths to come back to (default: the first item's page, ?status=success / cancel). */
+  successPath?: string;
+  cancelPath?: string;
 };
 
 const lineItem = (priced: PricedItem, origin: string): Stripe.Checkout.SessionCreateParams.LineItem => ({
@@ -38,7 +41,7 @@ const lineItem = (priced: PricedItem, origin: string): Stripe.Checkout.SessionCr
 
 export function cartSessionParams(
   cart: PricedItem[],
-  { origin = SITE_ORIGIN, promotionCode, metadata }: CartOptions = {}
+  { origin = SITE_ORIGIN, promotionCode, metadata, successPath, cancelPath }: CartOptions = {}
 ): Stripe.Checkout.SessionCreateParams {
   if (!cart.length) throw new Error("empty cart");
   const first = cart[0];
@@ -75,8 +78,8 @@ export function cartSessionParams(
         },
       },
     ],
-    success_url: `${origin}/${first.item.slug}?status=success`,
-    cancel_url: `${origin}/${first.item.slug}?status=cancel`,
+    success_url: `${origin}${successPath ?? `/${first.item.slug}?status=success`}`,
+    cancel_url: `${origin}${cancelPath ?? `/${first.item.slug}?status=cancel`}`,
   };
 }
 

@@ -345,6 +345,21 @@ File names carry a content hash, because Facebook and Instagram cache a preview 
 URL. They also cache the page's tags: after a deploy that changes them, paste the URL into
 Facebook's Sharing Debugger (developers.facebook.com/tools/debug) and press **Scrape Again**.
 
+## Shopping bag (/bag)
+
+Product pages: **Add to bag** (primary) and **Buy now** (that one item straight to Stripe, as
+before). The bag lives in the browser (`localStorage` `mop-bag`: variant ids, the same as the
+feeds' `g:id`, and quantities 1–20, up to 20 lines) and is checked against the catalog on load;
+anything no longer sold is dropped with a note. The bag button (top right, every page) shows
+the count. `/bag` → **Checkout** → `POST /api/bag-checkout` → one Stripe Checkout session for
+every line, priced on the server by the same code as `/meta-checkout` (`resolveMetaCart` +
+`cartSessionParams`): "Add promotion code", US only, phone, free shipping; session metadata
+`mop_source={"via":"bag"}`; back to `/bag?status=success`, which empties the bag (cancel → `/bag`).
+The webhook handles multi-line orders as before: one Printful order (and one Yoycol order if
+any), a registration code per unit, royalties per item, one email. Umami: `add-to-bag` (slug,
+variant, price), `bag-checkout` (lines, items, value); `buy-click` is now **Buy now**. The weekly
+scorecard reports all three. Box log: `[bag-checkout] …`.
+
 ## Custom orders (/custom)
 
 `POST /api/custom-request` saves each request to `$MOP_DATA_DIR/custom-requests.jsonl` (with
