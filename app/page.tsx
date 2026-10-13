@@ -208,7 +208,7 @@ export default function HomePage() {
           onMouseEnter={() => setIsCouponHovered(true)}
           onMouseLeave={() => setIsCouponHovered(false)}
         >
-          Redeem a Coupon Code
+          Got an old MOP card? Claim it
         </Link>
         <a
           href="https://www.instagram.com/modernorangepineapple"

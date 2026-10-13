@@ -2,7 +2,7 @@
 // entered at /register to register the shirt and leave a verified review.
 //
 // Format: <ANIMAL>-<NN>-<XXXX>, e.g. COW-76-K3P9. The animal and the two digits
-// follow John's legacy redeem codes (lib/db.ts: the same animals and the same
+// follow John's legacy redeem codes (the old cards: the same animals and the same
 // easy-to-read digits); the last four characters come from an alphabet with no
 // 0/O/1/I/L, picked with crypto randomness. That's about 2×10^8 codes, and the
 // lookups are rate limited.
@@ -16,7 +16,7 @@ import crypto from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-/** John's legacy animals and digits (lib/db.ts generateCode). */
+/** John's legacy animals and digits (the old printed cards; lib/legacy-claims.ts). */
 export const ANIMALS = ["FOX", "OWL", "DOG", "BAT", "ANT", "CAT", "RAM", "COW", "HEN"] as const;
 export const DIGITS = "23678";
 /** No 0/O/1/I/L. */

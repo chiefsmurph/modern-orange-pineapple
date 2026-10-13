@@ -1,22 +1,5 @@
-// 📦app/api/generate/route.ts
-import { NextResponse } from "next/server";
-import { generateCode, readCodes, writeCodes } from "@/lib/db";
-
-export async function POST(req: Request) {
-  const { count } = await req.json();
-  const codes = await readCodes();
-
-  const newCodes = Array.from({ length: count }, () => {
-    const value = generateCode(codes);
-    return {
-      value,
-      redeemed: false,
-      redeemedAt: null,
-      user: null,
-      createdAt: new Date().toISOString(),
-    };
-  });
-  codes.push(...newCodes);
-  await writeCodes(codes);
-  return NextResponse.json({ codes: newCodes.map((c) => c.value) });
+// POST /api/generate — retired (10/13): the old redeem-code admin is gone. It made codes
+// for anyone who asked; new codes are made per order by the webhook (lib/item-codes.ts).
+export function POST() {
+  return Response.json({ error: "gone" }, { status: 410 });
 }

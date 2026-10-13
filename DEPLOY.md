@@ -73,14 +73,14 @@ Verify:
 systemctl status mopclothing --no-pager | head -5
 journalctl -u mopclothing -n 20 --no-pager
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3100/                     # 200
-curl -s http://127.0.0.1:3100/api/list | head -c 300; echo                          # the codes
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3100/api/list             # 410 (old admin, retired)
 curl -s -o /dev/null -w '%{http_code} %{content_type}\n' -H 'Accept: image/avif,image/webp' \
   'http://127.0.0.1:3100/_next/image?url=%2Fimages%2Fclouds-in-sky-shirt%2Ferasebg-transformed(3).png&w=640&q=75'  # 200 image/avif
 curl -sI http://127.0.0.1:3100/videos/underthesea-web.mp4 | head -1                 # 200
 ```
 
-Then open https://mopclothing.com and a product page, and generate and redeem a test
-code at /banana-suit-42 and /redeem if you want an end-to-end check.
+Then open https://mopclothing.com and a product page (and /redeem with a test old-card code
+if you want an end-to-end check; reject the test claim afterwards).
 
 ## Rollback
 
