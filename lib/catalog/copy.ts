@@ -118,9 +118,28 @@ export const catalogFabricNote = (printfulCatalogProductId?: number) =>
 export const catalogSizeNote = (printfulCatalogProductId?: number) =>
   garments[printfulCatalogProductId ?? -1]?.sizeNote;
 
-/** Home-page sections for catalog `group`s, shown above the main grid in this order. */
-export const groupSections: Record<string, { title: string; line: string }> = {
-  allover: { title: "Premium all-over", line: "Printed edge to edge." },
+/**
+ * The home page's "Featured" section, in this order (John, 10/13): premium
+ * all-overs alternating with the $29 basics, so the first screen shows both
+ * prices and different models. Everything else follows in the main grid
+ * (catalogRank order) without repeating these. Reorder freely here.
+ *   pick   the card opens the product with these picks (and shows that photo)
+ *   photo  "womens": the card shows the women's model photo for that pick
+ * A new pick or photo needs `npm run catalog` (it makes the card's crop);
+ * reordering or removing doesn't.
+ */
+export type FeaturedItem = { slug: string; pick?: Record<string, string>; photo?: "womens" };
+export const featured: { title: string; line: string; items: FeaturedItem[] } = {
+  title: "Featured",
+  line: "Heavyweight cotton tees and edge-to-edge all-overs.",
+  items: [
+    { slug: "day-all-over", pick: { style: "beanie" } },
+    { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
+    { slug: "dusk-all-over" },
+    { slug: "rabbit-tee", photo: "womens" },
+    { slug: "sky-tee" },
+    { slug: "original-star-tee" },
+  ],
 };
 
 /**

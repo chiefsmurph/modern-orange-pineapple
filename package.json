@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test test/*.test.ts",
     "catalog": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-catalog.mjs",
-    "share-images": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-share-images.mjs"
+    "share-images": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-share-images.mjs",
+    "featured": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gen-featured.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.70.0",

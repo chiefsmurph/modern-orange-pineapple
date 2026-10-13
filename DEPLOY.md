@@ -190,6 +190,10 @@ result. Image names carry a content hash, so refreshed mockups (e.g. the skater 
 new colour grade) get new URLs on the next run and no cache serves the old ones. Full-body
 hero shots get a head-to-hips crop for the home-grid card (`scripts/card-crop.mjs`).
 Descriptions, option labels and fabric notes live in `lib/catalog/copy.ts`.
+The home page's **Featured** section is the `featured` list in `lib/catalog/copy.ts` (order,
+picks, `photo: "womens"`); everything else follows in the main grid without repeats. Reorder or
+remove freely; after changing a pick or photo run `npm run featured` (crops the card photo into
+`public/images/featured/`; `npm run catalog` runs it too) and commit.
 
 "Out in the wild" (home page) photos come from the gallery manifest:
 `node scripts/gen-wild.mjs /path/to/mop-gallery/manifest.json` writes `public/images/wild/`

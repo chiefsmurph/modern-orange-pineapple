@@ -8,8 +8,10 @@ import legacy, {
   type Product,
 } from "../public/products.ts";
 import { shopProducts, type ShopProduct } from "./catalog/index.ts";
-import { imageSetFor, imagesFor, normalizeSelection, priceLabel } from "./catalog/select.ts";
-import { valueLabel } from "./catalog/copy.ts";
+import { imageSetFor, imagesFor, normalizeSelection, optionNames, priceLabel, syncedQuery } from "./catalog/select.ts";
+import { featured, valueLabel } from "./catalog/copy.ts";
+import { featuredCardImages } from "./catalog/featured.generated.ts";
+import { getShopProduct } from "./catalog/index.ts";
 
 export type ShopCard = {
   href: string;
@@ -61,3 +63,30 @@ export const shopCards = (): ShopCard[] => [
     .filter((p) => !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
     .map(legacyCard),
 ];
+
+/**
+ * The home page's Featured cards, in lib/catalog/copy.ts `featured` order: each
+ * opens its product with the featured picks and shows that photo
+ * (scripts/gen-featured.mjs). Products not on sale are left out.
+ */
+export const featuredCards = (): ShopCard[] =>
+  featured.items.flatMap((f) => {
+    const p = getShopProduct(f.slug);
+    if (!p) return [];
+    const card = catalogCard(p);
+    const query = f.pick ? syncedQuery("", optionNames(p), f.pick) : "";
+    return [
+      {
+        ...card,
+        href: `/${p.slug}${query ? `?${query}` : ""}`,
+        image: featuredCardImages[f.slug] ?? card.image,
+        price: priceLabel(p, f.pick ?? {}),
+      },
+    ];
+  });
+
+/** Everything else, in the usual order, below Featured (no repeats). */
+export const restCards = (): ShopCard[] => {
+  const shown = new Set(featuredCards().map((c) => c.href.split("?")[0]));
+  return shopCards().filter((c) => !shown.has(c.href));
+};

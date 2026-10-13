@@ -18,7 +18,8 @@ export default function ProductCard({ card, priority = false }: Props) {
       href={href}
       className={styles.card}
       // so "← Home" on the product page can bring the visitor back to this spot
-      onClick={() => rememberHomeCard(href, window.scrollY)}
+      // (by path: a Featured card's link carries its picks, ?version=large&style=beanie)
+      onClick={() => rememberHomeCard(href.split("?")[0], window.scrollY)}
     >
       {/* next/image: served as AVIF/WebP at the card's real width (was a raw 0.5–1.9 MB PNG) */}
       <Image

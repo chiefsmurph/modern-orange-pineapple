@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { shopCards } from "@/lib/shop-cards";
-import { groupSections } from "@/lib/catalog/copy";
+import { featuredCards, restCards } from "@/lib/shop-cards";
+import { featured } from "@/lib/catalog/copy";
 
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
@@ -89,44 +89,31 @@ export default function HomePage() {
         Real cotton — even the all-overs.
       </p>
       {wildPhotos.length > 0 && <WildStrip photos={wild?.strip ?? null} onOpen={(p) => openWild(p, "strip")} />}
-      {/* Catalog groups (e.g. Premium all-over) get their own section above the main grid. */}
-      {Object.entries(groupSections).map(([group, { title, line }]) => {
-        const cards = shopCards().filter((c) => c.group === group);
-        if (cards.length === 0) return null;
-        return (
-          <section
-            key={group}
-            className={`${styles.group} ${styles.fadeIn}`}
-            aria-labelledby={`group-${group}`}
-          >
-            <h2 id={`group-${group}`} className={styles.groupTitle}>
-              {title}
-            </h2>
-            <p className={styles.groupLine}>{line}</p>
-            <div className={styles.grid}>
-              {cards.map((card, index) => (
-                <div key={card.href} className={styles.cell}>
-                  <ProductCard card={card} priority={index === 0} />
-                </div>
-              ))}
-            </div>
-          </section>
-        );
-      })}
+      {/* Featured (lib/catalog/copy.ts `featured`): premium all-overs alternating with the $29 tees. */}
+      {featuredCards().length > 0 && (
+        <section className={`${styles.group} ${styles.fadeIn}`} aria-labelledby="featured">
+          <h2 id="featured" className={styles.groupTitle}>
+            {featured.title}
+          </h2>
+          <p className={styles.groupLine}>{featured.line}</p>
+          <div className={styles.grid}>
+            {featuredCards().map((card, index) => (
+              <div key={card.href} className={styles.cell}>
+                <ProductCard card={card} priority={index === 0} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
       <section
         className={`${styles.grid} ${styles.fadeIn}`}
         aria-label="Products"
       >
-        {shopCards()
-          .filter((c) => !c.group || !groupSections[c.group])
-          .map((card, index) => (
-            <div key={card.href} className={styles.cell}>
-              <ProductCard
-                card={card}
-                priority={index === 0 && !shopCards().some((c) => c.group && groupSections[c.group])}
-              />
-            </div>
-          ))}
+        {restCards().map((card, index) => (
+          <div key={card.href} className={styles.cell}>
+            <ProductCard card={card} priority={index === 0 && featuredCards().length === 0} />
+          </div>
+        ))}
         <div className={styles.cell}>
           <div className="product-card featured-store">
             <a

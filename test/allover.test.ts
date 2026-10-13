@@ -5,7 +5,6 @@ import assert from "node:assert/strict";
 import { getShopProduct, crossLinkFor } from "../lib/catalog/index.ts";
 import { catalogFulfilment } from "../lib/catalog/fulfilment.generated.ts";
 import { creditLinesFor, findVariant, normalizeSelection, variantKey } from "../lib/catalog/select.ts";
-import { groupSections } from "../lib/catalog/copy.ts";
 import { shopCards, skySwatches } from "../lib/shop-cards.ts";
 import { buildItem, itemSummary } from "../lib/orders/build-items.ts";
 import { itemsFromSessionMetadata, sessionMetadata } from "../lib/orders/metadata.ts";
@@ -31,8 +30,7 @@ test("all five all-overs are in the catalog: $44 (was $49 until 10/12), XS–2XL
   }
 });
 
-test("home: a Premium all-over section of five cards above the main grid; the Sky Tee card shows its skies", { skip: !present }, () => {
-  assert.equal(groupSections.allover.title, "Premium all-over");
+test("all-over cards: $44, group allover; the Sky Tee card shows its skies", { skip: !present }, () => {
   const cards = shopCards().filter((c) => c.group === "allover");
   assert.deepEqual(cards.map((c) => c.href), ALLOVER.map((s) => `/${s}`));
   for (const c of cards) assert.equal(c.price, "$44");

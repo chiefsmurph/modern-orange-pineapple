@@ -340,7 +340,16 @@ fs.writeFileSync(path.join(OUT_DIR, "products.generated.ts"), productsTs);
 fs.writeFileSync(path.join(OUT_DIR, "fulfilment.generated.ts"), fulfilmentTs);
 console.log(`wrote lib/catalog/{products,fulfilment}.generated.ts and public/images/catalog/`);
 
-// The link-preview images are made from these photos: remake them. A separate
+// The home Featured cards and the link-preview images are made from these photos: remake them.
+{
+  const { spawnSync } = await import("node:child_process");
+  const r = spawnSync(process.execPath, ["--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", path.join(ROOT, "scripts", "gen-featured.mjs")], { stdio: "inherit" });
+  if (r.status !== 0) {
+    console.error("gen-featured.mjs failed: run `npm run featured` after fixing it");
+    process.exit(1);
+  }
+}
+// The link-preview images: A separate
 // process, as it points fontconfig at the bundled Orbitron before sharp loads.
 const { spawnSync } = await import("node:child_process");
 const share = spawnSync(process.execPath, ["--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", path.join(ROOT, "scripts", "gen-share-images.mjs")], { stdio: "inherit" });
