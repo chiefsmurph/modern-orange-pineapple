@@ -198,3 +198,31 @@ and `lib/wild.generated.ts`. Which photos show, their captions, links and alt te
 of the public repo) until the flag goes and the script runs again.
 `npm test` checks the generated data (every variant has a Printful sync variant, credits and
 royalties follow the spec) and the order code.
+
+## New-drops email list
+
+`POST /api/subscribe` (the "Get notified of new drops" forms on the home page and under each
+product's description) appends `{email, ts, source, ua_hash}` to
+`$MOP_DATA_DIR/subscribers.jsonl`, deduplicated case-insensitively. No IPs are stored (the
+rate limit, 5 tries / 10 min, keys on a salted in-memory hash) and addresses never go to the
+logs. Each NEW signup sends John "New MOP subscriber (#N)" through PingPigeon
+(`PINGPIGEON_TOKEN`, same as the order emails); if that fails, the signup still counts.
+
+Export (prints CSV; never commit the output):
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node /srv/mopclothing/scripts/export-subscribers.mjs > /root/mop-subscribers.csv
+```
+
+**TODO before the first newsletter:** there's no double opt-in yet, and the form promises
+"Unsubscribe anytime": every newsletter must carry a working unsubscribe link (and honour it
+by removing the address from `subscribers.jsonl` or the sending tool).
+
+## Analytics (Umami)
+
+Umami (stats.chiefsmurph.com) records page views with their query string, so Instagram
+links like `?ref=ig` show on the landing page view. Product pages rewrite the query on every
+pick; `lib/umami.ts` drops those as page views (same path) and keeps the other params in the
+URL. Custom events: `buy-click` (slug, options, price), `gallery-open` (from, photo), `signup`
+(source), `crosslink-allover` (from, to). They're fire-and-forget: with Umami blocked,
+nothing changes (checkout never waits on it).

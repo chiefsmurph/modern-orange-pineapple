@@ -16,6 +16,7 @@ import {
   optionNames,
   keepPhotoPosition,
   priceLabel,
+  syncedQuery,
 } from "@/lib/catalog/select";
 import { optionTitle, valueLabel } from "@/lib/catalog/copy";
 import { crossLinkFor } from "@/lib/catalog";
@@ -28,6 +29,8 @@ import { createPreloadQueue, type PreloadQueue } from "@/lib/preload-queue";
 import { preloadKey, preloadPlan, type PreloadKind } from "@/lib/catalog/preload-plan";
 import { imageAttrs, preloadImage, wantsLessData } from "@/lib/product-image";
 import StripeButton from "./StripeButton";
+import DropsSignup from "@/components/DropsSignup";
+import { track } from "@/lib/umami";
 import styles from "./ProductClientView.module.css";
 import own from "./CatalogProductView.module.css";
 
@@ -47,9 +50,8 @@ export default function CatalogProductView({
 
   // Keep the URL in step so a pick can be shared or bookmarked.
   useEffect(() => {
-    const qs = new URLSearchParams();
-    for (const n of names) if (sel[n]) qs.set(n, sel[n]!);
-    const query = qs.toString();
+    // keeps any other params (e.g. ?ref=ig from Instagram) as they came
+    const query = syncedQuery(window.location.search, names, sel);
     const url = query ? `${window.location.pathname}?${query}` : window.location.pathname;
     window.history.replaceState(window.history.state, "", url);
   }, [sel, names]);
@@ -221,7 +223,12 @@ export default function CatalogProductView({
 
           {crossLink && (
             <p className={own.crossLink}>
-              <Link href={crossLink.href}>{crossLink.text} →</Link>
+              <Link
+                href={crossLink.href}
+                onClick={() => track("crosslink-allover", { from: product.slug, to: crossLink.href.split("?")[0].slice(1) })}
+              >
+                {crossLink.text} →
+              </Link>
             </p>
           )}
 
@@ -235,6 +242,8 @@ export default function CatalogProductView({
                 .join("<br/>"),
             }}
           />
+
+          <DropsSignup source={`product:${product.slug}`} compact />
         </div>
       </div>
 

@@ -1,0 +1,111 @@
+/* The new-drops signup: a frosted card like the other home sections. */
+.signup {
+  max-width: 520px;
+  margin: 1.5rem auto;
+  padding: 1.1rem 1rem 0.9rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.line {
+  margin: 0.3rem 0 0.8rem;
+  font-size: 0.8rem;
+  color: #3b4a54;
+}
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0.8rem;
+  border: 1.5px solid #9aa7ae;
+  border-radius: 10px;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-size: 16px; /* 16px: iOS Safari doesn't zoom into the field */
+}
+
+.input:focus {
+  outline: 2px solid #ff8800;
+  outline-offset: 1px;
+}
+
+.button {
+  flex: 0 0 auto;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 10px;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+}
+
+.done {
+  margin: 0.4rem 0 0.6rem;
+  font-weight: 700;
+}
+
+.error {
+  margin: 0.5rem 0 0;
+  color: #b00020;
+  font-size: 0.8rem;
+}
+
+.privacy {
+  margin: 0.6rem 0 0;
+  font-size: 0.68rem;
+  color: #4a5a64;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Under a product's description: left-aligned, smaller, no card. */
+.compact {
+  max-width: none;
+  margin: 0 0 1.5rem;
+  padding: 0.85rem 0.9rem 0.75rem;
+  text-align: left;
+}
+
+.compact .title {
+  font-size: 0.9rem;
+}
+
+.compact .line {
+  font-size: 0.72rem;
+  margin-bottom: 0.6rem;
+}

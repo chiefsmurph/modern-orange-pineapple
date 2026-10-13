@@ -163,3 +163,22 @@ export const creditLinesFor = (
  */
 export const keepPhotoPosition = (index: number, nextLength: number) =>
   index >= 0 && index < nextLength ? index : 0;
+
+/**
+ * The page's query string after a pick: our option keys follow the selection,
+ * everything else (?ref=ig, utm_*, ...) is kept as it came, so campaign
+ * attribution survives the picker rewriting the URL.
+ */
+export const syncedQuery = (
+  search: string,
+  names: string[],
+  sel: Selection
+): string => {
+  const qs = new URLSearchParams(search);
+  for (const n of names) {
+    const v = sel[n];
+    if (v) qs.set(n, v);
+    else qs.delete(n);
+  }
+  return qs.toString();
+};

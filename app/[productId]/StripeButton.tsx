@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./StripeButton.module.css";
+import { track } from "@/lib/umami";
 
 export default function StripeButton({
   productId,
@@ -25,6 +26,9 @@ export default function StripeButton({
   const checkout = async () => {
     setLoading(true);
     setError(null);
+
+    // Never awaited and a no-op when Umami is blocked: checkout never waits on analytics.
+    track("buy-click", { slug: productId, ...options, price: value });
 
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "begin_checkout", {

@@ -3,6 +3,7 @@ import { Analytics } from "@/components/Analytics";
 import { Orbitron } from "next/font/google";
 import type { Viewport } from "next";
 import "./globals.css";
+import { UMAMI_BEFORE_SEND, UMAMI_BEFORE_SEND_JS } from "@/lib/umami";
 
 // Self-hosted at build time by next/font: no render-blocking Google Fonts @import.
 // Same single 500 weight as before (bold text is synthesized, exactly as it was).
@@ -50,10 +51,13 @@ export default function RootLayout({
           <style>{"[data-main-photo]{opacity:1!important}"}</style>
         </noscript>
 
+        {/* Umami: picks on a product page rewrite the query but aren't new page views (lib/umami.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: UMAMI_BEFORE_SEND_JS }} />
         <script
           defer
           src="https://stats.chiefsmurph.com/script.js"
           data-website-id="ba4cac44-a005-45f5-8d24-3b897178364c"
+          data-before-send={UMAMI_BEFORE_SEND}
         />
       </head>
       <body>
