@@ -142,6 +142,19 @@
   text-underline-offset: 3px;
 }
 
+.customLine {
+  margin: -0.5rem 0 1.25rem;
+  font-size: 0.78rem;
+  color: #3b4a54;
+}
+
+.customLine a {
+  color: #d96f00;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .buyBar {
   display: flex;
   flex-direction: column;

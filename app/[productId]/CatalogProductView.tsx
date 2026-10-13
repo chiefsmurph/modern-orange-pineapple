@@ -243,6 +243,10 @@ export default function CatalogProductView({
             }}
           />
 
+          <p className={own.customLine}>
+            Want this for your team? <Link href="/custom">Custom orders →</Link>
+          </p>
+
           <DropsSignup source={`product:${product.slug}`} compact />
         </div>
       </div>

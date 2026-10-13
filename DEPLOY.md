@@ -226,3 +226,29 @@ pick; `lib/umami.ts` drops those as page views (same path) and keeps the other p
 URL. Custom events: `buy-click` (slug, options, price), `gallery-open` (from, photo), `signup`
 (source), `crosslink-allover` (from, to). They're fire-and-forget: with Umami blocked,
 nothing changes (checkout never waits on it).
+
+## Custom orders (/custom)
+
+`POST /api/custom-request` saves each request to `$MOP_DATA_DIR/custom-requests.jsonl` (with
+an id) and its optional reference image to `$MOP_DATA_DIR/custom-uploads/<id>.<ext>` (JPEG /
+PNG / WebP / HEIC by their bytes, ≤10 MB), then emails John every field through PingPigeon
+(the order helper, which retries once; a failed email is logged by id and the request stays
+saved). Honeypot + 3 requests / 10 min per visitor; nothing the visitor wrote is logged.
+
+| Variable | Needed | What |
+|---|---|---|
+| `MOP_LINK_SECRET` | recommended | Signs the image link in John's email (`/api/custom-upload/<id>?sig=…`). Any long random string (`openssl rand -hex 32`). Without it the email says "saved on the server as custom-uploads/<id>.<ext>" instead of a link. |
+| `MOP_SITE_URL` | no | Base of that link. Default `https://mopclothing.com`. |
+
+**nginx:** its default `client_max_body_size` is 1 MB, which would turn away most phone
+photos with a 413 (the form then says the image is too big). Allow ~12 MB for this route:
+
+```nginx
+location = /api/custom-request {
+    client_max_body_size 12m;
+    proxy_pass http://127.0.0.1:3100;
+    # + the same proxy_set_header lines as `location /`
+}
+```
+
+(or `client_max_body_size 12m;` in the mopclothing.com server block). Then `nginx -t` and reload.

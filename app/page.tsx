@@ -185,6 +185,11 @@ export default function HomePage() {
 
       <DropsSignup source="home" />
 
+      <Link href="/custom" className={styles.customCard}>
+        <span>Want your own design, or shirts for your team?</span>
+        <b>Custom orders →</b>
+      </Link>
+
       <nav className={`button-container ${styles.links}`} aria-label="More">
         <Link
           href="/redeem"
