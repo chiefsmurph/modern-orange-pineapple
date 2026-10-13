@@ -1,0 +1,244 @@
+{
+ "views": [
+  {
+   "session_id": "mc00",
+   "created_at": "2026-10-11T01:58:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Khaki&size=3XL&fbclid=IwAR0crawler00",
+   "referrer_domain": "m.facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "mc01",
+   "created_at": "2026-10-11T02:00:07Z",
+   "url_path": "/alpaca-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0crawler01",
+   "referrer_domain": "facebook.com",
+   "country": "IE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "firefox"
+  },
+  {
+   "session_id": "mc02",
+   "created_at": "2026-10-11T02:02:14Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=aurora&size=L&fbclid=IwAR0crawler02",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "mc03",
+   "created_at": "2026-10-11T02:04:21Z",
+   "url_path": "/day-all-over",
+   "url_query": "style=beanie&size=XS&fbclid=IwAR0crawler03",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "firefox"
+  },
+  {
+   "session_id": "mc04",
+   "created_at": "2026-10-11T02:06:28Z",
+   "url_path": "/rabbit-tee",
+   "url_query": "color=Lagoon+Blue&size=S&fbclid=IwAR0crawler04",
+   "referrer_domain": "facebook.com",
+   "country": "IE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "mc05",
+   "created_at": "2026-10-11T02:08:35Z",
+   "url_path": "/original-star-tee",
+   "url_query": "version=small&color=White&size=XL&fbclid=IwAR0crawler05",
+   "referrer_domain": "m.facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "firefox"
+  },
+  {
+   "session_id": "mc06",
+   "created_at": "2026-10-11T02:10:42Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Khaki&size=3XL&fbclid=IwAR0crawler06",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "mc07",
+   "created_at": "2026-10-11T02:12:49Z",
+   "url_path": "/alpaca-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0crawler07",
+   "referrer_domain": "facebook.com",
+   "country": "IE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "firefox"
+  },
+  {
+   "session_id": "mc08",
+   "created_at": "2026-10-11T02:14:56Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=aurora&size=L&fbclid=IwAR0crawler08",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "mc09",
+   "created_at": "2026-10-11T02:16:03Z",
+   "url_path": "/day-all-over",
+   "url_query": "style=beanie&size=XS&fbclid=IwAR0crawler09",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "firefox"
+  },
+  {
+   "session_id": "mc10",
+   "created_at": "2026-10-11T02:18:10Z",
+   "url_path": "/rabbit-tee",
+   "url_query": "color=Lagoon+Blue&size=S&fbclid=IwAR0crawler10",
+   "referrer_domain": "m.facebook.com",
+   "country": "IE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "mc11",
+   "created_at": "2026-10-11T02:20:17Z",
+   "url_path": "/original-star-tee",
+   "url_query": "version=small&color=White&size=XL&fbclid=IwAR0crawler11",
+   "referrer_domain": "facebook.com",
+   "country": "SE",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "firefox"
+  },
+  {
+   "session_id": "k1",
+   "created_at": "2026-10-09T17:00:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=M&fbclid=IwAR0phone",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "mobile",
+   "os": "iOS",
+   "browser": "ios"
+  },
+  {
+   "session_id": "k2",
+   "created_at": "2026-10-09T17:10:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=aurora&size=L&fbclid=IwAR0twopages",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "k2",
+   "created_at": "2026-10-09T17:12:30Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "k3",
+   "created_at": "2026-10-09T17:20:00Z",
+   "url_path": "/",
+   "url_query": "fbclid=IwAR0home",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "k4",
+   "created_at": "2026-10-09T17:30:00Z",
+   "url_path": "/rabbit-tee",
+   "url_query": "color=Lagoon+Blue&size=S&fbclid=IwAR0mac",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Mac OS",
+   "browser": "safari"
+  },
+  {
+   "session_id": "k5",
+   "created_at": "2026-10-09T17:40:00Z",
+   "url_path": "/alpaca-tee",
+   "url_query": "color=Khaki&size=XL&fbclid=IwAR0ig",
+   "referrer_domain": "l.instagram.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "k6",
+   "created_at": "2026-10-09T17:50:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=L",
+   "referrer_domain": "facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  },
+  {
+   "session_id": "k7",
+   "created_at": "2026-10-09T18:00:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "color=Ivory&size=XL&fbclid=IwAR0lfb",
+   "referrer_domain": "l.facebook.com",
+   "country": "US",
+   "device": "desktop",
+   "os": "Windows 10",
+   "browser": "chrome"
+  }
+ ],
+ "events": [
+  {
+   "session_id": "mc03",
+   "created_at": "2026-10-11T02:04:30Z",
+   "event_name": "gallery-open",
+   "data": {
+    "from": "product",
+    "photo": "1"
+   }
+  },
+  {
+   "session_id": "k1",
+   "created_at": "2026-10-09T17:01:00Z",
+   "event_name": "buy-click",
+   "data": {
+    "slug": "pelican-tee",
+    "price": 29
+   }
+  }
+ ]
+}

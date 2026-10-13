@@ -240,7 +240,11 @@ Pacific) vs the 7 before. Umami: unique visitors, page views, visitors by source
 Shopping, Google search, Instagram, Facebook, old cards, direct, top 3 other referrers; from
 each visitor's landing page), top 5 pages, buy clicks (top products), signups, custom
 requests, gallery opens, Meta Shop checkouts by `cart_origin`. Likely bots are left out and
-counted (a single page view from CN; several page views in the same second). From
+counted: Meta's catalog-review crawler on its own line (one page view, a feed variant link
+with `fbclid`, referrer facebook.com / m.facebook.com, desktop Windows; ~250 of them the night
+the Meta Shop was set up), and others (a single page view from CN; several page views in the
+same second). Real Facebook / Instagram visitors (phones, l.facebook.com, Macs, a second
+page) are kept. From
 `$MOP_DATA_DIR`: live orders + revenue, new subscribers, shirt registrations, custom
 requests, reviews/photos waiting for approval. John's own visits count unless that browser
 has opened `mopclothing.com/?nostats` once. If Umami can't be read the email still goes, with

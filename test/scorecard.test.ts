@@ -10,6 +10,7 @@ import {
   buildScorecard,
   change,
   groupEvents,
+  isMetaCatalogCrawler,
   ptMidnight,
   readShop,
   sourceOf,
@@ -87,7 +88,7 @@ test("traffic: visitors by landing source, top pages, events; bots left out and 
   const t = analyzeTraffic(rows, w.cur);
   assert.equal(t.visitors, 11);
   assert.equal(t.pageviews, 15);
-  assert.deepEqual(t.bots, { cnSingle: 1, instant: 1 });
+  assert.deepEqual(t.bots, { metaCrawler: 12, cnSingle: 1, instant: 1 });
   assert.deepEqual(t.sources, {
     "Google Shopping": 1,
     "Google search": 1,
@@ -108,6 +109,52 @@ test("traffic: visitors by landing source, top pages, events; bots left out and 
   const p = analyzeTraffic(rows, w.prev);
   assert.equal(p.visitors, 4);
   assert.equal(p.sources.Instagram, 2);
+});
+
+test("Meta's catalog crawler is left out and counted; real Facebook / Instagram visitors stay", () => {
+  const rows = JSON.parse(readFileSync(path.join(FIX, "meta-crawler.json"), "utf8"));
+  const t = analyzeTraffic(rows, weekWindows(new Date(), "2026-10-12").cur);
+  assert.equal(t.bots.metaCrawler, 12);
+  // kept: on a phone, a second page, no variant link, a Mac, from Instagram, no fbclid, via l.facebook.com
+  assert.equal(t.visitors, 7);
+  assert.equal(t.pageviews, 8);
+  assert.equal(t.sources.Facebook, 6);
+  assert.equal(t.sources.Instagram, 1);
+  assert.equal(t.events.galleryOpen, 0); // the crawler's events go too
+  assert.equal(t.events.buyClick, 1);
+
+  const one = (view: Record<string, unknown>, extra: Record<string, unknown> = {}) =>
+    isMetaCatalogCrawler({
+      views: [{ url_query: "color=Khaki&size=3XL&fbclid=IwAR0x", referrer_domain: "facebook.com", ...view }],
+      device: "desktop",
+      os: "Windows 10",
+      ...extra,
+    });
+  assert.equal(one({}), true);
+  assert.equal(one({ referrer_domain: "m.facebook.com" }), true);
+  assert.equal(one({ referrer_domain: "www.facebook.com" }), true);
+  for (const k of ["size", "color", "sky", "style", "print"]) assert.equal(one({ url_query: `${k}=x&fbclid=y` }), true, k);
+  assert.equal(one({ url_query: "?color=Khaki&fbclid=IwAR0x" }), true);
+  assert.equal(one({ referrer_domain: "l.facebook.com" }), false);
+  assert.equal(one({ referrer_domain: "" }), false);
+  assert.equal(one({ url_query: "fbclid=IwAR0x" }), false);
+  assert.equal(one({ url_query: "color=Khaki&size=3XL" }), false);
+  assert.equal(one({}, { device: "mobile", os: "iOS" }), false);
+  assert.equal(one({}, { device: "laptop" }), false);
+  assert.equal(one({}, { os: "Mac OS" }), false);
+  assert.equal(one({}, { os: "Windows 11" }), true);
+  assert.equal(one({}, { device: null, os: null }), false); // unknown: kept
+  assert.equal(
+    isMetaCatalogCrawler({
+      views: [
+        { url_query: "color=Khaki&size=3XL&fbclid=IwAR0x", referrer_domain: "facebook.com" },
+        { url_query: "", referrer_domain: "" },
+      ],
+      device: "desktop",
+      os: "Windows 10",
+    }),
+    false
+  );
 });
 
 test("Umami event rows (one per data key) become events with their data", () => {
@@ -158,7 +205,8 @@ test("the email: headline first, every section, phone-friendly HTML", async () =
   assert.equal(lines[1], email.headline);
   for (const want of [
     "Unique visitors: 11 (last week 4, +175%)",
-    "Left out as likely bots: 2 (1 single page from CN, 1 all pages in 0 s)",
+    "Meta catalog crawler (left out): 12 (last week 0; desktop Windows, one feed-link page from facebook.com)",
+    "Other likely bots (left out): 2 (1 single page from CN, 1 all pages in 0 s)",
     "Google Shopping: 1 (last week 0)",
     "Other referrers: 3 (last week 0; reddit.com 2, news.ycombinator.com 1)",
     "/: 6 (6 visitors)",

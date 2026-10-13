@@ -94,25 +94,45 @@ export function sourceOf({ url_query, referrer_domain }) {
 // --- Umami rows -> numbers -------------------------------------------------
 
 /**
- * rows: { views: [{ session_id, created_at, url_path, url_query, referrer_domain, country }],
+ * Meta's catalog-review crawler (seen 10/12, the night the Meta Shop was set up:
+ * ~250 "visitors" in 25 minutes): one page view per session, a feed variant link
+ * (?color=…&size=…) with fbclid, referred by facebook.com, from desktop Windows
+ * (Chrome/Firefox; US, IE, SE). Real Facebook and Instagram visitors are mostly
+ * on phones, and come from l.facebook.com / l.instagram.com.
+ */
+const FEED_VARIANT_PARAMS = ["size", "color", "sky", "style", "print"];
+export function isMetaCatalogCrawler(session) {
+  if (session.views.length > 1) return false;
+  const v = session.views[0];
+  const ref = host(v.referrer_domain);
+  if (ref !== "facebook.com" && ref !== "m.facebook.com") return false;
+  const q = new URLSearchParams(String(v.url_query ?? "").replace(/^\?/, ""));
+  if (!q.get("fbclid") || !FEED_VARIANT_PARAMS.some((k) => q.has(k))) return false;
+  return String(session.device ?? "").toLowerCase() === "desktop" && /^windows/i.test(String(session.os ?? ""));
+}
+
+/**
+ * rows: { views: [{ session_id, created_at, url_path, url_query, referrer_domain, country, device, os }],
  *         events: [{ session_id, created_at, event_name, data: { key: value } }] }
- * Sessions that look like bots are left out and counted: a single page view
- * from China (crawlers), or several page views all within the same second.
+ * Sessions that look like bots are left out and counted: Meta's catalog crawler
+ * (isMetaCatalogCrawler), a single page view from China (crawlers), or several
+ * page views all within the same second.
  */
 export function analyzeTraffic(rows, w) {
   const views = (rows.views ?? []).filter((v) => inWindow(w, v.created_at)).sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
   const bySession = new Map();
   for (const v of views) {
-    const s = bySession.get(v.session_id) ?? { views: [], country: v.country ?? null };
+    const s = bySession.get(v.session_id) ?? { views: [], country: v.country ?? null, device: v.device ?? null, os: v.os ?? null };
     s.views.push(v);
     bySession.set(v.session_id, s);
   }
-  const bots = { cnSingle: 0, instant: 0 };
+  const bots = { metaCrawler: 0, cnSingle: 0, instant: 0 };
   const human = new Map();
   for (const [id, s] of bySession) {
     const first = Date.parse(s.views[0].created_at);
     const last = Date.parse(s.views[s.views.length - 1].created_at);
-    if ((s.country ?? "").toUpperCase() === "CN" && s.views.length === 1) bots.cnSingle++;
+    if (isMetaCatalogCrawler(s)) bots.metaCrawler++;
+    else if ((s.country ?? "").toUpperCase() === "CN" && s.views.length === 1) bots.cnSingle++;
     else if (s.views.length >= 2 && Math.floor(last / 1000) === Math.floor(first / 1000)) bots.instant++;
     else human.set(id, s);
   }
@@ -247,8 +267,11 @@ export function scorecardEmail({ windows, traffic, prevTraffic, shop, prevShop, 
     sections.push(["Visitors", [
       ["Unique visitors", t.visitors, `last week ${prevTraffic.visitors}, ${change(t.visitors, prevTraffic.visitors)}`],
       ["Page views", t.pageviews, `last week ${prevTraffic.pageviews}, ${change(t.pageviews, prevTraffic.pageviews)}`],
+      ...(t.bots.metaCrawler || prevTraffic.bots.metaCrawler
+        ? [["Meta catalog crawler (left out)", t.bots.metaCrawler, `last week ${prevTraffic.bots.metaCrawler}; desktop Windows, one feed-link page from facebook.com`]]
+        : []),
       ...(t.bots.cnSingle + t.bots.instant
-        ? [["Left out as likely bots", t.bots.cnSingle + t.bots.instant, [t.bots.cnSingle && `${t.bots.cnSingle} single page from CN`, t.bots.instant && `${t.bots.instant} all pages in 0 s`].filter(Boolean).join(", ")]]
+        ? [["Other likely bots (left out)", t.bots.cnSingle + t.bots.instant, [t.bots.cnSingle && `${t.bots.cnSingle} single page from CN`, t.bots.instant && `${t.bots.instant} all pages in 0 s`].filter(Boolean).join(", ")]]
         : []),
     ]]);
     sections.push(["Where visitors came from", BUCKETS.filter((b) => t.sources[b] || prevTraffic.sources[b]).map((b) => [
@@ -324,7 +347,7 @@ export function scorecardEmail({ windows, traffic, prevTraffic, shop, prevShop, 
 // --- Umami's database --------------------------------------------------------
 
 export const VIEWS_SQL = `
-  SELECT e.session_id, e.created_at, e.url_path, e.url_query, e.referrer_domain, s.country
+  SELECT e.session_id, e.created_at, e.url_path, e.url_query, e.referrer_domain, s.country, s.device, s.os
   FROM website_event e JOIN session s ON s.session_id = e.session_id
   WHERE e.website_id = $1 AND e.event_type = 1 AND e.created_at >= $2 AND e.created_at < $3`;
 
