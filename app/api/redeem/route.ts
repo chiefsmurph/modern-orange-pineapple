@@ -1,21 +1,8 @@
-// app/api/redeem/route.ts
-import { NextResponse } from 'next/server';
-import { readCodes, writeCodes } from '@/lib/db';
+// POST /api/redeem — retired (10/13): old card codes are now claimed with a photo for John
+// to check (/api/legacy-claim, lib/legacy-claims.ts). Marking a code redeemed here without
+// that check would skip it, so this only says where to go.
+import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { code, name, fact } = await req.json();
-  const db = await readCodes();
-  const target = db.find(c => c.value === code);
-
-  if (!target || target.redeemed) {
-    return NextResponse.json({ success: false });
-  }
-
-  target.redeemed = true;
-  target.redeemedAt = new Date().toISOString();
-  target.user = { name, fact };
-
-  await writeCodes(db);
-
-  return NextResponse.json({ success: true });
+export async function POST() {
+  return NextResponse.json({ success: false, error: "Please use the form at /redeem." }, { status: 410 });
 }

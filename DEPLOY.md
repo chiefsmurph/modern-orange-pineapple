@@ -443,6 +443,22 @@ John's steps:
    `https://mopclothing.com/shipping-returns`.
 6. Turn on **free listings** (Growth → Manage programs → Free listings) and wait for review.
 
+## Old card codes (/redeem): claims John checks
+
+The printed cards' two-part codes (COW-76) were checked against `$MOP_DATA_DIR/codes.json`,
+which an old deploy overwrote (it holds 1 code now). `/redeem` now takes any code with the old
+card format (FOX OWL DOG BAT ANT CAT RAM COW HEN + two digits from 2 3 6 7 8: 225 codes) or still
+on codes.json, **once**: name, fun fact, a required photo of the shirt or card (10 MB, JPG/PNG/
+WebP/HEIC, checked by content) and an optional email or Instagram handle. Lookups 10 / claims 5
+per 10 minutes per visitor (as /register). John gets an email (PingPigeon, as /register) with
+the code, name, fun fact, contact, a private photo link and a link to `/moderate/<id>` ("Old
+card claims") with **Approve** / **Reject** (needs `MOP_LINK_SECRET`). Approve only marks the
+claim approved (and the code redeemed on codes.json if it's there); nothing is paid or sent
+automatically. Reject frees the code for another claim.
+- Storage: `$MOP_DATA_DIR/legacy-claims.jsonl` (append-only: claims, then status changes) and
+  `$MOP_DATA_DIR/claim-uploads/`. Never in the repo; keep the data dir in the nightly backup.
+- `/api/redeem` and `/api/validate-code` are retired (410) so nothing skips the photo check.
+
 ## Shirt registration, verified reviews, The MOP Crew
 
 - **Codes:** the webhook issues one code per unit sold (`COW-76-K3P9`: John's legacy animals

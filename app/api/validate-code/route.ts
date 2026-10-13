@@ -1,15 +1,7 @@
-// app/api/validate-code/route.ts
-import { NextResponse } from 'next/server';
-import { readCodes } from '@/lib/db';
+// POST /api/validate-code — retired (10/13): /redeem now uses /api/legacy-claim/lookup,
+// which also accepts old card codes that were lost from codes.json, with a rate limit.
+import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { code } = await req.json();
-  const db = await readCodes();
-  const target = db.find(c => c.value === code);
-
-  if (!target) return NextResponse.json({ valid: false });
-  if (target.redeemed && target.user)
-    return NextResponse.json({ valid: false, alreadyRedeemed: true });
-
-  return NextResponse.json({ valid: true });
+export async function POST() {
+  return NextResponse.json({ valid: false, error: "Please use the form at /redeem." }, { status: 410 });
 }
