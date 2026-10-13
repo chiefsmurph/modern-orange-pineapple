@@ -1,0 +1,306 @@
+{
+ "views": [
+  {
+   "session_id": "s01",
+   "created_at": "2026-10-05T17:02:10Z",
+   "url_path": "/pelican-tee",
+   "url_query": "ref=ig",
+   "referrer_domain": "l.instagram.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s01",
+   "created_at": "2026-10-05T17:04:40Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s01",
+   "created_at": "2026-10-05T17:06:05Z",
+   "url_path": "/sky-tee",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s02",
+   "created_at": "2026-10-06T03:15:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "version=large&style=beanie&color=Ivory&size=M&utm_source=google&utm_medium=shopping&utm_campaign=free_listings",
+   "referrer_domain": "google.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s03",
+   "created_at": "2026-10-06T20:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "google.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s03",
+   "created_at": "2026-10-06T20:01:10Z",
+   "url_path": "/shipping-returns",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s04",
+   "created_at": "2026-10-07T01:30:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "sky=golden-hour&size=M&utm_source=meta&utm_medium=shop&utm_campaign=catalog",
+   "referrer_domain": "l.instagram.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s05",
+   "created_at": "2026-10-07T15:45:00Z",
+   "url_path": "/alpaca-tee",
+   "url_query": "color=Blue+Jean&size=L&utm_source=meta&utm_medium=shop&utm_campaign=catalog",
+   "referrer_domain": "l.facebook.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s06",
+   "created_at": "2026-10-08T19:20:00Z",
+   "url_path": "/",
+   "url_query": "ref=card",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s07",
+   "created_at": "2026-10-09T02:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s07",
+   "created_at": "2026-10-09T02:03:00Z",
+   "url_path": "/custom",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s08",
+   "created_at": "2026-10-10T16:00:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s09",
+   "created_at": "2026-10-10T18:00:00Z",
+   "url_path": "/rabbit-tee",
+   "url_query": "",
+   "referrer_domain": "reddit.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s10",
+   "created_at": "2026-10-11T04:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "news.ycombinator.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s10b",
+   "created_at": "2026-10-11T05:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "reddit.com",
+   "country": "US"
+  },
+  {
+   "session_id": "s11",
+   "created_at": "2026-10-09T09:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "CN"
+  },
+  {
+   "session_id": "s12",
+   "created_at": "2026-10-08T11:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s12",
+   "created_at": "2026-10-08T11:00:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "s12",
+   "created_at": "2026-10-08T11:00:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "p01",
+   "created_at": "2026-10-05T06:30:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "l.instagram.com",
+   "country": "US"
+  },
+  {
+   "session_id": "p02",
+   "created_at": "2026-09-30T18:00:00Z",
+   "url_path": "/pelican-tee",
+   "url_query": "ref=ig",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "p03",
+   "created_at": "2026-10-01T18:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "google.com",
+   "country": "US"
+  },
+  {
+   "session_id": "p04",
+   "created_at": "2026-10-02T18:00:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "p04",
+   "created_at": "2026-10-02T18:05:00Z",
+   "url_path": "/sky-tee",
+   "url_query": "",
+   "referrer_domain": "",
+   "country": "US"
+  },
+  {
+   "session_id": "n01",
+   "created_at": "2026-10-12T07:30:00Z",
+   "url_path": "/",
+   "url_query": "",
+   "referrer_domain": "l.instagram.com",
+   "country": "US"
+  }
+ ],
+ "events": [
+  {
+   "session_id": "s01",
+   "created_at": "2026-10-05T17:07:00Z",
+   "event_name": "buy-click",
+   "data": {
+    "slug": "pelican-tee",
+    "price": 29
+   }
+  },
+  {
+   "session_id": "s02",
+   "created_at": "2026-10-06T03:16:30Z",
+   "event_name": "buy-click",
+   "data": {
+    "slug": "pelican-tee",
+    "price": 29
+   }
+  },
+  {
+   "session_id": "s04",
+   "created_at": "2026-10-07T01:31:00Z",
+   "event_name": "buy-click",
+   "data": {
+    "slug": "sky-tee",
+    "price": 49
+   }
+  },
+  {
+   "session_id": "s04",
+   "created_at": "2026-10-07T01:31:20Z",
+   "event_name": "gallery-open",
+   "data": {
+    "from": "product",
+    "photo": "2"
+   }
+  },
+  {
+   "session_id": "s06",
+   "created_at": "2026-10-08T19:22:00Z",
+   "event_name": "signup",
+   "data": {
+    "source": "home"
+   }
+  },
+  {
+   "session_id": "s06",
+   "created_at": "2026-10-08T19:23:00Z",
+   "event_name": "gallery-open",
+   "data": {
+    "from": "wild",
+    "photo": "12"
+   }
+  },
+  {
+   "session_id": "s07",
+   "created_at": "2026-10-09T02:09:00Z",
+   "event_name": "custom-request",
+   "data": {
+    "who": "team",
+    "qty": 12,
+    "items": "tee"
+   }
+  },
+  {
+   "session_id": "s08",
+   "created_at": "2026-10-10T16:01:00Z",
+   "event_name": "signup",
+   "data": {
+    "source": "product:pelican-tee"
+   }
+  },
+  {
+   "session_id": "s12",
+   "created_at": "2026-10-08T11:00:00Z",
+   "event_name": "gallery-open",
+   "data": {
+    "from": "home",
+    "photo": "1"
+   }
+  },
+  {
+   "session_id": "s13",
+   "created_at": "2026-10-11T22:10:00Z",
+   "event_name": "meta-checkout",
+   "data": {
+    "origin": "instagram",
+    "items": 2,
+    "lines": 2,
+    "value": 78
+   }
+  },
+  {
+   "session_id": "p02",
+   "created_at": "2026-09-30T18:02:00Z",
+   "event_name": "buy-click",
+   "data": {
+    "slug": "pelican-tee",
+    "price": 29
+   }
+  }
+ ]
+}

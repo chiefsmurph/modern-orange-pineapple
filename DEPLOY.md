@@ -227,6 +227,102 @@ URL. Custom events: `buy-click` (slug, options, price), `gallery-open` (from, ph
 (source), `crosslink-allover` (from, to), and `meta-checkout` from the server (see Instagram Shop). They're fire-and-forget: with Umami blocked,
 nothing changes (checkout never waits on it).
 
+Feed links are tagged, after the variant's picks, so listing clicks show up as campaigns:
+Google `utm_source=google&utm_medium=shopping&utm_campaign=free_listings`, Meta
+`utm_source=meta&utm_medium=shop&utm_campaign=catalog` (Meta can't say Facebook or Instagram
+in the link; the referrer and `/meta-checkout`'s `cart_origin` tell them apart). The product
+page keeps them through its URL rewrite, and the landing page view carries them to Umami.
+
+### Weekly scorecard email ("MOP weekly", not installed yet)
+
+`scripts/weekly-scorecard.mjs` emails John every Monday 08:00 PT: the last 7 days (Mon–Sun,
+Pacific) vs the 7 before. Umami: unique visitors, page views, visitors by source (Google
+Shopping, Google search, Instagram, Facebook, old cards, direct, top 3 other referrers; from
+each visitor's landing page), top 5 pages, buy clicks (top products), signups, custom
+requests, gallery opens, Meta Shop checkouts by `cart_origin`. Likely bots are left out and
+counted (a single page view from CN; several page views in the same second). From
+`$MOP_DATA_DIR`: live orders + revenue, new subscribers, shirt registrations, custom
+requests, reviews/photos waiting for approval. John's own visits count unless that browser
+has opened `mopclothing.com/?nostats` once. If Umami can't be read the email still goes, with
+the shop numbers.
+
+It reads Umami's Postgres directly with a read-only user (the `pg` package is now a
+dependency, installed by the usual `npm ci`). Create the user as the Postgres superuser, in
+Umami's database (the name at the end of `DATABASE_URL` in `/root/umami/.env`):
+
+```sql
+-- sudo -u postgres psql -d <umami db>
+-- password: openssl rand -hex 24
+CREATE ROLE mop_scorecard LOGIN PASSWORD '<password>' CONNECTION LIMIT 2;
+ALTER ROLE mop_scorecard SET default_transaction_read_only = on;
+GRANT CONNECT ON DATABASE <umami db> TO mop_scorecard;
+GRANT USAGE ON SCHEMA public TO mop_scorecard;
+GRANT SELECT ON public.website_event, public.session, public.event_data TO mop_scorecard;
+```
+
+Table grants can't be limited to one website, so this user can read the other sites' rows in
+the same Umami too (read-only, local only). A view filtered to MOP's website id would be
+tighter, but views on Umami's tables block its own migrations when an upgrade changes a
+column type, so it's left out. If `DATABASE_URL` has `?schema=…`, use that schema instead of
+`public`.
+
+Then add to `/srv/mopclothing/.env` (same host and port as Umami's `DATABASE_URL`):
+`MOP_UMAMI_DB_URL=postgresql://mop_scorecard:<password>@127.0.0.1:5432/<umami db>`.
+Check it reads and can't write:
+`psql "$MOP_UMAMI_DB_URL" -c "select count(*) from website_event"` (a number), then
+`psql "$MOP_UMAMI_DB_URL" -c "delete from session where false"` (fails: read-only transaction).
+
+Try it (prints, sends nothing):
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing \
+  MOP_UMAMI_DB_URL="$(grep '^MOP_UMAMI_DB_URL=' /srv/mopclothing/.env | cut -d= -f2-)" \
+  node /srv/mopclothing/scripts/weekly-scorecard.mjs --dry-run
+```
+
+Options: `--end YYYY-MM-DD` (the week ends at that day's midnight PT), `--html` (with
+`--dry-run`, also print the HTML), `--include-test` (count Stripe test-mode orders),
+`--fixture file.json --data-dir dir` (no database: `test/fixtures/scorecard/`).
+
+```ini
+# /etc/systemd/system/mopclothing-scorecard.service
+[Unit]
+Description=MOP weekly scorecard email
+After=network-online.target postgresql.service
+
+[Service]
+Type=oneshot
+User=mopclothing
+Group=mopclothing
+WorkingDirectory=/srv/mopclothing
+EnvironmentFile=/srv/mopclothing/.env
+Environment=MOP_DATA_DIR=/var/lib/mopclothing
+ExecStart=/usr/bin/node /srv/mopclothing/scripts/weekly-scorecard.mjs
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+
+# /etc/systemd/system/mopclothing-scorecard.timer
+[Unit]
+Description=MOP weekly scorecard, Mondays 08:00 Pacific
+
+[Timer]
+OnCalendar=Mon *-*-* 08:00:00 America/Los_Angeles
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+```sh
+systemctl daemon-reload && systemctl enable --now mopclothing-scorecard.timer
+systemctl list-timers mopclothing-scorecard.timer
+systemctl start mopclothing-scorecard.service && journalctl -u mopclothing-scorecard -n 20   # send one now
+```
+
+Use the same `node` binary as `mopclothing.service` (`systemctl cat mopclothing`). A failed
+send exits 1 with the whole email in the journal.
+
 ## Custom orders (/custom)
 
 `POST /api/custom-request` saves each request to `$MOP_DATA_DIR/custom-requests.jsonl` (with
@@ -287,7 +383,8 @@ notes are in the script.
 ## Google free listings (Merchant Center)
 
 The feed is `https://mopclothing.com/feeds/google.xml` (built at build time from the catalog:
-one item per variant, free US shipping, in stock). Redeploy to refresh it.
+one item per variant, free US shipping, in stock; links tagged `utm_medium=shopping`, see
+Analytics). Redeploy to refresh it.
 
 John's steps:
 1. **merchants.google.com** → sign in → create a Merchant Center account (business name

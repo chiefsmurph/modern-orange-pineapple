@@ -54,6 +54,17 @@ const plain = (s: string) =>
 
 export type FeedFlavor = "google" | "meta";
 
+/**
+ * Campaign tags on every feed link, after the variant's picks (John, 2026-10-12), so
+ * Umami shows which visits came from a listing. The product page keeps them through
+ * its URL rewrite (syncedQuery). Meta can't say Facebook or Instagram in the link:
+ * /meta-checkout's cart_origin and the referrer tell those apart.
+ */
+export const FEED_UTM: Record<FeedFlavor, string> = {
+  google: "utm_source=google&utm_medium=shopping&utm_campaign=free_listings",
+  meta: "utm_source=meta&utm_medium=shop&utm_campaign=catalog",
+};
+
 export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor: FeedFlavor = "google"): string {
   const items: string[] = [];
   for (const p of products) {
@@ -79,7 +90,7 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
           `<g:item_group_id>${xml(p.slug)}</g:item_group_id>`,
           `<g:title>${xml(title)}</g:title>`,
           `<g:description>${xml(plain(p.description).slice(0, 4900))}</g:description>`,
-          `<g:link>${xml(`${SITE}/${p.slug}${query ? `?${query}` : ""}`)}</g:link>`,
+          `<g:link>${xml(`${SITE}/${p.slug}?${[query, FEED_UTM[flavor]].filter(Boolean).join("&")}`)}</g:link>`,
           `<g:image_link>${xml(abs(hero))}</g:image_link>`,
           ...extra.map((src) => `<g:additional_image_link>${xml(abs(src))}</g:additional_image_link>`),
           `<g:price>${v.price.toFixed(2)} USD</g:price>`,

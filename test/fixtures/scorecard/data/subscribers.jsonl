@@ -1,0 +1,5 @@
+{"email": "old1@example.com", "ts": "2026-09-01T20:00:00Z", "source": "home", "ua_hash": "x"}
+{"email": "old2@example.com", "ts": "2026-09-15T20:00:00Z", "source": "home", "ua_hash": "x"}
+{"email": "prev@example.com", "ts": "2026-10-01T20:00:00Z", "source": "home", "ua_hash": "x"}
+{"email": "new1@example.com", "ts": "2026-10-08T19:22:00Z", "source": "home", "ua_hash": "x"}
+{"email": "new2@example.com", "ts": "2026-10-10T16:01:00Z", "source": "product:pelican-tee", "ua_hash": "x"}

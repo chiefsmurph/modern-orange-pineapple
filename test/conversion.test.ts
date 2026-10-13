@@ -60,7 +60,7 @@ test("Google feed: one item per variant, every required field, valid XML", () =>
     assert.ok(id.length <= 50, id);
     assert.ok(!ids.has(id), `duplicate ${id}`);
     ids.add(id);
-    assert.match(it, /<g:link>https:\/\/mopclothing\.com\/[a-z0-9-]+\?/);
+    assert.match(it, /<g:link>https:\/\/mopclothing\.com\/[a-z0-9-]+\?[^<]*utm_source=google&amp;utm_medium=shopping&amp;utm_campaign=free_listings<\/g:link>/);
     assert.match(it, /<g:image_link>https:\/\/mopclothing\.com\/images\/catalog\/.+-checkout\.jpg<\/g:image_link>/);
     assert.match(it, /<g:availability>in_stock<\/g:availability>/);
     assert.match(it, /<g:brand>Modern Orange Pineapple<\/g:brand>/);
@@ -73,7 +73,10 @@ test("Google feed: one item per variant, every required field, valid XML", () =>
   const pel = getShopProduct("pelican-tee")!;
   const v = pel.variants.find((x) => x.opts.style === "beanie" && x.opts.color === "Ivory" && x.opts.size === "M" && x.opts.version === "large")!;
   const item = items.find((i) => i.includes(`<g:id>${feedId("pelican-tee", v.opts)}</g:id>`))!;
-  assert.match(item, /<g:link>https:\/\/mopclothing\.com\/pelican-tee\?version=large&amp;style=beanie&amp;color=Ivory&amp;size=M<\/g:link>/);
+  assert.match(
+    item,
+    /<g:link>https:\/\/mopclothing\.com\/pelican-tee\?version=large&amp;style=beanie&amp;color=Ivory&amp;size=M&amp;utm_source=google&amp;utm_medium=shopping&amp;utm_campaign=free_listings<\/g:link>/
+  );
   assert.match(item, /<g:title>Pelican Tee - Big print, Grind Beanie, Ivory, size M<\/g:title>/);
   assert.match(item, /<g:color>Ivory<\/g:color>/);
   assert.equal(genderFor(getShopProduct("pelican-crop-top")!), "female");
@@ -97,4 +100,16 @@ test("Meta feed: same items, Meta's 'in stock' spelling, JPEG images only", () =
   assert.doesNotMatch(meta, /\.webp/);
   for (const tag of ["id", "title", "description", "availability", "condition", "price", "link", "image_link", "brand", "item_group_id", "color", "size", "gender", "age_group"])
     assert.match(meta, new RegExp(`<g:${tag}>`), tag);
+  // every link: the variant's picks, then Meta's campaign tags (never Google's)
+  const links = [...meta.matchAll(/<g:link>([^<]+)<\/g:link>/g)].map((m) => m[1].replace(/&amp;/g, "&"));
+  assert.equal(links.length, meta.split("<item>").length - 1);
+  for (const l of links) {
+    const u = new URL(l);
+    assert.equal(u.searchParams.get("utm_source"), "meta", l);
+    assert.equal(u.searchParams.get("utm_medium"), "shop", l);
+    assert.equal(u.searchParams.get("utm_campaign"), "catalog", l);
+    assert.match(u.search, /^\?([a-z]+=[^&]+&)*utm_source=meta&utm_medium=shop&utm_campaign=catalog$/, l);
+  }
+  assert.ok(links.includes("https://mopclothing.com/pelican-tee?version=large&style=beanie&color=Ivory&size=M&utm_source=meta&utm_medium=shop&utm_campaign=catalog"));
+  assert.doesNotMatch(meta, /utm_medium=shopping|free_listings/);
 });

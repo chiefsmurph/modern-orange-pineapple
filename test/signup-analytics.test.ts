@@ -13,6 +13,7 @@ import {
   subscribersCsv,
 } from "../lib/subscribers.ts";
 import { syncedQuery } from "../lib/catalog/select.ts";
+import { FEED_UTM } from "../lib/google-feed.ts";
 import { UMAMI_BEFORE_SEND_JS, track } from "../lib/umami.ts";
 import { tmpDir } from "./helpers.ts";
 
@@ -114,6 +115,25 @@ test("?ref=ig survives the product page rewriting its query", () => {
   );
   assert.equal(syncedQuery("?ref=ig&size=M", names, { version: "small", size: undefined }), "ref=ig&version=small");
   assert.equal(syncedQuery("", names, {}), "");
+});
+
+test("feed links' utm tags survive the product page's rewrite and reach Umami on the landing view", () => {
+  const names = ["version", "style", "color", "size"];
+  for (const tags of Object.values(FEED_UTM)) {
+    const landing = `?version=large&style=beanie&color=Ivory&size=M&${tags}`;
+    // first render: same picks, nothing changes
+    assert.equal(syncedQuery(landing, names, { version: "large", style: "beanie", color: "Ivory", size: "M" }), landing.slice(1));
+    // a new pick: the picks change, the tags stay
+    const after = new URLSearchParams(syncedQuery(landing, names, { version: "small", style: "classic", color: "White", size: undefined }));
+    for (const [k, v] of new URLSearchParams(tags)) assert.equal(after.get(k), v, k);
+    assert.equal(after.get("size"), null);
+    // the landing view goes to Umami with the tags (Umami reads utm_* off the URL); picks after it don't
+    const w: Record<string, any> = {};
+    new Function("window", UMAMI_BEFORE_SEND_JS)(w);
+    const hook = w.mopUmamiBeforeSend as (t: string, p: any) => any;
+    assert.equal(hook("event", { url: `/pelican-tee${landing}`, website: "x" }).url, `/pelican-tee${landing}`);
+    assert.equal(hook("event", { url: `/pelican-tee?${after}`, website: "x" }), null);
+  }
 });
 
 test("Umami hook: picks (same path) don't count as page views; new pages and events do", () => {
