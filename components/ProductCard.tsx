@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function ProductCard({ card, priority = false }: Props) {
-  const { href, title, image, price, freeShipping, delivery, fabricNote, swatches } = card;
+  const { href, title, shortTitle, image, price, freeShipping, delivery, fabricNote, swatches } = card;
   return (
     <Link
       href={href}
@@ -29,9 +29,14 @@ export default function ProductCard({ card, priority = false }: Props) {
         width={900}
         height={900}
         priority={priority}
-        sizes="(max-width: 768px) calc(100vw - 56px), (max-width: 1200px) calc(50vw - 84px), 460px"
+        // phones: two cards per row (about half the screen); tablet/desktop as before
+        sizes="(max-width: 768px) calc(50vw - 34px), (max-width: 1200px) calc(50vw - 84px), 460px"
       />
-      <h3 className={styles.title}>{title}</h3>
+      {/* the full name, or on phones (two per row) the short one; only the visible one is read out */}
+      <h3 className={styles.title}>
+        <span className={styles.fullTitle}>{title}</span>
+        <span className={styles.shortTitle}>{shortTitle}</span>
+      </h3>
       <p className={styles.price}>{price}</p>
       {swatches && swatches.length > 0 && (
         <div className={styles.swatches} aria-label={`${swatches.length} skies`}>

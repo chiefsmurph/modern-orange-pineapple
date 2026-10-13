@@ -9,13 +9,15 @@ import legacy, {
 } from "../public/products.ts";
 import { shopProducts, type ShopProduct } from "./catalog/index.ts";
 import { imageSetFor, imagesFor, normalizeSelection, optionNames, priceLabel, syncedQuery } from "./catalog/select.ts";
-import { featured, valueLabel } from "./catalog/copy.ts";
+import { featured, shortName, valueLabel } from "./catalog/copy.ts";
 import { featuredCardImages } from "./catalog/featured.generated.ts";
 import { getShopProduct } from "./catalog/index.ts";
 
 export type ShopCard = {
   href: string;
   title: string;
+  /** The name on phones (two cards per row): lib/catalog/copy.ts shortNames, else the title. */
+  shortTitle: string;
   image: string;
   price: string;
   freeShipping: boolean;
@@ -30,6 +32,7 @@ export type ShopCard = {
 export const legacyCard = (product: Product): ShopCard => ({
   href: `/${product.id}`,
   title: product.title,
+  shortTitle: shortName(product.id, product.title),
   image: getProductImages(product)[0],
   price: `$${getTotalPrice(product)}`,
   freeShipping: !!product.freeShippingMode,
@@ -40,6 +43,7 @@ export const legacyCard = (product: Product): ShopCard => ({
 export const catalogCard = (product: ShopProduct): ShopCard => ({
   href: `/${product.slug}`,
   title: product.title,
+  shortTitle: shortName(product.slug, product.title),
   image: product.card ?? imagesFor(product, normalizeSelection(product))[0],
   price: priceLabel(product),
   // The catalog prices include US shipping.

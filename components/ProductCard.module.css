@@ -76,3 +76,59 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
   object-fit: cover;
 }
+
+/* The name on phones only (lib/catalog/copy.ts shortNames). */
+.shortTitle {
+  display: none;
+}
+
+/* Phones: two compact cards per row (app/HomeGrid.module.css): photo, short
+   name, price. Free shipping and the delivery time are said once, above the
+   grid; the Sky Tee's skies are on its page. Tablet and desktop unchanged. */
+@media (max-width: 768px) {
+  .card {
+    padding: 7px;
+    border-radius: 12px;
+  }
+
+  .image {
+    border-radius: 8px;
+  }
+
+  .title {
+    margin: 7px 2px 2px;
+    font-size: 0.8rem;
+    line-height: 1.25;
+    /* never more than two lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .fullTitle {
+    display: none;
+  }
+
+  .shortTitle {
+    display: inline;
+  }
+
+  .price {
+    margin: 0 2px 2px;
+    font-size: 0.8rem;
+  }
+
+  .freeShipping,
+  .delivery,
+  .swatches {
+    display: none;
+  }
+
+  .fabricNote {
+    margin: 2px 0 1px;
+    padding: 1px 6px;
+    font-size: 0.6rem;
+    line-height: 1.3;
+  }
+}

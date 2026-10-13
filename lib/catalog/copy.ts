@@ -129,6 +129,28 @@ export const catalogSizeNote = (printfulCatalogProductId?: number) =>
  * A new pick or photo needs `npm run catalog` (it makes the card's crop);
  * reordering or removing doesn't.
  */
+/**
+ * Short card names for phones, where the home page shows two cards per row
+ * (John, 10/13). By product slug; a product not listed shows its full name.
+ * Only the phone cards use these: the product page, alt text, feeds, Stripe and
+ * the share cards keep the full names.
+ */
+export const shortNames: Record<string, string> = {
+  "day-all-over": "Day All-Over",
+  "dusk-all-over": "Dusk All-Over",
+  "night-all-over": "Night All-Over",
+  "gold-stripes": "Gold Stripes",
+  "original-star-tee": "Original Star Tee",
+  "nolli-extra-fancy-tee": "Nolli Extra Fancy Tee",
+  "pelican-polo": "Pelican Polo",
+  "rabbit-polo": "Rabbit Polo",
+  "alpaca-polo": "Alpaca Polo",
+  "star-polo": "Star Polo",
+};
+
+/** The phone card's name for a product: its short name, else the full one. */
+export const shortName = (slug: string, title: string) => shortNames[slug] ?? title;
+
 export type FeaturedItem = { slug: string; pick?: Record<string, string>; photo?: "womens" | "mens" | "flat" };
 export const featured: { title: string; line: string; items: FeaturedItem[] } = {
   title: "Featured",

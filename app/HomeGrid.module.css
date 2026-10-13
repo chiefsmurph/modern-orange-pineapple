@@ -109,6 +109,25 @@ main.main {
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
+/* Phones only: free shipping and the delivery time, said once above the cards. */
+.phoneNote {
+  display: none;
+  margin: 0 0 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #333;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  text-wrap: balance;
+}
+
+.phoneNote b {
+  color: green;
+}
+
 /* was an <h2> per card; keeps the bold text the cards inherited from it */
 .cell {
   min-width: 0;
@@ -210,9 +229,19 @@ main.main {
     font-size: 0.72rem;
   }
 
+  /* two compact cards per row (components/ProductCard.module.css) */
   .grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* the Morro Bay store card keeps the full width */
+  .wide {
+    grid-column: 1 / -1;
+  }
+
+  .phoneNote {
+    display: inline-block;
   }
 
   .links {

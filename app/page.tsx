@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { featuredCards, restCards } from "@/lib/shop-cards";
 import { featured } from "@/lib/catalog/copy";
+import { vendorDelivery } from "@/public/products";
 
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
@@ -96,6 +97,10 @@ export default function HomePage() {
             {featured.title}
           </h2>
           <p className={styles.groupLine}>{featured.line}</p>
+          {/* phones only: the cards there are compact, so this is said once here */}
+          <p className={styles.phoneNote}>
+            <b>Free shipping</b> · made to order, {vendorDelivery.printful.text.replace(/^Made to order · /, "")}
+          </p>
           <div className={styles.grid}>
             {featuredCards().map((card, index) => (
               <div key={card.href} className={styles.cell}>
@@ -114,7 +119,7 @@ export default function HomePage() {
             <ProductCard card={card} priority={index === 0 && featuredCards().length === 0} />
           </div>
         ))}
-        <div className={styles.cell}>
+        <div className={`${styles.cell} ${styles.wide}`}>
           <div className="product-card featured-store">
             <a
               href="https://www.google.com/maps?q=Under the Sea Gallery, 833 b, 725 Embarcadero, Morro Bay, CA 93442"
