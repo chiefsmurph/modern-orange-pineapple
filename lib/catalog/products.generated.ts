@@ -4926,12 +4926,12 @@ export const catalogProducts: CatalogProduct[] = [
       {
         "when": {},
         "images": [
-          "/images/catalog/night-all-over/model-left-front.837ad816.webp",
-          "/images/catalog/night-all-over/model2.234e2e4e.webp",
           "/images/catalog/night-all-over/flat.51f645f6.webp",
-          "/images/catalog/night-all-over/back.8f839cc6.webp"
+          "/images/catalog/night-all-over/model-left-front.837ad816.webp",
+          "/images/catalog/night-all-over/back.8f839cc6.webp",
+          "/images/catalog/night-all-over/model2.234e2e4e.webp"
         ],
-        "checkout": "/images/catalog/night-all-over/model-left-front.837ad816-checkout.jpg"
+        "checkout": "/images/catalog/night-all-over/flat.51f645f6-checkout.jpg"
       }
     ],
     "credits": [
@@ -5745,15 +5745,14 @@ export const catalogProducts: CatalogProduct[] = [
       {
         "when": {},
         "images": [
-          "/images/catalog/gold-stripes/model-right-front.7b72cfb7.webp",
-          "/images/catalog/gold-stripes/model2.0cf9375c.webp",
           "/images/catalog/gold-stripes/flat.92f5abe8.webp",
-          "/images/catalog/gold-stripes/back.442d4572.webp"
+          "/images/catalog/gold-stripes/model-right-front.7b72cfb7.webp",
+          "/images/catalog/gold-stripes/back.442d4572.webp",
+          "/images/catalog/gold-stripes/model2.0cf9375c.webp"
         ],
-        "checkout": "/images/catalog/gold-stripes/model-right-front.7b72cfb7-checkout.jpg"
+        "checkout": "/images/catalog/gold-stripes/flat.92f5abe8-checkout.jpg"
       }
     ],
-    "card": "/images/catalog/gold-stripes/model-right-front.7b72cfb7-card.webp",
     "credits": [
       {
         "lines": [
