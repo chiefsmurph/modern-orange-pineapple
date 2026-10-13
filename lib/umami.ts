@@ -10,6 +10,8 @@
 // It's an inline script (it must exist before the tracker loads), so it's kept
 // as plain ES5 here and tested by evaluating the string.
 export const UMAMI_BEFORE_SEND = "mopUmamiBeforeSend";
+export const UMAMI_HOST = "https://stats.chiefsmurph.com";
+export const UMAMI_WEBSITE_ID = "ba4cac44-a005-45f5-8d24-3b897178364c";
 
 export const UMAMI_BEFORE_SEND_JS =
   "(function(w){var last=null;w." +

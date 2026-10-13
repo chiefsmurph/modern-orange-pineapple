@@ -224,7 +224,7 @@ Umami (stats.chiefsmurph.com) records page views with their query string, so Ins
 links like `?ref=ig` show on the landing page view. Product pages rewrite the query on every
 pick; `lib/umami.ts` drops those as page views (same path) and keeps the other params in the
 URL. Custom events: `buy-click` (slug, options, price), `gallery-open` (from, photo), `signup`
-(source), `crosslink-allover` (from, to). They're fire-and-forget: with Umami blocked,
+(source), `crosslink-allover` (from, to), and `meta-checkout` from the server (see Instagram Shop). They're fire-and-forget: with Umami blocked,
 nothing changes (checkout never waits on it).
 
 ## Custom orders (/custom)
@@ -349,3 +349,32 @@ spelling (`in stock`) with JPEG images only (Meta's catalog takes JPG/PNG). Step
    `https://mopclothing.com/feeds/meta.xml`, currency USD, schedule **daily**.
 4. Check **Catalog → Items** for errors, then **Shop → Submit for review**. After approval, tag
    products in Instagram posts and stories.
+
+### Checkout URL (`/meta-checkout`)
+
+In Commerce Manager → **Settings → Checkout method → Checkout on another website**, the
+checkout URL is `https://mopclothing.com/meta-checkout`. Meta sends the cart as
+([Meta's format](https://developers.facebook.com/documentation/ads-commerce/commerce-platform/setup-checkout-url))
+`?products=<id>:<qty>,<id>:<qty>` (URL-encoded; the ids are the `<g:id>`s in `/feeds/meta.xml`),
+an optional `coupon=CODE`, `cart_origin=facebook|instagram|meta_shops` and any `utm_*` tags.
+
+- Every id is checked against the catalog (same ids as the feed) and priced by the site, never
+  by the URL. Unknown or off-sale ids are skipped; with nothing left, the visitor lands on
+  `/meta-checkout/unavailable` (links to the shop).
+- One Stripe Checkout session for the whole cart, built by the same code as the product page
+  (`lib/orders/checkout.ts` `cartSessionParams`), so the webhook, Printful, royalties, codes,
+  US-only shipping and the phone field work the same. The session's metadata also gets
+  `mop_source` (`{"via":"meta","origin":…,"utm_…":…,"coupon":…}`).
+- `coupon`: looked up as a live promotion code and applied up front (`discounts`). An unknown
+  code, or one Stripe won't apply to the cart, falls back to "Add promotion code" on Stripe's
+  page. **The lookup needs "Promotion Codes: Read" on the restricted key**; without it every
+  coupon falls back (checkout still opens).
+- Umami event `meta-checkout` (origin, items, lines, value, utm_*, coupon: applied / not found /
+  rejected, skipped) sent from the server after the redirect; `meta-checkout-unavailable` and
+  `meta-checkout-error` for the other outcomes. The box log line is `[meta-checkout] …`.
+- `robots.txt` disallows `/meta-checkout`.
+
+Test (Meta's **Add URL** test does the same):
+`https://mopclothing.com/meta-checkout?products=pelican-tee-large-classic-lagoon-blue-m%3A1%2Csky-tee-golden-hour-m%3A2&coupon=WELCOME10&cart_origin=instagram`
+should open Stripe Checkout with 1 Pelican Tee and 2 Sky Tees and WELCOME10 applied; close the
+tab without paying.

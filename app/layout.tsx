@@ -3,7 +3,7 @@ import { Analytics } from "@/components/Analytics";
 import { Orbitron } from "next/font/google";
 import type { Viewport } from "next";
 import "./globals.css";
-import { UMAMI_BEFORE_SEND, UMAMI_BEFORE_SEND_JS } from "@/lib/umami";
+import { UMAMI_BEFORE_SEND, UMAMI_BEFORE_SEND_JS, UMAMI_HOST, UMAMI_WEBSITE_ID } from "@/lib/umami";
 
 // Self-hosted at build time by next/font: no render-blocking Google Fonts @import.
 // Same single 500 weight as before (bold text is synthesized, exactly as it was).
@@ -63,8 +63,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: UMAMI_BEFORE_SEND_JS }} />
         <script
           defer
-          src="https://stats.chiefsmurph.com/script.js"
-          data-website-id="ba4cac44-a005-45f5-8d24-3b897178364c"
+          src={`${UMAMI_HOST}/script.js`}
+          data-website-id={UMAMI_WEBSITE_ID}
           data-before-send={UMAMI_BEFORE_SEND}
         />
       </head>

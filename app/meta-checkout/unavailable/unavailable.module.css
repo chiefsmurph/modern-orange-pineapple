@@ -1,0 +1,60 @@
+.page {
+  padding-bottom: 3rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.page p {
+  margin: 0 0 0.9rem;
+}
+
+.page a {
+  color: #d96f00;
+}
+
+.title {
+  margin: 0.75rem 0 1rem;
+  font-size: 1.4rem;
+}
+
+.list {
+  list-style: none;
+  margin: 0 0 1.2rem;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex: none;
+}
+
+.name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.price {
+  white-space: nowrap;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-bottom: 3rem !important;
+  }
+}
