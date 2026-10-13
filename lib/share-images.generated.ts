@@ -3,9 +3,9 @@
 export const SHARE_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 
 export const shareImages: Record<string, string> = {
-  "home": "/images/share/home.8f503c91.jpg",
+  "home": "/images/share/home.667072d2.jpg",
   "day-all-over": "/images/share/day-all-over.63c79342.jpg",
-  "dusk-all-over": "/images/share/dusk-all-over.71cd7f92.jpg",
+  "dusk-all-over": "/images/share/dusk-all-over.db7016b3.jpg",
   "night-all-over": "/images/share/night-all-over.2696db1b.jpg",
   "sky-tee": "/images/share/sky-tee.fb94f845.jpg",
   "gold-stripes": "/images/share/gold-stripes.297f9dc7.jpg",
