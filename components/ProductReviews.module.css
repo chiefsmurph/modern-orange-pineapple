@@ -1,0 +1,68 @@
+.summary {
+  display: inline-block;
+  margin: -0.6rem 0 0.9rem;
+  font-size: 0.8rem;
+  color: #3b4a54;
+  text-decoration: none;
+}
+
+.stars {
+  color: #ff9f1c;
+  letter-spacing: 1px;
+}
+
+.section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.section .summary {
+  margin: 0 0 0.75rem;
+}
+
+.title {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.review {
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.reviewTitle {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+.text {
+  margin: 0 0 0.4rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.by {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #3b4a54;
+}
+
+.verified {
+  color: #1d7a3a;
+  font-weight: 700;
+}
+
+.friend {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid #c9a227;
+  border-radius: 999px;
+  background: #fff6d6;
+  color: #6b5200;
+  font-size: 0.65rem;
+}

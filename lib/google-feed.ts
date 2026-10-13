@@ -1,6 +1,9 @@
-// Google Merchant Center product feed (free listings): RSS 2.0 with the g:
-// namespace, one <item> per purchasable variant of the Printful line-up,
-// grouped by product (item_group_id = slug). Served at /feeds/google.xml.
+// Product feeds: RSS 2.0 with the g: namespace, one <item> per purchasable
+// variant of the Printful line-up, grouped by product (item_group_id = slug).
+//   /feeds/google.xml  Google Merchant Center (free listings)
+//   /feeds/meta.xml    Meta Commerce Manager (Instagram / Facebook Shop): the same
+//                      feed in Meta's spelling ("in stock") and with JPEG images
+//                      only (Meta's catalog takes JPG/PNG/GIF; our extra photos are WebP).
 import type { ShopProduct } from "./catalog/index.ts";
 import { imageSetFor, imagesFor, optionNames, syncedQuery } from "./catalog/select.ts";
 import { valueLabel } from "./catalog/copy.ts";
@@ -49,7 +52,9 @@ const plain = (s: string) =>
     .replace(/:\./g, ":")
     .trim();
 
-export function googleFeedXml(products: ShopProduct[], now = new Date()): string {
+export type FeedFlavor = "google" | "meta";
+
+export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor: FeedFlavor = "google"): string {
   const items: string[] = [];
   for (const p of products) {
     const names = optionNames(p);
@@ -66,7 +71,7 @@ export function googleFeedXml(products: ShopProduct[], now = new Date()): string
       const title = `${p.title}${summary ? ` - ${summary}` : ""}${v.opts.size ? `, size ${v.opts.size}` : ""}`.slice(0, 150);
       const query = syncedQuery("", names, sel);
       const color = v.opts.color ?? (p.group === "allover" || /dress/.test(p.slug) ? "Multicolor" : undefined);
-      const extra = images.filter((src) => src !== images[0]).slice(0, 3);
+      const extra = flavor === "meta" ? [] : images.filter((src) => src !== images[0]).slice(0, 3);
       items.push(
         [
           "<item>",
@@ -78,7 +83,7 @@ export function googleFeedXml(products: ShopProduct[], now = new Date()): string
           `<g:image_link>${xml(abs(hero))}</g:image_link>`,
           ...extra.map((src) => `<g:additional_image_link>${xml(abs(src))}</g:additional_image_link>`),
           `<g:price>${v.price.toFixed(2)} USD</g:price>`,
-          "<g:availability>in_stock</g:availability>",
+          `<g:availability>${flavor === "meta" ? "in stock" : "in_stock"}</g:availability>`,
           "<g:condition>new</g:condition>",
           `<g:brand>${xml(BRAND)}</g:brand>`,
           "<g:identifier_exists>no</g:identifier_exists>",

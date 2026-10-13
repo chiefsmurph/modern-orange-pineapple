@@ -11,6 +11,7 @@ import WildStrip from "@/components/WildStrip";
 import DropsSignup from "@/components/DropsSignup";
 import { track } from "@/lib/umami";
 import WildLightbox from "@/components/WildLightbox";
+import MopCrew from "@/components/MopCrew";
 import { wildPhotos, type WildPhoto } from "@/lib/wild.generated";
 import { pickRandom, splitWild } from "@/lib/wild";
 import InViewVideo from "@/components/InViewVideo";
@@ -182,6 +183,7 @@ export default function HomePage() {
       {lightbox !== null && (
         <WildLightbox photos={wildPhotos} start={lightbox} onClose={() => setLightbox(null)} />
       )}
+      <MopCrew />
 
       <DropsSignup source="home" />
 

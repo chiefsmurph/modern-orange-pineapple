@@ -87,3 +87,14 @@ test("Google feed: one item per variant, every required field, valid XML", () =>
     if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw new Error(`invalid XML: ${(err as { stderr?: Buffer }).stderr}`);
   }
 });
+
+test("Meta feed: same items, Meta's 'in stock' spelling, JPEG images only", () => {
+  const meta = googleFeedXml(shopProducts, new Date("2026-10-12T20:00:00Z"), "meta");
+  const google = googleFeedXml(shopProducts, new Date("2026-10-12T20:00:00Z"));
+  assert.equal(meta.split("<item>").length, google.split("<item>").length);
+  assert.doesNotMatch(meta, /in_stock/);
+  assert.match(meta, /<g:availability>in stock<\/g:availability>/);
+  assert.doesNotMatch(meta, /\.webp/);
+  for (const tag of ["id", "title", "description", "availability", "condition", "price", "link", "image_link", "brand", "item_group_id", "color", "size", "gender", "age_group"])
+    assert.match(meta, new RegExp(`<g:${tag}>`), tag);
+});

@@ -13,7 +13,8 @@ import { orderEmail, sendEmail } from "./notify.ts";
 import { royaltyRows } from "./royalties.ts";
 import type { FetchLike } from "./http.ts";
 import type { OrderStore, SessionEntry } from "./store.ts";
-import type { OrderItem, RoyaltyRow, Supplier, SupplierResult } from "./types.ts";
+import type { OrderCodes, OrderItem, OrderRecord, RoyaltyRow, Supplier, SupplierResult } from "./types.ts";
+import { packingSlipMessage, shortName, type ItemCodeStore } from "../item-codes.ts";
 
 export type OrderDeps = {
   env: Record<string, string | undefined>;
@@ -25,6 +26,8 @@ export type OrderDeps = {
   listLineItems?: (sessionId: string) => Promise<LineItemLike[]>;
   /** Pause before a retry (tests use 0). */
   retryDelayMs?: number;
+  /** Registration codes (lib/item-codes.ts); without it, no codes are issued. */
+  codes?: ItemCodeStore;
 };
 
 export type HandleResult = { status: number; body: Record<string, unknown> };
@@ -106,11 +109,21 @@ export async function processSession(session: SessionLike, deps: OrderDeps): Pro
       return { status: 200, body: { received: true, awaiting_payment: true } };
     }
 
-    // 2. Suppliers, one order per supplier.
+    // 2. Registration codes, one per unit sold; the Printful ones go on its packing slip.
+    if (deps.codes && !entry.codes && record.items.length) {
+      const codes = await issueCodes(record, deps.codes, deps.now().toISOString());
+      entry = await store.update(id, deps.now(), (e) => {
+        e.codes = codes;
+      });
+      log(`[orders] ${id}: ${codes.items.length} registration code(s)${codes.order ? " + an order code" : ""}`);
+    }
+    const slip = entry.codes?.slip ? { message: entry.codes.slip, store_name: "Modern Orange Pineapple" } : null;
+
+    // 3. Suppliers, one order per supplier.
     for (const [supplier, items] of Array.from(groupBySupplier(record.items))) {
       if (entry.suppliers[supplier]) continue; // done in an earlier run
       let result: SupplierResult;
-      if (supplier === "printful") result = await createPrintfulOrder(record, items, deps);
+      if (supplier === "printful") result = await createPrintfulOrder(record, items, deps, slip);
       else if (supplier === "yoycol") result = await createYoycolOrder(record, items, deps);
       else
         result = {
@@ -138,7 +151,7 @@ export async function processSession(session: SessionLike, deps: OrderDeps): Pro
 
     // 4. Email John. A failed email never undoes anything; it's logged and kept in the state.
     if (!entry.emailed) {
-      const email = orderEmail(record, entry.suppliers, royalties);
+      const email = orderEmail(record, entry.suppliers, royalties, entry.codes);
       const sent = await sendEmail(email, deps);
       if (!sent.ok) log(`[orders] ${id}: EMAIL TO JOHN FAILED: ${sent.error}. Subject was: ${email.subject}`);
       entry = await store.update(id, deps.now(), (e) => {
@@ -185,4 +198,29 @@ export async function processSession(session: SessionLike, deps: OrderDeps): Pro
     }
     return { status: 500, body: { error: "processing failed; will retry" } };
   }
+}
+
+/** Issue one code per unit, then fit the Printful ones on the slip (or fall back to one order code). */
+async function issueCodes(record: OrderRecord, codes: ItemCodeStore, at: string): Promise<OrderCodes> {
+  const issued = await codes.issue(
+    { session_id: record.session_id, order_ref: record.order_ref, items: record.items.map((i) => ({ slug: i.slug, title: i.title, qty: i.qty, opts: i.opts })) },
+    at
+  );
+  const same = (a: Record<string, string> = {}, b: Record<string, string> = {}) =>
+    Object.keys(a).length === Object.keys(b).length && Object.entries(a).every(([k, v]) => b[k] === v);
+  const items = issued.map((c) => ({
+    code: c.code,
+    slug: c.slug!,
+    title: c.title!,
+    variant: c.variant ?? {},
+    supplier: record.items.find((i) => i.slug === c.slug && same(i.opts, c.variant))?.supplier ?? ("manual" as Supplier),
+  }));
+  const printful = items.filter((c) => c.supplier === "printful").map((c) => ({ name: shortName(c.title), code: c.code }));
+  let order: string | null = null;
+  let slip = packingSlipMessage(printful, null);
+  if (printful.length && !slip) {
+    order = (await codes.issueOrderCode(record.session_id, record.order_ref, printful.map((p) => p.code), at)).code;
+    slip = packingSlipMessage(printful, order);
+  }
+  return { items, order, slip };
 }

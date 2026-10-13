@@ -1,6 +1,6 @@
 // 🖥️ app/redeem/page.tsx (frontend UI)
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -10,6 +10,12 @@ export default function RedeemPage() {
   const [name, setName] = useState("");
   const [fact, setFact] = useState("");
   const [error, setError] = useState("");
+
+  // /register sends the old two-part codes here as ?code=COW-76: fill the box
+  useEffect(() => {
+    const c = new URLSearchParams(window.location.search).get("code");
+    if (c) setCode(c.toUpperCase());
+  }, []);
 
   const validateMutation = useMutation({
     mutationFn: async () => {

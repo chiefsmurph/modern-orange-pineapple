@@ -29,6 +29,10 @@ export const metadata = {
   ...(process.env.GOOGLE_SITE_VERIFICATION
     ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
     : {}),
+  // Meta (Instagram Shop): <meta name="facebook-domain-verification"> when set.
+  ...(process.env.META_DOMAIN_VERIFICATION
+    ? { other: { "facebook-domain-verification": process.env.META_DOMAIN_VERIFICATION } }
+    : {}),
 };
 
 // Browser chrome tint (status bar / Android address bar) = the sky's top edge.

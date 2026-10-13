@@ -7,7 +7,7 @@
 // All state changes go through one in-process queue (the site is one Node process).
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import type { OrderRecord, RoyaltyRow, SupplierResult } from "./types.ts";
+import type { OrderCodes, OrderRecord, RoyaltyRow, SupplierResult } from "./types.ts";
 
 export type SessionStatus =
   | "processing"
@@ -26,6 +26,8 @@ export type SessionEntry = {
   /** Per supplier group ("printful", "yoycol", "manual"). */
   suppliers: Record<string, SupplierResult>;
   royalties_written?: boolean;
+  /** Registration codes issued for this order (lib/item-codes.ts) and the packing slip text. */
+  codes?: OrderCodes;
   royalty_total?: number;
   emailed?: boolean;
   email_error?: string;

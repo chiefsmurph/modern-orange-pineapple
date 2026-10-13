@@ -30,6 +30,9 @@ import { preloadKey, preloadPlan, type PreloadKind } from "@/lib/catalog/preload
 import { imageAttrs, preloadImage, wantsLessData } from "@/lib/product-image";
 import StripeButton from "./StripeButton";
 import DropsSignup from "@/components/DropsSignup";
+import { ProductReviews, RatingSummary } from "@/components/ProductReviews";
+import reviewStyles from "@/components/ProductReviews.module.css";
+import type { PublicReview } from "@/lib/reviews";
 import SizeGuide from "@/components/SizeGuide";
 import { sizeGuides } from "@/lib/catalog/sizes.generated";
 import { track } from "@/lib/umami";
@@ -43,9 +46,11 @@ import own from "./CatalogProductView.module.css";
 export default function CatalogProductView({
   product,
   initialSelection,
+  reviews,
 }: {
   product: ShopProduct;
   initialSelection: Selection;
+  reviews?: { average: number; count: number; reviews: PublicReview[] } | null;
 }) {
   const [sel, setSel] = useState<Selection>(initialSelection);
   const names = useMemo(() => optionNames(product), [product]);
@@ -124,6 +129,7 @@ export default function CatalogProductView({
       <HomeLink className={styles.home} />
 
       <h1 className={styles.title}>{product.title}</h1>
+      <RatingSummary data={reviews} styles={reviewStyles} />
       <p className={styles.price}>{price}</p>
       {product.fabricNote && (
         <p className={styles.fabricNote}>{product.fabricNote}</p>
@@ -257,6 +263,8 @@ export default function CatalogProductView({
             Want this for your team? <Link href="/custom">Custom orders →</Link>
           </p>
 
+          <ProductReviews data={reviews} styles={reviewStyles} />
+
           <DropsSignup source={`product:${product.slug}`} compact />
         </div>
       </div>
@@ -290,7 +298,7 @@ export default function CatalogProductView({
           }
         />
         <Link href="/shipping-returns" className={own.buyPolicy}>
-          Free US shipping · Misprints replaced free · Shipping &amp; returns
+          Free US shipping · Shipping &amp; returns
         </Link>
       </div>
 

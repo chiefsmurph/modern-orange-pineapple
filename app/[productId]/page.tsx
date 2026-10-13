@@ -6,6 +6,8 @@ import { normalizeSelection } from "@/lib/catalog/select";
 import ProductClientView from "./ProductClientView";
 import ComingSoonView from "./ComingSoonView";
 import CatalogProductView from "./CatalogProductView";
+import { approvedReviews, reviewStore } from "@/lib/reviews";
+import { dataDir } from "@/lib/orders/store";
 
 type ProductPageProps = {
   params: Promise<{ productId: string }>;
@@ -46,10 +48,16 @@ export default async function ProductPage({
   const query = Object.fromEntries(
     Object.entries(await searchParams).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])
   );
+  // Approved reviews, read at request time (no rebuild when John approves one).
+  const reviews = await reviewStore(dataDir())
+    .readAll()
+    .then((all) => approvedReviews(all, shopProduct.slug))
+    .catch(() => null);
   return (
     <CatalogProductView
       product={shopProduct}
       initialSelection={normalizeSelection(shopProduct, query)}
+      reviews={reviews}
     />
   );
 }

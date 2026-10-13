@@ -8,6 +8,7 @@ import Stripe from "stripe";
 import { verifyStripeEvent } from "@/lib/orders/stripe-verify";
 import { handleStripeEvent } from "@/lib/orders/process";
 import { dataDir, orderStore } from "@/lib/orders/store";
+import { itemCodeStore } from "@/lib/item-codes";
 import type { LineItemLike } from "@/lib/orders/session";
 
 export const runtime = "nodejs";
@@ -49,6 +50,7 @@ export async function POST(req: NextRequest) {
     now: () => new Date(),
     log: (msg) => console.log(msg),
     listLineItems,
+    codes: itemCodeStore(dataDir()),
   });
   return NextResponse.json(result.body, { status: result.status });
 }

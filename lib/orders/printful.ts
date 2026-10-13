@@ -21,10 +21,14 @@ const STATE_COUNTRIES = new Set(["US", "CA", "AU"]);
 
 export type PrintfulRequest = { method: "POST"; url: string; body: Record<string, unknown> };
 
+/** Printful prints this on the packing slip (registration codes; see lib/item-codes.ts). */
+export type PackingSlip = { message: string; store_name: string };
+
 export function printfulOrderRequest(
   record: OrderRecord,
   items: OrderItem[],
-  env: Record<string, string | undefined>
+  env: Record<string, string | undefined>,
+  packingSlip?: PackingSlip | null
 ): PrintfulRequest {
   const confirm = env.PRINTFUL_AUTO_CONFIRM === "true";
   const { customer } = record;
@@ -61,6 +65,7 @@ export function printfulOrderRequest(
         retail_price: money(i.unitAmount),
         name: `${i.title} (${itemSummary(i)})`,
       })),
+      ...(packingSlip ? { packing_slip: packingSlip } : {}),
       // Shown on the packing slip and used for customs on international orders.
       retail_costs: {
         currency: record.currency.toUpperCase(),
@@ -107,11 +112,12 @@ export async function createPrintfulOrder(
     log: (msg: string) => void;
     now: () => Date;
     retryDelayMs?: number;
-  }
+  },
+  packingSlip?: PackingSlip | null
 ): Promise<SupplierResult> {
   const { env, log } = deps;
   const at = deps.now().toISOString();
-  const req = printfulOrderRequest(record, items, env);
+  const req = printfulOrderRequest(record, items, env, packingSlip);
 
   if (env.ORDER_DRY_RUN === "1") {
     log(`[orders] DRY-RUN Printful ${req.method} ${req.url}\n${JSON.stringify(req.body, null, 2)}`);

@@ -5,7 +5,7 @@
 // ORDER_DRY_RUN=1 logs the email instead of sending it.
 import { describeFailure, requestJson, sleep, type FetchLike } from "./http.ts";
 import { itemSummary } from "./build-items.ts";
-import type { OrderRecord, RoyaltyRow, SupplierResult } from "./types.ts";
+import type { OrderCodes, OrderRecord, RoyaltyRow, SupplierResult } from "./types.ts";
 
 export const DEFAULT_PINGPIGEON_URL = "http://127.0.0.1:3141";
 
@@ -30,7 +30,8 @@ const stripeLink = (r: OrderRecord) =>
 export function orderEmail(
   record: OrderRecord,
   results: Record<string, SupplierResult>,
-  royalties: RoyaltyRow[]
+  royalties: RoyaltyRow[],
+  codes?: OrderCodes
 ): Email {
   const failed = Object.values(results).filter((r) => !r.ok);
   const dry = Object.values(results).some((r) => r.dryRun);
@@ -88,6 +89,16 @@ export function orderEmail(
   }
   if (Object.keys(results).length === 0) lines.push("- Nothing was sent to a supplier: check the items.");
   lines.push("", "SHIP TO", ...shipTo.map((l) => `  ${l}`));
+  if (codes?.items.length) {
+    lines.push("", "REGISTRATION CODES");
+    for (const c of codes.items)
+      lines.push(
+        `- ${c.code}: ${c.title} (${itemSummary({ opts: c.variant, slug: c.slug })})${
+          c.supplier === "printful" ? (codes.order ? "" : ", on the packing slip") : ", NOT printed (send it to them if you like)"
+        }`
+      );
+    if (codes.order) lines.push(`- Order code ${codes.order} (on the packing slip) registers all the Printful items`);
+  }
   if (royalties.length) {
     lines.push("", "ROYALTIES");
     for (const r of royalties)

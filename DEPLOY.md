@@ -304,3 +304,48 @@ John's steps:
    replacement for misprints, damage or defects reported within 30 days; policy URL
    `https://mopclothing.com/shipping-returns`.
 6. Turn on **free listings** (Growth → Manage programs → Free listings) and wait for review.
+
+## Shirt registration, verified reviews, The MOP Crew
+
+- **Codes:** the webhook issues one code per unit sold (`COW-76-K3P9`: John's legacy animals
+  and digits + 4 characters with no 0/O/1/I/L) into `$MOP_DATA_DIR/item-codes.jsonl`, and puts the
+  Printful items' codes on Printful's **packing slip** (`packing_slip.message`, ≤200 characters
+  by our own cap; one order-level code if the list wouldn't fit). Yoycol's API has only an
+  internal order remark, so Yoycol items' codes are just listed in John's order email.
+- **/register:** code → the piece → first name (+ optional email / new-drops opt-in), an optional
+  owner photo ("Show us yours!", ≤10 MB, same checks as /custom) and/or review. Each code registers
+  once. Two-part legacy codes (`COW-76`) go to `/redeem` as before. Files:
+  `registrations.jsonl`, `reviews.jsonl`, `review-uploads/` (private originals), `crew/`
+  (web copies of approved owner photos, made on approval, metadata stripped).
+- **Moderation:** John's email has signed links (needs `MOP_LINK_SECRET`) for **Approve / Hide the
+  review** and **Approve photo for The MOP Crew / Hide the photo**. Each opens a confirmation page;
+  only its button (a POST) changes anything. Approved reviews show on the product page (any
+  variant) with "Verified buyer", plus "Friend of MOP" when they said they know John (FTC).
+  The MOP Crew (home page, after Out in the wild) shows approved, OK-to-feature owner photos once
+  there are 3. Everything is read at request time: no rebuild needed.
+- **nginx:** `/api/register` takes photos up to 10 MB too: give it the same
+  `client_max_body_size 12m;` as `/api/custom-request` (or set it for the whole server block).
+
+### Thank-you code THANKS10 (reward after registering)
+
+Stripe dashboard (phone browser, live mode): ☰ → **Product catalog** → **Coupons** → **+ New**:
+name `Thanks 10%`, **Percentage discount** `10` %, duration **Once** → turn on **customer-facing
+codes**, code `THANKS10`, tick **Limit to one redemption per customer**, and leave **first-time
+order only OFF** (they're existing customers) → **Create coupon**. Then on the box add
+`MOP_REGISTER_REWARD_CODE=THANKS10` (and optionally `MOP_REGISTER_REWARD_OFF=10%`, the default)
+to `/srv/mopclothing/.env` and restart. Unset = no reward shown.
+
+## Instagram Shop (Meta Commerce Manager)
+
+The feed for Meta is `https://mopclothing.com/feeds/meta.xml`: the Google feed in Meta's
+spelling (`in stock`) with JPEG images only (Meta's catalog takes JPG/PNG). Steps for John:
+1. **business.facebook.com** → Business settings → **Brand safety → Domains** → Add
+   `mopclothing.com` → choose the **meta tag** method → copy the `content` value → put it in
+   `/srv/mopclothing/.env` as `META_DOMAIN_VERIFICATION=<value>` → rebuild + restart → **Verify**.
+2. **Commerce Manager** (facebook.com/commerce_manager) → **Add shop** → Instagram (and Facebook)
+   → checkout method **Checkout on another website** (the site's Stripe Checkout) → pick the
+   MOP Instagram account and the business account.
+3. **Catalog → Data sources → Add items → Data feed** → **Use a URL** →
+   `https://mopclothing.com/feeds/meta.xml`, currency USD, schedule **daily**.
+4. Check **Catalog → Items** for errors, then **Shop → Submit for review**. After approval, tag
+   products in Instagram posts and stories.

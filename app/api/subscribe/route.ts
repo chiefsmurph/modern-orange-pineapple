@@ -1,6 +1,6 @@
 // POST /api/subscribe — "Get notified of new drops" (lib/subscribers.ts).
 import { NextRequest, NextResponse, after } from "next/server";
-import { clientIp, createRateLimiter, createSubscriberStore, handleSubscribe } from "@/lib/subscribers";
+import { clientIp, createRateLimiter, handleSubscribe, subscriberStore } from "@/lib/subscribers";
 import { dataDir } from "@/lib/orders/store";
 import { sendEmail } from "@/lib/orders/notify";
 import { getShopProduct } from "@/lib/catalog";
@@ -10,7 +10,6 @@ export const dynamic = "force-dynamic";
 
 // 5 tries per 10 minutes per visitor (keyed on a salted hash of the IP, in memory).
 const allow = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
-let store: ReturnType<typeof createSubscriberStore> | null = null;
 
 export async function POST(req: NextRequest) {
   let body: Record<string, unknown> = {};
@@ -19,12 +18,11 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ ok: false, error: "invalid request" }, { status: 400 });
   }
-  store ??= createSubscriberStore(dataDir());
   const result = await handleSubscribe(
     body,
     { ip: clientIp(req.headers), userAgent: req.headers.get("user-agent") },
     {
-      store,
+      store: subscriberStore(dataDir()),
       allow,
       productExists: (slug) => !!getShopProduct(slug),
       now: () => new Date(),

@@ -83,6 +83,15 @@ export type SupplierResult = {
   at: string;
 };
 
+/** Registration codes for one order (one per unit sold; see lib/item-codes.ts). */
+export type OrderCodes = {
+  items: { code: string; slug: string; title: string; variant: Record<string, string>; supplier: Supplier }[];
+  /** One code for all the Printful items, when listing each wouldn't fit on the slip. */
+  order: string | null;
+  /** What goes on the Printful packing slip (null: no Printful items). */
+  slip: string | null;
+};
+
 export type RoyaltyRow = {
   at: string;
   session_id: string;

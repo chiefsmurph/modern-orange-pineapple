@@ -2,6 +2,12 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { WildPhoto } from "@/lib/wild.generated";
+
+/** What the lightbox shows: an "Out in the wild" photo, or an owner photo from The MOP Crew. */
+export type LightboxPhoto = Pick<WildPhoto, "n" | "design" | "href" | "alt" | "src" | "width" | "height"> & {
+  /** e.g. "Ana · Verified owner" */
+  credit?: string;
+};
 import styles from "./WildLightbox.module.css";
 
 // Full-screen photo viewer: swipe left/right (touch or pen), arrow buttons and
@@ -13,7 +19,7 @@ export default function WildLightbox({
   start,
   onClose,
 }: {
-  photos: WildPhoto[];
+  photos: LightboxPhoto[];
   start: number;
   onClose: () => void;
 }) {
@@ -102,6 +108,7 @@ export default function WildLightbox({
         <Link href={p.href} onClick={onClose}>
           {p.design}
         </Link>
+        {p.credit && <span className={styles.credit}>{p.credit}</span>}
         <span className={styles.count}>
           {i + 1} / {n}
         </span>

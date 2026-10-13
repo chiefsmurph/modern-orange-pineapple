@@ -158,3 +158,12 @@ export function subscribersCsv(subs: Subscriber[]): string {
   }
   return rows.join("\n") + "\n";
 }
+
+/** One subscriber store per data directory for the whole process (signup forms and /register share it). */
+export const subscriberStore = (dir: string) => {
+  const g = globalThis as unknown as { __mopSubscribers?: Map<string, ReturnType<typeof createSubscriberStore>> };
+  g.__mopSubscribers ??= new Map();
+  let s = g.__mopSubscribers.get(dir);
+  if (!s) g.__mopSubscribers.set(dir, (s = createSubscriberStore(dir)));
+  return s;
+};
