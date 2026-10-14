@@ -6,7 +6,7 @@ import styles from "./OutInTheWild.module.css";
 
 // "Out in the wild" near the bottom of the home page: 9 photos (3×3 squares) and
 // "See all". The page decides which 9 (one shuffle per visit, shared with the
-// strip at the top: lib/wild.ts splitWild) and owns the lightbox. Nothing loads
+// strip at the top: lib/wild.ts mixWild) and owns the lightbox. Nothing loads
 // until the section scrolls near the screen. Not for sale here: the lightbox
 // captions link to the product pages.
 export default function OutInTheWild({

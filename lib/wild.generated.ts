@@ -8,6 +8,8 @@ export type WildPhoto = {
   href: string;
   /** Describes the shirt, never the person. */
   alt: string;
+  /** Who is in it (anonymous ids): never twice in the strip, never side by side in the grid. */
+  people: string[];
   /** Lightbox photo (long side 1000 px) and its size. */
   src: string;
   width: number;
@@ -24,6 +26,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-tee",
     "alt": "Pink tank top with the MOP pelican print",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/01.a24fbcff.webp",
     "width": 667,
     "height": 1000,
@@ -35,6 +40,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-tee",
     "alt": "Pink tank top with the MOP pelican print",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/02.9e2ca756.webp",
     "width": 667,
     "height": 1000,
@@ -46,6 +54,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-tee",
     "alt": "Pink tank top with the MOP pelican print",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/03.7d75a8e0.webp",
     "width": 800,
     "height": 1000,
@@ -57,6 +68,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-tee",
     "alt": "Pink tank top with the MOP pelican print",
+    "people": [
+      "p02"
+    ],
     "src": "/images/wild/04.4ce0696c.webp",
     "width": 667,
     "height": 1000,
@@ -68,6 +82,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-crop-top",
     "alt": "Peach crop top with the MOP pelican print",
+    "people": [
+      "p02"
+    ],
     "src": "/images/wild/05.3f44fe65.webp",
     "width": 667,
     "height": 1000,
@@ -79,6 +96,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-crop-top",
     "alt": "White crop top with the MOP pelican print",
+    "people": [
+      "p03"
+    ],
     "src": "/images/wild/06.7d7820f0.webp",
     "width": 800,
     "height": 1000,
@@ -90,6 +110,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-crop-top",
     "alt": "White crop top with the MOP pelican print",
+    "people": [
+      "p03"
+    ],
     "src": "/images/wild/07.7a979402.webp",
     "width": 1000,
     "height": 667,
@@ -101,6 +124,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-tee",
     "alt": "Pink tank top with the MOP pelican print",
+    "people": [
+      "p04"
+    ],
     "src": "/images/wild/08.fc727e44.webp",
     "width": 819,
     "height": 1000,
@@ -112,6 +138,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Pelican",
     "href": "/pelican-crop-top",
     "alt": "White crop top with the MOP pelican print",
+    "people": [
+      "p05"
+    ],
     "src": "/images/wild/09.1cef1f91.webp",
     "width": 562,
     "height": 1000,
@@ -123,6 +152,10 @@ export const wildPhotos: WildPhoto[] = [
     "design": "Pelican on Sky",
     "href": "/day-all-over",
     "alt": "Two all-over sky tees with the pelican and “Morro Bay, CA”",
+    "people": [
+      "p06",
+      "p07"
+    ],
     "src": "/images/wild/10.6a215296.webp",
     "width": 1000,
     "height": 820,
@@ -134,6 +167,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "Pelican on Sky",
     "href": "/day-all-over",
     "alt": "All-over sky tee with the pelican and “Morro Bay, CA”",
+    "people": [
+      "p06"
+    ],
     "src": "/images/wild/11.3cbb479a.webp",
     "width": 800,
     "height": 1000,
@@ -145,6 +181,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "Pelican on Sky",
     "href": "/day-all-over",
     "alt": "All-over sky tee with the pelican",
+    "people": [
+      "p07"
+    ],
     "src": "/images/wild/12.a60d6b77.webp",
     "width": 800,
     "height": 1000,
@@ -156,6 +195,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "Purple tee with the smoking alpaca",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/14.d108fc13.webp",
     "width": 800,
     "height": 1000,
@@ -167,6 +209,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "Purple tee with the smoking alpaca",
+    "people": [
+      "p02"
+    ],
     "src": "/images/wild/15.41cd4123.webp",
     "width": 667,
     "height": 1000,
@@ -178,6 +223,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "Purple crop top with the smoking alpaca",
+    "people": [
+      "p08"
+    ],
     "src": "/images/wild/16.6511a9c2.webp",
     "width": 929,
     "height": 1000,
@@ -189,6 +237,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "White tank top with the smoking alpaca",
+    "people": [
+      "p09"
+    ],
     "src": "/images/wild/17.3c39017c.webp",
     "width": 667,
     "height": 1000,
@@ -200,6 +251,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "White tee with the smoking alpaca",
+    "people": [
+      "p10"
+    ],
     "src": "/images/wild/18.af201487.webp",
     "width": 667,
     "height": 1000,
@@ -211,6 +265,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "White tee with the smoking alpaca",
+    "people": [
+      "p11"
+    ],
     "src": "/images/wild/19.60edd065.webp",
     "width": 803,
     "height": 1000,
@@ -222,6 +279,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Smoking Alpaca",
     "href": "/alpaca-tee",
     "alt": "Basketball jersey with the smoking alpaca",
+    "people": [
+      "p12"
+    ],
     "src": "/images/wild/20.5897b5f0.webp",
     "width": 750,
     "height": 1000,
@@ -233,6 +293,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Classy Rabbit",
     "href": "/rabbit-tee",
     "alt": "Sky-print crop top with the classy rabbit",
+    "people": [
+      "p04"
+    ],
     "src": "/images/wild/21.98ded3ce.webp",
     "width": 896,
     "height": 1000,
@@ -244,6 +307,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Classy Rabbit",
     "href": "/rabbit-tee",
     "alt": "Sky-print crop top with the classy rabbit",
+    "people": [
+      "p04"
+    ],
     "src": "/images/wild/22.91b0bb79.webp",
     "width": 794,
     "height": 1000,
@@ -255,6 +321,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Classy Rabbit",
     "href": "/rabbit-tee",
     "alt": "Pale-sky crop top with the classy rabbit",
+    "people": [
+      "p03"
+    ],
     "src": "/images/wild/23.9016e325.webp",
     "width": 667,
     "height": 1000,
@@ -266,6 +335,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Classy Rabbit",
     "href": "/rabbit-tee",
     "alt": "Black crop top with the classy rabbit",
+    "people": [
+      "p03"
+    ],
     "src": "/images/wild/24.55eefbb9.webp",
     "width": 800,
     "height": 1000,
@@ -277,6 +349,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Classy Rabbit",
     "href": "/rabbit-tee",
     "alt": "Black crop top with the classy rabbit",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/25.3f26d338.webp",
     "width": 563,
     "height": 1000,
@@ -288,6 +363,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "Clouds",
     "href": "/clouds-skater-dress",
     "alt": "All-over clouds skater dress",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/26.f5adcc23.webp",
     "width": 579,
     "height": 1000,
@@ -299,6 +377,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "Clouds",
     "href": "/clouds-skater-dress",
     "alt": "All-over clouds skater dress",
+    "people": [
+      "p01"
+    ],
     "src": "/images/wild/27.d77ecef4.webp",
     "width": 577,
     "height": 1000,
@@ -310,6 +391,9 @@ export const wildPhotos: WildPhoto[] = [
     "design": "The Original Star",
     "href": "/original-star-tee",
     "alt": "Tee with the original painted star",
+    "people": [
+      "p07"
+    ],
     "src": "/images/wild/28.fa08eb0e.webp",
     "width": 794,
     "height": 1000,

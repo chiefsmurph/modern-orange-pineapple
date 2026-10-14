@@ -14,7 +14,7 @@ import { track } from "@/lib/umami";
 import WildLightbox from "@/components/WildLightbox";
 import MopCrew from "@/components/MopCrew";
 import { wildPhotos, type WildPhoto } from "@/lib/wild.generated";
-import { pickRandom, splitWild } from "@/lib/wild";
+import { mixWild } from "@/lib/wild";
 import InViewVideo from "@/components/InViewVideo";
 import { useEffect, useRef, useState } from "react";
 import { takeHomeRestore } from "@/lib/home-scroll";
@@ -28,13 +28,16 @@ export default function HomePage() {
   const [isHoveredBtn2, setIsHoveredBtn2] = useState(false);
   const glowRef = useRef<HTMLHeadingElement>(null);
 
-  // "Out in the wild": one shuffle per visit, after hydration (the HTML stays
-  // the same for everyone), shared by the strip at the top (first 5) and the
-  // grid at the bottom (next 9). One lightbox for both, over all the photos.
+  // "Out in the wild": one mix per visit, after hydration (the HTML stays the
+  // same for everyone, so the page can stay static and cached; the strip and
+  // grid hold their size with placeholders until then, so nothing moves): the
+  // strip at the top shows 5 different people, the grid at the bottom 9 other
+  // photos with nobody twice side by side (lib/wild.ts mixWild). One lightbox
+  // for both, over all the photos.
   const [wild, setWild] = useState<{ strip: WildPhoto[]; grid: WildPhoto[] } | null>(null);
   const [lightbox, setLightbox] = useState<number | null>(null);
   useEffect(() => {
-    setWild(splitWild(pickRandom(wildPhotos, wildPhotos.length)));
+    setWild(mixWild(wildPhotos));
   }, []);
   const openWild = (p: WildPhoto | null, from: "strip" | "grid" | "see-all") => {
     setLightbox(p ? Math.max(0, wildPhotos.indexOf(p)) : 0);

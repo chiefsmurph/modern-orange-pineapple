@@ -5,7 +5,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { wildPhotos } from "../lib/wild.generated.ts";
-import { pickRandom, splitWild } from "../lib/wild.ts";
+import { adjacentRepeats, mixWild, pickRandom, GRID_COLS, GRID_COUNT, STRIP_COUNT } from "../lib/wild.ts";
 import { getShopProduct } from "../lib/catalog/index.ts";
 
 const config = JSON.parse(readFileSync("scripts/wild/photos.json", "utf8")).photos as { n: string; hidden?: boolean }[];
@@ -59,19 +59,81 @@ test("pickRandom: n different photos, a fresh order each time", () => {
   assert.deepEqual(items, Array.from({ length: 27 }, (_, i) => i)); // the input isn't shuffled in place
 });
 
-test("one shuffle feeds both spots: 5 in the top strip, the next 9 in the grid, none twice", () => {
-  const order = pickRandom(wildPhotos, wildPhotos.length);
-  const { strip, grid } = splitWild(order);
-  assert.equal(strip.length, 5);
-  assert.equal(grid.length, 9);
-  const both = strip.filter((p) => grid.includes(p));
-  assert.deepEqual(both, []);
-  assert.equal(new Set([...strip, ...grid].map((p) => p.n)).size, 14);
-});
-
 test("strip thumbnails are 240×240", async () => {
   for (const p of wildPhotos) {
     const m = await sharp(path.join("public", p.small)).metadata();
     assert.deepEqual([m.width, m.height], [240, 240], p.n);
   }
+});
+
+// --- people: the strip never shows anyone twice, the grid never side by side (10/13) ---
+
+/** A small seeded random (mulberry32) so every run tries the same 2,000 visits. */
+const seeded = (seed: number) => () => {
+  seed |= 0;
+  seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+
+test("every photo on the site says who is in it; hidden photos stay off the site", () => {
+  const photosJson = JSON.parse(readFileSync(path.join(import.meta.dirname, "..", "scripts/wild/photos.json"), "utf8")).photos;
+  for (const p of photosJson) assert.ok(p.person && (typeof p.person === "string" || p.person.length), `${p.n} has a person`);
+  for (const w of wildPhotos) {
+    assert.ok(w.people.length >= 1 && w.people.every((x) => /^p\d{2}$/.test(x)), w.n);
+    assert.deepEqual(w.people, [photosJson.find((p: { n: string }) => p.n === w.n).person].flat(), w.n);
+  }
+  const hidden = photosJson.filter((p: { hidden?: boolean }) => p.hidden).map((p: { n: string }) => p.n);
+  assert.ok(hidden.length > 0);
+  for (const n of hidden) assert.ok(!wildPhotos.some((w) => w.n === n), `hidden ${n} is not on the site`);
+});
+
+test("2,000 visits: the strip never shows a person twice, never overlaps the grid, and the grid never puts a person side by side", () => {
+  const strips = new Set<string>();
+  for (let seed = 1; seed <= 2000; seed++) {
+    const { strip, grid } = mixWild(wildPhotos, seeded(seed));
+    assert.equal(strip.length, STRIP_COUNT);
+    assert.equal(grid.length, GRID_COUNT);
+    const people = strip.flatMap((p) => p.people);
+    assert.equal(new Set(people).size, people.length, `seed ${seed}: someone twice in the strip`);
+    for (const p of grid) assert.ok(!strip.includes(p), `seed ${seed}: ${p.n} in both`);
+    assert.equal(new Set(grid.map((p) => p.n)).size, GRID_COUNT, `seed ${seed}: a photo twice in the grid`);
+    assert.equal(adjacentRepeats(grid, GRID_COLS), 0, `seed ${seed}: same person side by side`);
+    strips.add(strip.map((p) => p.n).join(","));
+  }
+  // a fresh mix each visit (and every photo gets its turn)
+  assert.ok(strips.size > 1900, `${strips.size} different strips`);
+  const shown = new Set(Array.from(strips).flatMap((s) => s.split(",")));
+  assert.equal(shown.size, wildPhotos.length);
+});
+
+test("the grid spreads people out: 9 photos of at least 7 different people, nobody more than twice", () => {
+  let least = 99;
+  for (let seed = 1; seed <= 2000; seed++) {
+    const { grid } = mixWild(wildPhotos, seeded(seed));
+    least = Math.min(least, new Set(grid.flatMap((p) => p.people)).size);
+    const count: Record<string, number> = {};
+    for (const p of grid) for (const x of p.people) count[x] = (count[x] ?? 0) + 1;
+    assert.ok(Math.max(...Object.values(count)) <= 2, `seed ${seed}: someone 3 times in the grid`);
+  }
+  assert.ok(least >= 7, `only ${least} different people in some grid`);
+});
+
+test("the two-person photo blocks both of them: never with another photo of either in the strip", () => {
+  const both = wildPhotos.find((w) => w.people.length > 1)!;
+  assert.ok(both, "the photo with two people");
+  for (let seed = 1; seed <= 500; seed++) {
+    const { strip } = mixWild(wildPhotos, seeded(seed));
+    if (!strip.includes(both)) continue;
+    for (const p of strip) if (p !== both) assert.ok(!p.people.some((x) => both.people.includes(x)), `seed ${seed}: ${p.n} with ${both.n}`);
+  }
+});
+
+test("adjacentRepeats counts left/right and above/below only", () => {
+  const P = (id: string) => ({ people: [id] });
+  assert.equal(adjacentRepeats([P("a"), P("a"), P("b")]), 1); // side by side
+  assert.equal(adjacentRepeats([P("a"), P("b"), P("c"), P("a")]), 1); // above/below
+  assert.equal(adjacentRepeats([P("a"), P("b"), P("a")]), 0); // same row, not touching
+  assert.equal(adjacentRepeats([P("a"), P("b"), P("c"), P("d"), P("a")]), 0); // diagonal
 });
