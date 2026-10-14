@@ -6,7 +6,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { shopProducts, getShopProduct } from "../lib/catalog/index.ts";
 import { SHARE_IMAGE_SIZE, shareImages } from "../lib/share-images.generated.ts";
-import { firstSentence, productShareMeta, productShareTitle, shareMeta, SITE_DESCRIPTION } from "../lib/share-meta.ts";
+import { firstSentence, productShareMeta, productShareTitle, shareMeta, SITE_DESCRIPTION, SITE_URL } from "../lib/share-meta.ts";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 
@@ -74,4 +74,21 @@ test("the description pairs the slogan with the descriptor (John 10/13), and nev
   assert.equal(manifest.name, "Modern Orange Pineapple");
   assert.equal(manifest.short_name, "MOP");
   assert.equal(manifest.description, SITE_DESCRIPTION);
+});
+
+test("a ?color= link previews that colour's own photo and keeps the colour in og:url (John 10/14)", () => {
+  const pelican = getShopProduct("pelican-tee")!;
+  const black = productShareMeta(pelican, { color: "black" }); // case-insensitive, as people type it
+  const og = black.openGraph as { url?: string; title?: string; images?: { url: string }[] };
+  assert.match(og.images![0].url, /\/images\/share\/pelican-tee--black\.[0-9a-f]{8}\.jpg$/);
+  assert.equal(og.url, `${SITE_URL}/pelican-tee?color=Black`);
+  assert.match(String(og.title), /^Pelican Tee in Black · /);
+  // no colour, an unknown colour, or a colour that shares the default photo → the product's image
+  for (const color of [undefined, "Plaid", ""]) {
+    const m = productShareMeta(pelican, { color }).openGraph as { url?: string; images?: { url: string }[] };
+    assert.equal(m.images![0].url, `${SITE_URL}${shareImages["pelican-tee"]}`);
+    assert.equal(m.url, `${SITE_URL}/pelican-tee`);
+  }
+  for (const [key, src] of Object.entries(shareImages))
+    if (key.includes("?color=")) assert.notEqual(src, shareImages[key.split("?")[0]], key);
 });

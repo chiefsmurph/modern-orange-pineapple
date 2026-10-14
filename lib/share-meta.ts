@@ -63,12 +63,26 @@ export function productShareTitle(p: Pick<ShopProduct, "title" | "variants">): s
   return `${p.title} · ${r.min === r.max ? formatPrice(r.min) : `from ${formatPrice(r.min)}`}`;
 }
 
-export function productShareMeta(p: ShopProduct): Pick<Metadata, "openGraph" | "twitter"> {
+/** The product's colour named in a link (?color=black → "Black"), or undefined. */
+export function linkColor(p: Pick<ShopProduct, "options">, color: string | undefined): string | undefined {
+  if (!color) return undefined;
+  const want = color.trim().toLowerCase();
+  return (p.options?.color ?? []).find((c) => c.toLowerCase() === want);
+}
+
+/**
+ * A shared ?color= link previews that colour (scripts/gen-share-images.mjs makes one image per
+ * colour whose photo differs), and its og:url keeps the colour so apps don't fold it back into the
+ * default-colour preview. Any other link, or a colour without its own image, gets the product's.
+ */
+export function productShareMeta(p: ShopProduct, opts: { color?: string } = {}): Pick<Metadata, "openGraph" | "twitter"> {
+  const color = linkColor(p, opts.color);
+  const colorImage = color ? shareImages[`${p.slug}?color=${color}`] : undefined;
   return shareMeta({
-    title: productShareTitle(p),
+    title: colorImage ? productShareTitle(p).replace(p.title, `${p.title} in ${color}`) : productShareTitle(p),
     description: firstSentence(p.description),
-    path: `/${p.slug}`,
-    image: shareImages[p.slug] ?? shareImages.home,
-    alt: p.title,
+    path: colorImage ? `/${p.slug}?color=${encodeURIComponent(color!)}` : `/${p.slug}`,
+    image: colorImage ?? shareImages[p.slug] ?? shareImages.home,
+    alt: colorImage ? `${p.title} in ${color}` : p.title,
   });
 }

@@ -22,6 +22,7 @@ const findLegacy = (id: string) =>
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: ProductPageProps): Promise<Metadata> {
   const { productId } = await params;
   const legacy = findLegacy(productId);
@@ -32,8 +33,10 @@ export async function generateMetadata({
     };
   const product = getShopProduct(productId);
   if (!product) return {};
-  // Link preview: the product photo, "<name> · $<price>", the copy's first sentence.
-  const share = productShareMeta(product);
+  // Link preview: the product photo (the linked ?color='s own, when it has one), "<name> · $<price>",
+  // the copy's first sentence.
+  const color = (await searchParams).color;
+  const share = productShareMeta(product, { color: Array.isArray(color) ? color[0] : color });
   return {
     title: `${product.title} | Modern Orange Pineapple`,
     description: share.openGraph?.description,
