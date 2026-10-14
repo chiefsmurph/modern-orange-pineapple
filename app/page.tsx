@@ -90,7 +90,7 @@ export default function HomePage() {
       </header>
 
       <p className={`${styles.materialNote} ${styles.fadeIn}`}>
-        Real cotton — even the all-overs.
+        Art-inspired designs · real cotton, even the all-overs · Morro Bay, CA
       </p>
       {wildPhotos.length > 0 && <WildStrip photos={wild?.strip ?? null} onOpen={(p) => openWild(p, "strip")} />}
       {/* Featured (lib/catalog/copy.ts `featured`): premium all-overs alternating with the $29 tees. */}

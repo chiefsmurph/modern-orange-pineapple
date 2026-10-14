@@ -3,7 +3,7 @@
 //
 //   home      the MOP wordmark (Orbitron, as on the site) on the site's sky
 //             backdrop, four all-over shirts (Day, Dusk, Night, a Sky Tee) and
-//             the line "Art-inspired shirts on real cotton".
+//             the line "Art-inspired designs on real cotton".
 //   <slug>    each product's photo (its home-card photo: the hero, or the hero's
 //             head-to-hips crop for full-body shots), letterboxed on the light
 //             photo-tile grey. Centred, so a square crop (some apps) is the photo.
@@ -40,7 +40,7 @@ export const HOME_SHIRTS = [
   { slug: "night-all-over", when: {} },
   { slug: "sky-tee", when: { sky: "orbital-sunset" } },
 ];
-export const HOME_LINE = "Art-inspired shirts on real cotton";
+export const HOME_LINE = "Art-inspired designs on real cotton";
 
 const pub = (src) => path.join(ROOT, "public", decodeURI(src));
 
@@ -163,7 +163,7 @@ export async function homeImage(shopProducts, imagesFor) {
   });
   layers.push({ input: line.input, left: x + padX, top: y + padY });
   y += pillH + 22;
-  const small = await text(`<span foreground="white">Made to order in the USA • Morro Bay, CA</span>`, { size: 16, weight: "Medium" });
+  const small = await text(`<span foreground="white">Made to order • Morro Bay, CA</span>`, { size: 16, weight: "Medium" });
   layers.push({ input: small.input, left: x + 4, top: y });
 
   return sharp(bg).composite(layers).flatten({ background: TILE }).jpeg({ quality: 86, mozjpeg: true }).toBuffer();

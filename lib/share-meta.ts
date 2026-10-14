@@ -7,9 +7,9 @@ import { SHARE_IMAGE_SIZE, shareImages } from "./share-images.generated.ts";
 
 export const SITE_URL = "https://mopclothing.com";
 export const SITE_NAME = "Modern Orange Pineapple";
-/** The site's description (replaced "Escape the Ordinary — Own a Collectible Piece of Paradise", 10/12). */
+/** The site's description: the slogan + the descriptor, as in the Instagram bio (John 10/13). No country-of-printing claim: Printful picks the print facility. */
 export const SITE_DESCRIPTION =
-  "Art-inspired shirts on real cotton — even the all-overs. Made to order in the USA · Morro Bay, CA";
+  "Escape the ordinary, own a collectible piece of paradise. Art-inspired designs on real cotton, even the all-overs. Made to order · Morro Bay, CA";
 
 const abs = (p: string) => (p.startsWith("http") ? p : `${SITE_URL}${encodeURI(p)}`);
 
@@ -19,7 +19,7 @@ export function shareMeta({
   description,
   path,
   image = shareImages.home,
-  alt = "Modern Orange Pineapple: art-inspired shirts on real cotton",
+  alt = "Modern Orange Pineapple: art-inspired designs on real cotton",
 }: {
   title: string;
   description: string;

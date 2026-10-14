@@ -60,16 +60,16 @@ test("home and the other pages: the home image, the new description, a large car
   const m = shareMeta({ title: "Modern Orange Pineapple", description: SITE_DESCRIPTION });
   const og = m.openGraph as Record<string, any>;
   assert.equal(og.title, "Modern Orange Pineapple");
-  assert.equal(og.description, "Art-inspired shirts on real cotton — even the all-overs. Made to order in the USA · Morro Bay, CA");
+  assert.equal(og.description, "Escape the ordinary, own a collectible piece of paradise. Art-inspired designs on real cotton, even the all-overs. Made to order · Morro Bay, CA");
   assert.equal(og.url, undefined); // the shared URL itself
   assert.equal(og.images[0].url, `https://mopclothing.com${shareImages.home}`);
   assert.equal((m.twitter as Record<string, any>).card, "summary_large_image");
 });
 
-test("the old tagline is gone from the metadata and the manifest", () => {
-  const old = /Escape the Ordinary|Collectible Piece of Paradise/i;
-  for (const f of ["app/layout.tsx", "app/[productId]/page.tsx", "public/manifest.json", "lib/share-meta.ts"])
-    assert.doesNotMatch(readFileSync(path.join(ROOT, f), "utf8").replace(/\/\*\* The site's description \(replaced[^\n]*/, ""), old, f);
+test("the description pairs the slogan with the descriptor (John 10/13), and never claims 'in the USA'", () => {
+  assert.match(SITE_DESCRIPTION, /^Escape the ordinary, own a collectible piece of paradise\. Art-inspired designs on real cotton/);
+  for (const f of ["app/layout.tsx", "app/[productId]/page.tsx", "public/manifest.json", "lib/share-meta.ts", "app/page.tsx", "scripts/gen-share-images.mjs"])
+    assert.doesNotMatch(readFileSync(path.join(ROOT, f), "utf8"), /in the USA/i, f);
   const manifest = JSON.parse(readFileSync(path.join(ROOT, "public/manifest.json"), "utf8"));
   assert.equal(manifest.name, "Modern Orange Pineapple");
   assert.equal(manifest.short_name, "MOP");
