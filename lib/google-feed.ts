@@ -29,7 +29,9 @@ export const categoryFor = (p: Pick<ShopProduct, "printfulCatalogProductId" | "s
     ? "Apparel & Accessories > Clothing Accessories > Hats"
     : p.printfulCatalogProductId === 315 || /dress/.test(p.slug)
       ? "Apparel & Accessories > Clothing > Dresses"
-      : "Apparel & Accessories > Clothing > Shirts & Tops";
+      : p.printfulCatalogProductId === 1481 || /shorts/.test(p.slug)
+        ? "Apparel & Accessories > Clothing > Shorts"
+        : "Apparel & Accessories > Clothing > Shirts & Tops";
 
 /** Crop top and dress are cut for women; everything else is unisex. */
 export const genderFor = (p: Pick<ShopProduct, "printfulCatalogProductId" | "slug">) =>
@@ -81,7 +83,7 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
         .join(", ");
       const title = `${p.title}${summary ? ` - ${summary}` : ""}${v.opts.size ? `, size ${v.opts.size}` : ""}`.slice(0, 150);
       const query = syncedQuery("", names, sel);
-      const color = v.opts.color ?? (p.group === "allover" || /dress/.test(p.slug) ? "Multicolor" : undefined);
+      const color = v.opts.color ?? (p.group === "allover" || /dress|shorts/.test(p.slug) ? "Multicolor" : undefined);
       const extra = flavor === "meta" ? [] : images.filter((src) => src !== images[0]).slice(0, 3);
       items.push(
         [

@@ -46,11 +46,13 @@ test("generated images: content-hashed names, model shots before the flat, cards
       }
       // model, then model2, then flat, then extras (detail, back...). The hero is a model
       // shot, or the flat itself when Printful has no second model (the all-over line:
-      // one model, so some heroes are flat shots); either way no image repeats.
+      // one model, so some heroes are flat shots; the Sky Shorts, Printful 1481, have flat
+      // mockups only); either way no image repeats.
       const stems = set.images.map((src) => path.basename(src).replace(/\.[0-9a-f]{8}\.\w+$/, ""));
       assert.equal(new Set(set.images).size, set.images.length, `${p.slug}: repeated image`);
       const flatHero = /(^|-)flat$/.test(stems[0]);
-      assert.ok(/model/.test(stems[0]) || (flatHero && p.group === "allover"), `${p.slug}: hero ${stems[0]}`);
+      const flatOnly = p.group === "allover" || p.printfulCatalogProductId === 1481;
+      assert.ok(/model/.test(stems[0]) || (flatHero && flatOnly), `${p.slug}: hero ${stems[0]}`);
       const flat = stems.findIndex((s) => /(^|-)flat$/.test(s));
       if (flat > 0) assert.ok(stems.slice(0, flat).every((s) => /model/.test(s)), `${p.slug}: ${stems.join(", ")}`);
     }

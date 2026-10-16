@@ -36,6 +36,12 @@ const garments: Record<number, Garment> = {
       "- Printed edge to edge: front, back and both sleeves\n- Fabric: 96% cotton, 4% elastane\n- Midweight: 5.6 oz/yd² (189 g/m²)\n- Slight stretch, keeps its shape",
     sizeNote: "96% cotton, 4% elastane · runs slim — size up",
   },
+  // All-Over Print Unisex Cotton Shorts (the Sky Shorts)
+  1481: {
+    details:
+      "- Printed edge to edge, front and back\n- Fabric: 95% cotton, 5% elastane\n- Heavyweight: 8.85 oz/yd² (300 g/m²), medium-soft with a little stretch\n- Elastic waistband, side pockets\n- Short 2⅝″ inseam, unisex fit",
+    sizeNote: "95% cotton, 5% elastane · short 2⅝″ inseam",
+  },
   // All-Over Print Skater Dress (US fulfilment)
   315: {
     details:
@@ -62,6 +68,11 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
   { match: /^night-all-over/, text: () => "The rabbit under a night sky, printed edge to edge.", rank: 1 },
   { match: /^sky-tee/, text: () => "Pick your sky. Every one is printed edge to edge.", rank: 1 },
   { match: /stripes/, text: () => "Gold stripes, printed edge to edge.", rank: 1 },
+  {
+    match: /^sky-shorts/,
+    text: () => "Big summer clouds on a bright day sky, printed edge to edge, with a little MOP rabbit by the left hem.",
+    rank: 2,
+  },
   {
     match: /dress/,
     text: () => "Dress to impress with this all-over cloud print skater dress!",

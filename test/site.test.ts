@@ -20,10 +20,11 @@ test("the old $27 pelican is off the home grid but still in the product data", (
   assert.ok(legacy.products.some((p) => p.id === "pelican-beanie-t-shirt" && p.retired));
 });
 
-test("its URL redirects permanently to the pelican tee's beanie style", async () => {
+test("retired URLs redirect permanently: the old pelican to the beanie style, the old shorts to the Sky Shorts", async () => {
   const redirects = await nextConfig.redirects!();
   assert.deepEqual(redirects, [
     { source: "/pelican-beanie-t-shirt", destination: "/pelican-tee?style=beanie", statusCode: 301 },
+    { source: "/blue-sky-cotton-shorts", destination: "/sky-shorts", statusCode: 301 },
   ]);
 });
 
@@ -85,18 +86,50 @@ test("a plain credit line (CC0 photo) shows as written, with no avatar", () => {
   assert.equal(creditText(d), "Sky photo: John Robert McPherson (CC0, Wikimedia Commons)");
 });
 
-test("the old-sky Yoycol shirt and shorts are 'coming back soon': off the grid, no new checkouts, old orders still map", () => {
+test("the old-sky Yoycol shirt is 'coming back soon': off the grid, no new checkouts, old orders still map", () => {
   const hrefs = shopCards().map((c) => c.href);
-  for (const id of ["clouds-in-sky-shirt", "blue-sky-cotton-shorts"]) {
-    assert.ok(!hrefs.includes(`/${id}`), `${id} hidden`);
-    const p = legacy.products.find((x) => x.id === id)!;
-    assert.equal(p.comingSoon?.message, "Coming back soon with a new sky");
-    assert.deepEqual(checkoutBlock(id), { status: 409, error: "coming back soon with a new sky" });
-    // a paid order from a checkout started before still goes to Yoycol
-    const { item } = buildItem(id, { size: "M" }, 1, {});
-    assert.equal(item.supplier, "yoycol");
-  }
+  const id = "clouds-in-sky-shirt";
+  assert.ok(!hrefs.includes(`/${id}`), `${id} hidden`);
+  const p = legacy.products.find((x) => x.id === id)!;
+  assert.equal(p.comingSoon?.message, "Coming back soon with a new sky");
+  assert.deepEqual(checkoutBlock(id), { status: 409, error: "coming back soon with a new sky" });
+  // a paid order from a checkout started before still goes to Yoycol
+  const { item } = buildItem(id, { size: "M" }, 1, {});
+  assert.equal(item.supplier, "yoycol");
   assert.deepEqual(checkoutBlock("pelican-beanie-t-shirt"), { status: 410, error: "no longer available" });
   assert.equal(checkoutBlock("pelican-tee"), null);
   assert.equal(checkoutBlock("clouds-skater-dress"), null);
+});
+
+test("the old Yoycol shorts are retired (no new checkouts) but checkouts started before still go to Yoycol", () => {
+  const id = "blue-sky-cotton-shorts";
+  const hrefs = shopCards().map((c) => c.href);
+  assert.ok(!hrefs.includes(`/${id}`), `${id} hidden`);
+  const p = legacy.products.find((x) => x.id === id)!;
+  assert.deepEqual(p.retired, { redirectTo: "/sky-shorts" });
+  assert.equal(p.comingSoon, undefined);
+  assert.equal(p.superseded, undefined, "a new slug, so the legacy entry isn't superseded");
+  assert.deepEqual(checkoutBlock(id), { status: 410, error: "no longer available" });
+  const { item } = buildItem(id, { size: "M" }, 1, {});
+  assert.equal(item.supplier, "yoycol");
+});
+
+test("the Sky Shorts are a Printful catalog product: $40 XS–3XL, CC0 sky credit, no royalty", { skip: !getShopProduct("sky-shorts") }, () => {
+  const p = getShopProduct("sky-shorts")!;
+  assert.equal(p.printfulCatalogProductId, 1481);
+  assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL", "3XL"]);
+  assert.ok(p.variants.every((v) => v.price === 40));
+  const cards = shopCards().filter((c) => c.href === "/sky-shorts");
+  assert.equal(cards.length, 1);
+  assert.equal(cards[0].price, "$40");
+  assert.equal(checkoutBlock("sky-shorts"), null);
+  const { item } = buildItem("sky-shorts", { size: "3XL" }, 1, {});
+  assert.equal(item.supplier, "printful");
+  assert.equal(item.unitAmount, 4000);
+  assert.ok(item.printful?.syncVariantId);
+  assert.deepEqual(creditLinesFor(p, normalizeSelection(p)), ["Sky photo: John Robert McPherson (CC0)"]);
+  assert.deepEqual(rulesFor("sky-shorts"), []);
+  assert.match(p.description, /^Big summer clouds/);
+  assert.match(p.description, /95% cotton, 5% elastane/);
+  assert.match(p.sizeNote ?? "", /2⅝″ inseam/);
 });

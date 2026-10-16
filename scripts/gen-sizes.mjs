@@ -24,6 +24,7 @@ const FIT = {
   810: "Regular fit.",
   315: "Fitted top, flared skirt; between sizes, size up.",
   99: "One size, adjustable snap.",
+  1481: "Elastic waist, short 2⅝″ inseam; between sizes, size up.",
 };
 
 const NAMES = [
@@ -31,6 +32,8 @@ const NAMES = [
   [/^1\/2 waist width$/i, "Waist width (laid flat)"],
   [/^length$/i, "Length"],
   [/^sleeve length$/i, "Sleeve length"],
+  [/^inseam length$/i, "Inseam"],
+  [/^front rise$/i, "Front rise"],
 ];
 const nameFor = (label) => NAMES.find(([re]) => re.test(label.trim()))?.[1] ?? label.trim();
 

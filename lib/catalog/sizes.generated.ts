@@ -257,5 +257,55 @@ export const sizeGuides: Record<number, SizeGuide> = {
       }
     ],
     "fit": "Runs slim — size up."
+  },
+  "1481": {
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL",
+      "3XL"
+    ],
+    "rows": [
+      {
+        "label": "Waist width (laid flat)",
+        "values": {
+          "XS": "11¾",
+          "S": "12⅝",
+          "M": "13⅝",
+          "L": "15½",
+          "XL": "16½",
+          "2XL": "18½",
+          "3XL": "20¼"
+        }
+      },
+      {
+        "label": "Inseam",
+        "values": {
+          "XS": "2⅝",
+          "S": "2⅝",
+          "M": "2⅝",
+          "L": "2⅝",
+          "XL": "2⅝",
+          "2XL": "2⅝",
+          "3XL": "2⅝"
+        }
+      },
+      {
+        "label": "Front rise",
+        "values": {
+          "XS": "11¾",
+          "S": "12¼",
+          "M": "13⅜",
+          "L": "14⅛",
+          "XL": "14⅝",
+          "2XL": "15",
+          "3XL": "15⅜"
+        }
+      }
+    ],
+    "fit": "Elastic waist, short 2⅝″ inseam; between sizes, size up."
   }
 };
