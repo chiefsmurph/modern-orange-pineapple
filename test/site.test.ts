@@ -114,18 +114,19 @@ test("the old Yoycol shorts are retired (no new checkouts) but checkouts started
   assert.equal(item.supplier, "yoycol");
 });
 
-test("the Sky Shorts are a Printful catalog product: $40 XS–3XL, CC0 sky credit, no royalty", { skip: !getShopProduct("sky-shorts") }, () => {
+test("the Sky Shorts are a Printful catalog product: $40 XS–XL, $42 2XL, $44 3XL, CC0 sky credit, no royalty", { skip: !getShopProduct("sky-shorts") }, () => {
   const p = getShopProduct("sky-shorts")!;
   assert.equal(p.printfulCatalogProductId, 1481);
   assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL", "3XL"]);
-  assert.ok(p.variants.every((v) => v.price === 40));
+  const SIZE_PRICE: Record<string, number> = { XS: 40, S: 40, M: 40, L: 40, XL: 40, "2XL": 42, "3XL": 44 };
+  assert.ok(p.variants.every((v) => v.price === SIZE_PRICE[v.opts.size]), JSON.stringify(p.variants.map((v) => [v.opts.size, v.price])));
   const cards = shopCards().filter((c) => c.href === "/sky-shorts");
   assert.equal(cards.length, 1);
-  assert.equal(cards[0].price, "$40");
+  assert.equal(cards[0].price, "From $40");
   assert.equal(checkoutBlock("sky-shorts"), null);
   const { item } = buildItem("sky-shorts", { size: "3XL" }, 1, {});
   assert.equal(item.supplier, "printful");
-  assert.equal(item.unitAmount, 4000);
+  assert.equal(item.unitAmount, 4400); // 3XL = $44
   assert.ok(item.printful?.syncVariantId);
   assert.deepEqual(creditLinesFor(p, normalizeSelection(p)), ["Sky photo: John Robert McPherson (CC0)"]);
   assert.deepEqual(rulesFor("sky-shorts"), []);

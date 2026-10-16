@@ -7867,14 +7867,14 @@ export const catalogProducts: CatalogProduct[] = [
         "opts": {
           "size": "2XL"
         },
-        "price": 40,
+        "price": 42,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "3XL"
         },
-        "price": 40,
+        "price": 44,
         "status": "DECIDED"
       }
     ],
