@@ -139,12 +139,28 @@ journalctl -u mopclothing -n 50 --no-pager | grep -E '\[orders\]|\[stripe-webhoo
 ls -l /var/lib/mopclothing/    # orders.jsonl, orders-state.json, royalties.jsonl appear after the first order
 ```
 
-### Monthly royalty email (not installed yet)
+### Monthly royalty email (timer installed 10/2026; first run Sun 11/1 09:00 PT)
 
 `scripts/royalty-summary.mjs` emails John the per-artist totals for the previous month
-(Pacific time; Stripe test-mode orders are skipped; refunds are not subtracted).
+(Pacific time; Stripe test-mode orders are skipped), the payouts/refunds recorded that month,
+and each artist's **balance**: lifetime owed (every `royalties.jsonl` row) − refunds − payouts
+(`royalty-payouts.jsonl`). The subject ends with the total due now.
 Try it first: `sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node /srv/mopclothing/scripts/royalty-summary.mjs --dry-run`.
 Use the same `node` binary as `mopclothing.service` (`systemctl cat mopclothing`).
+
+**Recording a payout** (appends one line to `/var/lib/mopclothing/royalty-payouts.jsonl`, created
+0640 on first use; lines are never edited):
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node /srv/mopclothing/scripts/royalty-payout.mjs \
+  --artist janette --amount 3.00 --date 2026-11-02 --note "Venmo @janette"     # --dry-run first to see the new balance
+```
+
+It refuses an artist the catalog doesn't pay or more than the balance (`--force` for an advance).
+A payout recorded by mistake: record the opposite with `--amount -3.00 --correct --note "…"`.
+**Refunds**: Stripe refunds don't reach the ledger (the webhook only records paid orders), so
+record one with `--refund-order <order_ref>` (from John's order email / `royalties.jsonl`); it
+takes that order's royalties off each artist once (`--artist` / `--slug` for part of a bag).
 
 ```ini
 # /etc/systemd/system/mopclothing-royalties.service
