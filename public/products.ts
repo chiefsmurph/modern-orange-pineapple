@@ -22,7 +22,20 @@ export type Product = {
   title: string;
   description: string;
   options: ProductOptions;
+  /** The item price in dollars, before shipping (free-shipping items show and charge price + shipping). */
   price: number;
+  /**
+   * Item prices (like `price`, before shipping) for the sizes that cost more;
+   * a size not listed costs `price`. The page, the card ("From $…"), the
+   * checkout's unitAmount and the Stripe line all follow the picked size.
+   */
+  sizePrices?: Partial<Record<string, number>>;
+  /**
+   * Home-grid position among the generated products (lib/catalog/copy.ts
+   * catalogRank: lower first; a tie goes after the generated ones). Unset: after
+   * all of them, in this file's order.
+   */
+  rank?: number;
   vendor:
     | {
         platform: "yoycol";
@@ -109,8 +122,22 @@ export const getProductDesignId = (
   return (value && design.designs[value]) || design.fallback;
 };
 
-export const getTotalPrice = ({ shipping, price }: Product) =>
-  parseFloat((shipping.cost / 100 + price).toFixed(2));
+/** The item price for a size (before shipping): its `sizePrices` entry, else `price`. */
+export const getItemPrice = ({ price, sizePrices }: Product, size?: string) =>
+  (size ? sizePrices?.[size] : undefined) ?? price;
+
+/** Price + shipping, for a size when the price depends on it (no size: the base `price`). */
+export const getTotalPrice = (product: Product, size?: string) =>
+  parseFloat((product.shipping.cost / 100 + getItemPrice(product, size)).toFixed(2));
+
+/** "$40" for a picked size or a one-price product, else "From $40" (as the catalog's priceLabel). */
+export const getPriceLabel = (product: Product, size?: string) => {
+  if (size || !product.sizePrices) return `$${getTotalPrice(product, size)}`;
+  const totals = (product.options.size ?? []).map((s) => getTotalPrice(product, s));
+  const min = Math.min(getTotalPrice(product), ...totals);
+  const max = Math.max(getTotalPrice(product), ...totals);
+  return min === max ? `$${min}` : `From $${min}`;
+};
 
 const products: { products: Product[] } = {
   products: [
@@ -247,7 +274,11 @@ const products: { products: Product[] } = {
       options: {
         size: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
       },
+      // $40 with the 14.53 shipping (free-shipping model); 4XL $42 and 5XL $44 (John, 2026-10-16).
       price: 25.47,
+      sizePrices: { "4XL": 27.47, "5XL": 29.47 },
+      // Back near the top of the home grid, where the Printful Sky Shorts sat (catalog rank 2).
+      rank: 2,
       vendor: {
         platform: "yoycol",
         productId: "ID LRWGN",

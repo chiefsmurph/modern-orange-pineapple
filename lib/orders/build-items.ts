@@ -4,6 +4,7 @@
 // client: every option is checked against the product, prices come from here.
 import legacyProducts, {
   getDelivery,
+  getItemPrice,
   getProductImages,
   getTotalPrice,
   vendorDelivery,
@@ -104,8 +105,9 @@ export function buildItem(
       qty,
       opts,
       // Free shipping: the item carries the whole total. Otherwise the item is the
-      // price alone and shipping is charged once (shippingCents).
-      unitAmount: cents(legacy.freeShippingMode ? getTotalPrice(legacy) : legacy.price),
+      // price alone and shipping is charged once (shippingCents). Either follows the
+      // size when it has its own price (sizePrices: the shorts' 4XL/5XL).
+      unitAmount: cents(legacy.freeShippingMode ? getTotalPrice(legacy, opts.size) : getItemPrice(legacy, opts.size)),
     };
     if (legacy.vendor.platform === "yoycol") {
       const y = yoycolFor(legacy.id, env);

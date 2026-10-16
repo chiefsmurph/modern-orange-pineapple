@@ -5,13 +5,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import nextConfig from "../next.config.ts";
-import legacy, { vendorDelivery } from "../public/products.ts";
-import { shopCards } from "../lib/shop-cards.ts";
+import legacy, { getPriceLabel, getTotalPrice, vendorDelivery } from "../public/products.ts";
+import { restCards, shopCards } from "../lib/shop-cards.ts";
 import { allShopProducts, getShopProduct, getShopProductIncludingRetired, shopProducts } from "../lib/catalog/index.ts";
 import { retiredCatalog } from "../lib/catalog/retired.ts";
 import { catalogFulfilment } from "../lib/catalog/fulfilment.generated.ts";
 import { creditLinesFor, imagesFor, normalizeSelection } from "../lib/catalog/select.ts";
-import { optionTitle, valueLabel } from "../lib/catalog/copy.ts";
+import { catalogRank, optionTitle, valueLabel } from "../lib/catalog/copy.ts";
 import { buildItem, checkoutBlock, itemSummary } from "../lib/orders/build-items.ts";
 import { checkoutSessionParams } from "../lib/orders/checkout.ts";
 import { itemsFromSessionMetadata, sessionMetadata } from "../lib/orders/metadata.ts";
@@ -115,7 +115,10 @@ test("the old-sky Yoycol shirt is 'coming back soon': off the grid, no new check
 
 const SHORTS_SIZES = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
 
-test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: $40 every size S–5XL, 3–4 weeks", () => {
+// $40 total S–3XL, 4XL $42, 5XL $44 (John, 2026-10-16), shipping included.
+const SHORTS_TOTAL_CENTS: Record<string, number> = { S: 4000, M: 4000, L: 4000, XL: 4000, "2XL": 4000, "3XL": 4000, "4XL": 4200, "5XL": 4400 };
+
+test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: S–5XL, 3–4 weeks", () => {
   const id = "blue-sky-cotton-shorts";
   const p = legacy.products.find((x) => x.id === id)!;
   assert.equal(p.retired, undefined);
@@ -128,7 +131,7 @@ test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: $40 
   // on the home grid, with the honest Yoycol delivery time
   const cards = shopCards().filter((c) => c.href === `/${id}`);
   assert.equal(cards.length, 1);
-  assert.equal(cards[0].price, "$40");
+  assert.equal(cards[0].price, "From $40", "4XL/5XL cost more");
   assert.equal(cards[0].freeShipping, true);
   assert.equal(cards[0].delivery, vendorDelivery.yoycol.text);
   assert.match(cards[0].delivery, /3–4 weeks/);
@@ -139,7 +142,7 @@ test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: $40 
     const priced = buildItem(id, { size }, 1, {});
     assert.equal(priced.item.supplier, "yoycol", size);
     assert.deepEqual(priced.item.yoycol, { designCode: "LRWGN", skuCode: `ADS-3MPXZT40-00000-FFFFFF-${size}` }, size);
-    assert.equal(priced.item.unitAmount, 4000, `${size} is $40 with shipping included`);
+    assert.equal(priced.item.unitAmount, SHORTS_TOTAL_CENTS[size], `${size} with shipping included`);
     assert.equal(priced.shippingCents, 0, size);
     assert.deepEqual(priced.delivery, vendorDelivery.yoycol, size);
   }
@@ -155,6 +158,50 @@ test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: $40 
     designCode: "LRWGN",
     skuCode: "ADS-3MPXZT40-00000-FFFFFF-M",
   });
+});
+
+test("the shorts cost $40 in S–3XL, $42 in 4XL and $44 in 5XL: page, checkout and Stripe line follow the size", () => {
+  const id = "blue-sky-cotton-shorts";
+  const p = legacy.products.find((x) => x.id === id)!;
+  for (const size of ["S", "M", "L", "XL", "2XL", "3XL"]) {
+    assert.equal(getTotalPrice(p, size), 40, size);
+    assert.equal(getPriceLabel(p, size), "$40", size);
+    assert.equal(buildItem(id, { size }, 1, {}).item.unitAmount, 4000, size);
+  }
+  assert.equal(getTotalPrice(p, "4XL"), 42);
+  assert.equal(getTotalPrice(p, "5XL"), 44);
+  assert.equal(getPriceLabel(p, "4XL"), "$42");
+  assert.equal(getPriceLabel(p, "5XL"), "$44");
+  // before a size is picked the page (and card) say "From $40"
+  assert.equal(getPriceLabel(p), "From $40");
+  assert.equal(buildItem(id, { size: "4XL" }, 1, {}).item.unitAmount, 4200);
+  assert.equal(buildItem(id, { size: "5XL" }, 1, {}).item.unitAmount, 4400);
+  // the Stripe line carries the size's price, shipping stays free, quantity multiplies the line
+  for (const [size, cents] of [["3XL", 4000], ["4XL", 4200], ["5XL", 4400]] as const) {
+    const params = checkoutSessionParams(buildItem(id, { size }, 2, {}));
+    assert.equal(params.line_items![0].price_data!.unit_amount, cents, size);
+    assert.equal(params.line_items![0].quantity, 2, size);
+    assert.equal(params.shipping_options![0].shipping_rate_data!.fixed_amount!.amount, 0, size);
+    assert.match(params.metadata!.mop_summary ?? "", new RegExp(`${size}`), size);
+  }
+  // one-price legacy products are unchanged
+  const dress = legacy.products.find((x) => x.id === "clouds-skater-dress")!;
+  assert.equal(getTotalPrice(dress, "M"), getTotalPrice(dress));
+  assert.equal(getPriceLabel(dress), `$${getTotalPrice(dress)}`);
+  assert.equal(buildItem("pelican-beanie-t-shirt", { color: "White", size: "5XL" }, 1, {}).item.unitAmount, 2700);
+});
+
+test("the shorts are back near the top of the home grid, where the Printful Sky Shorts sat (after the all-overs)", () => {
+  const rest = restCards().map((c) => c.href.split("?")[0].slice(1));
+  const at = rest.indexOf("blue-sky-cotton-shorts");
+  assert.ok(at >= 0 && at <= 3, `shorts at ${at + 1} in the grid below Featured: ${rest.join(", ")}`);
+  // every generated card before them ranks above the old Sky Shorts slot (2), every one after below it
+  for (const slug of rest.slice(0, at)) assert.ok(catalogRank(slug) <= 2, `${slug} before the shorts`);
+  for (const slug of rest.slice(at + 1).filter((s) => getShopProduct(s))) assert.ok(catalogRank(slug) > 2, `${slug} after the shorts`);
+  assert.equal(legacy.products.find((x) => x.id === "blue-sky-cotton-shorts")!.rank, catalogRank("sky-shorts"));
+  // the other older products still come after every generated one
+  const all = shopCards().map((c) => c.href.split("?")[0].slice(1));
+  assert.ok(all.indexOf("clouds-skater-dress") > all.indexOf("star-snapback"));
 });
 
 test("the Printful Sky Shorts are retired: off the grid, feeds and bag, no new checkouts, but checkouts started before still go to Printful", () => {

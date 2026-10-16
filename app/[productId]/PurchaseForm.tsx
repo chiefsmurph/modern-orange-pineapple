@@ -43,7 +43,7 @@ export default function PurchaseForm(props: PurchaseFormProps) {
       <StripeButton
         productId={product.id}
         title={product.title}
-        value={getTotalPrice(product)}
+        value={getTotalPrice(product, options.size)}
         disabled={missing.length > 0}
         options={options}
       />

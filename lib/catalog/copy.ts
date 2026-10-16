@@ -191,7 +191,10 @@ export const crossLinks: Record<string, { to: string; text: string; carry?: stri
   "rabbit-tee": { to: "night-all-over", text: "Also as an all-over: Night" },
 };
 
-/** Home-page order: lower first. Generated products come before the older ones. */
+/**
+ * Home-page order: lower first. Generated products come before the older ones
+ * (public/products.ts), unless an older one has its own `rank` on this scale.
+ */
 export const catalogRank = (slug: string) => introFor(slug)?.rank ?? 90;
 
 /** Picker headings. The option keys (version: large/small) stay as they are in catalog.json. */

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
-  getTotalPrice,
+  getPriceLabel,
   getProductImages,
   getDelivery,
   getProductDesignId,
@@ -38,7 +38,8 @@ export default function ProductClientView({
       <HomeLink className={styles.home} />
 
       <h1 className={styles.title}>{product.title}</h1>
-      <p className={styles.price}>${getTotalPrice(product)}</p>
+      {/* "From $40" until a size is picked when sizes cost different amounts */}
+      <p className={styles.price}>{getPriceLabel(product, options.size)}</p>
       {product.fabricNote && (
         <p className={styles.fabricNote}>{product.fabricNote}</p>
       )}

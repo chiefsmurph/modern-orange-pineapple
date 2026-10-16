@@ -1,9 +1,10 @@
 // Home-page cards for both kinds of product: the generated Printful line-up
-// (lib/catalog) first, then the older hand-written products (public/products.ts).
+// (lib/catalog) first, then the older hand-written products (public/products.ts),
+// except an older one with a `rank`, which sits among the generated ones.
 import legacy, {
   getDelivery,
+  getPriceLabel,
   getProductImages,
-  getTotalPrice,
   vendorDelivery,
   type Product,
 } from "../public/products.ts";
@@ -34,7 +35,7 @@ export const legacyCard = (product: Product): ShopCard => ({
   title: product.title,
   shortTitle: shortName(product.id, product.title),
   image: getProductImages(product)[0],
-  price: `$${getTotalPrice(product)}`,
+  price: getPriceLabel(product),
   freeShipping: !!product.freeShippingMode,
   delivery: getDelivery(product).text,
   fabricNote: product.fabricNote,
@@ -61,12 +62,21 @@ export const skySwatches = (product: ShopProduct) =>
     return set?.swatch ? [{ src: set.swatch, label: valueLabel("sky", sky, product.optionLabels) }] : [];
   });
 
-export const shopCards = (): ShopCard[] => [
-  ...shopProducts.map(catalogCard),
-  ...legacy.products
-    .filter((p) => !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
-    .map(legacyCard),
-];
+/**
+ * Every card on sale, in home-grid order: the generated products by catalogRank,
+ * with an older product that has a `rank` slotted in among them (after the
+ * generated ones of the same rank); the rest of the older products last.
+ */
+export const shopCards = (): ShopCard[] =>
+  [
+    ...shopProducts.map((p) => ({ rank: p.rank, card: catalogCard(p) })),
+    ...legacy.products
+      .filter((p) => !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
+      .map((p) => ({ rank: p.rank ?? Infinity, card: legacyCard(p) })),
+  ]
+    // a stable sort: same-rank cards keep their order, generated ones first
+    .sort((a, b) => a.rank - b.rank)
+    .map((c) => c.card);
 
 /**
  * The home page's Featured cards, in lib/catalog/copy.ts `featured` order: each
