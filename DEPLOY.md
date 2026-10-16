@@ -206,6 +206,10 @@ result. Image names carry a content hash, so refreshed mockups (e.g. the skater 
 new colour grade) get new URLs on the next run and no cache serves the old ones. Full-body
 hero shots get a head-to-hips crop for the home-grid card (`scripts/card-crop.mjs`).
 Descriptions, option labels and fabric notes live in `lib/catalog/copy.ts`.
+To take a generated product off sale without deleting it, add its slug to `lib/catalog/retired.ts`
+(e.g. the Printful Sky Shorts → `/blue-sky-cotton-shorts`): it leaves the grid, feeds and bag, its
+URL 301s, new checkouts get 410, and paid checkouts started before still go to Printful. The older
+hand-written products in `public/products.ts` use `retired` / `comingSoon` for the same.
 The home page's **Featured** section is the `featured` list in `lib/catalog/copy.ts` (order,
 picks, `photo: "womens"`); everything else follows in the main grid without repeats. Reorder or
 remove freely; after changing a pick or photo run `npm run featured` (crops the card photo into

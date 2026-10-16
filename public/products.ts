@@ -238,10 +238,9 @@ const products: { products: Product[] } = {
     },
     {
       id: "blue-sky-cotton-shorts",
-      // Old stock sky (off sale since 2026-10-12). Replaced by the Printful Sky Shorts
-      // (catalog.json sky-shorts, Printful 482204677) on the new CC0 sky (John, 2026-10-16).
-      // Kept so checkouts started before still map to Yoycol.
-      retired: { redirectTo: "/sky-shorts" },
+      // The original sky shorts, back on sale through Yoycol (template "Clouds Cotton
+      // Shorts", lib/orders/yoycol-config.ts). John kept these over the Printful Sky
+      // Shorts, which are retired in lib/catalog/retired.ts and redirect here (2026-10-16).
       title: "Blue Sky Cotton Shorts",
       description:
         "Made of natural fiber fabric, it is comfortable and breathable, and will not tighten when worn against the skin.  Pair it with casual tops or sweatshirts to wear in many scenarios.\n\n- Fabric: 100% cotton\n- Regular fit\n- Side pocket, back pocket, waist elastic\n- Fabric: 245 g/m²",

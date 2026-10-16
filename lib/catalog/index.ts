@@ -1,6 +1,7 @@
 // The generated Printful line-up plus its hand-written copy (copy.ts).
 import { catalogProducts } from "./products.generated.ts";
 import { catalogDescription, catalogFabricNote, catalogRank, catalogSizeNote, crossLinks } from "./copy.ts";
+import { isRetiredCatalog } from "./retired.ts";
 import type { CatalogProduct, Selection } from "./types.ts";
 
 export type ShopProduct = CatalogProduct & {
@@ -12,7 +13,13 @@ export type ShopProduct = CatalogProduct & {
   rank: number;
 };
 
-export const shopProducts: ShopProduct[] = catalogProducts
+/**
+ * Every generated product, retired ones (retired.ts) included. Only for things
+ * already sold: mapping a paid order from a checkout started before a product
+ * was retired, its order email and its registration. Pages, cards, feeds, the
+ * bag and new checkouts use `shopProducts`.
+ */
+export const allShopProducts: ShopProduct[] = catalogProducts
   .map((p) => ({
     ...p,
     description: catalogDescription(p.slug, p.printfulCatalogProductId),
@@ -22,8 +29,15 @@ export const shopProducts: ShopProduct[] = catalogProducts
   }))
   .sort((a, b) => a.rank - b.rank);
 
+/** What's on sale: the generated line-up minus the retired products. */
+export const shopProducts: ShopProduct[] = allShopProducts.filter((p) => !isRetiredCatalog(p.slug));
+
 export const getShopProduct = (slug: string) =>
   shopProducts.find((p) => p.slug === slug);
+
+/** A generated product even if it's retired (see allShopProducts): for orders already paid. */
+export const getShopProductIncludingRetired = (slug: string) =>
+  allShopProducts.find((p) => p.slug === slug);
 
 /**
  * The "Also as an all-over: Day" link for a product page, carrying the picks the

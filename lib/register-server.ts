@@ -18,7 +18,7 @@ import {
 } from "./reviews.ts";
 import { UPLOAD_MAX_BYTES, isEmail } from "./custom-request.ts";
 import { sniffImage, type UploadIn } from "./custom-request-server.ts";
-import { getShopProduct } from "./catalog/index.ts";
+import { getShopProductIncludingRetired } from "./catalog/index.ts";
 import { imagesFor } from "./catalog/select.ts";
 import { valueLabel } from "./catalog/copy.ts";
 
@@ -34,14 +34,14 @@ export type LookupResult =
   | { status: "limited" };
 
 const summaryOf = (slug: string, variant: Record<string, string>) => {
-  const labels = getShopProduct(slug)?.optionLabels;
+  const labels = getShopProductIncludingRetired(slug)?.optionLabels;
   return Object.entries(variant)
     .map(([k, v]) => valueLabel(k, v, labels))
     .join(" · ");
 };
 
 const itemView = (c: ItemCode): RegisterItem => {
-  const p = c.slug ? getShopProduct(c.slug) : undefined;
+  const p = c.slug ? getShopProductIncludingRetired(c.slug) : undefined;
   return {
     code: c.code,
     slug: c.slug ?? "",

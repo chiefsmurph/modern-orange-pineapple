@@ -1,6 +1,7 @@
 // next.config.ts
 import type { NextConfig } from 'next';
 import products from './public/products.ts';
+import { retiredCatalog } from './lib/catalog/retired.ts';
 
 const nextConfig: NextConfig = {
   images: {
@@ -20,17 +21,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // Retired products (public/products.ts `retired`) move permanently to their
-  // replacement, so old links and QR codes still land somewhere. Query strings
-  // (e.g. Stripe's ?status=success) are passed through.
+  // Retired products (public/products.ts `retired`, lib/catalog/retired.ts) move
+  // permanently to their replacement, so old links and QR codes still land
+  // somewhere. Query strings (e.g. Stripe's ?status=success) are passed through.
   async redirects() {
-    return products.products
-      .filter((p) => p.retired)
-      .map((p) => ({
-        source: `/${p.id}`,
-        destination: p.retired!.redirectTo,
-        statusCode: 301 as const,
-      }));
+    return [
+      ...products.products
+        .filter((p) => p.retired)
+        .map((p) => ({ slug: p.id, redirectTo: p.retired!.redirectTo })),
+      ...Object.entries(retiredCatalog).map(([slug, r]) => ({ slug, redirectTo: r.redirectTo })),
+    ].map(({ slug, redirectTo }) => ({
+      source: `/${slug}`,
+      destination: redirectTo,
+      statusCode: 301 as const,
+    }));
   },
   // experimental: {
   //   serverActions: true

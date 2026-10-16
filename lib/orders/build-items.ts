@@ -9,7 +9,8 @@ import legacyProducts, {
   vendorDelivery,
   type Delivery,
 } from "../../public/products.ts";
-import { getShopProduct } from "../catalog/index.ts";
+import { getShopProduct, getShopProductIncludingRetired } from "../catalog/index.ts";
+import { isRetiredCatalog } from "../catalog/retired.ts";
 import { catalogFulfilment } from "../catalog/fulfilment.generated.ts";
 import {
   findVariant,
@@ -32,12 +33,13 @@ export class CheckoutError extends Error {
 }
 
 /**
- * Why a NEW checkout for this product isn't allowed (retired or coming back
- * soon), or null. The webhook never asks: orders already paid always go through.
+ * Why a NEW checkout for this product isn't allowed (retired, in
+ * public/products.ts or lib/catalog/retired.ts, or coming back soon), or null.
+ * The webhook never asks: orders already paid always go through.
  */
 export const checkoutBlock = (productId: string): { status: number; error: string } | null => {
   const p = legacyProducts.products.find((x) => x.id === productId);
-  if (p?.retired) return { status: 410, error: "no longer available" };
+  if (p?.retired || isRetiredCatalog(productId)) return { status: 410, error: "no longer available" };
   if (p?.comingSoon) return { status: 409, error: p.comingSoon.message.toLowerCase() };
   return null;
 };
@@ -58,7 +60,7 @@ const cents = (dollars: number) => Math.round(dollars * 100);
 
 /** "Big · Grind Beanie · Ivory · M" (with the product's own labels, e.g. "Golden Hour" for golden-hour). */
 export const itemSummary = (item: Pick<OrderItem, "opts"> & { slug?: string }) => {
-  const labels = item.slug ? getShopProduct(item.slug)?.optionLabels : undefined;
+  const labels = item.slug ? getShopProductIncludingRetired(item.slug)?.optionLabels : undefined;
   return Object.entries(item.opts)
     .map(([k, v]) => valueLabel(k, v, labels))
     .join(" · ");
@@ -126,8 +128,9 @@ export function buildItem(
     };
   }
 
-  // The generated Printful line-up (lib/catalog).
-  const product = getShopProduct(productId);
+  // The generated Printful line-up (lib/catalog). A retired one still maps here, for
+  // checkouts started before it was retired; new ones are refused by checkoutBlock.
+  const product = getShopProductIncludingRetired(productId);
   if (!product) throw new CheckoutError("invalid product");
   const sel = normalizeSelection(product, rawOptions, { fillDefaults: false });
   for (const name of optionNames(product)) {
