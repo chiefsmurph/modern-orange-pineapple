@@ -197,6 +197,29 @@ systemctl daemon-reload && systemctl enable --now mopclothing-royalties.timer
 systemctl list-timers mopclothing-royalties.timer
 ```
 
+### Street sales (shirts sold in person)
+
+Shirts sold from the car or at a market (cash, Venmo) owe the same royalties as website
+orders: alpaca → austin, star → sunshine, Grind Beanie pelican → janette, $1.50 an item
+(the website's own rules, `lib/orders/royalties.ts`, `MOP_ROYALTY_RATES` included).
+`scripts/street-sale.mjs` logs each sale: one `royalties.jsonl` row per royalty-bearing
+item (the webhook's format, marked `source: "street"`) and one line in
+`street-sales.jsonl` (price, place, payment) for analysis. The monthly email and the
+balances then include them, with "street sales: N items" shown apart.
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node /srv/mopclothing/scripts/street-sale.mjs \
+  --product pelican --style beanie --size M --qty 1 --price 25 --place "Pacific Beach" --paid cash --dry-run
+```
+
+- `--product`: `alpaca`, `pelican`, `rabbit`, `star`, or any website slug (`alpaca-tee`, `star-polo`, …).
+- `--style beanie|classic`: required for the pelican (only the beanie pays Janette).
+- `--size` (XS–5XL), `--qty` (default 1), `--price` (dollars each), `--place`, `--paid`,
+  `--color`, `--note` (optional), `--date YYYY-MM-DD` (default today, Pacific time).
+- The same sale logged twice on one day is refused; `--again` logs another one.
+- `--dry-run` prints the lines and writes nothing. Without it, it prints the sale's
+  `street-…` ref. A sale logged by mistake: `royalty-payout.mjs --refund-order street-… --note "logged by mistake"`.
+
 ### Product data
 
 The Printful line-up is generated from the Printful agent's `catalog.json`:

@@ -10,6 +10,9 @@
 //   node scripts/royalty-summary.mjs --month 2026-10 --dry-run                  # print only
 //   --include-test   also count Stripe test-mode orders (skipped by default)
 //
+// Street sales (shirts sold in person, logged with scripts/street-sale.mjs) are
+// rows in the same file with source "street"; the email counts them apart.
+//
 // Plain Node (no dependencies, no TypeScript) so it runs anywhere on the box.
 // Refunds: the order ledger doesn't see them (the webhook only records paid
 // orders). Record one with `royalty-payout.mjs --refund-order <order_ref>` and
@@ -80,8 +83,10 @@ export function summarize(rows, month, { includeTest = false } = {}) {
   for (const r of rows) {
     if (!counts(r, includeTest) || !r.at) continue;
     if (monthOf(new Date(r.at)) !== month) continue;
-    const a = byArtist.get(r.artist) ?? { artist: r.artist, items: 0, amount: 0, lines: [] };
+    const a = byArtist.get(r.artist) ?? { artist: r.artist, items: 0, street: 0, amount: 0, lines: [] };
     a.items += r.qty ?? 1;
+    // sold in person (scripts/street-sale.mjs), not through the website
+    if (r.source === "street") a.street += r.qty ?? 1;
     a.amount = Math.round((a.amount + r.amount) * 100) / 100;
     a.lines.push(r);
     byArtist.set(r.artist, a);
@@ -150,16 +155,25 @@ export function summaryEmail(month, artists, extra = {}) {
     `MOP royalties for ${monthName(month)}: ${
       artists.length ? artists.map((a) => `${a.artist} $${a.amount.toFixed(2)}`).join(", ") : "none"
     }` + (bal ? ` (due now: ${money(due)})` : "");
-  const lines = [`Royalties earned in ${monthName(month)} (orders paid that month, Pacific time).`, ""];
+  const lines = [`Royalties earned in ${monthName(month)} (website orders paid and street sales made that month, Pacific time).`, ""];
   if (!artists.length) lines.push("No royalty-bearing items sold.", "");
+  const plural = (n) => `${n} item${n === 1 ? "" : "s"}`;
   for (const a of artists) {
-    lines.push(`${a.artist}: $${a.amount.toFixed(2)} for ${a.items} item${a.items === 1 ? "" : "s"}`);
+    const street = a.street ?? 0;
+    lines.push(`${a.artist}: $${a.amount.toFixed(2)} for ${plural(a.items)}${street ? ` (street sales: ${plural(street)})` : ""}`);
     for (const r of a.lines) {
-      lines.push(`  ${dayOf(new Date(r.at))}  ${r.qty ?? 1} x ${r.product} (${Object.values(r.options ?? {}).join(" / ")})  $${r.amount.toFixed(2)}  ${r.order_ref}`);
+      const where = r.source === "street" ? `  street sale${r.place ? `, ${r.place}` : ""}` : "";
+      lines.push(`  ${dayOf(new Date(r.at))}  ${r.qty ?? 1} x ${r.product} (${Object.values(r.options ?? {}).join(" / ")})  $${r.amount.toFixed(2)}  ${r.order_ref}${where}`);
     }
     lines.push("");
   }
   lines.push(`Total for ${monthName(month)}: ${money(total)}`);
+  // In-person sales (car, markets) logged with scripts/street-sale.mjs, shown apart from the website's.
+  const streetItems = artists.reduce((n, a) => n + (a.street ?? 0), 0);
+  if (streetItems) {
+    const streetTotal = artists.reduce((n, a) => n + a.lines.filter((r) => r.source === "street").reduce((m, r) => m + cents(r.amount), 0), 0);
+    lines.push(`Of which street sales: ${plural(streetItems)}, ${money(streetTotal)} (the rest are website orders)`);
+  }
   if (entries.length) {
     lines.push("", `Payouts and refunds recorded in ${monthName(month)}:`);
     for (const p of entries) {
@@ -184,6 +198,7 @@ export function summaryEmail(month, artists, extra = {}) {
   lines.push(
     "",
     "Refunds only count once recorded: royalty-payout.mjs --refund-order <order_ref>. Check Stripe for refunded orders above.",
+    "Log a shirt sold in person: sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node /srv/mopclothing/scripts/street-sale.mjs --product alpaca --size M --price 25 --place <where>",
     "Record a payout: sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node /srv/mopclothing/scripts/royalty-payout.mjs --artist <name> --amount <dollars> --note <how>"
   );
   return { subject, body: lines.join("\n") };
