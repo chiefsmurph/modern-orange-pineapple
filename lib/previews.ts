@@ -1,4 +1,4 @@
-// Private preview pages (/preview/<slug>), one per artist, sent by link only.
+// Private preview pages (/preview/<slug>), one per artist, store or town, sent by link only.
 // The slugs carry random hex so they can't be guessed; the pages are noindex,
 // in no sitemap, and linked from nowhere on the site. Images live in
 // public/preview/<slug>/ (WebP, ≤300 KB each).
@@ -55,6 +55,10 @@ const ALPACA = "alpaca-79015f8f";
 const STAR = "star-95c35cbf";
 const BEANIE = "beanie-ad578892";
 const MORRO = "morro-bay-0b7d6793";
+// Town exclusives for local-shop outreach (concept mockups; print after a shop says yes).
+// Never print or caption "Flower Fields", "Carlsbad Ranch", "O'side", "Ruby's" (test/previews.test.ts).
+const OCEANSIDE = "oceanside-9636b198";
+const CARLSBAD = "carlsbad-8d9b6e95";
 
 export const previews: Preview[] = [
   {
@@ -118,6 +122,34 @@ export const previews: Preview[] = [
       img(MORRO, "morro-rock-back", 1000, 941, "Back of the Morro Rock tee: MOP logo and a small sea otter badge", "Morro Rock \u00b7 back"),
       img(MORRO, "otter-front", 1000, 941, "All-over tee with a sea otter floating on its back and Morro Bay, CA script", "Sea Otter \u00b7 front"),
       img(MORRO, "otter-back", 1000, 941, "Back of the sea otter tee: MOP logo and a small Morro Rock badge", "Sea Otter \u00b7 back"),
+    ],
+  },
+  {
+    slug: OCEANSIDE,
+    headline: "Oceanside exclusives",
+    line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cOceanside, CA\u201d on the front. Each back has a small glimpse of the other shirt and our bunny. Early concepts.",
+    gallery: [
+      img(OCEANSIDE, "set", 1408, 697, "The Pelican on the Pier shirt and the Oceanside Harbor shirt side by side", "The pair", true),
+      img(OCEANSIDE, "pier-front", 1000, 991, "All-over tee: the MOP pelican on a piling in front of the Oceanside Pier at sunset, with Oceanside, CA script", "Pelican on the Pier \u00b7 front \u00b7 concept \u00b7 pier photo: Bill Newman (public domain)"),
+      img(OCEANSIDE, "pier-back", 1000, 991, "Back of the pier tee: a small harbor badge at the shoulder and the MOP bunny at the lower right", "Pelican on the Pier \u00b7 back"),
+      img(OCEANSIDE, "harbor-front", 1000, 991, "All-over tee: sailboats in Oceanside Harbor at golden hour, with Oceanside, CA script", "Harbor Sunset \u00b7 front \u00b7 photo: U.S. Marine Corps (public domain)"),
+      img(OCEANSIDE, "harbor-back", 1000, 991, "Back of the harbor tee: a small pelican badge at the shoulder and the MOP bunny at the lower right", "Harbor Sunset \u00b7 back"),
+      img(OCEANSIDE, "bunny-closeup", 560, 560, "Close-up of the small MOP bunny logo, its ears rising out of the circle", "The MOP bunny, lower right on every back"),
+    ],
+  },
+  {
+    slug: CARLSBAD,
+    headline: "Carlsbad exclusives",
+    line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cCarlsbad, CA\u201d on the front. Each back has a small glimpse of the other shirt and our bunny. Early concepts: the egret is still being drawn.",
+    gallery: [
+      img(CARLSBAD, "set", 1408, 697, "The Lagoon Life shirt and the Ranunculus Hills shirt side by side", "The pair \u00b7 concept", true),
+      img(CARLSBAD, "lagoon-front", 1000, 991, "All-over tee: Agua Hedionda Lagoon at sunset with Carlsbad, CA script; a dashed outline marks where the egret will go", "Lagoon Life \u00b7 front \u00b7 concept, egret artwork in progress \u00b7 lagoon photo: Bovlb (public domain)"),
+      img(CARLSBAD, "lagoon-back", 1000, 991, "Back of the lagoon tee: a small flower-field badge at the shoulder and the MOP bunny at the lower right", "Lagoon Life \u00b7 back"),
+      img(CARLSBAD, "ranunculus-front", 1000, 991, "All-over tee: rows of yellow and pink ranunculus under a spring sky, with Carlsbad, CA script", "Ranunculus Hills \u00b7 front \u00b7 photo: Stickpen (public domain)"),
+      img(CARLSBAD, "ranunculus-back", 1000, 991, "Back of the ranunculus tee: a small lagoon badge at the shoulder and the MOP bunny at the lower right", "Ranunculus Hills \u00b7 back"),
+      img(CARLSBAD, "arch-front", 1000, 991, "All-over tee: the MOP pelican under an arched Carlsbad, CA sign at sunset over the water", "Also possible: Pelican under the Arch \u00b7 concept"),
+      img(CARLSBAD, "arch-back", 1000, 991, "Back of the arch tee: a small flower-field badge at the shoulder and the MOP bunny at the lower right", "Pelican under the Arch \u00b7 back"),
+      img(CARLSBAD, "bunny-closeup", 560, 560, "Close-up of the small MOP bunny logo, its ears rising out of the circle", "The MOP bunny, lower right on every back"),
     ],
   },
 ];
