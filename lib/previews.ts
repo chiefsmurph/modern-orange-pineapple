@@ -57,6 +57,8 @@ const BEANIE = "beanie-ad578892";
 const MORRO = "morro-bay-0b7d6793";
 // Town exclusives for local-shop outreach (concept mockups; print after a shop says yes).
 // Never print or caption "Flower Fields", "Carlsbad Ranch", "O'side", "Ruby's" (test/previews.test.ts).
+// Every town design comes two ways (10/13): all-over, and a lower-priced BASIC tee (the same art as a
+// chest print on a Comfort Colors 1717). No prices on these pages: the basic's wholesale isn't set yet.
 const OCEANSIDE = "oceanside-9636b198";
 const CARLSBAD = "carlsbad-8d9b6e95";
 
@@ -127,29 +129,43 @@ export const previews: Preview[] = [
   {
     slug: OCEANSIDE,
     headline: "Oceanside exclusives",
-    line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cOceanside, CA\u201d on the front. Each back has a small glimpse of the other shirt and our bunny. Early concepts.",
+    line: "Two shirts made just for your shop, not sold online. Every design comes as an all-over, printed edge to edge on soft cotton, or a lower-priced basic tee: the same art as a chest print on a heavyweight Comfort Colors tee. Both have \u201cOceanside, CA\u201d on the front. Each all-over back has a small glimpse of the other shirt and our bunny. Early concepts.",
     gallery: [
       img(OCEANSIDE, "set", 1408, 697, "The Pelican on the Pier shirt and the Oceanside Harbor shirt side by side", "The pair", true),
-      img(OCEANSIDE, "pier-front", 1000, 991, "All-over tee: the MOP pelican on a piling in front of the Oceanside Pier at sunset, with Oceanside, CA script", "Pelican on the Pier \u00b7 front \u00b7 concept \u00b7 pier photo: Bill Newman (public domain)"),
-      img(OCEANSIDE, "pier-back", 1000, 991, "Back of the pier tee: a small harbor badge at the shoulder and the MOP bunny at the lower right", "Pelican on the Pier \u00b7 back"),
-      img(OCEANSIDE, "harbor-front", 1000, 991, "All-over tee: sailboats in Oceanside Harbor at golden hour, with Oceanside, CA script", "Harbor Sunset \u00b7 front \u00b7 photo: U.S. Marine Corps (public domain)"),
-      img(OCEANSIDE, "harbor-back", 1000, 991, "Back of the harbor tee: a small pelican badge at the shoulder and the MOP bunny at the lower right", "Harbor Sunset \u00b7 back"),
-      img(OCEANSIDE, "bunny-closeup", 560, 560, "Close-up of the small MOP bunny logo, its ears rising out of the circle", "The MOP bunny, lower right on every back"),
+      img(OCEANSIDE, "pier-versions", 1408, 697, "The Pelican on the Pier design two ways: the all-over tee and the basic Ivory tee with the same art as a round chest print, side by side", "Pelican on the Pier, two ways: all-over and basic tee", true),
+      img(OCEANSIDE, "pier-front", 1000, 991, "All-over tee: the MOP pelican on a piling in front of the Oceanside Pier at sunset, with Oceanside, CA script", "Pelican on the Pier \u00b7 all-over \u00b7 front \u00b7 concept \u00b7 pier photo: Bill Newman (public domain)"),
+      img(OCEANSIDE, "pier-back", 1000, 991, "Back of the pier tee: a small harbor badge at the shoulder and the MOP bunny at the lower right", "Pelican on the Pier \u00b7 all-over \u00b7 back"),
+      img(OCEANSIDE, "pier-basic-ivory", 1000, 991, "Ivory basic tee with a round chest print: the MOP pelican on its piling in front of the Oceanside Pier at sunset, with Oceanside, CA script", "Pelican on the Pier \u00b7 basic tee \u00b7 Ivory \u00b7 concept \u00b7 pier photo: Bill Newman (public domain)"),
+      img(OCEANSIDE, "pier-basic-washed-denim", 1000, 991, "Washed Denim basic tee with the same round pelican-and-pier chest print", "Pelican on the Pier \u00b7 basic tee \u00b7 Washed Denim \u00b7 concept \u00b7 pier photo: Bill Newman (public domain)"),
+      img(OCEANSIDE, "harbor-front", 1000, 991, "All-over tee: sailboats in Oceanside Harbor at golden hour, with Oceanside, CA script", "Harbor Sunset \u00b7 all-over \u00b7 front \u00b7 photo: U.S. Marine Corps (public domain)"),
+      img(OCEANSIDE, "harbor-back", 1000, 991, "Back of the harbor tee: a small pelican badge at the shoulder and the MOP bunny at the lower right", "Harbor Sunset \u00b7 all-over \u00b7 back"),
+      img(OCEANSIDE, "harbor-basic-blue-jean", 1000, 991, "Blue Jean basic tee with a round chest print: sailboats in Oceanside Harbor at golden hour, with Oceanside, CA script", "Harbor Sunset \u00b7 basic tee \u00b7 Blue Jean \u00b7 photo: U.S. Marine Corps (public domain)"),
+      img(OCEANSIDE, "harbor-basic-butter", 1000, 991, "Butter basic tee with the same round harbor chest print", "Harbor Sunset \u00b7 basic tee \u00b7 Butter \u00b7 photo: U.S. Marine Corps (public domain)"),
+      img(OCEANSIDE, "pier-basic-ivory-worn", 1000, 991, "The Ivory basic pier tee, worn: the round pelican-and-pier print on the chest", "Pelican on the Pier \u00b7 basic tee \u00b7 Ivory, worn \u00b7 concept \u00b7 pier photo: Bill Newman (public domain)"),
+      img(OCEANSIDE, "bunny-closeup", 560, 560, "Close-up of the small MOP bunny logo, its ears rising out of the circle", "The MOP bunny, lower right on every all-over back"),
     ],
   },
   {
     slug: CARLSBAD,
     headline: "Carlsbad exclusives",
-    line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cCarlsbad, CA\u201d on the front. Each back has a small glimpse of the other shirt and our bunny. Early concepts: the egret is still being drawn.",
+    line: "Two shirts made just for your shop, not sold online. Every design comes as an all-over, printed edge to edge on soft cotton, or a lower-priced basic tee: the same art as a chest print on a heavyweight Comfort Colors tee. Both have \u201cCarlsbad, CA\u201d on the front. Each all-over back has a small glimpse of the other shirt and our bunny. Early concepts: the egret is still being drawn.",
     gallery: [
       img(CARLSBAD, "set", 1408, 697, "The Lagoon Life shirt and the Ranunculus Hills shirt side by side", "The pair \u00b7 concept", true),
-      img(CARLSBAD, "lagoon-front", 1000, 991, "All-over tee: Agua Hedionda Lagoon at sunset with Carlsbad, CA script; a dashed outline marks where the egret will go", "Lagoon Life \u00b7 front \u00b7 concept, egret artwork in progress \u00b7 lagoon photo: Bovlb (public domain)"),
-      img(CARLSBAD, "lagoon-back", 1000, 991, "Back of the lagoon tee: a small flower-field badge at the shoulder and the MOP bunny at the lower right", "Lagoon Life \u00b7 back"),
-      img(CARLSBAD, "ranunculus-front", 1000, 991, "All-over tee: rows of yellow and pink ranunculus under a spring sky, with Carlsbad, CA script", "Ranunculus Hills \u00b7 front \u00b7 photo: Stickpen (public domain)"),
-      img(CARLSBAD, "ranunculus-back", 1000, 991, "Back of the ranunculus tee: a small lagoon badge at the shoulder and the MOP bunny at the lower right", "Ranunculus Hills \u00b7 back"),
-      img(CARLSBAD, "arch-front", 1000, 991, "All-over tee: the MOP pelican under an arched Carlsbad, CA sign at sunset over the water", "Also possible: Pelican under the Arch \u00b7 concept"),
-      img(CARLSBAD, "arch-back", 1000, 991, "Back of the arch tee: a small flower-field badge at the shoulder and the MOP bunny at the lower right", "Pelican under the Arch \u00b7 back"),
-      img(CARLSBAD, "bunny-closeup", 560, 560, "Close-up of the small MOP bunny logo, its ears rising out of the circle", "The MOP bunny, lower right on every back"),
+      img(CARLSBAD, "ranunculus-versions", 1408, 697, "The Ranunculus Hills design two ways: the all-over tee and the basic Butter tee with the same art as a round chest print, side by side", "Ranunculus Hills, two ways: all-over and basic tee", true),
+      img(CARLSBAD, "lagoon-front", 1000, 991, "All-over tee: Agua Hedionda Lagoon at sunset with Carlsbad, CA script; a dashed outline marks where the egret will go", "Lagoon Life \u00b7 all-over \u00b7 front \u00b7 concept, egret artwork in progress \u00b7 lagoon photo: Bovlb (public domain)"),
+      img(CARLSBAD, "lagoon-back", 1000, 991, "Back of the lagoon tee: a small flower-field badge at the shoulder and the MOP bunny at the lower right", "Lagoon Life \u00b7 all-over \u00b7 back"),
+      img(CARLSBAD, "lagoon-basic-lagoon-blue", 1000, 991, "Lagoon Blue basic tee with a round chest print: Agua Hedionda Lagoon at sunset with Carlsbad, CA script; a dashed outline marks where the egret will go", "Lagoon Life \u00b7 basic tee \u00b7 Lagoon Blue \u00b7 concept, egret artwork in progress \u00b7 lagoon photo: Bovlb (public domain)"),
+      img(CARLSBAD, "lagoon-basic-ivory", 1000, 991, "Ivory basic tee with the same round lagoon chest print and the dashed egret outline", "Lagoon Life \u00b7 basic tee \u00b7 Ivory \u00b7 concept, egret artwork in progress \u00b7 lagoon photo: Bovlb (public domain)"),
+      img(CARLSBAD, "ranunculus-front", 1000, 991, "All-over tee: rows of yellow and pink ranunculus under a spring sky, with Carlsbad, CA script", "Ranunculus Hills \u00b7 all-over \u00b7 front \u00b7 photo: Stickpen (public domain)"),
+      img(CARLSBAD, "ranunculus-back", 1000, 991, "Back of the ranunculus tee: a small lagoon badge at the shoulder and the MOP bunny at the lower right", "Ranunculus Hills \u00b7 all-over \u00b7 back"),
+      img(CARLSBAD, "ranunculus-basic-butter", 1000, 991, "Butter basic tee with a round chest print: rows of yellow and pink ranunculus under a spring sky, with Carlsbad, CA script", "Ranunculus Hills \u00b7 basic tee \u00b7 Butter \u00b7 photo: Stickpen (public domain)"),
+      img(CARLSBAD, "ranunculus-basic-blossom", 1000, 991, "Blossom pink basic tee with the same round ranunculus chest print", "Ranunculus Hills \u00b7 basic tee \u00b7 Blossom \u00b7 photo: Stickpen (public domain)"),
+      img(CARLSBAD, "arch-front", 1000, 991, "All-over tee: the MOP pelican under an arched Carlsbad, CA sign at sunset over the water", "Also possible: Pelican under the Arch \u00b7 all-over \u00b7 concept"),
+      img(CARLSBAD, "arch-back", 1000, 991, "Back of the arch tee: a small flower-field badge at the shoulder and the MOP bunny at the lower right", "Pelican under the Arch \u00b7 all-over \u00b7 back"),
+      img(CARLSBAD, "arch-basic-washed-denim", 1000, 991, "Washed Denim basic tee with a round chest print: the MOP pelican on a piling at sunset over the water, under an arched Carlsbad, CA banner", "Pelican under the Arch \u00b7 basic tee \u00b7 Washed Denim \u00b7 concept"),
+      img(CARLSBAD, "arch-basic-butter", 1000, 991, "Butter basic tee with the same round pelican-under-the-arch chest print", "Pelican under the Arch \u00b7 basic tee \u00b7 Butter \u00b7 concept"),
+      img(CARLSBAD, "ranunculus-basic-butter-worn", 1000, 991, "The Butter basic ranunculus tee, worn: the round flower-row print on the chest", "Ranunculus Hills \u00b7 basic tee \u00b7 Butter, worn \u00b7 photo: Stickpen (public domain)"),
+      img(CARLSBAD, "bunny-closeup", 560, 560, "Close-up of the small MOP bunny logo, its ears rising out of the circle", "The MOP bunny, lower right on every all-over back"),
     ],
   },
 ];

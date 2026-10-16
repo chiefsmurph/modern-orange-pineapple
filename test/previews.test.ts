@@ -52,6 +52,58 @@ test("town previews: Oceanside + Carlsbad, each shirt shown front and back, plus
   assert.match(getPreview("carlsbad-8d9b6e95")!.line, /“Carlsbad, CA”/);
 });
 
+// The same design, two versions (10/13): every town design shows as an all-over AND a basic tee
+// (chest print on a Comfort Colors 1717), one design per page side by side, one worn shot per page.
+const BASIC_COLOURS = ["Ivory", "Butter", "Lagoon Blue", "Washed Denim", "Blue Jean", "Grey", "Bay", "Blossom"];
+const TOWN_DESIGNS: Record<string, { name: string; file: string }[]> = {
+  "oceanside-9636b198": [
+    { name: "Pelican on the Pier", file: "pier" },
+    { name: "Harbor Sunset", file: "harbor" },
+  ],
+  "carlsbad-8d9b6e95": [
+    { name: "Lagoon Life", file: "lagoon" },
+    { name: "Ranunculus Hills", file: "ranunculus" },
+    { name: "Pelican under the Arch", file: "arch" },
+  ],
+};
+
+test("town previews: every design comes all-over and basic, and the intro says so", () => {
+  for (const [slug, designs] of Object.entries(TOWN_DESIGNS)) {
+    const p = getPreview(slug)!;
+    assert.match(p.line, /every design comes as an all-over/i, slug);
+    assert.match(p.line, /lower-priced basic tee/, slug);
+    const files = p.gallery.map((g) => path.basename(g.src, ".webp"));
+    assert.ok(files.some((f) => f.endsWith("-versions")), `${slug}: an all-over vs basic image`);
+    assert.ok(files.some((f) => f.endsWith("-worn")), `${slug}: a worn basic`);
+    for (const d of designs) {
+      const front = p.gallery.find((g) => g.src.endsWith(`/${d.file}-front.webp`))!;
+      assert.match(front.caption, /all-over/, `${slug} ${d.file}-front`);
+      const basics = p.gallery.filter((g) => path.basename(g.src).startsWith(`${d.file}-basic-`));
+      assert.ok(basics.length >= 1, `${slug}: ${d.file} has a basic tee`);
+      // a basic that reuses the all-over's photo keeps its credit
+      const credit = front.caption.match(/photo: .*$/)?.[0];
+      for (const b of basics) {
+        assert.ok(b.caption.startsWith(`${d.name} · basic tee · `), b.caption);
+        const colour = b.caption.split(" · ")[2].replace(/, worn$/, "");
+        assert.ok(BASIC_COLOURS.includes(colour), `${b.src}: colour "${colour}"`);
+        assert.equal(b.width, 1000);
+        assert.equal(b.height, 991);
+        if (credit) assert.ok(b.caption.endsWith(credit), `${b.src} keeps "${credit}"`);
+        if (d.file === "lagoon") assert.match(b.caption, /egret artwork in progress/i);
+        if (/concept/i.test(front.caption)) assert.match(b.caption, /concept/i, b.src);
+      }
+    }
+  }
+});
+
+test("town previews show no prices (the basic's wholesale isn't set yet)", () => {
+  for (const slug of Object.keys(TOWN_DESIGNS)) {
+    const p = getPreview(slug)!;
+    const text = [p.headline, p.line, ...p.gallery.flatMap((g) => [g.alt, g.caption])].join("\n");
+    assert.doesNotMatch(text, /\$|€|£|\bUSD\b|\bdollars?\b|\bwholesale\b|\bmsrp\b|\d+(\.\d\d)?\s*(each|per)\b/i, slug);
+  }
+});
+
 test("town previews say which shirts are still concepts (the egret isn't drawn yet)", () => {
   const c = getPreview("carlsbad-8d9b6e95")!;
   const lagoon = c.gallery.find((g) => g.src.endsWith("/lagoon-front.webp"))!;
