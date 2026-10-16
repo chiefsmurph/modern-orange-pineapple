@@ -38,6 +38,6 @@ test("per-artist totals for the month, test-mode orders left out", () => {
   assert.equal(summarize(rows, "2026-10", { includeTest: true }).length, 3);
   const email = summaryEmail("2026-10", s);
   assert.equal(email.subject, "MOP royalties for October 2026: janette $4.50, austin $1.50");
-  assert.match(email.body, /Total: \$6\.00/);
+  assert.match(email.body, /Total for October 2026: \$6\.00/);
   assert.match(summaryEmail("2026-09", []).subject, /none$/);
 });
