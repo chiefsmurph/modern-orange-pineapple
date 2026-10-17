@@ -111,7 +111,9 @@ What happens on a paid checkout (`app/api/stripe-webhook/route.ts`, `lib/orders/
 5. John gets an email (through PingPigeon on this box) with what sold, the supplier order
    and what to do: confirm the Printful draft / pay the Yoycol order / place it by hand.
    Any supplier failure makes the subject start with `ACTION NEEDED`.
-6. When a package ships, the customer gets a "your order has shipped" email with tracking
+6. The customer gets a "Thanks for your MOP order! Here's what happens next" email, **once
+   `MOP_CONFIRMATION_EMAIL_ENABLED=1` is set** (off by default; see "Order confirmation email" below).
+7. When a package ships, the customer gets a "your order has shipped" email with tracking
    (Printful webhook, Yoycol cron; see "Shipped emails to customers" below).
 
 ### Environment (`/srv/mopclothing/.env`, mode 600)
@@ -145,8 +147,8 @@ ls -l /var/lib/mopclothing/    # orders.jsonl, orders-state.json, royalties.json
 
 When a package ships, the customer gets one branded "Your MOP order has shipped 📦" email
 (HTML + plain text) with the items in that box, the carrier, a **Track your package** button
-and the tracking number. Sent through **Resend** (PingPigeon can only email John). There is
-no order-confirmation email: Stripe's receipt covers that.
+and the tracking number. Sent through **Resend** (PingPigeon can only email John). The order
+confirmation (below) uses the same sender, look and exactly-once ledger.
 
 - **Printful** (`app/api/printful-webhook/[token]/route.ts`, `lib/orders/printful-shipped.ts`):
   Printful sends `package_shipped` to `https://mopclothing.com/api/printful-webhook/<PRINTFUL_WEBHOOK_TOKEN>`.
@@ -176,8 +178,8 @@ no order-confirmation email: Stripe's receipt covers that.
   a send that could work later, so Printful retries (after 1, 4, 16, 64, 256 and 1024 minutes);
   the Yoycol cron retries on its next run. Without `MOP_RESEND_API_KEY`, the webhook still
   answers 200 and logs `MOP_RESEND_API_KEY is not set: shipped email NOT sent` (nothing is
-  retried later, so set the key before registering the webhook). Checkout and the Stripe
-  webhook don't use any of this.
+  retried later, so set the key before registering the webhook). Checkout doesn't use any of
+  this, and the Stripe webhook only for the order confirmation (off unless switched on).
 
 **Environment** (add to `/srv/mopclothing/.env`; already there: `PRINTFUL_API_TOKEN`,
 `PRINTFUL_STORE_ID` if used, `YOYCOL_ACCESS_KEY`, `YOYCOL_SECRET_KEY`, `PINGPIGEON_TOKEN`):
@@ -189,6 +191,7 @@ no order-confirmation email: Stripe's receipt covers that.
 | `MOP_EMAIL_FROM` | no | Default `MOP Clothing <orders@mopclothing.com>`. Its domain must be verified in Resend. |
 | `MOP_EMAIL_REPLY_TO` | no | Default `orders@mopclothing.com`. The email says "Just reply to this email", so this address must receive mail (e.g. Cloudflare Email Routing → John's inbox). |
 | `MOP_EMAIL_DRY_RUN` | no | `1` logs each customer email instead of sending it (and marks nothing emailed). For a first look only. |
+| `MOP_CONFIRMATION_EMAIL_ENABLED` | no | `1` turns on the order confirmation email (next section). Unset / anything else: off. |
 
 **One-time setup**
 
@@ -257,6 +260,63 @@ sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --env-file=/srv/m
 journalctl -u mopclothing -n 100 --no-pager | grep '\[shipping\]'
 tail -n 5 /var/lib/mopclothing/shipments-emailed.jsonl /var/lib/mopclothing/yoycol-tracking.log
 ```
+
+### Order confirmation email (off until John approves the preview)
+
+"Thanks for your MOP order! Here's what happens next": the shipped email's look (same header,
+colours, item rows and footer: `lib/orders/email-layout.ts`) with a greeting, a **What happens
+next** timeline (made just for you → printed & packed → shipped with a tracking email → at your
+door), the items with thumbnails, options, qty and line price, the totals (subtotal, discount
+with the code's name, shipping "Free", total paid), the short order number, two care tips, and
+"Questions? Just reply to this email." + Shipping & returns.
+
+- **Times** come from `vendorDelivery` in `public/products.ts`: Printful printed & packed
+  `2–5 business days`, at the door `about 1–2 weeks`; Yoycol `about 10–12 days` / `about 3–4 weeks`
+  (`production` is the made-and-packed part). An order with items from both lists each item's
+  times and says they may arrive in separate packages.
+- **Amounts** are the Stripe session's own (`amount_subtotal`, `total_details`, `amount_total`, and
+  each item's unit amount from our session metadata). If the items don't add up to the session's
+  subtotal, the line prices are left out and only the session's totals show.
+- **Discount code**: the event only carries the promotion code's id, so the webhook asks Stripe
+  (`GET /v1/promotion_codes/{id}`, `STRIPE_SECRET_KEY`, 5 s timeout). A restricted key needs
+  **Promotion Codes: Read**; without it the line just says "Discount" (logged `[confirm]`).
+- **When**: from the Stripe webhook (`lib/orders/process.ts` step 5) after the order is recorded,
+  the supplier orders are placed and John's email has gone. It never fails the webhook or the
+  order: errors are caught and logged, and the webhook waits for it at most 8 s (a slower send
+  finishes in the background and records itself).
+- **To**: the email typed at Stripe Checkout (`customer_details.email`, the same address our
+  order record keeps and the shipped email uses), greeting the shipping name's first word.
+- **Exactly once** per order ref: `$MOP_DATA_DIR/confirmations-emailed.jsonl` (`sending` before,
+  `emailed` after Resend accepts it; same rules as `shipments-emailed.jsonl`) + a Resend
+  `Idempotency-Key` `mop-confirmation/<ref>`. Stripe's retries, replays and resumed runs never
+  send a second one.
+- **Off** (the default): nothing is sent and nothing is written; a debug line
+  `[confirm] mop-…: confirmation email is off … would have sent "<subject>" to an address at <domain>`.
+  `MOP_EMAIL_DRY_RUN=1` logs the whole email instead of sending it (so does `ORDER_DRY_RUN=1`).
+- **Failures**: logged (`[confirm] … CONFIRMATION EMAIL FAILED`), not marked emailed, and John gets
+  one PingPigeon email "ACTION NEEDED: order confirmation email failed for <ref>". Stripe doesn't
+  retry a webhook that answered 200, so resend it by hand once it's fixed (below). No
+  `MOP_RESEND_API_KEY`: logged and skipped, like the shipped email.
+
+**Preview / resend one order by hand** (`scripts/send-confirmation-email.mjs`; reads
+`orders.jsonl`, refuses an order that was already emailed unless `--force`):
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --env-file=/srv/mopclothing/.env \
+  /srv/mopclothing/scripts/send-confirmation-email.mjs --order-ref mop-<ref> --dry-run --html /var/lib/mopclothing/confirm-preview.html
+# --dry-run prints it (works while the email is off). Without --dry-run it sends (needs the switch on).
+# --force sends again an order that was already emailed. Exit 0 = sent / previewed.
+```
+
+**Turning it on** (after John has approved the preview):
+
+1. `MOP_RESEND_API_KEY` is already set for the shipped emails (check: `grep -c MOP_RESEND_API_KEY /srv/mopclothing/.env`).
+2. Optional: give the Stripe restricted key **Promotion Codes: Read** so the discount line names the code.
+3. Add `MOP_CONFIRMATION_EMAIL_ENABLED=1` to `/srv/mopclothing/.env` and `systemctl restart mopclothing`.
+4. The next order: `journalctl -u mopclothing | grep '\[confirm\]'` shows `confirmation email sent to a***@…`,
+   and `tail /var/lib/mopclothing/confirmations-emailed.jsonl` shows `sending` then `emailed`.
+
+To turn it off again: remove the line (or set it to anything but `1`) and restart.
 
 ### Monthly royalty email (timer installed 10/2026; first run Sun 11/1 09:00 PT)
 

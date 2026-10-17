@@ -3,7 +3,9 @@
 //   2. create the supplier order(s): Printful draft / Yoycol unpaid order,
 //      each call retried once on a network/429/5xx failure,
 //   3. append royalty rows,
-//   4. email John what sold and what to do (retried once).
+//   4. email John what sold and what to do (retried once),
+//   5. email the customer "thanks for your order" (confirmation.ts: off unless
+//      MOP_CONFIRMATION_EMAIL_ENABLED=1, once per order, never fails the order).
 // Each finished step is saved in orders-state.json, so a repeated event is a
 // no-op and a crashed run picks up where it stopped (see store.ts claim()).
 import { buildOrderRecord, type LineItemLike, type SessionLike } from "./session.ts";
@@ -11,6 +13,7 @@ import { createPrintfulOrder } from "./printful.ts";
 import { createYoycolOrder } from "./yoycol.ts";
 import { orderEmail, sendEmail } from "./notify.ts";
 import { royaltyRows } from "./royalties.ts";
+import { sendOrderConfirmation, type ConfirmationLedger } from "./confirmation.ts";
 import type { FetchLike } from "./http.ts";
 import type { OrderStore, SessionEntry } from "./store.ts";
 import type { OrderCodes, OrderItem, OrderRecord, RoyaltyRow, Supplier, SupplierResult } from "./types.ts";
@@ -28,7 +31,16 @@ export type OrderDeps = {
   retryDelayMs?: number;
   /** Registration codes (lib/item-codes.ts); without it, no codes are issued. */
   codes?: ItemCodeStore;
+  /** Debug-level log (the route: console.debug). */
+  debug?: (msg: string) => void;
+  /** The confirmation email's ledger (default: confirmations-emailed.jsonl in the store's dir). */
+  confirmations?: ConfirmationLedger;
+  /** How long the webhook waits for the confirmation email before answering anyway (default 8 s). */
+  confirmationBudgetMs?: number;
 };
+
+/** The webhook answers after this even if the customer's email is still sending; the send finishes on its own. */
+export const CONFIRMATION_BUDGET_MS = 8000;
 
 export type HandleResult = { status: number; body: Record<string, unknown> };
 
@@ -160,6 +172,9 @@ export async function processSession(session: SessionLike, deps: OrderDeps): Pro
       });
     }
 
+    // 5. The customer's confirmation, once everything above is saved. It can't fail or hold up the order.
+    await confirmOrder(record, deps);
+
     const allOk = Object.values(entry.suppliers).every((r) => r.ok) && record.items.length > 0;
     entry = await store.update(id, deps.now(), (e) => {
       e.status = allOk && e.emailed ? "done" : "done_with_errors";
@@ -198,6 +213,32 @@ export async function processSession(session: SessionLike, deps: OrderDeps): Pro
     }
     return { status: 500, body: { error: "processing failed; will retry" } };
   }
+}
+
+/**
+ * The "thanks for your order" email (confirmation.ts), which never throws. The
+ * webhook waits for it at most `confirmationBudgetMs`; a slower send carries on
+ * after the response and records its own outcome in confirmations-emailed.jsonl.
+ */
+async function confirmOrder(record: OrderRecord, deps: OrderDeps) {
+  // ORDER_DRY_RUN: no supplier order was placed, so the customer email is only logged too.
+  const env = deps.env.ORDER_DRY_RUN === "1" ? { ...deps.env, MOP_EMAIL_DRY_RUN: "1" } : deps.env;
+  const task = sendOrderConfirmation(record, {
+    env,
+    fetch: deps.fetch,
+    log: deps.log,
+    debug: deps.debug,
+    now: deps.now,
+    retryDelayMs: deps.retryDelayMs,
+    dir: deps.store.dir,
+    ledger: deps.confirmations,
+  }).catch((err) => deps.log(`[confirm] ${record.order_ref}: ${(err as Error).message}`));
+  const budget = deps.confirmationBudgetMs ?? CONFIRMATION_BUDGET_MS;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const slow = new Promise<"slow">((resolve) => (timer = setTimeout(() => resolve("slow"), budget)));
+  const first = await Promise.race([task, slow]);
+  clearTimeout(timer);
+  if (first === "slow") deps.log(`[confirm] ${record.order_ref}: still sending after ${budget} ms; answering Stripe now, the email finishes on its own`);
 }
 
 /** Issue one code per unit, then fit the Printful ones on the slip (or fall back to one order code). */
