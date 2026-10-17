@@ -290,6 +290,8 @@ const products: { products: Product[] } = {
       },
       images: [
         // John wearing his own pair (real photos, 2025-12-27; background cut out with Apple Vision, no generated pixels)
+        // lead: cropped to the shorts (chest to knees) so cards and email thumbnails show the shorts, not a tiny figure (John 10/17)
+        "/images/blue-sky-cotton-shorts/worn-front-shorts-crop.webp",
         "/images/blue-sky-cotton-shorts/worn-front.webp",
         "/images/blue-sky-cotton-shorts/worn-hands-in-pockets.webp",
         "/images/blue-sky-cotton-shorts/worn-side.webp",
