@@ -25,7 +25,8 @@ export default function HomeLink({ className }: { className?: string }) {
         }
       }}
     >
-      ←&nbsp;Home
+      {/* the arrow on its own, so a page can nudge it on hover (app/[productId]/ProductClientView.module.css) */}
+      <span>←&nbsp;</span>Home
     </Link>
   );
 }
