@@ -20,8 +20,8 @@ export const catalogProducts: CatalogProduct[] = [
         "small"
       ],
       "style": [
-        "classic",
-        "beanie"
+        "beanie",
+        "classic"
       ],
       "color": [
         "Lagoon Blue",
@@ -5357,8 +5357,8 @@ export const catalogProducts: CatalogProduct[] = [
     "printfulCatalogProductId": 636,
     "options": {
       "style": [
-        "classic",
-        "beanie"
+        "beanie",
+        "classic"
       ],
       "color": [
         "White",
