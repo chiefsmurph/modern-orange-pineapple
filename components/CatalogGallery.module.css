@@ -96,3 +96,25 @@
   border-color: #ff8800;
   opacity: 1;
 }
+
+/* The whole photo is the "Enlarge photo" button (opens the viewer). */
+.enlarge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  cursor: zoom-in;
+}
+
+.enlarge:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.enlarge:focus-visible {
+  outline: 3px solid #d96f00;
+  outline-offset: -3px;
+}

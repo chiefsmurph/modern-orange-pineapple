@@ -1,9 +1,11 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { decodeImage, imageAttrs } from "@/lib/product-image";
 import { preloadKey } from "@/lib/catalog/preload-plan";
 import type { PreloadQueue } from "@/lib/preload-queue";
+import WildLightbox from "./WildLightbox";
 import styles from "./CatalogGallery.module.css";
 
 // Photos for the Printful line-up: one big photo in a fixed square frame plus
@@ -18,6 +20,10 @@ import styles from "./CatalogGallery.module.css";
 //   is decoded, then they swap in one paint.
 // - A new pick that isn't: it jumps the preload queue and a spinner shows over
 //   the old photo until it's in. Only the latest pick ever lands.
+//
+// Clicking or tapping the big photo opens it full screen (components/WildLightbox.tsx)
+// with the rest of the set that's showing, at the original files (1600 px for the
+// line-up). Arrowing through the viewer doesn't change the photo here.
 export default function CatalogGallery({
   images,
   alt,
@@ -40,6 +46,8 @@ export default function CatalogGallery({
   const [shownSet, setShownSet] = useState(images);
   const [busy, setBusy] = useState(false);
   const [ready, setReady] = useState(false);
+  // the viewer, open at this photo of shownSet
+  const [viewer, setViewer] = useState<number | null>(null);
   const frame = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
   const latest = useRef(0);
@@ -104,6 +112,13 @@ export default function CatalogGallery({
           onError={markReady}
         />
         <span className={styles.spinner} aria-hidden="true" />
+        {/* over the photo (the <img> stays the frame's child for the ready script in app/layout.tsx) */}
+        <button
+          type="button"
+          className={styles.enlarge}
+          onClick={() => setViewer(Math.max(0, shownSet.indexOf(shown)))}
+          aria-label="Enlarge photo"
+        />
       </div>
       {shownSet.length > 1 && (
         <div className={styles.thumbs}>
@@ -122,6 +137,18 @@ export default function CatalogGallery({
           ))}
         </div>
       )}
+      {/* on <body>: the sticky gallery column would keep it under the bag button */}
+      {viewer !== null &&
+        createPortal(
+          <WildLightbox
+            photos={shownSet.map((src) => ({ src, alt }))}
+            start={viewer}
+            onClose={() => setViewer(null)}
+            label={alt}
+            pinchZoom
+          />,
+          document.body
+        )}
     </div>
   );
 }

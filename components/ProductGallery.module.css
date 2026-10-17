@@ -47,3 +47,26 @@
     --slide-gap: 24px;
   }
 }
+
+/* Each photo is an "Enlarge photo" button (opens the viewer); the photo still
+   spills out of it as before. */
+.enlarge {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  overflow: visible;
+  cursor: zoom-in;
+}
+
+.enlarge:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.enlarge:focus-visible {
+  outline: 3px solid #d96f00;
+  outline-offset: 2px;
+}
