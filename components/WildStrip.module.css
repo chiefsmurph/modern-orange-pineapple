@@ -25,6 +25,7 @@
   list-style: none;
   overflow-x: auto;
   overflow-y: hidden;
+  overscroll-behavior-x: none; /* no rubber-band at either end (John 10/17) */
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;

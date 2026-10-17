@@ -29,6 +29,7 @@
   max-width: 560px;
   max-height: 85vh;
   overflow: auto;
+  overscroll-behavior: none; /* no bounce, and the page behind doesn't scroll (John 10/17) */
   box-sizing: border-box;
   padding: 1rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
   border-radius: 18px 18px 0 0;
@@ -79,6 +80,7 @@
 
 .scroll {
   overflow-x: auto;
+  overscroll-behavior-x: none; /* no sideways bounce (John 10/17) */
 }
 
 .table {

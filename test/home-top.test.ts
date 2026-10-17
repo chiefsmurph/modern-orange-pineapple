@@ -133,3 +133,13 @@ test("no scroll bounce: the page root has overscroll-behavior none (John 10/17)"
   const g = readFileSync(path.join(ROOT, "app/globals.css"), "utf8");
   assert.match(/\nhtml \{[^}]*\}/.exec(g)?.[0] ?? "", /overscroll-behavior: none;/);
 });
+
+test("no bounce in scroll containers either: every overflow auto/scroll rule also sets overscroll-behavior (John 10/17)", () => {
+  const files = ["components/WildStrip.module.css", "components/SizeGuide.module.css"];
+  for (const f of files) {
+    const src = readFileSync(path.join(ROOT, f), "utf8");
+    for (const rule of src.match(/[^{}]+\{[^}]*\}/g) ?? []) {
+      if (/overflow(-x|-y)?: (auto|scroll)/.test(rule)) assert.match(rule, /overscroll-behavior(-x|-y)?: none/, `${f}: ${rule.trim().split("{")[0]}`);
+    }
+  }
+});
