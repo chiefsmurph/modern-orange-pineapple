@@ -143,3 +143,10 @@ test("no bounce in scroll containers either: every overflow auto/scroll rule als
     }
   }
 });
+
+test("product page columns can't be squeezed by a long thumbnail row (shorts, 10 photos; 10/17)", () => {
+  const g = readFileSync(path.join(ROOT, "components/CatalogGallery.module.css"), "utf8");
+  assert.match(/\.thumbs \{[^}]*\}/.exec(g)?.[0] ?? "", /flex-wrap: wrap;/);
+  const p = readFileSync(path.join(ROOT, "app/[productId]/ProductClientView.module.css"), "utf8");
+  for (const c of ["textSide", "gallerySide"]) assert.match(new RegExp(`\\.${c} \\{[^}]*\\}`).exec(p)?.[0] ?? "", /min-width: 0;/, c);
+});

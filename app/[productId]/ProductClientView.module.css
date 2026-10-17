@@ -212,10 +212,12 @@ a.home:focus-visible span {
 
   .textSide {
     flex: 1;
+    min-width: 0;
   }
 
   .gallerySide {
     flex: 1;
+    min-width: 0; /* never let wide content (a long thumbnail row) squeeze the text column */
     display: flex;
     justify-content: center;
   }

@@ -69,11 +69,13 @@
 
 .thumbs {
   display: flex;
+  flex-wrap: wrap; /* 10 photos (the shorts) must wrap, not widen the column (10/17 bug) */
   gap: 0.5rem;
   margin-top: 0.6rem;
 }
 
 .thumb {
+  flex: none;
   padding: 0;
   width: 64px;
   height: 64px;
