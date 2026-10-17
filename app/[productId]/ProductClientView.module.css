@@ -7,8 +7,33 @@
 
 
 
+/* "← Home": black at rest; the site's orange and an underline on hover or
+   keyboard focus, with the arrow nudging left. */
 a.home {
-  color: blue;
+  color: #000;
+  text-decoration: none;
+}
+
+a.home:hover,
+a.home:focus-visible {
+  color: #d96f00;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a.home span {
+  display: inline-block;
+}
+
+a.home:hover span,
+a.home:focus-visible span {
+  transform: translateX(-3px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a.home span {
+    transition: transform 150ms ease;
+  }
 }
 
 .title {
@@ -22,8 +47,11 @@ a.home {
   font-size: 2rem;
 }
 
+/* Body text, not a heading: ~17px (body is 130% ≈ 21px), same font. */
 .desc {
   margin-bottom: 24px;
+  font-size: 1.0625rem;
+  line-height: 1.45;
 }
 
 .credit {

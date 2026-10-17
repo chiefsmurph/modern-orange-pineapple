@@ -9,6 +9,7 @@ import CatalogProductView from "./CatalogProductView";
 import { approvedReviews, reviewStore } from "@/lib/reviews";
 import { dataDir } from "@/lib/orders/store";
 import { SITE_DESCRIPTION, productShareMeta, shareMeta } from "@/lib/share-meta";
+import { legacyPageProduct, type PageProduct } from "@/lib/product-page";
 
 type ProductPageProps = {
   params: Promise<{ productId: string }>;
@@ -52,28 +53,32 @@ export default async function ProductPage({
 
   const product = findLegacy(productId);
   if (product?.comingSoon) return <ComingSoonView product={product} />;
-  if (product) {
+  // A hand-written product gets the same page as the line-up (lib/product-page.ts:
+  // "Buy now" only, its checkout unchanged), unless that page can't show it.
+  const legacyPage = product && legacyPageProduct(product);
+  if (product && !legacyPage) {
     const defaultColor = product.options.color?.[0];
     const images = getProductImages(product, defaultColor);
     return <ProductClientView product={product} defaultImages={images} />;
   }
 
-  // The generated Printful line-up (lib/catalog). The query string can preselect
-  // options (?version=small&style=beanie&color=Ivory); anything invalid is ignored.
-  const shopProduct = getShopProduct(productId);
-  if (!shopProduct) notFound();
+  // The generated Printful line-up (lib/catalog), or that hand-written product. The
+  // query string can preselect options (?version=small&style=beanie&color=Ivory,
+  // ?size=M); anything invalid is ignored.
+  const pageProduct: PageProduct | undefined = legacyPage || getShopProduct(productId);
+  if (!pageProduct) notFound();
   const query = Object.fromEntries(
     Object.entries(await searchParams).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])
   );
   // Approved reviews, read at request time (no rebuild when John approves one).
   const reviews = await reviewStore(dataDir())
     .readAll()
-    .then((all) => approvedReviews(all, shopProduct.slug))
+    .then((all) => approvedReviews(all, pageProduct.slug))
     .catch(() => null);
   return (
     <CatalogProductView
-      product={shopProduct}
-      initialSelection={normalizeSelection(shopProduct, query)}
+      product={pageProduct}
+      initialSelection={normalizeSelection(pageProduct, query)}
       reviews={reviews}
     />
   );

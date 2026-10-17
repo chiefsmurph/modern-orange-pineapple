@@ -53,6 +53,8 @@ export type Product = {
   freeShippingMode?: boolean;
   /** Shown as a label on the card and product page when the item isn't 100% cotton. */
   fabricNote?: string;
+  /** One line under the size picker (fabric and fit), as on the line-up's pages. */
+  sizeNote?: string;
   /**
    * Retired: off the home grid, its URL redirects (next.config.ts) and new
    * checkouts are refused. It stays here so orders from checkouts started
@@ -270,7 +272,9 @@ const products: { products: Product[] } = {
       // Shorts, which are retired in lib/catalog/retired.ts and redirect here (2026-10-16).
       title: "Blue Sky Cotton Shorts",
       description:
-        "Made of natural fiber fabric, it is comfortable and breathable, and will not tighten when worn against the skin.  Pair it with casual tops or sweatshirts to wear in many scenarios.\n\n- Fabric: 100% cotton\n- Regular fit\n- Side pocket, back pocket, waist elastic\n- Fabric: 245 g/m²",
+        "The blue sky, on soft cotton shorts.\n\n- Fabric: 100% cotton\n- Regular fit\n- Side pocket, back pocket, elastic waist\n- Fabric weight: 245 g/m²",
+      // No measurements from Yoycol yet, so no Size guide: fabric and fit only.
+      sizeNote: "100% cotton · regular fit, elastic waist",
       options: {
         size: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
       },

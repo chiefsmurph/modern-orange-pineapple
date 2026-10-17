@@ -1,6 +1,8 @@
 // Product-page photo position and "← Home" scroll return (John's UX bugs, 2026-10-12).
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { keepPhotoPosition } from "../lib/catalog/select.ts";
 import { lastHomeCard, planReturnHome, rememberHomeCard, takeHomeRestore } from "../lib/home-scroll.ts";
 
@@ -53,4 +55,40 @@ test("storage that throws (private mode) still goes back, and restoring is skipp
   };
   assert.equal(planReturnHome(broken, "/x", 3, { to: "/x", y: 10 }), "back");
   assert.equal(takeHomeRestore(broken), null);
+});
+
+test("product pages: '← Home' is black, orange + underline on hover/focus, the arrow nudges left", () => {
+  const ROOT = path.resolve(import.meta.dirname, "..");
+  const link = readFileSync(path.join(ROOT, "components/HomeLink.tsx"), "utf8");
+  // the same text ("← Home") with the arrow in its own span, and the same back-navigation
+  assert.match(link, /<span>←&nbsp;<\/span>Home\s*<\/Link>/);
+  assert.match(link, /if \(plan === "back"\) \{\s*e\.preventDefault\(\);\s*router\.back\(\);/);
+  const css = readFileSync(path.join(ROOT, "app/[productId]/ProductClientView.module.css"), "utf8");
+  assert.match(css, /a\.home \{\s*color: #000;\s*text-decoration: none;\s*\}/);
+  assert.match(css, /a\.home:hover,\s*a\.home:focus-visible \{\s*color: #d96f00;\s*text-decoration: underline;/);
+  assert.match(css, /a\.home:hover span,\s*a\.home:focus-visible span \{\s*transform: translateX\(-3px\);/);
+  assert.match(css, /@media \(prefers-reduced-motion: no-preference\) \{\s*a\.home span \{\s*transition: transform 150ms ease;/);
+  assert.doesNotMatch(css, /a\.home[^{]*\{[^}]*font-size/); // same size as before
+});
+
+test("product description: ~17px body text (≥16px), line-height 1.45, the page's own font", () => {
+  const ROOT = path.resolve(import.meta.dirname, "..");
+  const css = readFileSync(path.join(ROOT, "app/[productId]/ProductClientView.module.css"), "utf8");
+  const desc = /\n\.desc \{([^}]*)\}/.exec(css)![1];
+  const rem = Number(/font-size: ([\d.]+)rem;/.exec(desc)![1]);
+  assert.ok(rem * 16 >= 16 && rem * 16 <= 18, `${rem * 16}px`);
+  assert.match(desc, /line-height: 1\.45;/);
+  assert.doesNotMatch(desc, /font-family/);
+  assert.equal(css.match(/\.desc\b/g)!.length, 1); // one rule: the same size on desktop and phones
+});
+
+test("gallery thumbnails and Sky tiles: no browser focus ring from a click, an orange one from the keyboard", () => {
+  const ROOT = path.resolve(import.meta.dirname, "..");
+  const gallery = readFileSync(path.join(ROOT, "components/CatalogGallery.module.css"), "utf8");
+  assert.match(gallery, /\.active \{\s*border-color: #ff8800;/); // the selected one: orange
+  assert.match(gallery, /\.thumb:focus:not\(:focus-visible\) \{\s*outline: none;/);
+  assert.match(gallery, /\.thumb:focus-visible \{\s*outline: 2px solid #d96f00;/);
+  const page = readFileSync(path.join(ROOT, "app/[productId]/CatalogProductView.module.css"), "utf8");
+  assert.match(page, /\.thumbChoice:focus:not\(:focus-visible\) \{\s*outline: none;/);
+  assert.match(page, /\.thumbChoice:focus-visible \{\s*outline: 2px solid #d96f00;/);
 });

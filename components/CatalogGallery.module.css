@@ -96,3 +96,36 @@
   border-color: #ff8800;
   opacity: 1;
 }
+
+/* No focus ring from a click or tap (some browsers draw their blue one over the
+   orange border); keyboard focus gets an orange ring. */
+.thumb:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.thumb:focus-visible {
+  outline: 2px solid #d96f00;
+  outline-offset: 2px;
+}
+
+/* The whole photo is the "Enlarge photo" button (opens the viewer). */
+.enlarge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  cursor: zoom-in;
+}
+
+.enlarge:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.enlarge:focus-visible {
+  outline: 3px solid #d96f00;
+  outline-offset: -3px;
+}

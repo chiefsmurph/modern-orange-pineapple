@@ -23,6 +23,16 @@
   user-select: none;
 }
 
+/* Product photos: the browser's pinch-zoom works too (browsers without the
+   pinch-zoom keyword keep pan-y). Zoomed in, the browser pans the photo. */
+.pinch {
+  touch-action: pan-y pinch-zoom;
+}
+
+.zoomed {
+  touch-action: auto;
+}
+
 .photo {
   display: block;
   max-width: 100%;
@@ -32,6 +42,11 @@
   border-radius: 6px;
   object-fit: contain;
   -webkit-user-drag: none;
+}
+
+/* Product photos are cut-outs on transparency: the same light tile as on the page. */
+.tile {
+  background: var(--photo-tile);
 }
 
 .close,
