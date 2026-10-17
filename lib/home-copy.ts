@@ -11,5 +11,6 @@
 /** One sentence under the brand line. */
 export const HERO_LINE = "Original characters on real cotton.";
 
-/** The benefits row, shown as one line: "Free US shipping · Original art, made to order". */
-export const BENEFITS = ["Free US shipping", "Original art, made to order"] as const;
+/** The benefits row, shown as one line: "Tees from $29 · Free US shipping · Original art, made to order".
+ *  "Tees from $29" = the cheapest tee on sale (test/home-top.test.ts checks it against the catalog; John 10/17). */
+export const BENEFITS = ["Tees from $29", "Free US shipping", "Original art, made to order"] as const;

@@ -17,7 +17,7 @@ const css = readFileSync(path.join(ROOT, "app/HomeGrid.module.css"), "utf8");
 
 test("the words: one sentence under the brand line, and the benefits row", () => {
   assert.equal(HERO_LINE, "Original characters on real cotton.");
-  assert.equal(BENEFITS.join(" · "), "Free US shipping · Original art, made to order");
+  assert.equal(BENEFITS.join(" · "), "Tees from $29 · Free US shipping · Original art, made to order");
   // nothing we can't back up
   for (const t of [HERO_LINE, ...BENEFITS]) assert.doesNotMatch(t, /made in|USA|America|organic|handmade/i, t);
 });
@@ -60,4 +60,13 @@ test("the brand line is bigger: 3rem on desktop (was 2rem), and on phones as big
   const phone = css.slice(css.indexOf("@media (max-width: 768px)"));
   assert.match(phone, /\.header \.title \{[^}]*font-size: min\(1\.8rem, calc\(10vw - 11px\)\);/);
   assert.match(phone, /\.subtitle \{[^}]*font-size: 0\.78em;/);
+});
+
+test('"Tees from $29" is true: the cheapest tee on sale costs exactly $29 (John 10/17)', () => {
+  const tees = shopProducts.filter((p) => /-tee$/.test(p.slug));
+  assert.ok(tees.length > 0);
+  const prices = tees.flatMap((p) => p.variants.map((v) => Number(v.price)));
+  assert.ok(prices.every(Number.isFinite), "every tee variant has a price");
+  assert.equal(Math.min(...prices), 29);
+  assert.ok(BENEFITS.includes("Tees from $29"));
 });
