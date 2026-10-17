@@ -277,7 +277,8 @@ const products: { products: Product[] } = {
       // $40 with the 14.53 shipping (free-shipping model); 4XL $42 and 5XL $44 (John, 2026-10-16).
       price: 25.47,
       sizePrices: { "4XL": 27.47, "5XL": 29.47 },
-      // Back near the top of the home grid, where the Printful Sky Shorts sat (catalog rank 2).
+      // Where the Printful Sky Shorts sat in the full card list (catalog rank 2). On the
+      // home page they're 3rd, among the first cards (lib/catalog/copy.ts `featured`).
       rank: 2,
       vendor: {
         platform: "yoycol",

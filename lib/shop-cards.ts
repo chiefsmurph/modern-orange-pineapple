@@ -62,6 +62,10 @@ export const skySwatches = (product: ShopProduct) =>
     return set?.swatch ? [{ src: set.swatch, label: valueLabel("sky", sky, product.optionLabels) }] : [];
   });
 
+/** An older product (public/products.ts) that's on sale and not replaced by a generated one. */
+const onSaleLegacy = (p: Product) =>
+  !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id));
+
 /**
  * Every card on sale, in home-grid order: the generated products by catalogRank,
  * with an older product that has a `rank` slotted in among them (after the
@@ -71,7 +75,7 @@ export const shopCards = (): ShopCard[] =>
   [
     ...shopProducts.map((p) => ({ rank: p.rank, card: catalogCard(p) })),
     ...legacy.products
-      .filter((p) => !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id)))
+      .filter(onSaleLegacy)
       .map((p) => ({ rank: p.rank ?? Infinity, card: legacyCard(p) })),
   ]
     // a stable sort: same-rank cards keep their order, generated ones first
@@ -79,14 +83,18 @@ export const shopCards = (): ShopCard[] =>
     .map((c) => c.card);
 
 /**
- * The home page's Featured cards, in lib/catalog/copy.ts `featured` order: each
+ * The first cards on the home grid, in lib/catalog/copy.ts `featured` order: each
  * opens its product with the featured picks and shows that photo
- * (scripts/gen-featured.mjs). Products not on sale are left out.
+ * (scripts/gen-featured.mjs); an older product (the shorts) is its usual card.
+ * Products not on sale are left out.
  */
 export const featuredCards = (): ShopCard[] =>
   featured.items.flatMap((f) => {
     const p = getShopProduct(f.slug);
-    if (!p) return [];
+    if (!p) {
+      const old = legacy.products.find((o) => o.id === f.slug && onSaleLegacy(o));
+      return old ? [legacyCard(old)] : [];
+    }
     const card = catalogCard(p);
     const query = f.pick ? syncedQuery("", optionNames(p), f.pick) : "";
     return [
@@ -99,8 +107,11 @@ export const featuredCards = (): ShopCard[] =>
     ];
   });
 
-/** Everything else, in the usual order, below Featured (no repeats). */
+/** Everything else, in the usual order, after the featured cards (no repeats). */
 export const restCards = (): ShopCard[] => {
   const shown = new Set(featuredCards().map((c) => c.href.split("?")[0]));
   return shopCards().filter((c) => !shown.has(c.href));
 };
+
+/** The whole home grid, top to bottom: the featured cards, then the rest. */
+export const homeCards = (): ShopCard[] => [...featuredCards(), ...restCards()];

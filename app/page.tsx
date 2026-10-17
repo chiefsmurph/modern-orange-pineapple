@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
-import { featuredCards, restCards } from "@/lib/shop-cards";
-import { featured } from "@/lib/catalog/copy";
-import { vendorDelivery } from "@/public/products";
+import { homeCards } from "@/lib/shop-cards";
+import { BENEFITS, HERO_LINE } from "@/lib/home-copy";
 
 import styles from "./HomeGrid.module.css";
 import "./styles.css";
@@ -16,11 +15,12 @@ import MopCrew from "@/components/MopCrew";
 import { wildPhotos, type WildPhoto } from "@/lib/wild.generated";
 import { mixWild } from "@/lib/wild";
 import InViewVideo from "@/components/InViewVideo";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { takeHomeRestore } from "@/lib/home-scroll";
 
-// Products first: a compact title + one tagline line, then the grid, then the
-// links and the brand story. Everything is server-rendered visible — no
+// Products first: a compact hero (the title, one line under it, the slogan and
+// the benefits row), the "Out in the wild" strip, then the grid, then the links
+// and the brand story. Everything is server-rendered visible — no
 // scroll lock, no typewriter, no staggered reveal; the only motion is a short
 // CSS fade (off under prefers-reduced-motion, see HomeGrid.module.css).
 export default function HomePage() {
@@ -84,45 +84,35 @@ export default function HomePage() {
           <span className={styles.rule} aria-hidden="true" />
           <i className={styles.subtitle}>Modern Orange Pineapple</i>
         </h1>
+        <p className={styles.heroLine}>{HERO_LINE}</p>
         <p className={styles.tagline}>
           Escape the Ordinary — Own a Collectible Piece of Paradise.
         </p>
+        {/* one row; on a very narrow phone it breaks between items, never inside one */}
+        <p className={styles.benefits}>
+          {BENEFITS.map((b, i) => (
+            <Fragment key={b}>
+              {i > 0 && (
+                <>
+                  {" "}
+                  <span aria-hidden="true">·</span>{" "}
+                </>
+              )}
+              <span className={styles.benefit}>{b}</span>
+            </Fragment>
+          ))}
+        </p>
       </header>
 
-      <p className={`${styles.materialNote} ${styles.fadeIn}`}>
-        Art-inspired designs · real cotton, even the all-overs · Morro Bay, CA
-      </p>
       {wildPhotos.length > 0 && <WildStrip photos={wild?.strip ?? null} onOpen={(p) => openWild(p, "strip")} />}
-      {/* Featured (lib/catalog/copy.ts `featured`): premium all-overs alternating with the $29 tees. */}
-      {featuredCards().length > 0 && (
-        <section className={`${styles.group} ${styles.fadeIn}`} aria-labelledby="featured">
-          <h2 id="featured" className={styles.groupTitle}>
-            {featured.title}
-          </h2>
-          <p className={styles.groupLine}>
-            {/* hyphenated words ("all-overs") never split across lines */}
-            {featured.line.split(/(\S+-\S+)/).map((w, i) => (i % 2 ? <span key={i} className={styles.nowrap}>{w}</span> : w))}
-          </p>
-          {/* phones only: the cards there are compact, so this is said once here */}
-          <p className={styles.phoneNote}>
-            <b>Free shipping</b> · made to order, {vendorDelivery.printful.text.replace(/^Made to order · /, "")}
-          </p>
-          <div className={styles.grid}>
-            {featuredCards().map((card, index) => (
-              <div key={card.href} className={styles.cell}>
-                <ProductCard card={card} priority={index === 0} />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* The featured cards first (lib/catalog/copy.ts `featured`: the Sky Tee, Day, the shorts, ...), then the rest. */}
       <section
         className={`${styles.grid} ${styles.fadeIn}`}
         aria-label="Products"
       >
-        {restCards().map((card, index) => (
+        {homeCards().map((card, index) => (
           <div key={card.href} className={styles.cell}>
-            <ProductCard card={card} priority={index === 0 && featuredCards().length === 0} />
+            <ProductCard card={card} priority={index === 0} />
           </div>
         ))}
         <div className={`${styles.cell} ${styles.wide}`}>

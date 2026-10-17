@@ -135,17 +135,6 @@ export const catalogSizeNote = (printfulCatalogProductId?: number) =>
   garments[printfulCatalogProductId ?? -1]?.sizeNote;
 
 /**
- * The home page's "Featured" section, in this order (John, 10/13): premium
- * all-overs alternating with the $29 basics, so the first screen shows both
- * prices and different models. Everything else follows in the main grid
- * (catalogRank order) without repeating these. Reorder freely here.
- *   pick   the card opens the product with these picks (and shows that photo)
- *   photo  "womens" / "mens": the card shows that model's photo for the pick;
- *          "flat": the flat shot (e.g. so an all-over isn't the Day model again)
- * A new pick or photo needs `npm run catalog` (it makes the card's crop);
- * reordering or removing doesn't.
- */
-/**
  * Short card names for phones, where the home page shows two cards per row
  * (John, 10/13). By product slug; a product not listed shows its full name.
  * Only the phone cards use these: the product page, alt text, feeds, Stripe and
@@ -167,16 +156,29 @@ export const shortNames: Record<string, string> = {
 /** The phone card's name for a product: its short name, else the full one. */
 export const shortName = (slug: string, title: string) => shortNames[slug] ?? title;
 
+/**
+ * The first cards on the home grid, in this order (John, 10/16): the Sky Tee
+ * first, then Day, the Blue Sky Cotton Shorts, Dusk, the Rabbit, Pelican and
+ * Original Star tees. Everything else follows (catalogRank order) without
+ * repeating these. Reorder freely here. (Until 10/16 these were a separate
+ * "Featured" section above the grid, in John's 10/13 order.)
+ *   slug   a generated product, or an older one from public/products.ts (the
+ *          shorts), which shows its own first photo and takes no pick or photo
+ *   pick   the card opens the product with these picks (and shows that photo)
+ *   photo  "womens" / "mens": the card shows that model's photo for the pick;
+ *          "flat": the flat shot (e.g. so an all-over isn't the Day model again)
+ * A new pick or photo needs `npm run catalog` (it makes the card's crop);
+ * reordering or removing doesn't.
+ */
 export type FeaturedItem = { slug: string; pick?: Record<string, string>; photo?: "womens" | "mens" | "flat" };
-export const featured: { title: string; line: string; items: FeaturedItem[] } = {
-  title: "Featured",
-  line: "Heavyweight cotton tees and edge-to-edge all-overs.",
+export const featured: { items: FeaturedItem[] } = {
   items: [
-    { slug: "day-all-over", pick: { style: "beanie" } },
-    { slug: "rabbit-tee", pick: { version: "large", color: "Blossom" }, photo: "mens" },
-    { slug: "dusk-all-over" },
-    { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
     { slug: "sky-tee", pick: { sky: "orbital-sunset" }, photo: "flat" },
+    { slug: "day-all-over", pick: { style: "beanie" } },
+    { slug: "blue-sky-cotton-shorts" },
+    { slug: "dusk-all-over" },
+    { slug: "rabbit-tee", pick: { version: "large", color: "Blossom" }, photo: "mens" },
+    { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
     { slug: "original-star-tee" },
   ],
 };

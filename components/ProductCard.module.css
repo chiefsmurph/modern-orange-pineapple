@@ -1,6 +1,9 @@
 .card {
   background: rgba(255,255,255,0.6);
   display: block;
+  /* fills its grid cell, so the cards in a row end level (the Sky Tee's skies make it taller) */
+  box-sizing: border-box;
+  height: 100%;
   padding: 12px;
   border-radius: 16px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
@@ -83,8 +86,9 @@
 }
 
 /* Phones: two compact cards per row (app/HomeGrid.module.css): photo, short
-   name, price. Free shipping and the delivery time are said once, above the
-   grid; the Sky Tee's skies are on its page. Tablet and desktop unchanged. */
+   name, price, and the Sky Tee's skies as one row of small dots (it's the first
+   card, 10/16). Free shipping is said once, in the benefits row above the grid;
+   the delivery time is on the product page. Tablet and desktop unchanged. */
 @media (max-width: 768px) {
   .card {
     padding: 7px;
@@ -120,9 +124,21 @@
   }
 
   .freeShipping,
-  .delivery,
-  .swatches {
+  .delivery {
     display: none;
+  }
+
+  /* 10 skies fit one row down to a 360px phone */
+  .swatches {
+    gap: 2px;
+    margin: 2px 0 1px;
+  }
+
+  .swatch {
+    box-sizing: border-box;
+    width: 12px;
+    height: 12px;
+    border-width: 1px;
   }
 
   .fabricNote {

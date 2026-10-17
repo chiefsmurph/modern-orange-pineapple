@@ -6,7 +6,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import nextConfig from "../next.config.ts";
 import legacy, { getPriceLabel, getTotalPrice, vendorDelivery } from "../public/products.ts";
-import { restCards, shopCards } from "../lib/shop-cards.ts";
+import { homeCards, shopCards } from "../lib/shop-cards.ts";
 import { allShopProducts, getShopProduct, getShopProductIncludingRetired, shopProducts } from "../lib/catalog/index.ts";
 import { retiredCatalog } from "../lib/catalog/retired.ts";
 import { catalogFulfilment } from "../lib/catalog/fulfilment.generated.ts";
@@ -191,16 +191,17 @@ test("the shorts cost $40 in S–3XL, $42 in 4XL and $44 in 5XL: page, checkout 
   assert.equal(buildItem("pelican-beanie-t-shirt", { color: "White", size: "5XL" }, 1, {}).item.unitAmount, 2700);
 });
 
-test("the shorts are back near the top of the home grid, where the Printful Sky Shorts sat (after the all-overs)", () => {
-  const rest = restCards().map((c) => c.href.split("?")[0].slice(1));
-  const at = rest.indexOf("blue-sky-cotton-shorts");
-  assert.ok(at >= 0 && at <= 3, `shorts at ${at + 1} in the grid below Featured: ${rest.join(", ")}`);
+test("the shorts are 3rd on the home grid (John 10/16); their rank keeps them near the top of the full list", () => {
+  const home = homeCards().map((c) => c.href.split("?")[0].slice(1));
+  assert.equal(home.indexOf("blue-sky-cotton-shorts"), 2, home.join(", "));
+  // shopCards (every card on sale, also the Meta "unavailable" page): where the Printful Sky Shorts sat
+  const all = shopCards().map((c) => c.href.split("?")[0].slice(1));
+  const at = all.indexOf("blue-sky-cotton-shorts");
   // every generated card before them ranks above the old Sky Shorts slot (2), every one after below it
-  for (const slug of rest.slice(0, at)) assert.ok(catalogRank(slug) <= 2, `${slug} before the shorts`);
-  for (const slug of rest.slice(at + 1).filter((s) => getShopProduct(s))) assert.ok(catalogRank(slug) > 2, `${slug} after the shorts`);
+  for (const slug of all.slice(0, at)) assert.ok(catalogRank(slug) <= 2, `${slug} before the shorts`);
+  for (const slug of all.slice(at + 1).filter((s) => getShopProduct(s))) assert.ok(catalogRank(slug) > 2, `${slug} after the shorts`);
   assert.equal(legacy.products.find((x) => x.id === "blue-sky-cotton-shorts")!.rank, catalogRank("sky-shorts"));
   // the other older products still come after every generated one
-  const all = shopCards().map((c) => c.href.split("?")[0].slice(1));
   assert.ok(all.indexOf("clouds-skater-dress") > all.indexOf("star-snapback"));
 });
 

@@ -20,13 +20,16 @@ const TS_OUT = path.join(ROOT, "lib", "catalog", "featured.generated.ts");
 const { featured } = await import("../lib/catalog/copy.ts");
 const { getShopProduct } = await import("../lib/catalog/index.ts");
 const { imageSetFor, imagesFor, normalizeSelection } = await import("../lib/catalog/select.ts");
+const { default: legacy } = await import("../public/products.ts");
 
 const images = {};
 const writes = [];
 for (const f of featured.items) {
   const p = getShopProduct(f.slug);
   if (!p) {
-    console.warn(`warn: featured ${f.slug}: no such product (left off the home page)`);
+    // an older product (public/products.ts, e.g. the shorts) shows its own first photo
+    if (!legacy.products.some((o) => o.id === f.slug))
+      console.warn(`warn: featured ${f.slug}: no such product (left off the home page)`);
     continue;
   }
   const sel = normalizeSelection(p, f.pick ?? {});

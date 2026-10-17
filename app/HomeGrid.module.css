@@ -4,15 +4,15 @@ main.main {
   font-family: var(--font-orbitron), sans-serif;
 }
 
-/* ---- compact header: glowing title + one tagline line ---- */
+/* ---- compact hero: the glowing brand line, one sentence, the slogan, the benefits row ---- */
 .header {
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 1.25rem;
 }
 
 /* sizes override .glitch (app/styles.css), which keeps the glow */
 .header .title {
   margin: 0;
-  font-size: 2rem;
+  font-size: 3rem;
   line-height: 1.15;
 }
 
@@ -30,11 +30,22 @@ main.main {
   letter-spacing: 1px;
 }
 
+/* the one sentence under the brand line */
+.heroLine {
+  margin: 0.55rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
 .tagline {
   display: inline-block;
   max-width: 100%;
   box-sizing: border-box;
-  margin: 0.75rem 0 0;
+  margin: 0.6rem 0 0;
   padding: 0.35rem 0.9rem;
   font-size: 0.85rem;
   font-weight: 700;
@@ -46,40 +57,19 @@ main.main {
   border-radius: 8px;
 }
 
-/* One quiet line above the grid, in the tagline's type without its pill. */
-.materialNote {
-  margin: 0 0 0.9rem;
+/* The benefits row (lib/home-copy.ts): one quiet line, the tagline's type without its pill. */
+.benefits {
+  margin: 0.7rem 0 0;
   font-size: 0.8rem;
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 1px;
-  color: white;
+  color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
 }
 
-/* ---- product groups (Premium all-over) above the main grid ---- */
-.group {
-  margin: 0 0 2rem;
-}
-
-.groupTitle {
-  margin: 0;
-  font-size: 1.3rem;
-  letter-spacing: 2px;
-  color: white;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-}
-
-.groupLine {
-  margin: 0.25rem 0 0.9rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: white;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-}
-
-.nowrap {
+/* a benefit never breaks inside itself; the row can only break between them */
+.benefit {
   white-space: nowrap;
 }
 
@@ -111,25 +101,6 @@ main.main {
   gap: 24px;
   margin: 0;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-}
-
-/* Phones only: free shipping and the delivery time, said once above the cards. */
-.phoneNote {
-  display: none;
-  margin: 0 0 0.75rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  color: #333;
-  font-size: 0.68rem;
-  font-weight: 700;
-  line-height: 1.35;
-  letter-spacing: 0.3px;
-  text-wrap: balance;
-}
-
-.phoneNote b {
-  color: green;
 }
 
 /* was an <h2> per card; keeps the bold text the cards inherited from it */
@@ -199,38 +170,35 @@ main.main {
   }
 
   .header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.9rem;
   }
 
+  /* as big as fits beside the bag button (fixed, top right): 28px on a 390px
+     phone, back to the old 25.6px on a 360px one */
   .header .title {
-    font-size: 1.6rem;
+    font-size: min(1.8rem, calc(10vw - 11px));
   }
 
+  /* the brand name sits below the bag button, so it can take the full width */
   .subtitle {
-    font-size: 0.66em;
+    font-size: 0.78em;
+  }
+
+  .heroLine {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
   }
 
   .tagline {
-    margin-top: 0.5rem;
+    margin-top: 0.45rem;
     padding: 0.3rem 0.75rem;
     font-size: 0.72rem;
   }
 
-  .materialNote {
-    margin-bottom: 0.75rem;
-    font-size: 0.72rem;
-  }
-
-  .group {
-    margin-bottom: 1.5rem;
-  }
-
-  .groupTitle {
-    font-size: 1.15rem;
-  }
-
-  .groupLine {
-    font-size: 0.72rem;
+  .benefits {
+    margin-top: 0.45rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
   }
 
   /* two compact cards per row (components/ProductCard.module.css) */
@@ -242,10 +210,6 @@ main.main {
   /* the Morro Bay store card keeps the full width */
   .wide {
     grid-column: 1 / -1;
-  }
-
-  .phoneNote {
-    display: inline-block;
   }
 
   .links {
