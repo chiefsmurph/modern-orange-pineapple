@@ -289,6 +289,12 @@ const products: { products: Product[] } = {
         productId: "ID LRWGN",
       },
       images: [
+        // John wearing his own pair (real photos, 2025-12-27; background cut out with Apple Vision, no generated pixels)
+        "/images/blue-sky-cotton-shorts/worn-front.webp",
+        "/images/blue-sky-cotton-shorts/worn-hands-in-pockets.webp",
+        "/images/blue-sky-cotton-shorts/worn-side.webp",
+        "/images/blue-sky-cotton-shorts/worn-back.webp",
+        "/images/blue-sky-cotton-shorts/flat-back.webp",
         "/images/blue-sky-cotton-shorts/erasebg-transformed(3).webp",
         "/images/blue-sky-cotton-shorts/erasebg-transformed (1).webp",
         "/images/blue-sky-cotton-shorts/erasebg-transformed.webp",
