@@ -21,13 +21,12 @@ main.main {
   max-width: 100%;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 12px 32px 0 22px;
-  background:
-    linear-gradient(90deg, #ee7a30, #fa9215) bottom / 100% var(--stripe) no-repeat,
-    rgba(255, 255, 255, 0.9);
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0, 30, 60, 0.18);
-  color: #222;
+  padding: 12px 0 0;
+  /* NO CARD (John 10/17, compare with the card): the logo sits on the sky itself. A soft
+     light halo behind the dark wordmark keeps it legible where the sky is mid-blue. */
+  background: none;
+  color: #14232b;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.75), 0 0 2px rgba(255, 255, 255, 0.6);
   font-size: 2.4rem;
   font-weight: 500;
   line-height: 1.1;
@@ -39,7 +38,7 @@ main.main {
   flex: none;
   width: auto;
   height: 132px;
-  margin-bottom: var(--stripe);
+  filter: drop-shadow(0 2px 6px rgba(0, 30, 60, 0.25));
 }
 
 /* centred a little below the middle: level with the bunny's face, not its ears */
@@ -60,7 +59,7 @@ main.main {
   font-style: italic;
   letter-spacing: 0.06em;
   white-space: nowrap;
-  color: #4f646c;
+  color: #2f444c;
 }
 
 /* the one sentence under the logo */
@@ -212,8 +211,7 @@ main.main {
   .logo {
     --stripe: 3px;
     gap: 10px;
-    padding: 6px 16px 0 12px;
-    border-radius: 14px;
+    padding: 6px 0 0;
     font-size: min(1.45rem, 5.9vw);
   }
 

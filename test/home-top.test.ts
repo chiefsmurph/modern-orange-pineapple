@@ -108,14 +108,14 @@ test("the bunny comes in two sizes of the same art (1x to 3x screens), and `size
   assert.equal(Number(phoneW), Math.ceil((phoneH * 120) / 216));
 });
 
-test("the logo card: white like the emails' header, dark Orbitron, the orange stripe; on phones it shrinks to clear the bag button", () => {
+test("the logo sits on the sky with no card (John 10/17): dark Orbitron with a soft light halo; on phones it shrinks to clear the bag button", () => {
   const logo = /\.logo \{[^}]*\}/.exec(css)?.[0] ?? "";
-  assert.match(logo, /rgba\(255, 255, 255, 0\.9\)/);
-  assert.match(logo, /linear-gradient\(90deg, #ee7a30, #fa9215\)/); // the emails' stripe colours
-  assert.match(logo, /color: #222;/);
+  assert.match(logo, /background: none;/);
+  assert.doesNotMatch(logo, /border-radius|box-shadow/); // no card
+  assert.match(logo, /color: #14232b;/);
+  assert.match(logo, /text-shadow: 0 0 10px rgba\(255, 255, 255, 0\.75\)/); // legible on mid-blue sky
   assert.match(logo, /font-weight: 500;/); // the one Orbitron weight we load, as in the email logo
   const phone = css.slice(css.indexOf("@media (max-width: 768px)"));
-  // 390px phone: a 249px card, centred, ends at 320px; the bag button starts at 336px
   assert.match(phone, /\.logo \{[^}]*font-size: min\(1\.45rem, 5\.9vw\);/);
   assert.match(phone, /\.bunny \{[^}]*height: min\(76px, 19\.5vw\);/);
 });
@@ -127,4 +127,9 @@ test('"Tees from $29" is true: the cheapest tee on sale costs exactly $29 (John 
   assert.ok(prices.every(Number.isFinite), "every tee variant has a price");
   assert.equal(Math.min(...prices), 29);
   assert.ok(BENEFITS.includes("Tees from $29"));
+});
+
+test("no scroll bounce: the page root has overscroll-behavior none (John 10/17)", () => {
+  const g = readFileSync(path.join(ROOT, "app/globals.css"), "utf8");
+  assert.match(/\nhtml \{[^}]*\}/.exec(g)?.[0] ?? "", /overscroll-behavior: none;/);
 });

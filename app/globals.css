@@ -16,6 +16,8 @@ body {
   height: 100%;
 }
 html {
+  /* no rubber-band overscroll (John 10/17): the fixed sky backdrop made the bounce look loose */
+  overscroll-behavior: none;
   background-color: var(--page-bg);
 }
 body {
