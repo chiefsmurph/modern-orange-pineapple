@@ -3302,11 +3302,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Blue Jean"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.ff8eb8bb.webp",
-          "/images/catalog/alpaca-tee/large-blue-jean-model-womens.b49ac8b0.webp",
-          "/images/catalog/alpaca-tee/large-blue-jean-flat.d481bb69.webp"
+          "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.e6849323.webp",
+          "/images/catalog/alpaca-tee/large-blue-jean-model-womens.5711900f.webp",
+          "/images/catalog/alpaca-tee/large-blue-jean-flat.d95012e4.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.ff8eb8bb-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.e6849323-checkout.jpg"
       },
       {
         "when": {
@@ -3314,11 +3314,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Ivory"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-ivory-model-mens-2.38a3e9a9.webp",
-          "/images/catalog/alpaca-tee/large-ivory-model-womens.ad430d89.webp",
-          "/images/catalog/alpaca-tee/large-ivory-flat.4a711a16.webp"
+          "/images/catalog/alpaca-tee/large-ivory-model-mens-2.f9e440db.webp",
+          "/images/catalog/alpaca-tee/large-ivory-model-womens.fa8f9067.webp",
+          "/images/catalog/alpaca-tee/large-ivory-flat.1a92586d.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-ivory-model-mens-2.38a3e9a9-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-ivory-model-mens-2.f9e440db-checkout.jpg"
       },
       {
         "when": {
@@ -3326,11 +3326,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Grey"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-grey-model-mens-2.b6b37773.webp",
-          "/images/catalog/alpaca-tee/large-grey-model-womens.e055b974.webp",
-          "/images/catalog/alpaca-tee/large-grey-flat.3d0ab398.webp"
+          "/images/catalog/alpaca-tee/large-grey-model-mens-2.e6c050bc.webp",
+          "/images/catalog/alpaca-tee/large-grey-model-womens.8d981fdf.webp",
+          "/images/catalog/alpaca-tee/large-grey-flat.7bffd553.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-grey-model-mens-2.b6b37773-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-grey-model-mens-2.e6c050bc-checkout.jpg"
       },
       {
         "when": {
@@ -3338,11 +3338,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Bay"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-bay-model-mens-2.4fd5571b.webp",
-          "/images/catalog/alpaca-tee/large-bay-model-womens.1d733451.webp",
-          "/images/catalog/alpaca-tee/large-bay-flat.e642b3c4.webp"
+          "/images/catalog/alpaca-tee/large-bay-model-mens-2.2d810430.webp",
+          "/images/catalog/alpaca-tee/large-bay-model-womens.b17b3c1c.webp",
+          "/images/catalog/alpaca-tee/large-bay-flat.ddfbe9b0.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-bay-model-mens-2.4fd5571b-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-bay-model-mens-2.2d810430-checkout.jpg"
       },
       {
         "when": {
@@ -3350,11 +3350,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Blue Jean"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-blue-jean-model-mens-2.358e7ed9.webp",
-          "/images/catalog/alpaca-tee/small-blue-jean-model-womens.4535499e.webp",
-          "/images/catalog/alpaca-tee/small-blue-jean-flat.35f02640.webp"
+          "/images/catalog/alpaca-tee/small-blue-jean-model-mens-2.58406627.webp",
+          "/images/catalog/alpaca-tee/small-blue-jean-model-womens.c002fa3e.webp",
+          "/images/catalog/alpaca-tee/small-blue-jean-flat.93f6c00d.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-blue-jean-model-mens-2.358e7ed9-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-blue-jean-model-mens-2.58406627-checkout.jpg"
       },
       {
         "when": {
@@ -3362,11 +3362,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Ivory"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-ivory-model-mens-2.d464c136.webp",
-          "/images/catalog/alpaca-tee/small-ivory-model-womens.3f8e986a.webp",
-          "/images/catalog/alpaca-tee/small-ivory-flat.27aab20e.webp"
+          "/images/catalog/alpaca-tee/small-ivory-model-mens-2.a644dd39.webp",
+          "/images/catalog/alpaca-tee/small-ivory-model-womens.aec2183b.webp",
+          "/images/catalog/alpaca-tee/small-ivory-flat.195c708e.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-ivory-model-mens-2.d464c136-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-ivory-model-mens-2.a644dd39-checkout.jpg"
       },
       {
         "when": {
@@ -3374,11 +3374,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Grey"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-grey-model-mens-2.c02bfac6.webp",
-          "/images/catalog/alpaca-tee/small-grey-model-womens.d83cfe81.webp",
-          "/images/catalog/alpaca-tee/small-grey-flat.e4609eff.webp"
+          "/images/catalog/alpaca-tee/small-grey-model-mens-2.2453f022.webp",
+          "/images/catalog/alpaca-tee/small-grey-model-womens.9e92ba68.webp",
+          "/images/catalog/alpaca-tee/small-grey-flat.56413f17.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-grey-model-mens-2.c02bfac6-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-grey-model-mens-2.2453f022-checkout.jpg"
       },
       {
         "when": {
@@ -3386,11 +3386,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Bay"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-bay-model-mens-2.61516c56.webp",
-          "/images/catalog/alpaca-tee/small-bay-model-womens.4b8e2157.webp",
-          "/images/catalog/alpaca-tee/small-bay-flat.dd75231f.webp"
+          "/images/catalog/alpaca-tee/small-bay-model-mens-2.d7a239db.webp",
+          "/images/catalog/alpaca-tee/small-bay-model-womens.d5f35181.webp",
+          "/images/catalog/alpaca-tee/small-bay-flat.3af522f9.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-bay-model-mens-2.61516c56-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-bay-model-mens-2.d7a239db-checkout.jpg"
       },
       {
         "when": {
@@ -3398,11 +3398,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-black-model-mens-2.ce25e806.webp",
-          "/images/catalog/alpaca-tee/large-black-model-womens.e33d8278.webp",
-          "/images/catalog/alpaca-tee/large-black-flat.34af317a.webp"
+          "/images/catalog/alpaca-tee/large-black-model-mens-2.e32886ca.webp",
+          "/images/catalog/alpaca-tee/large-black-model-womens.49e0d4df.webp",
+          "/images/catalog/alpaca-tee/large-black-flat.e3e153de.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-black-model-mens-2.ce25e806-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-black-model-mens-2.e32886ca-checkout.jpg"
       },
       {
         "when": {
@@ -3410,11 +3410,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Pepper"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-pepper-model-mens-2.73af6bad.webp",
-          "/images/catalog/alpaca-tee/large-pepper-model-womens.3ffc4102.webp",
-          "/images/catalog/alpaca-tee/large-pepper-flat.a41651e6.webp"
+          "/images/catalog/alpaca-tee/large-pepper-model-mens-2.d49a42db.webp",
+          "/images/catalog/alpaca-tee/large-pepper-model-womens.2e0e05d0.webp",
+          "/images/catalog/alpaca-tee/large-pepper-flat.ede5378f.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-pepper-model-mens-2.73af6bad-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-pepper-model-mens-2.d49a42db-checkout.jpg"
       },
       {
         "when": {
@@ -3422,11 +3422,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "True Navy"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-true-navy-model-mens-2.3a0aaa8a.webp",
-          "/images/catalog/alpaca-tee/large-true-navy-model-womens.ecab3ab5.webp",
-          "/images/catalog/alpaca-tee/large-true-navy-flat.ea3ba7a5.webp"
+          "/images/catalog/alpaca-tee/large-true-navy-model-mens-2.11b8c24e.webp",
+          "/images/catalog/alpaca-tee/large-true-navy-model-womens.b31336e1.webp",
+          "/images/catalog/alpaca-tee/large-true-navy-flat.0febacc1.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-true-navy-model-mens-2.3a0aaa8a-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-true-navy-model-mens-2.11b8c24e-checkout.jpg"
       },
       {
         "when": {
@@ -3434,11 +3434,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-black-model-mens-2.4ff9b370.webp",
-          "/images/catalog/alpaca-tee/small-black-model-womens.e232202c.webp",
-          "/images/catalog/alpaca-tee/small-black-flat.47cadd80.webp"
+          "/images/catalog/alpaca-tee/small-black-model-mens-2.6496c263.webp",
+          "/images/catalog/alpaca-tee/small-black-model-womens.f2e67d8b.webp",
+          "/images/catalog/alpaca-tee/small-black-flat.28d51762.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-black-model-mens-2.4ff9b370-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-black-model-mens-2.6496c263-checkout.jpg"
       },
       {
         "when": {
@@ -3446,11 +3446,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Pepper"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-pepper-model-mens-2.ada9725c.webp",
-          "/images/catalog/alpaca-tee/small-pepper-model-womens.36ed6d2d.webp",
-          "/images/catalog/alpaca-tee/small-pepper-flat.a664771a.webp"
+          "/images/catalog/alpaca-tee/small-pepper-model-mens-2.98a6e2a7.webp",
+          "/images/catalog/alpaca-tee/small-pepper-model-womens.f1421e58.webp",
+          "/images/catalog/alpaca-tee/small-pepper-flat.c1be3da4.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-pepper-model-mens-2.ada9725c-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-pepper-model-mens-2.98a6e2a7-checkout.jpg"
       },
       {
         "when": {
@@ -3458,14 +3458,14 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "True Navy"
         },
         "images": [
-          "/images/catalog/alpaca-tee/small-true-navy-model-mens-2.3d8efebe.webp",
-          "/images/catalog/alpaca-tee/small-true-navy-model-womens.8cc7ff52.webp",
-          "/images/catalog/alpaca-tee/small-true-navy-flat.4ae8b9f6.webp"
+          "/images/catalog/alpaca-tee/small-true-navy-model-mens-2.0a9a16a4.webp",
+          "/images/catalog/alpaca-tee/small-true-navy-model-womens.201833c8.webp",
+          "/images/catalog/alpaca-tee/small-true-navy-flat.aada4432.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/small-true-navy-model-mens-2.3d8efebe-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/small-true-navy-model-mens-2.0a9a16a4-checkout.jpg"
       }
     ],
-    "card": "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.ff8eb8bb-card.webp",
+    "card": "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.e6849323-card.webp",
     "credits": [
       {
         "lines": [
