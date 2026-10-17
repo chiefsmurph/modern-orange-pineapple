@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import HomeLink from "@/components/HomeLink";
 import Image from "next/image";
 import Link from "next/link";
-import type { ShopProduct } from "@/lib/catalog";
+import type { PageProduct } from "@/lib/product-page";
 import type { Selection } from "@/lib/catalog/types";
 import {
   creditLinesFor,
@@ -43,12 +43,14 @@ import own from "./CatalogProductView.module.css";
 // style, colour) plus size. Photos follow the version/style/colour, the price
 // follows the variant, and the artist credit shows only for the selections it
 // applies to (e.g. "Beanie by Janette Garcia" on the Grind Beanie style).
+// The older hand-written products use it too (lib/product-page.ts), with
+// "Buy now" only.
 export default function CatalogProductView({
   product,
   initialSelection,
   reviews,
 }: {
-  product: ShopProduct;
+  product: PageProduct;
   initialSelection: Selection;
   reviews?: { average: number; count: number; reviews: PublicReview[] } | null;
 }) {

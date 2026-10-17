@@ -2,9 +2,11 @@
 // The product page's buy buttons: "Add to bag" (primary) and "Buy now" (this
 // one item straight to Stripe, as before). Adding opens a small sheet:
 // "Added to bag: Pelican Tee · Big · Lagoon Blue · M" with Checkout / Keep shopping.
+// A product that can't go in the bag (buyNowOnly, lib/product-page.ts) gets one
+// "Buy now" button in the primary style instead.
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { ShopProduct } from "@/lib/catalog";
+import type { PageProduct } from "@/lib/product-page";
 import { addLine, bagCount, bagId, readBag, variantSummary, writeBag } from "@/lib/bag";
 import { startBagCheckout } from "@/lib/bag-checkout-client";
 import { imageSetFor, imagesFor } from "@/lib/catalog/select";
@@ -20,7 +22,7 @@ export default function AddToBag({
   variant,
   chooseLabel,
 }: {
-  product: ShopProduct;
+  product: PageProduct;
   sel: Record<string, string | undefined>;
   /** The complete pick, or undefined until every option is chosen. */
   variant: Variant | undefined;
@@ -87,12 +89,20 @@ export default function AddToBag({
   return (
     <>
       <div className={bag.buttons}>
-        <button type="button" className={bag.add} onClick={add} disabled={!variant || busy !== null}>
-          {variant ? "Add to bag" : chooseLabel}
-        </button>
-        <button type="button" className={bag.buyNow} onClick={buyNow} disabled={!variant || busy !== null}>
-          {busy === "buy" ? "Opening…" : "Buy now"}
-        </button>
+        {product.buyNowOnly ? (
+          <button type="button" className={bag.add} onClick={buyNow} disabled={!variant || busy !== null}>
+            {!variant ? chooseLabel : busy === "buy" ? "Opening…" : "Buy now"}
+          </button>
+        ) : (
+          <>
+            <button type="button" className={bag.add} onClick={add} disabled={!variant || busy !== null}>
+              {variant ? "Add to bag" : chooseLabel}
+            </button>
+            <button type="button" className={bag.buyNow} onClick={buyNow} disabled={!variant || busy !== null}>
+              {busy === "buy" ? "Opening…" : "Buy now"}
+            </button>
+          </>
+        )}
       </div>
       {error && !added && (
         <p role="alert" className={bag.error}>
