@@ -582,7 +582,7 @@ test("the Yoycol check emails a shipped order once (signed GET of /orders/{id}/t
   assert.match(send.body.text, /^Hi Riley,/);
   assert.match(send.body.text, /- Blue Sky Cotton Shorts \(L\)/);
   assert.match(send.body.text, /Carrier: USPS · Standard Shipping/);
-  assert.match(send.body.html, /src="https:\/\/mopclothing\.com\/images\/blue-sky-cotton-shorts\/worn-front\.webp"/);
+  assert.match(send.body.html, /src="https:\/\/mopclothing\.com\/images\/blue-sky-cotton-shorts\/worn-front-shorts-crop-v2\.webp"/);
 
   // Next run: already emailed, so Yoycol isn't even asked.
   const again = await checkYoycolTracking({ ...d, ledger: createShipmentLedger(dir), state: yoycolState() });
