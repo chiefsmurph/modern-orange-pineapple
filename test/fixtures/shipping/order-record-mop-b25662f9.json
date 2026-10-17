@@ -1,0 +1,28 @@
+{
+  "type": "order",
+  "at": "2026-10-13T18:26:40.000Z",
+  "session_id": "cs_live_fixture_first_order_not_a_real_session_id",
+  "order_ref": "mop-b25662f98fbdbf6d77984351dfca",
+  "created": "2026-10-13T18:26:30.000Z",
+  "livemode": true,
+  "payment_status": "paid",
+  "payment_intent": "pi_fixture_first_order",
+  "currency": "usd",
+  "amount_total": 10200,
+  "amount_subtotal": 10200,
+  "amount_shipping": 0,
+  "amount_discount": 0,
+  "amount_tax": 0,
+  "customer": {
+    "name": "Jordan Sample",
+    "email": "jordan.sample@example.com",
+    "phone": "+15555550199",
+    "address": { "line1": "100 Example Ave", "city": "Exampleton", "state": "CA", "postal_code": "90000", "country": "US" }
+  },
+  "items": [
+    { "slug": "pelican-tee", "title": "Pelican Tee", "supplier": "printful", "qty": 1, "opts": { "version": "large", "style": "beanie", "color": "Ivory", "size": "M" }, "unitAmount": 2900, "printful": { "syncVariantId": 5567829078 } },
+    { "slug": "alpaca-tee", "title": "Alpaca Tee", "supplier": "printful", "qty": 1, "opts": { "version": "large", "color": "Blue Jean", "size": "L" }, "unitAmount": 2900, "printful": { "syncVariantId": 5567829232 } },
+    { "slug": "day-all-over", "title": "Day · Pelican All-Over", "supplier": "printful", "qty": 1, "opts": { "style": "beanie", "size": "M" }, "unitAmount": 4400, "printful": { "syncVariantId": 5568376190 } }
+  ],
+  "items_source": "metadata"
+}

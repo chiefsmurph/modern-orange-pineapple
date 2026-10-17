@@ -1,0 +1,20 @@
+{
+  "code": "100000",
+  "msg": "success",
+  "data": {
+    "orderNo": "YC2610170001",
+    "lpCode": "YUNEXPRESS",
+    "lpName": "YunExpress",
+    "waybillCode": "YT2629012345678901",
+    "deliveryStatus": 2,
+    "carrier": "USPS",
+    "deliveryLevel": "Standard Shipping",
+    "tailTrackCode": "9400111899223817364905",
+    "routerDetail": "",
+    "tailRouterDetail": "",
+    "headTrackingEvents": [
+      { "occurDate": 1760920000000, "location": "Shenzhen, CN", "description": "Shipment picked up" }
+    ],
+    "tailTrackingEvents": []
+  }
+}

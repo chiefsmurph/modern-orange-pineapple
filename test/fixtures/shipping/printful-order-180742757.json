@@ -1,0 +1,80 @@
+{
+  "code": 200,
+  "result": {
+    "id": 180742757,
+    "external_id": "mop-b25662f98fbdbf6d77984351dfca",
+    "store": 18891329,
+    "status": "fulfilled",
+    "shipping": "STANDARD",
+    "shipping_service_name": "Flat Rate (Estimated delivery: Oct 20–Oct 24)",
+    "created": 1791915990,
+    "updated": 1792180000,
+    "recipient": {
+      "name": "Printful Recipient",
+      "company": null,
+      "address1": "100 Example Ave",
+      "address2": null,
+      "city": "Exampleton",
+      "state_code": "CA",
+      "state_name": "California",
+      "country_code": "US",
+      "country_name": "United States",
+      "zip": "90000",
+      "phone": "+15555550100",
+      "email": "recipient-on-printful@example.com"
+    },
+    "items": [
+      {
+        "id": 111000001,
+        "external_id": "li-1",
+        "variant_id": 16523,
+        "sync_variant_id": 5567829078,
+        "quantity": 1,
+        "price": "13.50",
+        "retail_price": "29.00",
+        "name": "Pelican Tee (Big · Grind Beanie · Ivory · M)",
+        "product": { "variant_id": 16523, "product_id": 586, "image": "https://files.cdn.printful.com/products/586/16523_1.jpg", "name": "Comfort Colors 1717 (Ivory / M)" }
+      },
+      {
+        "id": 111000002,
+        "external_id": "li-2",
+        "variant_id": 17680,
+        "sync_variant_id": 5567829232,
+        "quantity": 1,
+        "price": "13.50",
+        "retail_price": "29.00",
+        "name": "Alpaca Tee (Big · Blue Jean · L)",
+        "product": { "variant_id": 17680, "product_id": 586, "image": "https://files.cdn.printful.com/products/586/17680_1.jpg", "name": "Comfort Colors 1717 (Blue Jean / L)" }
+      },
+      {
+        "id": 111000003,
+        "external_id": "li-3",
+        "variant_id": 30000,
+        "sync_variant_id": 5568376190,
+        "quantity": 1,
+        "price": "22.00",
+        "retail_price": "44.00",
+        "name": "Day · Pelican All-Over (Grind Beanie · M)",
+        "product": { "variant_id": 30000, "product_id": 1414, "image": "https://files.cdn.printful.com/products/1414/30000_1.jpg", "name": "All-Over Print Men's Crew Neck T-Shirt (M)" }
+      }
+    ],
+    "shipments": [
+      {
+        "id": 61000001,
+        "carrier": "DHL",
+        "service": "DHL GlobalMail Packet Plus",
+        "tracking_number": "GM6056178201234567",
+        "tracking_url": "https://www.dhl.com/us-en/home/tracking/tracking-ecommerce.html?submit=1&tracking-id=GM6056178201234567",
+        "created": 1792170000,
+        "ship_date": "2026-10-16",
+        "shipped_at": 1792170000,
+        "reshipment": false,
+        "items": [
+          { "item_id": 111000001, "quantity": 1, "picked": 1, "printed": 1 },
+          { "item_id": 111000002, "quantity": 1, "picked": 1, "printed": 1 },
+          { "item_id": 111000003, "quantity": 1, "picked": 1, "printed": 1 }
+        ]
+      }
+    ]
+  }
+}

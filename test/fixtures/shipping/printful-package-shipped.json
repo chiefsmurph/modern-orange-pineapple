@@ -1,0 +1,27 @@
+{
+  "type": "package_shipped",
+  "created": 1792170100,
+  "retries": 0,
+  "store": 18891329,
+  "data": {
+    "shipment": {
+      "id": 61000001,
+      "carrier": "FORGED",
+      "service": "Forged Service",
+      "tracking_number": "FORGED000000000",
+      "tracking_url": "https://evil.example/track",
+      "created": 1792170000,
+      "ship_date": "2026-10-16",
+      "shipped_at": 1792170000,
+      "reshipment": false,
+      "items": [{ "item_id": 111000001, "quantity": 1 }]
+    },
+    "order": {
+      "id": 180742757,
+      "external_id": "mop-ffffffffffffffffffffffffffff",
+      "recipient": { "name": "Forged Person", "email": "forged@evil.example" },
+      "items": [],
+      "shipments": []
+    }
+  }
+}

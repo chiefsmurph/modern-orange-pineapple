@@ -1,0 +1,18 @@
+{
+  "code": "100000",
+  "msg": "success",
+  "data": {
+    "orderNo": "YC2610170001",
+    "lpCode": "",
+    "lpName": "",
+    "waybillCode": "",
+    "deliveryStatus": 0,
+    "carrier": "",
+    "deliveryLevel": "vSt5rbZe",
+    "tailTrackCode": "",
+    "routerDetail": "",
+    "tailRouterDetail": "",
+    "headTrackingEvents": [],
+    "tailTrackingEvents": []
+  }
+}

@@ -111,6 +111,8 @@ What happens on a paid checkout (`app/api/stripe-webhook/route.ts`, `lib/orders/
 5. John gets an email (through PingPigeon on this box) with what sold, the supplier order
    and what to do: confirm the Printful draft / pay the Yoycol order / place it by hand.
    Any supplier failure makes the subject start with `ACTION NEEDED`.
+6. When a package ships, the customer gets a "your order has shipped" email with tracking
+   (Printful webhook, Yoycol cron; see "Shipped emails to customers" below).
 
 ### Environment (`/srv/mopclothing/.env`, mode 600)
 
@@ -137,6 +139,123 @@ Already there: `STRIPE_SECRET_KEY`, `PRINTFUL_API_TOKEN`, `YOYCOL_ACCESS_KEY`, `
 curl -s -o /dev/null -w '%{http_code}\n' -X POST https://mopclothing.com/api/stripe-webhook -d '{}'
 journalctl -u mopclothing -n 50 --no-pager | grep -E '\[orders\]|\[stripe-webhook\]|\[checkout\]'
 ls -l /var/lib/mopclothing/    # orders.jsonl, orders-state.json, royalties.jsonl appear after the first order
+```
+
+### Shipped emails to customers (Printful webhook, Yoycol cron)
+
+When a package ships, the customer gets one branded "Your MOP order has shipped 📦" email
+(HTML + plain text) with the items in that box, the carrier, a **Track your package** button
+and the tracking number. Sent through **Resend** (PingPigeon can only email John). There is
+no order-confirmation email: Stripe's receipt covers that.
+
+- **Printful** (`app/api/printful-webhook/[token]/route.ts`, `lib/orders/printful-shipped.ts`):
+  Printful sends `package_shipped` to `https://mopclothing.com/api/printful-webhook/<PRINTFUL_WEBHOOK_TOKEN>`.
+  A wrong token gets a 404; every other event type gets a 200 and is ignored. v1 webhooks
+  aren't signed, so only the payload's order id is read: the order is re-fetched with
+  `GET https://api.printful.com/orders/{id}` (`PRINTFUL_API_TOKEN`, `PRINTFUL_STORE_ID`) and
+  the shipments, tracking, items and recipient come from that.
+- **Who gets it**: the Printful order's `external_id` is our order ref. An exact match in
+  `orders.jsonl` gives the email typed at checkout; otherwise (an order re-placed by hand as
+  `mop-…r1`) the recipient on the Printful order. Never any other address. Orders without a
+  `mop-` external_id (samples, dashboard orders) get no email.
+- **One email per box**: a partial shipment lists only what's in it ("Part of your MOP order
+  has shipped", then "The rest of…"); a reshipment says "Your MOP replacement has shipped".
+  The webhook skips boxes that shipped over 30 days ago (use the backfill script below for those).
+- **Yoycol** (the shorts): no webhooks, so `scripts/yoycol-tracking.mjs` runs from cron. It reads
+  Yoycol orders from `orders-state.json` (read only), asks
+  `GET /api/2025/open/v4/orders/{orderId}/tracking` (signed like order creation) and emails the
+  customer once there's a number (the last-mile `tailTrackCode` if any, else `waybillCode`).
+  Those fields come from Yoycol's API spec and haven't been seen on a real shipped order yet:
+  check the first one with `--order <ref> --verbose --dry-run`.
+- **Exactly once**: `$MOP_DATA_DIR/shipments-emailed.jsonl` gets a `sending` line before the
+  send and an `emailed` line once Resend accepts it (key `<supplier>:<order id>:<shipment id or
+  tracking number>`). An emailed package is never sent again, through Printful's retries or a
+  rerun of either script. Each send also carries a Resend `Idempotency-Key`.
+- **Failures**: a failed send is logged (`[shipping]`), not marked emailed, and John gets one
+  PingPigeon email "ACTION NEEDED: shipped email failed for <ref>". The webhook answers 500 for
+  a send that could work later, so Printful retries (after 1, 4, 16, 64, 256 and 1024 minutes);
+  the Yoycol cron retries on its next run. Without `MOP_RESEND_API_KEY`, the webhook still
+  answers 200 and logs `MOP_RESEND_API_KEY is not set: shipped email NOT sent` (nothing is
+  retried later, so set the key before registering the webhook). Checkout and the Stripe
+  webhook don't use any of this.
+
+**Environment** (add to `/srv/mopclothing/.env`; already there: `PRINTFUL_API_TOKEN`,
+`PRINTFUL_STORE_ID` if used, `YOYCOL_ACCESS_KEY`, `YOYCOL_SECRET_KEY`, `PINGPIGEON_TOKEN`):
+
+| Variable | Needed | What |
+|---|---|---|
+| `MOP_RESEND_API_KEY` | yes | Resend API key with **sending access** for the `mopclothing.com` domain. Unset: shipped emails are skipped and logged. |
+| `PRINTFUL_WEBHOOK_TOKEN` | yes | The secret in the webhook URL, e.g. `openssl rand -hex 24`. Unset: the route answers 404 to everything. |
+| `MOP_EMAIL_FROM` | no | Default `MOP Clothing <orders@mopclothing.com>`. Its domain must be verified in Resend. |
+| `MOP_EMAIL_REPLY_TO` | no | Default `orders@mopclothing.com`. The email says "Just reply to this email", so this address must receive mail (e.g. Cloudflare Email Routing → John's inbox). |
+| `MOP_EMAIL_DRY_RUN` | no | `1` logs each customer email instead of sending it (and marks nothing emailed). For a first look only. |
+
+**One-time setup**
+
+1. Resend → Domains → add `mopclothing.com`, add the DNS records it shows in Cloudflare
+   (DNS only, not proxied), wait for **Verified**. Create an API key: Sending access, domain
+   `mopclothing.com`. Put it in `.env` as `MOP_RESEND_API_KEY`.
+2. Make `orders@mopclothing.com` (or whatever `MOP_EMAIL_REPLY_TO` is) deliver somewhere John reads.
+3. Add `PRINTFUL_WEBHOOK_TOKEN` to `.env`, deploy, restart.
+4. Register the webhook. **A Printful store has one webhook config, and `POST /webhooks` replaces
+   it**, so look first and keep any types already there:
+
+```sh
+# on the box, as root; reads the tokens from .env without printing them
+set -a; . /srv/mopclothing/.env; set +a
+PF=(-H "Authorization: Bearer $PRINTFUL_API_TOKEN" ${PRINTFUL_STORE_ID:+-H "X-PF-Store-Id: $PRINTFUL_STORE_ID"})
+curl -s "${PF[@]}" https://api.printful.com/webhooks; echo           # what's configured now
+curl -s "${PF[@]}" -H 'Content-Type: application/json' -X POST https://api.printful.com/webhooks \
+  -d "{\"url\":\"https://mopclothing.com/api/printful-webhook/$PRINTFUL_WEBHOOK_TOKEN\",\"types\":[\"package_shipped\"]}" \
+  | sed "s/$PRINTFUL_WEBHOOK_TOKEN/<token>/g"; echo
+```
+
+A 401/403 there means the token lacks the Webhooks permission: add it to the private token in
+Printful's developer portal. The token is in the URL, so it also shows in nginx's access log.
+
+5. The Yoycol cron (as the app user, twice a day). The box's clock decides the hours
+   (`timedatectl`); on UTC, 16:15 and 01:15 are 9:15 am and 6:15 pm Pacific (daylight time):
+
+```sh
+cat > /etc/cron.d/mopclothing-yoycol-tracking <<'EOF'
+# Yoycol tracking -> "your order has shipped" emails (scripts/yoycol-tracking.mjs, DEPLOY.md)
+15 1,16 * * * mopclothing cd /srv/mopclothing && MOP_DATA_DIR=/var/lib/mopclothing /usr/bin/flock -n /var/lib/mopclothing/yoycol-tracking.lock /usr/bin/node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=/srv/mopclothing/.env scripts/yoycol-tracking.mjs >> /var/lib/mopclothing/yoycol-tracking.log 2>&1
+EOF
+chmod 644 /etc/cron.d/mopclothing-yoycol-tracking
+```
+
+Both scripts import the site's TypeScript (`lib/orders`), so they need Node >= 22.18
+(`/usr/bin/node --version`; use the same `node` as `mopclothing.service`).
+
+**Backfill: orders that shipped before the webhook** (or whose email failed).
+`scripts/send-shipped-email.mjs` runs the webhook's path for one Printful order: re-fetch,
+the same recipient rule, the same email, the same ledger. Any shipment already in
+`shipments-emailed.jsonl` is refused, so running it twice sends nothing new. No 30-day limit.
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --env-file=/srv/mopclothing/.env \
+  /srv/mopclothing/scripts/send-shipped-email.mjs --printful-order 180742757 --dry-run   # prints the email(s)
+# then the same without --dry-run. It prints "Customer from: our order record" for an exact ref match.
+```
+
+First use: Printful order **180742757** (the site's first order, 3 items, shipped 10/16 by DHL
+GlobalMail; external_id `mop-b25662f98fbdbf6d77984351dfca`, an exact match in `orders.jsonl`).
+
+**Checks after a deploy**
+
+```sh
+curl -s -o /dev/null -w '%{http_code}\n' -X POST https://mopclothing.com/api/printful-webhook/wrong -d '{}'   # 404 (a 403 = Cloudflare blocking POSTs)
+curl -s -o /dev/null -w '%{http_code}\n' https://mopclothing.com/images/email/mop-logo.png                    # 200 (the email's logo)
+# on the box, the real token and a harmless event: expect {"received":true,"ignored":"ping"}
+set -a; . /srv/mopclothing/.env; set +a
+curl -s -X POST "https://mopclothing.com/api/printful-webhook/$PRINTFUL_WEBHOOK_TOKEN" -H 'Content-Type: application/json' -d '{"type":"ping"}'; echo
+# the email for a real shipped order, not sent:
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --env-file=/srv/mopclothing/.env \
+  /srv/mopclothing/scripts/send-shipped-email.mjs --printful-order 180742757 --dry-run
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --env-file=/srv/mopclothing/.env \
+  /srv/mopclothing/scripts/yoycol-tracking.mjs --dry-run --verbose
+journalctl -u mopclothing -n 100 --no-pager | grep '\[shipping\]'
+tail -n 5 /var/lib/mopclothing/shipments-emailed.jsonl /var/lib/mopclothing/yoycol-tracking.log
 ```
 
 ### Monthly royalty email (timer installed 10/2026; first run Sun 11/1 09:00 PT)
