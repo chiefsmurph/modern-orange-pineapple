@@ -4,7 +4,6 @@ import { homeCards } from "@/lib/shop-cards";
 import { BENEFITS, HERO_LINE } from "@/lib/home-copy";
 
 import styles from "./HomeGrid.module.css";
-import "./styles.css";
 import ProductCard from "@/components/ProductCard";
 import OutInTheWild from "@/components/OutInTheWild";
 import WildStrip from "@/components/WildStrip";
@@ -15,10 +14,10 @@ import MopCrew from "@/components/MopCrew";
 import { wildPhotos, type WildPhoto } from "@/lib/wild.generated";
 import { mixWild } from "@/lib/wild";
 import InViewVideo from "@/components/InViewVideo";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { takeHomeRestore } from "@/lib/home-scroll";
 
-// Products first: a compact hero (the title, one line under it, the slogan and
+// Products first: a compact hero (the logo, one line under it, the slogan and
 // the benefits row), the "Out in the wild" strip, then the grid, then the links
 // and the brand story. Everything is server-rendered visible — no
 // scroll lock, no typewriter, no staggered reveal; the only motion is a short
@@ -26,7 +25,6 @@ import { takeHomeRestore } from "@/lib/home-scroll";
 export default function HomePage() {
   const [isCouponHovered, setIsCouponHovered] = useState(false);
   const [isHoveredBtn2, setIsHoveredBtn2] = useState(false);
-  const glowRef = useRef<HTMLHeadingElement>(null);
 
   // "Out in the wild": one mix per visit, after hydration (the HTML stays the
   // same for everyone, so the page can stay static and cached; the strip and
@@ -63,26 +61,28 @@ export default function HomePage() {
     };
   }, []);
 
-  // The title's glow animates text-shadow, which repaints every frame; pause it
-  // while the title is scrolled out of view so it can't compete with scrolling.
-  useEffect(() => {
-    const el = glowRef.current;
-    if (!el || !("IntersectionObserver" in window)) return;
-    const io = new IntersectionObserver(([entry]) =>
-      el.classList.toggle("glow-paused", !entry.isIntersecting)
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
     <main className={styles.main}>
       <header className={`${styles.header} ${styles.fadeIn}`}>
-        <h1 ref={glowRef} className={`glitch ${styles.title}`}>
-          mopclothing.com
-          {/* a span, not <hr>: an <hr> can't sit inside an <h1> */}
-          <span className={styles.rule} aria-hidden="true" />
-          <i className={styles.subtitle}>Modern Orange Pineapple</i>
+        {/* The logo (John 10/17), as in the emails: the bunny above the wordmark on a
+            white card, standing on an orange stripe. The wordmark is live Orbitron text (crisp
+            at any size). The image's alt names the brand, so the same words beside it
+            are hidden from screen readers: the heading reads "MOP Clothing Modern
+            Orange Pineapple" once. Two sizes of the bunny cover 1x to 3x screens. */}
+        <h1 className={styles.logo}>
+          <img
+            className={styles.bunny}
+            src="/images/brand/mop-bunny-120.webp"
+            srcSet="/images/brand/mop-bunny-120.webp 120w, /images/brand/mop-bunny-240.webp 240w"
+            sizes="(max-width: 768px) 36px, 67px"
+            width={120}
+            height={216}
+            alt="MOP Clothing"
+          />
+          <span className={styles.wordmark}>
+            <span className={styles.name} aria-hidden="true">MOP Clothing</span>
+            <span className={styles.subtitle}>Modern Orange Pineapple</span>
+          </span>
         </h1>
         <p className={styles.heroLine}>{HERO_LINE}</p>
         <p className={styles.tagline}>
