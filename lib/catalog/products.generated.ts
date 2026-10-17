@@ -2012,11 +2012,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Lagoon Blue"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-lagoon-blue-model.979baa5f.webp",
-          "/images/catalog/pelican-tee/large-classic-lagoon-blue-model-womens-2.bf16410d.webp",
-          "/images/catalog/pelican-tee/large-classic-lagoon-blue-flat.f7cfa81f.webp"
+          "/images/catalog/pelican-tee/large-classic-lagoon-blue-model.f6fdfaca.webp",
+          "/images/catalog/pelican-tee/large-classic-lagoon-blue-model-womens-2.9e791ce8.webp",
+          "/images/catalog/pelican-tee/large-classic-lagoon-blue-flat.17e35e63.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-lagoon-blue-model.979baa5f-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-lagoon-blue-model.f6fdfaca-checkout.jpg"
       },
       {
         "when": {
@@ -2025,11 +2025,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Ivory"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-ivory-model.e0c53b15.webp",
-          "/images/catalog/pelican-tee/large-classic-ivory-model-womens-2.36e4ccf6.webp",
-          "/images/catalog/pelican-tee/large-classic-ivory-flat.5b08fb30.webp"
+          "/images/catalog/pelican-tee/large-classic-ivory-model.334e1ab9.webp",
+          "/images/catalog/pelican-tee/large-classic-ivory-model-womens-2.5202209d.webp",
+          "/images/catalog/pelican-tee/large-classic-ivory-flat.e497cffa.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-ivory-model.e0c53b15-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-ivory-model.334e1ab9-checkout.jpg"
       },
       {
         "when": {
@@ -2038,11 +2038,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Butter"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-butter-model.9c55d335.webp",
-          "/images/catalog/pelican-tee/large-classic-butter-model-womens-2.62612580.webp",
-          "/images/catalog/pelican-tee/large-classic-butter-flat.53ddf792.webp"
+          "/images/catalog/pelican-tee/large-classic-butter-model.9fc50c32.webp",
+          "/images/catalog/pelican-tee/large-classic-butter-model-womens-2.062a0f2c.webp",
+          "/images/catalog/pelican-tee/large-classic-butter-flat.3ae243ac.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-butter-model.9c55d335-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-butter-model.9fc50c32-checkout.jpg"
       },
       {
         "when": {
@@ -2051,11 +2051,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Washed Denim"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-washed-denim-model.9ac99c57.webp",
-          "/images/catalog/pelican-tee/large-classic-washed-denim-model-womens-2.7451e509.webp",
-          "/images/catalog/pelican-tee/large-classic-washed-denim-flat.8ba3d3d6.webp"
+          "/images/catalog/pelican-tee/large-classic-washed-denim-model.05d08230.webp",
+          "/images/catalog/pelican-tee/large-classic-washed-denim-model-womens-2.f4f282ef.webp",
+          "/images/catalog/pelican-tee/large-classic-washed-denim-flat.7837b5dc.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-washed-denim-model.9ac99c57-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-washed-denim-model.05d08230-checkout.jpg"
       },
       {
         "when": {
@@ -2064,11 +2064,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Lagoon Blue"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-lagoon-blue-model.6cc033cb.webp",
-          "/images/catalog/pelican-tee/large-beanie-lagoon-blue-model-womens-2.751333ab.webp",
-          "/images/catalog/pelican-tee/large-beanie-lagoon-blue-flat.78795b9e.webp"
+          "/images/catalog/pelican-tee/large-beanie-lagoon-blue-model.1c13a909.webp",
+          "/images/catalog/pelican-tee/large-beanie-lagoon-blue-model-womens-2.790b9022.webp",
+          "/images/catalog/pelican-tee/large-beanie-lagoon-blue-flat.93367747.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-lagoon-blue-model.6cc033cb-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-lagoon-blue-model.1c13a909-checkout.jpg"
       },
       {
         "when": {
@@ -2077,11 +2077,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Ivory"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-ivory-model.bddfb868.webp",
-          "/images/catalog/pelican-tee/large-beanie-ivory-model-womens-2.53849a63.webp",
-          "/images/catalog/pelican-tee/large-beanie-ivory-flat.2d4a76d2.webp"
+          "/images/catalog/pelican-tee/large-beanie-ivory-model.9df08e4c.webp",
+          "/images/catalog/pelican-tee/large-beanie-ivory-model-womens-2.0b36b5d5.webp",
+          "/images/catalog/pelican-tee/large-beanie-ivory-flat.4a8e0141.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-ivory-model.bddfb868-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-ivory-model.9df08e4c-checkout.jpg"
       },
       {
         "when": {
@@ -2090,11 +2090,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Butter"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-butter-model.c75a6bcd.webp",
-          "/images/catalog/pelican-tee/large-beanie-butter-model-womens-2.f53d117c.webp",
-          "/images/catalog/pelican-tee/large-beanie-butter-flat.9927ab7c.webp"
+          "/images/catalog/pelican-tee/large-beanie-butter-model.354a899f.webp",
+          "/images/catalog/pelican-tee/large-beanie-butter-model-womens-2.3f2d0036.webp",
+          "/images/catalog/pelican-tee/large-beanie-butter-flat.a941d03c.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-butter-model.c75a6bcd-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-butter-model.354a899f-checkout.jpg"
       },
       {
         "when": {
@@ -2103,11 +2103,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Washed Denim"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-washed-denim-model.1cec0084.webp",
-          "/images/catalog/pelican-tee/large-beanie-washed-denim-model-womens-2.ad5aa922.webp",
-          "/images/catalog/pelican-tee/large-beanie-washed-denim-flat.56647203.webp"
+          "/images/catalog/pelican-tee/large-beanie-washed-denim-model.02948cae.webp",
+          "/images/catalog/pelican-tee/large-beanie-washed-denim-model-womens-2.dfbf05f8.webp",
+          "/images/catalog/pelican-tee/large-beanie-washed-denim-flat.cd3d2b7c.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-washed-denim-model.1cec0084-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-washed-denim-model.02948cae-checkout.jpg"
       },
       {
         "when": {
@@ -2220,11 +2220,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-black-model.e9ec60de.webp",
-          "/images/catalog/pelican-tee/large-classic-black-model-womens-2.6711bf40.webp",
-          "/images/catalog/pelican-tee/large-classic-black-flat.54b41f6f.webp"
+          "/images/catalog/pelican-tee/large-classic-black-model.25679c07.webp",
+          "/images/catalog/pelican-tee/large-classic-black-model-womens-2.2a07a659.webp",
+          "/images/catalog/pelican-tee/large-classic-black-flat.47362146.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-black-model.e9ec60de-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-black-model.25679c07-checkout.jpg"
       },
       {
         "when": {
@@ -2233,11 +2233,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Pepper"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-pepper-model.ca80e2aa.webp",
-          "/images/catalog/pelican-tee/large-classic-pepper-model-womens-2.40379fee.webp",
-          "/images/catalog/pelican-tee/large-classic-pepper-flat.c7c19774.webp"
+          "/images/catalog/pelican-tee/large-classic-pepper-model.c367570c.webp",
+          "/images/catalog/pelican-tee/large-classic-pepper-model-womens-2.262bd3cc.webp",
+          "/images/catalog/pelican-tee/large-classic-pepper-flat.0c2d6b00.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-pepper-model.ca80e2aa-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-pepper-model.c367570c-checkout.jpg"
       },
       {
         "when": {
@@ -2246,11 +2246,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "True Navy"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-classic-true-navy-model.e376f0a9.webp",
-          "/images/catalog/pelican-tee/large-classic-true-navy-model-womens-2.13096e24.webp",
-          "/images/catalog/pelican-tee/large-classic-true-navy-flat.48d4f985.webp"
+          "/images/catalog/pelican-tee/large-classic-true-navy-model.107e8128.webp",
+          "/images/catalog/pelican-tee/large-classic-true-navy-model-womens-2.5b59d0ce.webp",
+          "/images/catalog/pelican-tee/large-classic-true-navy-flat.da90b952.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-classic-true-navy-model.e376f0a9-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-classic-true-navy-model.107e8128-checkout.jpg"
       },
       {
         "when": {
@@ -2259,11 +2259,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-black-model.45928872.webp",
-          "/images/catalog/pelican-tee/large-beanie-black-model-womens-2.08b69d5d.webp",
-          "/images/catalog/pelican-tee/large-beanie-black-flat.6c8ff83e.webp"
+          "/images/catalog/pelican-tee/large-beanie-black-model.43e3b7ce.webp",
+          "/images/catalog/pelican-tee/large-beanie-black-model-womens-2.571bfe21.webp",
+          "/images/catalog/pelican-tee/large-beanie-black-flat.efa186f7.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-black-model.45928872-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-black-model.43e3b7ce-checkout.jpg"
       },
       {
         "when": {
@@ -2272,11 +2272,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Pepper"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-pepper-model.f6f063ee.webp",
-          "/images/catalog/pelican-tee/large-beanie-pepper-model-womens-2.cfaf3c98.webp",
-          "/images/catalog/pelican-tee/large-beanie-pepper-flat.a0965267.webp"
+          "/images/catalog/pelican-tee/large-beanie-pepper-model.fa13c61c.webp",
+          "/images/catalog/pelican-tee/large-beanie-pepper-model-womens-2.610071de.webp",
+          "/images/catalog/pelican-tee/large-beanie-pepper-flat.bb08aeee.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-pepper-model.f6f063ee-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-pepper-model.fa13c61c-checkout.jpg"
       },
       {
         "when": {
@@ -2285,11 +2285,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "True Navy"
         },
         "images": [
-          "/images/catalog/pelican-tee/large-beanie-true-navy-model.0bc394c0.webp",
-          "/images/catalog/pelican-tee/large-beanie-true-navy-model-womens-2.b81f867b.webp",
-          "/images/catalog/pelican-tee/large-beanie-true-navy-flat.edf7e998.webp"
+          "/images/catalog/pelican-tee/large-beanie-true-navy-model.a857b22c.webp",
+          "/images/catalog/pelican-tee/large-beanie-true-navy-model-womens-2.6212123f.webp",
+          "/images/catalog/pelican-tee/large-beanie-true-navy-flat.a0b17680.webp"
         ],
-        "checkout": "/images/catalog/pelican-tee/large-beanie-true-navy-model.0bc394c0-checkout.jpg"
+        "checkout": "/images/catalog/pelican-tee/large-beanie-true-navy-model.a857b22c-checkout.jpg"
       },
       {
         "when": {
