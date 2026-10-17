@@ -47,11 +47,8 @@ a.home:focus-visible span {
   font-size: 2rem;
 }
 
-/* Body text, not a heading: ~17px (body is 130% ≈ 21px), same font. */
 .desc {
   margin-bottom: 24px;
-  font-size: 1.0625rem;
-  line-height: 1.45;
 }
 
 .credit {
