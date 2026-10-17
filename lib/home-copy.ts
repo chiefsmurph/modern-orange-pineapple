@@ -9,7 +9,7 @@
 // the cards still flag anything that isn't cotton.
 
 /** One sentence under the logo. */
-export const HERO_LINE = "Original characters on real cotton.";
+export const HERO_LINE = "Real skies and original characters, on cotton.";
 
 /** The benefits row, shown as one line: "Tees from $29 · Free US shipping · Original art, made to order".
  *  "Tees from $29" = the cheapest tee on sale (test/home-top.test.ts checks it against the catalog; John 10/17). */

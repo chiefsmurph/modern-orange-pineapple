@@ -17,7 +17,7 @@ const page = readFileSync(path.join(ROOT, "app/page.tsx"), "utf8");
 const css = readFileSync(path.join(ROOT, "app/HomeGrid.module.css"), "utf8");
 
 test("the words: one sentence under the brand line, and the benefits row", () => {
-  assert.equal(HERO_LINE, "Original characters on real cotton.");
+  assert.equal(HERO_LINE, "Real skies and original characters, on cotton.");
   assert.equal(BENEFITS.join(" · "), "Tees from $29 · Free US shipping · Original art, made to order");
   // nothing we can't back up
   for (const t of [HERO_LINE, ...BENEFITS]) assert.doesNotMatch(t, /made in|USA|America|organic|handmade/i, t);
