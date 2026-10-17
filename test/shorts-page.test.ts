@@ -105,7 +105,7 @@ test("the shorts' copy: a MOP lead line, then the facts; no supplier blurb", () 
   assert.doesNotMatch(shorts.description, /natural fiber|many scenarios/);
   for (const fact of [/100% cotton/, /Regular fit/, /Side pocket, back pocket, elastic waist/, /245\sg\/m²/])
     assert.match(shorts.description, fact);
-  assert.equal(shorts.sizeNote, "100% cotton · regular fit, elastic waist");
+  assert.equal(shorts.sizeNote, "100% cotton · true to size, size up for a longer, below-the-knee fit");
 });
 
 test("products the shared page can't show faithfully keep the older template", () => {

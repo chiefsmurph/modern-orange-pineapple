@@ -274,7 +274,7 @@ const products: { products: Product[] } = {
       description:
         "The blue sky, on soft cotton shorts.\n\n- Fabric: 100% cotton\n- Regular fit\n- Side pocket, back pocket, elastic waist\n- Fabric weight: 245 g/m²",
       // No measurements from Yoycol yet, so no Size guide: fabric and fit only.
-      sizeNote: "100% cotton · regular fit, elastic waist",
+      sizeNote: "100% cotton · true to size, size up for a longer, below-the-knee fit",
       options: {
         size: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
       },
