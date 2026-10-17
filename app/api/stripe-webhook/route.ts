@@ -1,8 +1,9 @@
 // Stripe webhook: https://mopclothing.com/api/stripe-webhook
 // Event: checkout.session.completed (+ checkout.session.async_payment_succeeded).
 // Verifies the signature on the raw body, then records the order, creates the
-// Printful draft / Yoycol unpaid order, logs royalties and emails John
-// (lib/orders/process.ts). Idempotent per Checkout Session.
+// Printful draft / Yoycol unpaid order, logs royalties, emails John and (with
+// MOP_CONFIRMATION_EMAIL_ENABLED=1) the customer (lib/orders/process.ts).
+// Idempotent per Checkout Session.
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { verifyStripeEvent } from "@/lib/orders/stripe-verify";
@@ -49,6 +50,7 @@ export async function POST(req: NextRequest) {
     fetch: (url, init) => fetch(url, init),
     now: () => new Date(),
     log: (msg) => console.log(msg),
+    debug: (msg) => console.debug(msg),
     listLineItems,
     codes: itemCodeStore(dataDir()),
   });

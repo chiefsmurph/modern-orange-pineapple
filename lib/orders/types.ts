@@ -56,11 +56,19 @@ export type OrderRecord = {
   amount_shipping: number;
   amount_discount: number;
   amount_tax: number;
+  /**
+   * The session's discounts, as Stripe's ids (only on orders that had one). The code the
+   * customer typed ("WELCOME10") isn't in the event: the confirmation email looks it up.
+   */
+  discounts?: OrderDiscount[];
   customer: Customer;
   items: OrderItem[];
   /** Where the items came from: our session metadata, or (sessions made before this code) Stripe line items. */
   items_source: "metadata" | "line_items" | "none";
 };
+
+/** One discount on a session: its promotion code id (promo_…) and/or coupon id, and the code when Stripe sent it. */
+export type OrderDiscount = { promotion_code?: string; coupon?: string; code?: string };
 
 export type SupplierResult = {
   supplier: Supplier;

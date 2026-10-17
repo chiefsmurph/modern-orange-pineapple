@@ -2,7 +2,7 @@
 import crypto from "node:crypto";
 import { buildItem } from "./build-items.ts";
 import { itemsFromSessionMetadata } from "./metadata.ts";
-import type { Address, Customer, OrderItem, OrderRecord } from "./types.ts";
+import type { Address, Customer, OrderDiscount, OrderItem, OrderRecord } from "./types.ts";
 
 /**
  * Our order id for a session: "mop-" + 28 hex chars of sha256(session id).
@@ -29,6 +29,13 @@ export type SessionLike = {
     amount_tax?: number | null;
   } | null;
   metadata?: Record<string, string> | null;
+  /** Ids in event payloads; objects only when a retrieve expanded them. */
+  discounts?:
+    | {
+        coupon?: string | { id?: string | null } | null;
+        promotion_code?: string | { id?: string | null; code?: string | null } | null;
+      }[]
+    | null;
   customer_details?: {
     name?: string | null;
     email?: string | null;
@@ -67,6 +74,22 @@ export function customerFrom(session: SessionLike): Customer {
     phone: (cd.phone || "").trim(),
     address: { ...(ship?.address ?? cd.address ?? {}) },
   };
+}
+
+/** The session's discounts as ids (+ the code when the promotion code came expanded). */
+export function discountsFrom(session: SessionLike): OrderDiscount[] {
+  const id = (x: unknown) => (typeof x === "string" ? x : x && typeof x === "object" ? (x as { id?: unknown }).id : undefined);
+  return (Array.isArray(session.discounts) ? session.discounts : []).flatMap((d) => {
+    const promo = id(d?.promotion_code);
+    const coupon = id(d?.coupon);
+    const code = d?.promotion_code && typeof d.promotion_code === "object" ? d.promotion_code.code : undefined;
+    const out: OrderDiscount = {
+      ...(typeof promo === "string" && promo ? { promotion_code: promo } : {}),
+      ...(typeof coupon === "string" && coupon ? { coupon } : {}),
+      ...(typeof code === "string" && code.trim() ? { code: code.trim() } : {}),
+    };
+    return Object.keys(out).length ? [out] : [];
+  });
 }
 
 /**
@@ -125,6 +148,7 @@ export async function buildOrderRecord(
     }
   }
   const pi = session.payment_intent;
+  const discounts = discountsFrom(session);
   return {
     session_id: session.id,
     order_ref: orderRefFor(session.id),
@@ -138,6 +162,7 @@ export async function buildOrderRecord(
     amount_shipping: session.total_details?.amount_shipping ?? 0,
     amount_discount: session.total_details?.amount_discount ?? 0,
     amount_tax: session.total_details?.amount_tax ?? 0,
+    ...(discounts.length ? { discounts } : {}),
     customer: customerFrom(session),
     items,
     items_source: source,

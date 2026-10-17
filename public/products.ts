@@ -84,6 +84,8 @@ export type Delivery = {
   /** The same window in business days, for Stripe Checkout's delivery_estimate. */
   minBusinessDays: number;
   maxBusinessDays: number;
+  /** How long making and packing takes, before it ships (the order confirmation email's timeline). */
+  production: string;
 };
 
 // Per supplier: Yoycol makes each piece to order (~10–12 days) before ~8–15 days of shipping;
@@ -93,11 +95,13 @@ export const vendorDelivery: Record<Product["vendor"]["platform"], Delivery> = {
     text: "Made to order · arrives in about 3–4 weeks",
     minBusinessDays: 18,
     maxBusinessDays: 27,
+    production: "about 10–12 days",
   },
   printful: {
     text: "Made to order · arrives in about 1–2 weeks",
     minBusinessDays: 5,
     maxBusinessDays: 13,
+    production: "2–5 business days",
   },
 };
 

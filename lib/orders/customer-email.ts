@@ -38,16 +38,19 @@ export async function sendCustomerEmail(
     /** Resend dedupes sends with the same key for 24 hours. */
     idempotencyKey?: string;
     retryDelayMs?: number;
+    /** Log prefix (default "[shipping]"; the order confirmation uses "[confirm]"). */
+    tag?: string;
   }
 ): Promise<SendResult> {
   const { env, log } = deps;
+  const tag = deps.tag ?? "[shipping]";
   const from = env.MOP_EMAIL_FROM?.trim() || DEFAULT_FROM;
   const replyTo = env.MOP_EMAIL_REPLY_TO?.trim() || DEFAULT_REPLY_TO;
   if (!isEmail(email.to)) return { ok: false, error: "no valid customer email address", retryable: false };
 
   if (env.MOP_EMAIL_DRY_RUN === "1") {
     log(
-      `[shipping] DRY-RUN customer email (not sent)\nFrom: ${from}\nTo: ${email.to}\nReply-To: ${replyTo}\n` +
+      `${tag} DRY-RUN customer email (not sent)\nFrom: ${from}\nTo: ${email.to}\nReply-To: ${replyTo}\n` +
         `Subject: ${email.subject}\n\n${email.text}`
     );
     return { ok: true, dryRun: true };
@@ -76,7 +79,7 @@ export async function sendCustomerEmail(
 
   let r = await send();
   if (!(r.ok && r.json?.id) && isRetryable(r)) {
-    log(`[shipping] Resend ${describe(r)}; retrying once`);
+    log(`${tag} Resend ${describe(r)}; retrying once`);
     await sleep(deps.retryDelayMs ?? 2000);
     r = await send();
   }
