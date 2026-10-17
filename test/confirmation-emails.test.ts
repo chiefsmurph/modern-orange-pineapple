@@ -238,7 +238,7 @@ test("timeline: each item's own delivery estimate (Printful 1–2 weeks, Yoycol 
   assert.match(e.text, /2\. Printed & packed\n   Pelican Tee: 2–5 business days\n   Blue Sky Cotton Shorts: about 10–12 days\n3\. Shipped, with a tracking email from us\n   Your pieces are made by different print partners/);
   assert.match(e.text, /4\. At your door\n   Pelican Tee: about 1–2 weeks\n   Blue Sky Cotton Shorts: about 3–4 weeks/);
   assert.match(e.html, /Blue Sky Cotton Shorts: <span style="white-space:nowrap;">about 3–4 weeks<\/span>/); // never split on a phone
-  assert.match(e.html, /src="https:\/\/mopclothing\.com\/images\/blue-sky-cotton-shorts\/worn-front\.webp"/);
+  assert.match(e.html, /src="https:\/\/mopclothing\.com\/images\/blue-sky-cotton-shorts\/worn-front-shorts-crop-v2\.webp"/);
   assert.match(e.preheader, /your pieces may ship separately/);
 });
 
