@@ -65,6 +65,17 @@
   cursor: pointer;
 }
 
+/* Computers ≥ 1200 px: a little bigger (John, 10/16): ~288 px tiles, were ~236.
+   They load the 600 px square there (OutInTheWild.tsx), sharp at 2x. */
+@media (min-width: 1200px) {
+  .wild {
+    max-width: 880px;
+  }
+  .grid {
+    gap: 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .wild {
     margin-top: 2rem;

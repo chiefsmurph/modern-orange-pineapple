@@ -16,6 +16,8 @@ export type WildPhoto = {
   height: number;
   /** Home-grid square (500 px). */
   square: string;
+  /** The same square at 600 px (the home grid's bigger tiles on computers, at 2x). */
+  large: string;
   /** The same square at 240 px (the strip at the top of the home page). */
   small: string;
 };
@@ -33,6 +35,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/01-sq.a05e8712.webp",
+    "large": "/images/wild/01-lg.2e55fab6.webp",
     "small": "/images/wild/01-sm.250c4b0b.webp"
   },
   {
@@ -47,6 +50,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/02-sq.1287dbfc.webp",
+    "large": "/images/wild/02-lg.d8e52833.webp",
     "small": "/images/wild/02-sm.ddcbaa50.webp"
   },
   {
@@ -61,6 +65,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 800,
     "height": 1000,
     "square": "/images/wild/03-sq.58d8f59f.webp",
+    "large": "/images/wild/03-lg.66070b13.webp",
     "small": "/images/wild/03-sm.ca18ad6c.webp"
   },
   {
@@ -75,6 +80,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/04-sq.b64af959.webp",
+    "large": "/images/wild/04-lg.0ce9b2a4.webp",
     "small": "/images/wild/04-sm.1bd5d6b0.webp"
   },
   {
@@ -89,6 +95,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/05-sq.f4309eb2.webp",
+    "large": "/images/wild/05-lg.6801533a.webp",
     "small": "/images/wild/05-sm.97ac2cb9.webp"
   },
   {
@@ -103,6 +110,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 800,
     "height": 1000,
     "square": "/images/wild/06-sq.7845cc2b.webp",
+    "large": "/images/wild/06-lg.4d7a1114.webp",
     "small": "/images/wild/06-sm.02b4a21f.webp"
   },
   {
@@ -117,6 +125,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 1000,
     "height": 667,
     "square": "/images/wild/07-sq.e526d204.webp",
+    "large": "/images/wild/07-lg.e72f7f3b.webp",
     "small": "/images/wild/07-sm.db6b856d.webp"
   },
   {
@@ -131,6 +140,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 819,
     "height": 1000,
     "square": "/images/wild/08-sq.cce6a9d6.webp",
+    "large": "/images/wild/08-lg.733e0a55.webp",
     "small": "/images/wild/08-sm.e765d6ba.webp"
   },
   {
@@ -145,6 +155,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 562,
     "height": 1000,
     "square": "/images/wild/09-sq.577a01cd.webp",
+    "large": "/images/wild/09-lg.d29797f8.webp",
     "small": "/images/wild/09-sm.2f8a71a4.webp"
   },
   {
@@ -160,6 +171,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 1000,
     "height": 820,
     "square": "/images/wild/10-sq.b00ed81d.webp",
+    "large": "/images/wild/10-lg.94134c8b.webp",
     "small": "/images/wild/10-sm.23324da3.webp"
   },
   {
@@ -174,6 +186,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 800,
     "height": 1000,
     "square": "/images/wild/11-sq.e9877b87.webp",
+    "large": "/images/wild/11-lg.415157be.webp",
     "small": "/images/wild/11-sm.9656a691.webp"
   },
   {
@@ -188,6 +201,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 800,
     "height": 1000,
     "square": "/images/wild/12-sq.07c8ae46.webp",
+    "large": "/images/wild/12-lg.c4a98281.webp",
     "small": "/images/wild/12-sm.3d4d76a2.webp"
   },
   {
@@ -202,6 +216,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 800,
     "height": 1000,
     "square": "/images/wild/14-sq.47042962.webp",
+    "large": "/images/wild/14-lg.9cc3d37a.webp",
     "small": "/images/wild/14-sm.6b7d6fe2.webp"
   },
   {
@@ -216,6 +231,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/15-sq.5a4701ce.webp",
+    "large": "/images/wild/15-lg.868146fe.webp",
     "small": "/images/wild/15-sm.728c973c.webp"
   },
   {
@@ -230,6 +246,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 929,
     "height": 1000,
     "square": "/images/wild/16-sq.488408c0.webp",
+    "large": "/images/wild/16-lg.b5e92078.webp",
     "small": "/images/wild/16-sm.c9f755d6.webp"
   },
   {
@@ -244,6 +261,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/17-sq.5c2a2639.webp",
+    "large": "/images/wild/17-lg.213d42a9.webp",
     "small": "/images/wild/17-sm.bf508298.webp"
   },
   {
@@ -258,6 +276,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/18-sq.6259799d.webp",
+    "large": "/images/wild/18-lg.e9be8c9f.webp",
     "small": "/images/wild/18-sm.15a101e1.webp"
   },
   {
@@ -272,6 +291,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 803,
     "height": 1000,
     "square": "/images/wild/19-sq.7b9d5dc5.webp",
+    "large": "/images/wild/19-lg.58f8ac9b.webp",
     "small": "/images/wild/19-sm.6cbf9ab3.webp"
   },
   {
@@ -286,6 +306,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 750,
     "height": 1000,
     "square": "/images/wild/20-sq.d21b65b5.webp",
+    "large": "/images/wild/20-lg.c656bc9b.webp",
     "small": "/images/wild/20-sm.70099b7c.webp"
   },
   {
@@ -300,6 +321,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 896,
     "height": 1000,
     "square": "/images/wild/21-sq.8586cc44.webp",
+    "large": "/images/wild/21-lg.94745aa7.webp",
     "small": "/images/wild/21-sm.fbf49c3b.webp"
   },
   {
@@ -314,6 +336,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 794,
     "height": 1000,
     "square": "/images/wild/22-sq.406b5295.webp",
+    "large": "/images/wild/22-lg.1058983e.webp",
     "small": "/images/wild/22-sm.e97c6e98.webp"
   },
   {
@@ -328,6 +351,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 667,
     "height": 1000,
     "square": "/images/wild/23-sq.5be5d8eb.webp",
+    "large": "/images/wild/23-lg.a7de457d.webp",
     "small": "/images/wild/23-sm.27a939a0.webp"
   },
   {
@@ -342,6 +366,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 800,
     "height": 1000,
     "square": "/images/wild/24-sq.ed4172f9.webp",
+    "large": "/images/wild/24-lg.6d8e20dc.webp",
     "small": "/images/wild/24-sm.313e049b.webp"
   },
   {
@@ -356,6 +381,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 563,
     "height": 1000,
     "square": "/images/wild/25-sq.6344061a.webp",
+    "large": "/images/wild/25-lg.674af42d.webp",
     "small": "/images/wild/25-sm.4eebf80f.webp"
   },
   {
@@ -370,6 +396,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 579,
     "height": 1000,
     "square": "/images/wild/26-sq.79d7a67c.webp",
+    "large": "/images/wild/26-lg.c0eb1762.webp",
     "small": "/images/wild/26-sm.71a190cf.webp"
   },
   {
@@ -384,6 +411,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 577,
     "height": 1000,
     "square": "/images/wild/27-sq.8601d169.webp",
+    "large": "/images/wild/27-lg.34a7a972.webp",
     "small": "/images/wild/27-sm.7ac8dca1.webp"
   },
   {
@@ -398,6 +426,7 @@ export const wildPhotos: WildPhoto[] = [
     "width": 794,
     "height": 1000,
     "square": "/images/wild/28-sq.f034a0f6.webp",
+    "large": "/images/wild/28-lg.7cf8821d.webp",
     "small": "/images/wild/28-sm.9bf5d088.webp"
   }
 ];

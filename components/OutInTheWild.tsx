@@ -4,6 +4,9 @@ import type { WildPhoto } from "@/lib/wild.generated";
 import { GRID_COUNT } from "@/lib/wild";
 import styles from "./OutInTheWild.module.css";
 
+/** A tile's width (OutInTheWild.module.css): ~288 px from 1200 px wide, ~236 px below, a third of a phone. */
+const TILE_SIZES = "(min-width: 1200px) 290px, (min-width: 769px) 240px, 31vw";
+
 // "Out in the wild" near the bottom of the home page: 9 photos (3×3 squares) and
 // "See all". The page decides which 9 (one shuffle per visit, shared with the
 // strip at the top: lib/wild.ts mixWild) and owns the lightbox. Nothing loads
@@ -64,8 +67,18 @@ export default function OutInTheWild({
                   onClick={() => onOpen(p)}
                   aria-label={`${p.alt}: open the photo`}
                 >
+                  {/* the 600 px square only where a tile is wider than 250 px at 2x (computers ≥ 1200 px) */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.square} alt={p.alt} width={500} height={500} loading="lazy" decoding="async" />
+                  <img
+                    src={p.square}
+                    srcSet={`${p.square} 500w, ${p.large} 600w`}
+                    sizes={TILE_SIZES}
+                    alt={p.alt}
+                    width={500}
+                    height={500}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </button>
               ) : (
                 <span className={styles.tile} aria-hidden="true" />

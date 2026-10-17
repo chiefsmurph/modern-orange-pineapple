@@ -16,7 +16,7 @@ test("every photo but the hidden ones is on the site; hidden ones have no files 
   assert.deepEqual(wildPhotos.map((p) => p.n), config.filter((p) => !p.hidden).map((p) => p.n));
   const files = readdirSync("public/images/wild");
   for (const n of hidden) assert.ok(!files.some((f) => f.startsWith(`${n}.`) || f.startsWith(`${n}-`)), `no files for ${n}`);
-  assert.equal(files.length, wildPhotos.length * 3); // lightbox, grid square, strip square
+  assert.equal(files.length, wildPhotos.length * 4); // lightbox, grid square, its 600 px version, strip square
 });
 
 test("captions link to products that exist; alt text describes the shirt, with no names", () => {
@@ -77,6 +77,27 @@ test("the strip is bigger on computers (John 10/16): 180 px tiles from 1200 px, 
   // still a fixed height, so the shuffle after hydration can't move the page
   assert.match(css, /\.row \{[^}]*height: var\(--tile\);/);
   assert.match(css, /\.cell \{\s*flex: 0 0 var\(--tile\);/);
+});
+
+test("the 3×3 section is a little bigger on computers ≥ 1200 px (John 10/16): ~288 px tiles, sharp at 2x", async () => {
+  const css = readFileSync("components/OutInTheWild.module.css", "utf8");
+  assert.match(css, /\.wild \{\s*max-width: 720px;/); // below 1200 px, as before
+  const wide = css.slice(css.indexOf("@media (min-width: 1200px)"), css.indexOf("@media (max-width: 768px)"));
+  assert.match(wide, /\.wild \{\s*max-width: 880px;/);
+  assert.match(wide, /\.grid \{\s*gap: 8px;/);
+  const tile = (880 - 2 * 8) / 3;
+  assert.ok(tile > 285 && tile <= 290, `${tile}`);
+  // the 600 px square covers a ~288 px tile at 2x; the 500 px one still covers phones and smaller screens
+  assert.ok(600 >= 2 * tile && 500 >= 2 * ((720 - 2 * 6) / 3));
+  const src = readFileSync("components/OutInTheWild.tsx", "utf8");
+  assert.match(src, /srcSet=\{`\$\{p\.square\} 500w, \$\{p\.large\} 600w`\}/);
+  assert.match(src, /TILE_SIZES = "\(min-width: 1200px\) 290px, \(min-width: 769px\) 240px, 31vw"/);
+  for (const p of wildPhotos) {
+    // the same hand-picked square as the 500 and 240 px files
+    assert.equal(p.large.replace(/-lg\.[0-9a-f]{8}/, ""), p.square.replace(/-sq\.[0-9a-f]{8}/, ""), p.n);
+    const m = await sharp(path.join("public", p.large)).metadata();
+    assert.deepEqual([m.width, m.height], [600, 600], `${p.n} large`);
+  }
 });
 
 test("computers get the same square crop at 500 px (sharp on retina); phones keep the 240 px file", () => {
