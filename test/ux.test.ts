@@ -81,3 +81,14 @@ test("product description: ~17px body text (≥16px), line-height 1.45, the page
   assert.doesNotMatch(desc, /font-family/);
   assert.equal(css.match(/\.desc\b/g)!.length, 1); // one rule: the same size on desktop and phones
 });
+
+test("gallery thumbnails and Sky tiles: no browser focus ring from a click, an orange one from the keyboard", () => {
+  const ROOT = path.resolve(import.meta.dirname, "..");
+  const gallery = readFileSync(path.join(ROOT, "components/CatalogGallery.module.css"), "utf8");
+  assert.match(gallery, /\.active \{\s*border-color: #ff8800;/); // the selected one: orange
+  assert.match(gallery, /\.thumb:focus:not\(:focus-visible\) \{\s*outline: none;/);
+  assert.match(gallery, /\.thumb:focus-visible \{\s*outline: 2px solid #d96f00;/);
+  const page = readFileSync(path.join(ROOT, "app/[productId]/CatalogProductView.module.css"), "utf8");
+  assert.match(page, /\.thumbChoice:focus:not\(:focus-visible\) \{\s*outline: none;/);
+  assert.match(page, /\.thumbChoice:focus-visible \{\s*outline: 2px solid #d96f00;/);
+});
