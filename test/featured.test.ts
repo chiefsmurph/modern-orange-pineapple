@@ -100,3 +100,21 @@ test("the home page is one grid: no separate Featured heading, the first card lo
   assert.doesNotMatch(src, /featured\.title|id="featured"/);
   assert.doesNotMatch(src, /groupSections/);
 });
+
+test("the Star Crop Top leads with the sitting photo (card, page and checkout), not the Pelican Crop Top's standing pose (John 10/16)", () => {
+  const star = getShopProduct("star-crop-top")!;
+  for (const set of star.images) {
+    assert.match(set.images[0], /-model-womens-lifestyle-2\.[0-9a-f]{8}\.webp$/, JSON.stringify(set.when));
+    assert.match(set.images[1], /-model-womens-3\.[0-9a-f]{8}\.webp$/);
+    assert.match(set.images[2], /-flat\.[0-9a-f]{8}\.webp$/);
+    assert.match(set.checkout ?? "", /-model-womens-lifestyle-2\.[0-9a-f]{8}-checkout\.jpg$/);
+    assert.ok(existsSync(path.join(ROOT, "public", set.checkout!)), set.checkout);
+  }
+  const cards = homeCards();
+  const starCard = cards.find((c) => c.href === "/star-crop-top")!;
+  const pelicanCard = cards.find((c) => c.href === "/pelican-crop-top")!;
+  // a seated full-body photo isn't cropped head-to-hips: the card is the photo itself
+  assert.equal(star.card, undefined);
+  assert.equal(starCard.image, "/images/catalog/star-crop-top/white-model-womens-lifestyle-2.2d569775.webp");
+  assert.match(pelicanCard.image, /-model-womens-3\./);
+});

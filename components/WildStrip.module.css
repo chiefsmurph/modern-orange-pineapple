@@ -54,15 +54,39 @@
   cursor: zoom-in;
 }
 
+.tile picture,
 .tile img {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.tile img {
   object-fit: cover;
 }
 
+/* Computers: bigger tiles (John, 10/16; were 110 px), all five on one row. From
+   769 px they shrink to fit (the page has 48 px side padding) up to 150 px; from
+   1200 px they're 180 px. Phones keep 100 px tiles that scroll sideways. */
 @media (min-width: 769px) {
+  .strip {
+    margin-bottom: 1.5rem;
+  }
+
+  .label {
+    margin-bottom: 0.55rem;
+    font-size: 0.85rem;
+  }
+
   .row {
-    --tile: 110px;
+    --tile: min(150px, calc((100vw - 160px) / 5));
+    gap: 10px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .row {
+    --tile: 180px;
+    gap: 12px;
   }
 }

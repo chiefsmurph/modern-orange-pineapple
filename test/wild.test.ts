@@ -66,6 +66,28 @@ test("strip thumbnails are 240×240", async () => {
   }
 });
 
+test("the strip is bigger on computers (John 10/16): 180 px tiles from 1200 px, up to 150 px from 769 px; phones unchanged", () => {
+  const css = readFileSync("components/WildStrip.module.css", "utf8");
+  const mid = css.slice(css.indexOf("@media (min-width: 769px)"), css.indexOf("@media (min-width: 1200px)"));
+  const wide = css.slice(css.indexOf("@media (min-width: 1200px)"));
+  assert.match(css, /\.row \{\s*--tile: 100px;/); // phones
+  assert.match(mid, /--tile: min\(150px, calc\(\(100vw - 160px\) \/ 5\)\);/);
+  assert.match(wide, /--tile: 180px;/);
+  assert.match(mid, /\.label \{[^}]*font-size: 0\.85rem;/);
+  // still a fixed height, so the shuffle after hydration can't move the page
+  assert.match(css, /\.row \{[^}]*height: var\(--tile\);/);
+  assert.match(css, /\.cell \{\s*flex: 0 0 var\(--tile\);/);
+});
+
+test("computers get the same square crop at 500 px (sharp on retina); phones keep the 240 px file", () => {
+  const src = readFileSync("components/WildStrip.tsx", "utf8");
+  assert.match(src, /<source media="\(min-width: 769px\)" srcSet=\{`\$\{p\.small\} 240w, \$\{p\.square\} 500w`\}/);
+  assert.match(src, /STRIP_DESKTOP_SIZES = "\(min-width: 1200px\) 180px, 150px"/);
+  assert.match(src, /<img src=\{p\.small\}/);
+  // the 500 px file is the grid square: the same hand-picked crop as the 240 px one, not the uncropped photo
+  for (const p of wildPhotos) assert.equal(p.square.replace(/-sq\.[0-9a-f]{8}/, ""), p.small.replace(/-sm\.[0-9a-f]{8}/, ""), p.n);
+});
+
 // --- people: the strip never shows anyone twice, the grid never side by side (10/13) ---
 
 /** A small seeded random (mulberry32) so every run tries the same 2,000 visits. */

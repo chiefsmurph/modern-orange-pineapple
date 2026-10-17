@@ -6533,22 +6533,22 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "White"
         },
         "images": [
-          "/images/catalog/star-crop-top/white-model-womens-3.396d2753.webp",
           "/images/catalog/star-crop-top/white-model-womens-lifestyle-2.2d569775.webp",
+          "/images/catalog/star-crop-top/white-model-womens-3.396d2753.webp",
           "/images/catalog/star-crop-top/white-flat.c41149fb.webp"
         ],
-        "checkout": "/images/catalog/star-crop-top/white-model-womens-3.396d2753-checkout.jpg"
+        "checkout": "/images/catalog/star-crop-top/white-model-womens-lifestyle-2.2d569775-checkout.jpg"
       },
       {
         "when": {
           "color": "Black"
         },
         "images": [
-          "/images/catalog/star-crop-top/black-model-womens-3.5e791059.webp",
           "/images/catalog/star-crop-top/black-model-womens-lifestyle-2.4434814e.webp",
+          "/images/catalog/star-crop-top/black-model-womens-3.5e791059.webp",
           "/images/catalog/star-crop-top/black-flat.bf73fb0c.webp"
         ],
-        "checkout": "/images/catalog/star-crop-top/black-model-womens-3.5e791059-checkout.jpg"
+        "checkout": "/images/catalog/star-crop-top/black-model-womens-lifestyle-2.4434814e-checkout.jpg"
       }
     ],
     "credits": [
