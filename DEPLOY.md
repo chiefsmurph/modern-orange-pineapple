@@ -115,6 +115,9 @@ What happens on a paid checkout (`app/api/stripe-webhook/route.ts`, `lib/orders/
    `MOP_CONFIRMATION_EMAIL_ENABLED=1` is set** (off by default; see "Order confirmation email" below).
 7. When a package ships, the customer gets a "your order has shipped" email with tracking
    (Printful webhook, Yoycol cron; see "Shipped emails to customers" below).
+8. Later, from a daily cron: "How's it fit?" a few days after the last package arrives, and for
+   the Yoycol shorts a "being made" note 12–14 days in, **once each is switched on** (off by
+   default; see "Follow-up emails" below).
 
 ### Environment (`/srv/mopclothing/.env`, mode 600)
 
@@ -192,6 +195,9 @@ confirmation (below) uses the same sender, look and exactly-once ledger.
 | `MOP_EMAIL_REPLY_TO` | no | Default `orders@mopclothing.com`. The email says "Just reply to this email", so this address must receive mail (e.g. Cloudflare Email Routing → John's inbox). |
 | `MOP_EMAIL_DRY_RUN` | no | `1` logs each customer email instead of sending it (and marks nothing emailed). For a first look only. |
 | `MOP_CONFIRMATION_EMAIL_ENABLED` | no | `1` turns on the order confirmation email (next section). Unset / anything else: off. |
+| `MOP_FOLLOWUP_FIT_ENABLED` | no | `1` turns on the "How's it fit?" email ("Follow-up emails" below). Unset / anything else: off. |
+| `MOP_FOLLOWUP_YOYCOL_ENABLED` | no | `1` turns on the Yoycol "being made" note ("Follow-up emails" below). Unset / anything else: off. |
+| `MOP_YOYCOL_DELIVERED_STATUS` | no | Yoycol `deliveryStatus` value(s) that mean delivered, e.g. `3` (comma-separated). Unset: only a "Delivered" tracking event counts. Set it once a real delivered order shows the number. |
 
 **One-time setup**
 
@@ -317,6 +323,80 @@ sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --env-file=/srv/m
    and `tail /var/lib/mopclothing/confirmations-emailed.jsonl` shows `sending` then `emailed`.
 
 To turn it off again: remove the line (or set it to anything but `1`) and restart.
+
+### Follow-up emails (off until John approves the previews)
+
+Two more emails in the same look (`lib/orders/followup-email.ts`, built from `email-layout.ts`
+like the confirmation and shipped emails), decided once a day by `scripts/followup-emails.mjs`
+(`lib/orders/followups.ts`). No prices and nobody else's name in either.
+
+- **"How's it fit? 📸"** (every supplier, once per order): greeting, "We hope it fits just right",
+  the items with thumbnails, a **Send us a photo** button (`mailto:orders@mopclothing.com`, subject
+  "My MOP photo, order MOP-XXXXXXXX") for "Out in the wild" on the home page, and "Something not
+  right? Reply and we'll make it right" + Shipping & returns.
+  - **When**: 3 days after the order's **last** package was delivered, so an order in several
+    boxes gets one email, after the last one. It waits until everything has shipped (Printful's
+    shipments hold every Printful item, and the Yoycol parcel has its shipped email).
+  - **Delivered** comes from Printful **v2** `GET /v2/orders/{id}/shipments` (`delivery_status`
+    `delivered`, `delivered_at`; v1 orders have no delivery fields) and from Yoycol's tracking
+    events (a "Delivered" event, or `MOP_YOYCOL_DELIVERED_STATUS`). Both are from the API specs
+    and haven't been seen on a real delivered order: check the first one with `--verbose`.
+  - **No delivery report** (the carrier never says, or Printful refuses the call): 12 days after the
+    last shipped email. **Still in transit** per the carrier: up to 21 days after it. A package
+    **returned / failed** (and not reshipped) is held and never sent automatically (logged `HELD`).
+  - Orders with items John places by hand (`manual`) aren't tracked and get none.
+- **"Your Blue Sky Cotton Shorts are being made ☁️"** (orders with Yoycol items, once): "made to
+  order, just for you", about 3–4 weeks in total from order to door, the item, "We'll email
+  tracking as soon as they ship".
+  - **When**: 12–14 days after the order was paid (the `orders.jsonl` line), only if the Yoycol
+    parcel has no shipped email yet, and only if Yoycol's order (`GET /api/2025/open/v4/orders/{id}`)
+    isn't still unpaid (`canPay`) or cancelled: nothing is made until John pays it. Unpaid is logged
+    `NOT SENT: Yoycol order is still unpaid`. A run on day 15 or later doesn't send it.
+- **No backfill**: the first run with a switch on writes the time to
+  `$MOP_DATA_DIR/followups-start.json`. Only orders delivered after it (no delivery date: whose last
+  shipped email went out after it), or for the Yoycol note paid after it, qualify. Older orders:
+  `--include-before <YYYY-MM-DD>` by hand (orders from that date on; run it again for any not due yet).
+- **Exactly once**: `$MOP_DATA_DIR/followups-emailed.jsonl` (`sending` → `emailed`, keys
+  `fit:<ref>` / `being-made:<ref>`; same rules as the other ledgers) + Resend `Idempotency-Key`
+  `mop-followup/<key>`.
+- **Off** (the default): nothing is sent or written; the run logs
+  `would send "<subject>" to an address at <domain>` for each order that's due. `--dry-run` prints
+  the whole emails, sends nothing and records no start, on or off.
+- **Failures**: a failed send is logged, not marked emailed, and John gets one PingPigeon email
+  `ACTION NEEDED: "How's it fit?" email failed for <ref>` (or the "being made" note); the next
+  day's run tries again. A Printful / Yoycol blip (no answer, 429, 5xx) puts that order off to the
+  next run. Exit code 1 when anything failed.
+- **Calls**: read-only GETs, at most one per supplier order per run, 0.6 s apart; orders already
+  emailed, not shipped, or last shipped over 60 days ago cost none. Needs the keys already in `.env`
+  (`PRINTFUL_API_TOKEN` (+ `PRINTFUL_STORE_ID`), `YOYCOL_ACCESS_KEY` / `YOYCOL_SECRET_KEY`,
+  `MOP_RESEND_API_KEY`, `PINGPIGEON_TOKEN`).
+- It reads `kind` on the shipped-email lines (written from this version on) to know a box finished
+  the order when Printful can't be asked. Older lines without it still work.
+
+**Preview** (works with both switches off; prints every email that's due):
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+  --env-file=/srv/mopclothing/.env /srv/mopclothing/scripts/followup-emails.mjs --dry-run --verbose
+```
+
+**The cron** (as the app user, once a day at 10:30 am Eastern; the box's clock is America/New_York,
+check with `timedatectl`; on UTC it would be `30 14` in daylight time, `30 15` in winter):
+
+```sh
+cat > /etc/cron.d/mopclothing-followups <<'EOF'
+# Follow-up emails: "How's it fit?" + the Yoycol "being made" note (scripts/followup-emails.mjs, DEPLOY.md)
+30 10 * * * mopclothing cd /srv/mopclothing && MOP_DATA_DIR=/var/lib/mopclothing /usr/bin/flock -n /var/lib/mopclothing/followup-emails.lock /usr/bin/node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=/srv/mopclothing/.env scripts/followup-emails.mjs >> /var/lib/mopclothing/followup-emails.log 2>&1
+EOF
+chmod 644 /etc/cron.d/mopclothing-followups
+```
+
+Install the cron first with both switches off and read `/var/lib/mopclothing/followup-emails.log`
+for a few days (`would send …` lines). **Turning one on** (after John has approved the previews):
+add `MOP_FOLLOWUP_FIT_ENABLED=1` and/or `MOP_FOLLOWUP_YOYCOL_ENABLED=1` to `/srv/mopclothing/.env`
+(the cron reads `.env` each run; no restart needed). The next run logs `switched on for the first
+time` and writes `followups-start.json`. To turn one off: remove the line (the start stays, so
+turning it back on doesn't backfill either).
 
 ### Monthly royalty email (timer installed 10/2026; first run Sun 11/1 09:00 PT)
 

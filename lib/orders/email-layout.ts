@@ -143,8 +143,20 @@ export const ruleRow = () =>
 export const thanksRow = (text: string) =>
   `<tr><td style="padding:22px 0 0 0;font-family:${FONT};font-size:16px;line-height:25px;color:${C.ink};" class="mop-text">${esc(text)}</td></tr>`;
 
-export const replyRow = () =>
-  `<tr><td style="padding:18px 0 0 0;font-family:${FONT};font-size:16px;line-height:24px;font-weight:700;color:${C.ink};" class="mop-text">${esc(REPLY)}</td></tr>`;
+/** The bold line before the help link (default "Questions? Just reply to this email."). */
+export const replyRow = (text = REPLY) =>
+  `<tr><td style="padding:18px 0 0 0;font-family:${FONT};font-size:16px;line-height:24px;font-weight:700;color:${C.ink};" class="mop-text">${esc(text)}</td></tr>`;
+
+/**
+ * The orange button (the shipped email's "Track your package", the fit email's
+ * "Send us a photo"), centred. `newTab: false` for a mailto: link, so webmail
+ * doesn't open an empty tab.
+ */
+export const ctaButton = (href: string, label: string, { newTab = true }: { newTab?: boolean } = {}) => `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+<tr><td align="center" bgcolor="${C.button}" style="border-radius:12px;background-color:${C.button};background-image:linear-gradient(90deg,${C.button},#e2671f);box-shadow:0 3px 10px rgba(212,93,23,0.35);">
+<a href="${esc(href)}"${newTab ? ` target="_blank"` : ""} style="display:inline-block;padding:15px 34px;font-family:${DISPLAY};font-size:18px;line-height:22px;font-weight:700;letter-spacing:0.5px;color:#ffffff;text-decoration:none;border-radius:12px;">${esc(label)}</a>
+</td></tr>
+</table>`;
 
 /** A muted line ending in the Shipping & returns link. */
 export const helpRow = (lead: string) =>

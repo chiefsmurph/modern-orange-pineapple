@@ -33,6 +33,12 @@ export type LedgerRow = BaseLedgerRow & {
   tracking_number?: string;
   carrier?: string;
   items?: string[];
+  /**
+   * all / part / rest / replacement, as the email said. "all" or "rest" = with this box
+   * everything in the order has shipped (the follow-up emails wait for it). Lines
+   * written before 2026-10-17 don't have it.
+   */
+  kind?: ShipmentKind;
 };
 
 export function createShipmentLedger(dir: string) {
@@ -148,6 +154,7 @@ export async function deliverPackage(pkg: Package, deps: DeliverDeps): Promise<D
     tracking_number: tracking?.number,
     carrier: tracking?.carrier,
     items: pkg.email.items.map((i) => `${i.qty} x ${i.title}${i.options ? ` (${i.options})` : ""}`),
+    kind: pkg.email.kind,
   };
   const r = await deliverOnce<LedgerRow>(
     {

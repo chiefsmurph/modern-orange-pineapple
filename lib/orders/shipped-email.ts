@@ -5,11 +5,11 @@ import { groupTrackingNumber, type Tracking } from "./tracking.ts";
 import type { DisplayItem } from "./item-display.ts";
 import {
   C,
-  DISPLAY,
   FONT,
   MONO,
   REPLY,
   SHIPPING_URL,
+  ctaButton,
   emailDocument,
   esc,
   greetingFor,
@@ -127,11 +127,7 @@ export function shippedEmail(input: ShippedEmailInput): ShippedEmail {
   const trackingBlock = tracking
     ? panelRow(`${carrierLine ? `<div style="font-size:12px;line-height:16px;letter-spacing:1.5px;text-transform:uppercase;color:${C.muted};" class="mop-muted">Shipping with</div>
 <div style="font-size:17px;line-height:24px;font-weight:700;color:${C.ink};padding:2px 0 16px 0;" class="mop-text">${esc(carrierLine)}</div>` : ""}
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
-<tr><td align="center" bgcolor="${C.button}" style="border-radius:12px;background-color:${C.button};background-image:linear-gradient(90deg,${C.button},#e2671f);box-shadow:0 3px 10px rgba(212,93,23,0.35);">
-<a href="${esc(tracking.url)}" target="_blank" style="display:inline-block;padding:15px 34px;font-family:${DISPLAY};font-size:18px;line-height:22px;font-weight:700;letter-spacing:0.5px;color:#ffffff;text-decoration:none;border-radius:12px;">Track your package</a>
-</td></tr>
-</table>
+${ctaButton(tracking.url, "Track your package")}
 <div style="font-size:12px;line-height:16px;letter-spacing:1.5px;text-transform:uppercase;color:${C.muted};padding:18px 0 4px 0;" class="mop-muted">Tracking number</div>
 <div style="font-family:${MONO};font-size:15px;line-height:22px;font-weight:700;letter-spacing:0.2px;color:${C.ink};word-break:break-all;" class="mop-text">${esc(groupTrackingNumber(tracking.number))}</div>`)
     : "";

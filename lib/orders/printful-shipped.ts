@@ -92,6 +92,33 @@ export async function fetchPrintfulOrder(
   return { ok: false, status: r.status, error: r.ok ? "unexpected response (no order)" : describeFailure(r), retryable: !r.ok && isRetryable(r) };
 }
 
+export type FetchedShipments = { ok: boolean; shipments?: any[]; status?: number; error?: string; retryable?: boolean };
+
+/**
+ * GET https://api.printful.com/v2/orders/{id}/shipments (read only; same private token
+ * and X-PF-Store-Id as v1), retried once on a network error / 429 / 5xx. v1's order
+ * shipments have no delivery fields; v2's have delivery_status ("delivered",
+ * "in_transit", "return_to_sender", ...) and delivered_at (ISO). From Printful's v2
+ * OpenAPI spec (read 2026-10-17); not yet seen on a real order. Used by the
+ * "How's it fit?" email (followups.ts).
+ */
+export async function fetchPrintfulShipments(
+  orderId: string,
+  deps: Pick<PrintfulShippedDeps, "env" | "fetch" | "log" | "retryDelayMs">
+): Promise<FetchedShipments> {
+  if (!deps.env.PRINTFUL_API_TOKEN) return { ok: false, status: 0, error: "PRINTFUL_API_TOKEN is not set", retryable: false };
+  const url = `${PRINTFUL_API}/v2/orders/${encodeURIComponent(orderId)}/shipments?limit=100`;
+  const get = () => requestJson(deps.fetch, url, { method: "GET", headers: headers(deps.env) });
+  let r = await get();
+  if (!r.ok && isRetryable(r)) {
+    deps.log(`[followup] Printful order ${orderId} shipments: ${describeFailure(r)}; retrying once`);
+    await sleep(deps.retryDelayMs ?? 2000);
+    r = await get();
+  }
+  if (r.ok && Array.isArray(r.json?.data)) return { ok: true, shipments: r.json.data };
+  return { ok: false, status: r.status, error: r.ok ? "unexpected response (no shipments list)" : describeFailure(r), retryable: !r.ok && isRetryable(r) };
+}
+
 /** Who gets the email: our order record (exact ref only), else the re-fetched Printful order's recipient. */
 export function resolveCustomer(order: any, record: OrderRecord | undefined): { to: string; name: string; source: CustomerSource } {
   const recip = order?.recipient ?? {};

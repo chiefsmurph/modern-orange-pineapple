@@ -162,7 +162,8 @@ export type ConfirmResult = {
   email?: ConfirmationEmail;
 };
 
-const domainOf = (email: string) => {
+/** "ana@Example.com" -> "an address at example.com", for logs that mustn't show the address. */
+export const domainOf = (email: string) => {
   const d = /@([^@\s]+)$/.exec(email.trim())?.[1];
   return d ? `an address at ${d.toLowerCase()}` : "no address";
 };
