@@ -71,6 +71,16 @@ test("product pages: '← Home' is black, orange + underline on hover/focus, the
   assert.doesNotMatch(css, /a\.home[^{]*\{[^}]*font-size/); // same size as before
 });
 
+test("product description: ~17px body text (≥16px), line-height 1.45, the page's own font", () => {
+  const ROOT = path.resolve(import.meta.dirname, "..");
+  const css = readFileSync(path.join(ROOT, "app/[productId]/ProductClientView.module.css"), "utf8");
+  const desc = /\n\.desc \{([^}]*)\}/.exec(css)![1];
+  const rem = Number(/font-size: ([\d.]+)rem;/.exec(desc)![1]);
+  assert.ok(rem * 16 >= 16 && rem * 16 <= 18, `${rem * 16}px`);
+  assert.match(desc, /line-height: 1\.45;/);
+  assert.doesNotMatch(desc, /font-family/);
+  assert.equal(css.match(/\.desc\b/g)!.length, 1); // one rule: the same size on desktop and phones
+});
 
 test("gallery thumbnails and Sky tiles: no browser focus ring from a click, an orange one from the keyboard", () => {
   const ROOT = path.resolve(import.meta.dirname, "..");
