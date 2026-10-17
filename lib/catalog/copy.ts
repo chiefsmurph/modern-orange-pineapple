@@ -144,7 +144,7 @@ export const shortNames: Record<string, string> = {
   "day-all-over": "Day All-Over",
   "dusk-all-over": "Dusk All-Over",
   "night-all-over": "Night All-Over",
-  "gold-stripes": "Gold Stripes",
+  // "gold-stripes": "Gold Stripes", // retired 2026-10-17 (lib/catalog/retired.ts); restore with it
   "original-star-tee": "Original Star Tee",
   "nolli-extra-fancy-tee": "Nolli Extra Fancy Tee",
   "pelican-polo": "Pelican Polo",

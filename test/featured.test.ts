@@ -79,12 +79,12 @@ test("Featured photos: no model twice in a row — pelican on the women's model,
   assert.deepEqual(Object.keys(featuredCardImages), featured.items.map((f) => f.slug).filter((s) => getShopProduct(s)));
 });
 
-test("after the first seven: everything else, in the usual order, no repeats; Night and Gold Stripes are still there", () => {
+test("after the first seven: everything else, in the usual order, no repeats; Night is still there; Gold Stripes is retired", () => {
   const featuredPaths = featuredCards().map((c) => c.href.split("?")[0]);
   const rest = restCards().map((c) => c.href);
   for (const p of featuredPaths) assert.ok(!rest.includes(p), p);
   assert.ok(rest.includes("/night-all-over"));
-  assert.ok(rest.includes("/gold-stripes"));
+  assert.ok(!rest.includes("/gold-stripes")); // retired 2026-10-17 while John redoes the trim
   assert.equal(rest.length + featuredPaths.length, shopCards().length);
   // same order as before for the rest
   assert.deepEqual(rest, shopCards().map((c) => c.href).filter((h) => !featuredPaths.includes(h)));

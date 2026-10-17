@@ -22,7 +22,7 @@ test("the short-name map: real products, really shorter, and the list John asked
   assert.equal(shortNames["day-all-over"], "Day All-Over");
   assert.equal(shortNames["dusk-all-over"], "Dusk All-Over");
   assert.equal(shortNames["night-all-over"], "Night All-Over");
-  assert.equal(shortNames["gold-stripes"], "Gold Stripes");
+  assert.equal(shortNames["gold-stripes"], undefined); // retired 2026-10-17
   assert.equal(shortNames["original-star-tee"], "Original Star Tee");
   assert.equal(shortName("pelican-tee", "Pelican Tee"), "Pelican Tee"); // not listed: the full name
 });

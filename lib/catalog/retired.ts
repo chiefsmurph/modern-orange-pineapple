@@ -11,6 +11,9 @@ export const retiredCatalog: Record<string, { redirectTo: string }> = {
   // The Printful Sky Shorts: John went back to the original Yoycol Blue Sky
   // Cotton Shorts instead (2026-10-16).
   "sky-shorts": { redirectTo: "/blue-sky-cotton-shorts" },
+  // Gold Stripes (brown trim): off sale while John redesigns the trim himself in Printful.
+  // The body print is right; the collar and side/cuff trim aren't (2026-10-17). Delete to relist.
+  "gold-stripes": { redirectTo: "/sky-tee" },
 };
 
 export const isRetiredCatalog = (slug: string) =>
