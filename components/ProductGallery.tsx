@@ -68,6 +68,7 @@ export default function ProductGallery({ images }: { images: string[] }) {
             start={viewer}
             onClose={() => setViewer(null)}
             label="Product photos"
+            tile
             pinchZoom
           />,
           document.body

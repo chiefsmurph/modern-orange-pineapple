@@ -15,6 +15,8 @@ test("every product page's gallery opens the photo viewer from an 'Enlarge photo
     assert.match(src, /import WildLightbox from "\.\/WildLightbox"/, gallery[2]);
     assert.match(src, /<button[^>]*?type="button"[\s\S]*?aria-label=\{?[`"]Enlarge photo/, `${gallery[2]}: a real button`);
     assert.match(src, /<WildLightbox[\s\S]*?pinchZoom/, `${gallery[2]}: phones can pinch-zoom`);
+    // transparent cut-outs sit on the light photo tile, not the dark backdrop
+    assert.match(src, /<WildLightbox[\s\S]*?\btile\b/, `${gallery[2]}: photo tile`);
     // on <body>, so nothing on the page (bag button, buy bar) sits on top of it
     assert.match(src, /createPortal\(\s*<WildLightbox[\s\S]*?document\.body/, `${gallery[2]}: portal`);
     const css = read(`components/${gallery[2]}.module.css`);
@@ -42,10 +44,12 @@ test("pinch-zoom: allowed on product photos, Out in the wild and The MOP Crew un
   const box = read("components/WildLightbox.tsx");
   assert.match(box, /label = "Out in the wild"/);
   assert.match(box, /pinchZoom = false/);
+  assert.match(box, /tile = false/);
+  assert.match(css, /\.tile \{\s*background: var\(--photo-tile\);/);
   assert.match(box, /if \(!e\.isPrimary \|\| zoomed\) swipe\.current = null;/);
   for (const f of ["app/page.tsx", "components/MopCrew.tsx"]) {
     const el = /<WildLightbox photos=.*?\/>/.exec(read(f)); // one line
     assert.ok(el, f);
-    assert.doesNotMatch(el[0], /pinchZoom|\slabel=/, f);
+    assert.doesNotMatch(el[0], /pinchZoom|\slabel=|\stile/, f);
   }
 });

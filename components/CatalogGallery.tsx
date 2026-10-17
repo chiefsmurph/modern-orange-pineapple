@@ -145,6 +145,7 @@ export default function CatalogGallery({
             start={viewer}
             onClose={() => setViewer(null)}
             label={alt}
+            tile
             pinchZoom
           />,
           document.body

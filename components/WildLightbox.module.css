@@ -44,6 +44,11 @@
   -webkit-user-drag: none;
 }
 
+/* Product photos are cut-outs on transparency: the same light tile as on the page. */
+.tile {
+  background: var(--photo-tile);
+}
+
 .close,
 .nav {
   position: absolute;

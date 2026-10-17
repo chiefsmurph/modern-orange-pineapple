@@ -20,14 +20,17 @@ import styles from "./WildLightbox.module.css";
 // fetched ahead so a swipe shows the next one at once.
 //
 // Also the product photo viewer (components/CatalogGallery.tsx, ProductGallery.tsx):
-// `label` names the dialog and `pinchZoom` lets phones pinch-zoom the photo with
-// the browser's own zoom. While zoomed in, one finger pans around the photo (no
-// swipe to the next one); pinch back out to swipe again.
+// `label` names the dialog, `tile` puts the light photo tile behind transparent
+// product cut-outs (a black tee would vanish on the dark backdrop), and
+// `pinchZoom` lets phones pinch-zoom the photo with the browser's own zoom. While
+// zoomed in, one finger pans around the photo (no swipe to the next one); pinch
+// back out to swipe again.
 export default function WildLightbox({
   photos,
   start,
   onClose,
   label = "Out in the wild",
+  tile = false,
   pinchZoom = false,
 }: {
   photos: LightboxPhoto[];
@@ -35,6 +38,7 @@ export default function WildLightbox({
   onClose: () => void;
   /** the dialog's name: "<label>: photo 2 of 5" */
   label?: string;
+  tile?: boolean;
   pinchZoom?: boolean;
 }) {
   const [i, setI] = useState(start);
@@ -111,7 +115,7 @@ export default function WildLightbox({
           alt={p.alt}
           width={p.width}
           height={p.height}
-          className={styles.photo}
+          className={`${styles.photo} ${tile ? styles.tile : ""}`}
           draggable={false}
         />
       </div>
