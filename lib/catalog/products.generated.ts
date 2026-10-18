@@ -7793,12 +7793,12 @@ export const catalogProducts: CatalogProduct[] = [
       {
         "when": {},
         "images": [
-          "/images/catalog/gold-stripes/flat.d78a0ded.webp",
-          "/images/catalog/gold-stripes/model-right-front.0ee60e66.webp",
-          "/images/catalog/gold-stripes/back.cf887fac.webp",
-          "/images/catalog/gold-stripes/model2.a875c011.webp"
+          "/images/catalog/gold-stripes/flat.03abbb3a.webp",
+          "/images/catalog/gold-stripes/model-right-front.d0fa615a.webp",
+          "/images/catalog/gold-stripes/back.6c871361.webp",
+          "/images/catalog/gold-stripes/model2.a7f7d742.webp"
         ],
-        "checkout": "/images/catalog/gold-stripes/flat.d78a0ded-checkout.jpg"
+        "checkout": "/images/catalog/gold-stripes/flat.03abbb3a-checkout.jpg"
       }
     ],
     "credits": [

@@ -9,7 +9,7 @@ export const shareImages: Record<string, string> = {
   "dusk-all-over": "/images/share/dusk-all-over.db7016b3.jpg",
   "night-all-over": "/images/share/night-all-over.2696db1b.jpg",
   "sky-tee": "/images/share/sky-tee.fb94f845.jpg",
-  "gold-stripes": "/images/share/gold-stripes.c9a1f518.jpg",
+  "gold-stripes": "/images/share/gold-stripes.3eca8293.jpg",
   "sky-shorts": "/images/share/sky-shorts.10cf6ff9.jpg",
   "pelican-tee": "/images/share/pelican-tee.561243bf.jpg",
   "pelican-tee?color=Ivory": "/images/share/pelican-tee--ivory.9a3dccee.jpg",
