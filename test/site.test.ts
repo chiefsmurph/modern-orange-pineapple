@@ -35,7 +35,6 @@ test("retired URLs redirect permanently: the old pelican to the beanie style, th
   assert.deepEqual(redirects, [
     { source: "/pelican-beanie-t-shirt", destination: "/pelican-tee?style=beanie", statusCode: 301 },
     { source: "/sky-shorts", destination: "/blue-sky-cotton-shorts", statusCode: 301 },
-    { source: "/gold-stripes", destination: "/sky-tee", statusCode: 301 },
   ]);
   // the original shorts' own page is live again: nothing sends it away
   assert.ok(!redirects.some((r) => r.source === "/blue-sky-cotton-shorts"));

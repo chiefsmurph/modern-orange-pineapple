@@ -7729,7 +7729,7 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     "slug": "gold-stripes",
-    "title": "Gold Stripes · Brown Trim",
+    "title": "Gold Stripes",
     "supplier": "printful",
     "delivery": "printful",
     "printfulCatalogProductId": 1414,
@@ -7793,12 +7793,12 @@ export const catalogProducts: CatalogProduct[] = [
       {
         "when": {},
         "images": [
-          "/images/catalog/gold-stripes/flat.92f5abe8.webp",
-          "/images/catalog/gold-stripes/model-right-front.7b72cfb7.webp",
-          "/images/catalog/gold-stripes/back.442d4572.webp",
-          "/images/catalog/gold-stripes/model2.0cf9375c.webp"
+          "/images/catalog/gold-stripes/flat.d78a0ded.webp",
+          "/images/catalog/gold-stripes/model-right-front.0ee60e66.webp",
+          "/images/catalog/gold-stripes/back.cf887fac.webp",
+          "/images/catalog/gold-stripes/model2.a875c011.webp"
         ],
-        "checkout": "/images/catalog/gold-stripes/flat.92f5abe8-checkout.jpg"
+        "checkout": "/images/catalog/gold-stripes/flat.d78a0ded-checkout.jpg"
       }
     ],
     "credits": [
