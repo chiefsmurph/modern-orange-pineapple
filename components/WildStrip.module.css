@@ -10,9 +10,9 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: white;
   text-decoration: none;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  color: #14232b;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.75), 0 0 2px rgba(255, 255, 255, 0.6);
 }
 
 .row {
