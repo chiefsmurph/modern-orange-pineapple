@@ -3398,11 +3398,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-black-model.3ff48ed4.webp",
-          "/images/catalog/alpaca-tee/large-black-model-womens-2-front-2.ee0f362f.webp",
-          "/images/catalog/alpaca-tee/large-black-flat.a75a04bf.webp"
+          "/images/catalog/alpaca-tee/large-black-model.bb964b04.webp",
+          "/images/catalog/alpaca-tee/large-black-model-womens-2-front-2.cdd1cb1c.webp",
+          "/images/catalog/alpaca-tee/large-black-flat.df2281c3.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-black-model.3ff48ed4-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-black-model.bb964b04-checkout.jpg"
       },
       {
         "when": {
@@ -3410,11 +3410,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Pepper"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-pepper-model.2ca924e3.webp",
-          "/images/catalog/alpaca-tee/large-pepper-model-womens-2-front-2.6a2c460e.webp",
-          "/images/catalog/alpaca-tee/large-pepper-flat.7fd09f99.webp"
+          "/images/catalog/alpaca-tee/large-pepper-model.03a7abce.webp",
+          "/images/catalog/alpaca-tee/large-pepper-model-womens-2-front-2.65344833.webp",
+          "/images/catalog/alpaca-tee/large-pepper-flat.9c575dfc.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-pepper-model.2ca924e3-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-pepper-model.03a7abce-checkout.jpg"
       },
       {
         "when": {
@@ -3422,11 +3422,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "True Navy"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-true-navy-model.1e109162.webp",
-          "/images/catalog/alpaca-tee/large-true-navy-model-womens-2-front-2.b7f74e31.webp",
-          "/images/catalog/alpaca-tee/large-true-navy-flat.a42aa27f.webp"
+          "/images/catalog/alpaca-tee/large-true-navy-model.1fdd1d9e.webp",
+          "/images/catalog/alpaca-tee/large-true-navy-model-womens-2-front-2.f232b3a1.webp",
+          "/images/catalog/alpaca-tee/large-true-navy-flat.657d16f2.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-true-navy-model.1e109162-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-true-navy-model.1fdd1d9e-checkout.jpg"
       },
       {
         "when": {
