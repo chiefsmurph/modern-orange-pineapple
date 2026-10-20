@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { homeCards } from "@/lib/shop-cards";
-import { BENEFITS, HERO_LINE } from "@/lib/home-copy";
+import { BENEFITS, BENEFIT_HIGHLIGHT, HERO_LINE } from "@/lib/home-copy";
 
 import styles from "./HomeGrid.module.css";
 import ProductCard from "@/components/ProductCard";
@@ -98,7 +98,7 @@ export default function HomePage() {
                   <span aria-hidden="true">·</span>{" "}
                 </>
               )}
-              <span className={styles.benefit}>{b}</span>
+              <span className={b === BENEFIT_HIGHLIGHT ? `${styles.benefit} ${styles.benefitHot}` : styles.benefit}>{b}</span>
             </Fragment>
           ))}
         </p>

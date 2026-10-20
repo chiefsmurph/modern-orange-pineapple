@@ -105,6 +105,14 @@ main.main {
   white-space: nowrap;
 }
 
+/* "Free US shipping": MOP orange, a size up, with a warm glow over the dark shadow that keeps it legible on the sky */
+.benefitHot {
+  font-size: 1.18em;
+  font-weight: 800;
+  color: #ff9a4d;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.75), 0 0 14px rgba(238, 122, 48, 0.85);
+}
+
 /* "Custom orders" card under the new-drops signup */
 .customCard {
   display: flex;
