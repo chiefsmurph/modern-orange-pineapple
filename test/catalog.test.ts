@@ -103,6 +103,12 @@ test("the beanie credit shows only on the Grind Beanie style", () => {
   assert.equal(designFromCreditLines([]), undefined);
   // someone not in the registry is still credited by name
   assert.equal(creditText(designFromCreditLines(["Photo by Someone New"])!), "Photo by Someone New");
+  // "CC BY 4.0" is a licence, not a byline: the line stays exactly as written (CC BY requires it unaltered)
+  const cc = "Image: NASA, ESA, CSA, and STScI (CC BY 4.0), cropped, stars brightened";
+  const ccDesign = designFromCreditLines([cc])!;
+  assert.deepEqual(ccDesign.credits, []);
+  assert.deepEqual(ccDesign.notes, [cc]);
+  assert.equal(creditText(ccDesign), cc);
 });
 
 test("generated catalog: every variant has a sync id, images and valid credits", () => {

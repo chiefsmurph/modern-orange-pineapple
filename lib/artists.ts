@@ -94,7 +94,8 @@ export const getDesign = (
  * ["Beanie by Janette Garcia"]. "<role> by <name>" lines become credits: names
  * in the registry get their avatar and links, anyone else their initials. Any
  * other line (e.g. "Sky photo: John Robert McPherson (CC0, Wikimedia Commons)")
- * is shown exactly as written, with no avatar.
+ * is shown exactly as written, with no avatar. Only a lowercase " by " is a
+ * byline: "CC BY 4.0" is a licence, and a CC BY credit must stay unaltered.
  */
 export const designFromCreditLines = (lines: string[]): Design | undefined => {
   if (lines.length === 0) return undefined;
@@ -107,7 +108,7 @@ export const designFromCreditLines = (lines: string[]): Design | undefined => {
   const credits: Credit[] = [];
   const notes: string[] = [];
   for (const line of lines) {
-    const m = /^(.*?)\s+by\s+(.+)$/i.exec(line.trim());
+    const m = /^(.*?)\s+by\s+(.+)$/.exec(line.trim());
     if (!m) {
       notes.push(line.trim());
       continue;
