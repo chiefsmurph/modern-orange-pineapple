@@ -24,8 +24,12 @@ export const isRetiredCatalog = (slug: string) =>
 export const retiredOptions: Record<string, Record<string, string[]>> = {
   // Ten skies were too many that looked alike: kept one of each look (John, 2026-10-20).
   // Sunset Glow ~ Golden Hour, Mackerel Sky and Above the Clouds ~ the other dappled
-  // blues, Cloud Study ~ Roman Sunset (and muddy).
-  "sky-tee": { sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study"] },
+  // blues, Cloud Study ~ Roman Sunset (and muddy). Later the same day John cut the two
+  // weakest of the six too: Golden Hour (the Dusk alpaca keeps that sky) and Roman Sunset
+  // (a painting, on a "Real skies" site). Four left: Daydream, Midnight, Aurora, Orbital Sunset.
+  "sky-tee": {
+    sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset"],
+  },
 };
 
 export const isRetiredOption = (slug: string, name: string, value: string | undefined) =>

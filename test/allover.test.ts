@@ -84,12 +84,12 @@ test("credits follow the pick: the beanie credit on Day Grind Beanie, a credit p
 
 test("Sky picker values show their labels (catalog option_labels) on the page, in Stripe and in emails", { skip: !present }, () => {
   const sky = getShopProduct("sky-tee")!;
-  assert.equal(sky.optionLabels?.sky?.["golden-hour"], "Golden Hour");
-  const { item, description } = buildItem("sky-tee", { sky: "golden-hour", size: "M" }, 1, {});
-  assert.equal(item.opts.sky, "golden-hour"); // the key stays the code
-  assert.equal(description, "Sky: Golden Hour, Size: M");
-  assert.equal(itemSummary(item), "Golden Hour · M");
-  assert.equal(shopCards().find((c) => c.href === "/sky-tee")!.swatches![0].label, "Golden Hour");
+  assert.equal(sky.optionLabels?.sky?.["orbital-sunset"], "Orbital Sunset");
+  const { item, description } = buildItem("sky-tee", { sky: "orbital-sunset", size: "M" }, 1, {});
+  assert.equal(item.opts.sky, "orbital-sunset"); // the key stays the code
+  assert.equal(description, "Sky: Orbital Sunset, Size: M");
+  assert.equal(itemSummary(item), "Orbital Sunset · M");
+  assert.equal(shopCards().find((c) => c.href === "/sky-tee")!.swatches![0].label, "Daydream");
 });
 
 test("cross-links: pelican → Day (style carried), alpaca → Dusk, rabbit → Night", { skip: !present }, () => {

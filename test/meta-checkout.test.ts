@@ -23,7 +23,7 @@ import { handleStripeEvent } from "../lib/orders/process.ts";
 import { fakeFetch, happyResponder, makeDeps, makeEvent, makeSession, tmpDir } from "./helpers.ts";
 
 const PELICAN = "pelican-tee-large-classic-lagoon-blue-m";
-const SKY = "sky-tee-golden-hour-m";
+const SKY = "sky-tee-daydream-m";
 
 /** A Stripe that records calls. promos: code (any case) -> promotion code id. */
 function fakeStripe({ promos = {} as Record<string, string>, refuseDiscounts = false, listThrows = false, createThrows = false } = {}) {

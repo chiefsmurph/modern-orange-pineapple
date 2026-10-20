@@ -111,7 +111,7 @@ test("scripts/likes-summary.mjs shows every count, by design and source, without
   const d = deps(dir);
   await tap(d, 1);
   await tap(d, 2, { src: "popads" });
-  await tap(d, 2, { opts: { sky: "golden-hour" }, src: "popads" });
+  await tap(d, 2, { opts: { sky: "daydream" }, src: "popads" });
   await tap(d, 3, { self: true });
   appendFileSync(path.join(dir, LIKES_FILE), '{"torn');
   const out = execFileSync(process.execPath, ["scripts/likes-summary.mjs"], { env: { ...process.env, MOP_DATA_DIR: dir } }).toString();
@@ -119,5 +119,5 @@ test("scripts/likes-summary.mjs shows every count, by design and source, without
   assert.match(out, /1 of John's own not counted/);
   assert.match(out, /sky-tee: 2 people {2}\(by source: popads 2, direct 1\)/);
   assert.match(out, /2 {2}sky=aurora/);
-  assert.match(out, /1 {2}sky=golden-hour/);
+  assert.match(out, /1 {2}sky=daydream/);
 });

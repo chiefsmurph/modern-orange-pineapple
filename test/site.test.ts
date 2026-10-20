@@ -256,19 +256,20 @@ test("the Printful Sky Shorts are retired: off the grid, feeds and bag, no new c
   assert.equal(old.unitAmount, 4000);
 });
 
-test("the Sky Tee keeps six skies (John 10/20): the other four are off the picker, cards, feeds and bag, refused at checkout, but checkouts started before still go to Printful", () => {
+test("the Sky Tee keeps four skies (John 10/20): the other six are off the picker, cards, feeds and bag, refused at checkout, but checkouts started before still go to Printful", () => {
   const slug = "sky-tee";
-  const RETIRED = ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study"];
+  const RETIRED = ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset"];
   assert.deepEqual(retiredOptions[slug], { sky: RETIRED });
   const p = getShopProduct(slug)!;
-  assert.deepEqual(p.options.sky, ["golden-hour", "daydream", "midnight", "aurora", "orbital-sunset", "roman-sunset"]);
+  assert.deepEqual(p.options.sky, ["daydream", "midnight", "aurora", "orbital-sunset"]);
   assert.ok(p.variants.every((v) => !RETIRED.includes(v.opts.sky)));
-  assert.equal(p.variants.length, 6 * p.options.size!.length);
+  assert.equal(p.variants.length, 4 * p.options.size!.length);
   // the home card shows one swatch per kept sky
   const card = shopCards().find((c) => c.href.split("?")[0] === `/${slug}`)!;
-  assert.equal(card.swatches?.length, 6);
-  // a link to a retired sky opens on the default sky
-  assert.equal(normalizeSelection(p, { sky: "sunset-glow" }).sky, "golden-hour");
+  assert.equal(card.swatches?.length, 4);
+  // a link to a retired sky opens on the default sky (Daydream, now the first)
+  assert.equal(normalizeSelection(p, { sky: "sunset-glow" }).sky, "daydream");
+  assert.equal(normalizeSelection(p, { sky: "golden-hour" }).sky, "daydream");
   for (const flavor of ["google", "meta"] as const) {
     const xml = googleFeedXml(shopProducts, new Date(), flavor);
     for (const sky of RETIRED) assert.doesNotMatch(xml, new RegExp(`sky-tee[^<]*${sky}`), `${flavor} ${sky}`);
