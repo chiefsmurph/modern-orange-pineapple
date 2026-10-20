@@ -76,7 +76,7 @@ export function resolveMetaCart(
       continue;
     }
     const slug = hit.product.slug;
-    const blocked = block(slug);
+    const blocked = block(slug, hit.opts);
     if (blocked) {
       skipped.push({ id, slug, reason: blocked.error });
       continue;

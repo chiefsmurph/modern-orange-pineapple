@@ -15,3 +15,18 @@ export const retiredCatalog: Record<string, { redirectTo: string }> = {
 
 export const isRetiredCatalog = (slug: string) =>
   Object.prototype.hasOwnProperty.call(retiredCatalog, slug);
+
+// Retired option VALUES of a product still on sale: gone from its picker, its
+// card swatches, the feeds and the bag, and refused at checkout (410), while the
+// generated files keep them so a checkout started before still maps to Printful
+// (getShopProductIncludingRetired). A link to one opens the product's default.
+// Delete a value to put it back on sale.
+export const retiredOptions: Record<string, Record<string, string[]>> = {
+  // Ten skies were too many that looked alike: kept one of each look (John, 2026-10-20).
+  // Sunset Glow ~ Golden Hour, Mackerel Sky and Above the Clouds ~ the other dappled
+  // blues, Cloud Study ~ Roman Sunset (and muddy).
+  "sky-tee": { sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study"] },
+};
+
+export const isRetiredOption = (slug: string, name: string, value: string | undefined) =>
+  value !== undefined && (retiredOptions[slug]?.[name] ?? []).some((v) => v.toLowerCase() === value.toLowerCase());

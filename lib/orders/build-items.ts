@@ -11,7 +11,7 @@ import legacyProducts, {
   type Delivery,
 } from "../../public/products.ts";
 import { getShopProduct, getShopProductIncludingRetired } from "../catalog/index.ts";
-import { isRetiredCatalog } from "../catalog/retired.ts";
+import { isRetiredCatalog, isRetiredOption } from "../catalog/retired.ts";
 import { catalogFulfilment } from "../catalog/fulfilment.generated.ts";
 import {
   findVariant,
@@ -35,12 +35,18 @@ export class CheckoutError extends Error {
 
 /**
  * Why a NEW checkout for this product isn't allowed (retired, in
- * public/products.ts or lib/catalog/retired.ts, or coming back soon), or null.
+ * public/products.ts or lib/catalog/retired.ts, a retired option value such as
+ * a sky taken off the Sky Tee, or coming back soon), or null.
  * The webhook never asks: orders already paid always go through.
  */
-export const checkoutBlock = (productId: string): { status: number; error: string } | null => {
+export const checkoutBlock = (
+  productId: string,
+  opts: Record<string, unknown> = {}
+): { status: number; error: string } | null => {
   const p = legacyProducts.products.find((x) => x.id === productId);
   if (p?.retired || isRetiredCatalog(productId)) return { status: 410, error: "no longer available" };
+  if (Object.entries(opts).some(([name, value]) => typeof value === "string" && isRetiredOption(productId, name, value)))
+    return { status: 410, error: "no longer available" };
   if (p?.comingSoon) return { status: 409, error: p.comingSoon.message.toLowerCase() };
   return null;
 };

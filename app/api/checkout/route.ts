@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "invalid product" }, { status: 400 });
   // Retired / coming-back-soon products can't be bought now; orders from
   // checkouts started before still go through the webhook as usual.
-  const blocked = checkoutBlock(productId);
+  const blocked = checkoutBlock(productId, options);
   if (blocked) return NextResponse.json({ error: blocked.error }, { status: blocked.status });
 
   // Price, options and the supplier mapping all come from the server's own

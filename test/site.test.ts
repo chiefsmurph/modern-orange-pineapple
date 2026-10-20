@@ -8,7 +8,7 @@ import nextConfig from "../next.config.ts";
 import legacy, { getPriceLabel, getTotalPrice, vendorDelivery } from "../public/products.ts";
 import { homeCards, shopCards } from "../lib/shop-cards.ts";
 import { allShopProducts, getShopProduct, getShopProductIncludingRetired, shopProducts } from "../lib/catalog/index.ts";
-import { retiredCatalog } from "../lib/catalog/retired.ts";
+import { retiredCatalog, retiredOptions } from "../lib/catalog/retired.ts";
 import { catalogFulfilment } from "../lib/catalog/fulfilment.generated.ts";
 import { creditLinesFor, imagesFor, normalizeSelection } from "../lib/catalog/select.ts";
 import { catalogRank, optionTitle, valueLabel } from "../lib/catalog/copy.ts";
@@ -254,4 +254,42 @@ test("the Printful Sky Shorts are retired: off the grid, feeds and bag, no new c
   assert.equal(old.supplier, "printful");
   assert.equal(old.printful?.syncVariantId, catalogFulfilment[slug].variants["M"].syncVariantId);
   assert.equal(old.unitAmount, 4000);
+});
+
+test("the Sky Tee keeps six skies (John 10/20): the other four are off the picker, cards, feeds and bag, refused at checkout, but checkouts started before still go to Printful", () => {
+  const slug = "sky-tee";
+  const RETIRED = ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study"];
+  assert.deepEqual(retiredOptions[slug], { sky: RETIRED });
+  const p = getShopProduct(slug)!;
+  assert.deepEqual(p.options.sky, ["golden-hour", "daydream", "midnight", "aurora", "orbital-sunset", "roman-sunset"]);
+  assert.ok(p.variants.every((v) => !RETIRED.includes(v.opts.sky)));
+  assert.equal(p.variants.length, 6 * p.options.size!.length);
+  // the home card shows one swatch per kept sky
+  const card = shopCards().find((c) => c.href.split("?")[0] === `/${slug}`)!;
+  assert.equal(card.swatches?.length, 6);
+  // a link to a retired sky opens on the default sky
+  assert.equal(normalizeSelection(p, { sky: "sunset-glow" }).sky, "golden-hour");
+  for (const flavor of ["google", "meta"] as const) {
+    const xml = googleFeedXml(shopProducts, new Date(), flavor);
+    for (const sky of RETIRED) assert.doesNotMatch(xml, new RegExp(`sky-tee[^<]*${sky}`), `${flavor} ${sky}`);
+    assert.match(xml, /orbital-sunset/, flavor);
+  }
+
+  // the full product (every sky, its Printful variants and images) stays for paid orders
+  const all = getShopProductIncludingRetired(slug)!;
+  assert.equal(all.options.sky!.length, 10);
+  const old = all.variants.find((v) => v.opts.sky === "sunset-glow" && v.opts.size === "M")!;
+  const fid = feedId(slug, old.opts);
+  assert.equal(lineView({ id: fid, qty: 1 }), null);
+  assert.deepEqual(resolveMetaCart([{ id: fid, qty: 1 }], {}).skipped, [{ id: fid, reason: "unknown id" }]);
+  assert.deepEqual(resolveMetaCart([{ id: fid, qty: 1 }], {}, { products: allShopProducts }).skipped, [
+    { id: fid, slug, reason: "no longer available" },
+  ]);
+  assert.deepEqual(checkoutBlock(slug, { sky: "sunset-glow", size: "M" }), { status: 410, error: "no longer available" });
+  assert.deepEqual(checkoutBlock(slug, { sky: "Mackerel-Sky" }), { status: 410, error: "no longer available" });
+  assert.equal(checkoutBlock(slug, { sky: "orbital-sunset", size: "XL" }), null);
+  // a paid checkout started before the cut still maps to its Printful variant
+  const { item } = buildItem(slug, { sky: "sunset-glow", size: "M" }, 1, {});
+  assert.equal(item.printful?.syncVariantId, catalogFulfilment[slug].variants["sunset-glow|M"].syncVariantId);
+  assert.deepEqual(itemsFromSessionMetadata(sessionMetadata([item])), [item]);
 });

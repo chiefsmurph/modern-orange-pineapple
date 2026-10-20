@@ -1,7 +1,7 @@
 // The generated Printful line-up plus its hand-written copy (copy.ts).
 import { catalogProducts } from "./products.generated.ts";
 import { catalogDescription, catalogFabricNote, catalogRank, catalogSizeNote, crossLinks } from "./copy.ts";
-import { isRetiredCatalog } from "./retired.ts";
+import { isRetiredCatalog, isRetiredOption, retiredOptions } from "./retired.ts";
 import type { CatalogProduct, Selection } from "./types.ts";
 
 export type ShopProduct = CatalogProduct & {
@@ -29,8 +29,18 @@ export const allShopProducts: ShopProduct[] = catalogProducts
   }))
   .sort((a, b) => a.rank - b.rank);
 
-/** What's on sale: the generated line-up minus the retired products. */
-export const shopProducts: ShopProduct[] = allShopProducts.filter((p) => !isRetiredCatalog(p.slug));
+/** A product without its retired option values (retired.ts) or the variants that use them. */
+const withoutRetiredOptions = (p: ShopProduct): ShopProduct => {
+  if (!retiredOptions[p.slug]) return p;
+  const options = Object.fromEntries(
+    Object.entries(p.options).map(([name, values]) => [name, values?.filter((v) => !isRetiredOption(p.slug, name, v))])
+  ) as ShopProduct["options"];
+  const variants = p.variants.filter((v) => !Object.entries(v.opts).some(([name, value]) => isRetiredOption(p.slug, name, value)));
+  return { ...p, options, variants };
+};
+
+/** What's on sale: the generated line-up minus the retired products and retired option values. */
+export const shopProducts: ShopProduct[] = allShopProducts.filter((p) => !isRetiredCatalog(p.slug)).map(withoutRetiredOptions);
 
 export const getShopProduct = (slug: string) =>
   shopProducts.find((p) => p.slug === slug);
