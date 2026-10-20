@@ -3302,11 +3302,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Blue Jean"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.e6849323.webp",
-          "/images/catalog/alpaca-tee/large-blue-jean-model-womens.5711900f.webp",
-          "/images/catalog/alpaca-tee/large-blue-jean-flat.d95012e4.webp"
+          "/images/catalog/alpaca-tee/large-blue-jean-model.97d2c90f.webp",
+          "/images/catalog/alpaca-tee/large-blue-jean-model-womens-2-front-2.4021a973.webp",
+          "/images/catalog/alpaca-tee/large-blue-jean-flat.74e28f38.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.e6849323-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-blue-jean-model.97d2c90f-checkout.jpg"
       },
       {
         "when": {
@@ -3314,11 +3314,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Ivory"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-ivory-model-mens-2.f9e440db.webp",
-          "/images/catalog/alpaca-tee/large-ivory-model-womens.fa8f9067.webp",
-          "/images/catalog/alpaca-tee/large-ivory-flat.1a92586d.webp"
+          "/images/catalog/alpaca-tee/large-ivory-model.24ad0ff6.webp",
+          "/images/catalog/alpaca-tee/large-ivory-model-womens-2-front-2.7db84317.webp",
+          "/images/catalog/alpaca-tee/large-ivory-flat.d3b86377.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-ivory-model-mens-2.f9e440db-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-ivory-model.24ad0ff6-checkout.jpg"
       },
       {
         "when": {
@@ -3326,11 +3326,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Grey"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-grey-model-mens-2.e6c050bc.webp",
-          "/images/catalog/alpaca-tee/large-grey-model-womens.8d981fdf.webp",
-          "/images/catalog/alpaca-tee/large-grey-flat.7bffd553.webp"
+          "/images/catalog/alpaca-tee/large-grey-model.4d0e1920.webp",
+          "/images/catalog/alpaca-tee/large-grey-model-womens-2-front-2.1c67a15f.webp",
+          "/images/catalog/alpaca-tee/large-grey-flat.8f800f8b.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-grey-model-mens-2.e6c050bc-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-grey-model.4d0e1920-checkout.jpg"
       },
       {
         "when": {
@@ -3338,11 +3338,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Bay"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-bay-model-mens-2.2d810430.webp",
-          "/images/catalog/alpaca-tee/large-bay-model-womens.b17b3c1c.webp",
-          "/images/catalog/alpaca-tee/large-bay-flat.ddfbe9b0.webp"
+          "/images/catalog/alpaca-tee/large-bay-model.e3cc787c.webp",
+          "/images/catalog/alpaca-tee/large-bay-model-womens-2-front-2.33b9e290.webp",
+          "/images/catalog/alpaca-tee/large-bay-flat.5c285642.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-bay-model-mens-2.2d810430-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-bay-model.e3cc787c-checkout.jpg"
       },
       {
         "when": {
@@ -3398,11 +3398,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-black-model-mens-2.e32886ca.webp",
-          "/images/catalog/alpaca-tee/large-black-model-womens.49e0d4df.webp",
-          "/images/catalog/alpaca-tee/large-black-flat.e3e153de.webp"
+          "/images/catalog/alpaca-tee/large-black-model.3ff48ed4.webp",
+          "/images/catalog/alpaca-tee/large-black-model-womens-2-front-2.ee0f362f.webp",
+          "/images/catalog/alpaca-tee/large-black-flat.a75a04bf.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-black-model-mens-2.e32886ca-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-black-model.3ff48ed4-checkout.jpg"
       },
       {
         "when": {
@@ -3410,11 +3410,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Pepper"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-pepper-model-mens-2.d49a42db.webp",
-          "/images/catalog/alpaca-tee/large-pepper-model-womens.2e0e05d0.webp",
-          "/images/catalog/alpaca-tee/large-pepper-flat.ede5378f.webp"
+          "/images/catalog/alpaca-tee/large-pepper-model.2ca924e3.webp",
+          "/images/catalog/alpaca-tee/large-pepper-model-womens-2-front-2.6a2c460e.webp",
+          "/images/catalog/alpaca-tee/large-pepper-flat.7fd09f99.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-pepper-model-mens-2.d49a42db-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-pepper-model.2ca924e3-checkout.jpg"
       },
       {
         "when": {
@@ -3422,11 +3422,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "True Navy"
         },
         "images": [
-          "/images/catalog/alpaca-tee/large-true-navy-model-mens-2.11b8c24e.webp",
-          "/images/catalog/alpaca-tee/large-true-navy-model-womens.b31336e1.webp",
-          "/images/catalog/alpaca-tee/large-true-navy-flat.0febacc1.webp"
+          "/images/catalog/alpaca-tee/large-true-navy-model.1e109162.webp",
+          "/images/catalog/alpaca-tee/large-true-navy-model-womens-2-front-2.b7f74e31.webp",
+          "/images/catalog/alpaca-tee/large-true-navy-flat.a42aa27f.webp"
         ],
-        "checkout": "/images/catalog/alpaca-tee/large-true-navy-model-mens-2.11b8c24e-checkout.jpg"
+        "checkout": "/images/catalog/alpaca-tee/large-true-navy-model.1e109162-checkout.jpg"
       },
       {
         "when": {
@@ -3465,7 +3465,6 @@ export const catalogProducts: CatalogProduct[] = [
         "checkout": "/images/catalog/alpaca-tee/small-true-navy-model-mens-2.0a9a16a4-checkout.jpg"
       }
     ],
-    "card": "/images/catalog/alpaca-tee/large-blue-jean-model-mens-2.e6849323-card.webp",
     "credits": [
       {
         "lines": [
