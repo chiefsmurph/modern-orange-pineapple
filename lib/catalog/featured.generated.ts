@@ -3,6 +3,7 @@
 export const featuredCardImages: Record<string, string> = {
   "sky-tee": "/images/catalog/sky-tee/orbital-sunset-flat.501d930c.webp",
   "day-all-over": "/images/catalog/day-all-over/beanie-model.a3ecd116-card.webp",
+  "alpaca-tee": "/images/catalog/alpaca-tee/large-blue-jean-model.97d2c90f.webp",
   "dusk-all-over": "/images/catalog/dusk-all-over/flat.166d8f3a.webp",
   "rabbit-tee": "/images/featured/rabbit-tee.3009b977.webp",
   "pelican-tee": "/images/featured/pelican-tee.0c977ce2.webp",

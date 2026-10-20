@@ -13,11 +13,12 @@ import { featuredCards, homeCards, restCards, shopCards } from "../lib/shop-card
 const ROOT = path.resolve(import.meta.dirname, "..");
 const slugOf = (href: string) => href.split("?")[0].slice(1);
 
-test("the home grid opens with the Sky Tee, then Day, the shorts, Dusk, Rabbit, Pelican, Original Star (John 10/16)", () => {
-  assert.deepEqual(homeCards().slice(0, 7).map((c) => slugOf(c.href)), [
+test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee, Dusk, Rabbit, Pelican, Original Star (John 10/20)", () => {
+  assert.deepEqual(homeCards().slice(0, 8).map((c) => slugOf(c.href)), [
     "sky-tee",
     "day-all-over",
     "blue-sky-cotton-shorts",
+    "alpaca-tee",
     "dusk-all-over",
     "rabbit-tee",
     "pelican-tee",
@@ -30,6 +31,7 @@ test("the home grid opens with the Sky Tee, then Day, the shorts, Dusk, Rabbit, 
       ["/sky-tee?sky=orbital-sunset", "$44"],
       ["/day-all-over?style=beanie", "$44"],
       ["/blue-sky-cotton-shorts", "From $40"],
+      ["/alpaca-tee?version=large&color=Blue+Jean", "From $29"],
       ["/dusk-all-over", "$44"],
       ["/rabbit-tee?version=large&color=Blossom", "From $29"],
       ["/pelican-tee?version=large&style=beanie", "From $29"],

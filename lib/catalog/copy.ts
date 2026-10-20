@@ -175,6 +175,8 @@ export const featured: { items: FeaturedItem[] } = {
     { slug: "sky-tee", pick: { sky: "orbital-sunset" }, photo: "flat" },
     { slug: "day-all-over", pick: { style: "beanie" } },
     { slug: "blue-sky-cotton-shorts" },
+    // a $29 tee in the first four (John 10/20): the alpaca, the design people stop him about
+    { slug: "alpaca-tee", pick: { version: "large", color: "Blue Jean" } },
     { slug: "dusk-all-over" },
     { slug: "rabbit-tee", pick: { version: "large", color: "Blossom" }, photo: "mens" },
     { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
