@@ -1,0 +1,73 @@
+/* "♡ I'd wear this" under the price: a quiet white pill; the heart turns MOP orange once liked. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: -6px 0 14px;
+}
+
+.like {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.9em;
+  border: 1.5px solid rgba(20, 35, 43, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #14232b;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.like:hover {
+  border-color: #ee7a30;
+}
+
+.like:focus-visible {
+  outline: 2px solid #ee7a30;
+  outline-offset: 2px;
+}
+
+.heart {
+  font-size: 1.2em;
+  line-height: 1;
+  color: #ee7a30;
+}
+
+.on {
+  border-color: #ee7a30;
+  background: #fff4ec;
+}
+
+.on .heart {
+  animation: pop 0.25s ease-out;
+}
+
+.count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #2f444c;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .on .heart {
+    animation: none;
+  }
+}

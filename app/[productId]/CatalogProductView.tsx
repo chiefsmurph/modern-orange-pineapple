@@ -31,6 +31,7 @@ import { imageAttrs, preloadImage, wantsLessData } from "@/lib/product-image";
 import AddToBag from "./AddToBag";
 import DropsSignup from "@/components/DropsSignup";
 import { ProductReviews, RatingSummary } from "@/components/ProductReviews";
+import LikeButton from "@/components/LikeButton";
 import reviewStyles from "@/components/ProductReviews.module.css";
 import type { PublicReview } from "@/lib/reviews";
 import SizeGuide from "@/components/SizeGuide";
@@ -133,6 +134,7 @@ export default function CatalogProductView({
       <h1 className={styles.title}>{product.title}</h1>
       <RatingSummary data={reviews} styles={reviewStyles} />
       <p className={styles.price}>{price}</p>
+      <LikeButton slug={product.slug} opts={sel} />
       {product.fabricNote && (
         <p className={styles.fabricNote}>{product.fabricNote}</p>
       )}

@@ -13,6 +13,7 @@ import ProductPageBackground from "./ProductPageBackground";
 import PurchaseForm from "./PurchaseForm";
 import ProductGallery from "@/components/ProductGallery";
 import ArtistCredit from "@/components/ArtistCredit";
+import LikeButton from "@/components/LikeButton";
 import styles from "./ProductClientView.module.css";
 
 export type Options = { color?: string; size?: string };
@@ -40,6 +41,7 @@ export default function ProductClientView({
       <h1 className={styles.title}>{product.title}</h1>
       {/* "From $45" until a size is picked when sizes cost different amounts */}
       <p className={styles.price}>{getPriceLabel(product, options.size)}</p>
+      <LikeButton slug={product.id} opts={options} />
       {product.fabricNote && (
         <p className={styles.fabricNote}>{product.fabricNote}</p>
       )}

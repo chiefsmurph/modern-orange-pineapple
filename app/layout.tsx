@@ -67,6 +67,8 @@ export default function RootLayout({
 
         {/* Umami: picks on a product page rewrite the query but aren't new page views (lib/umami.ts). */}
         <script dangerouslySetInnerHTML={{ __html: UMAMI_BEFORE_SEND_JS }} />
+        {/* the visit's utm_source, kept for the tab so a like on a later page still knows where the visit came from (lib/likes.ts) */}
+        <script dangerouslySetInnerHTML={{ __html: "(function(){try{var s=new URLSearchParams(location.search).get('utm_source');if(s&&!sessionStorage.getItem('mop-src'))sessionStorage.setItem('mop-src',s.slice(0,40))}catch(e){}})();" }} />
         <script
           defer
           src={`${UMAMI_HOST}/script.js`}
