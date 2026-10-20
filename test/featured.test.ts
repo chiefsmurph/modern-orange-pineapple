@@ -24,18 +24,18 @@ test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee
     "pelican-tee",
     "original-star-tee",
   ]);
-  // the picks and prices John chose on 10/13 travel with each card
+  // the picks John chose on 10/13 travel with each card, at the 10/20 prices ($35 tees, $50 all-overs, $45 shorts)
   assert.deepEqual(
     featuredCards().map((c) => [c.href, c.price]),
     [
-      ["/sky-tee?sky=orbital-sunset", "$44"],
-      ["/day-all-over?style=beanie", "$44"],
-      ["/blue-sky-cotton-shorts", "From $40"],
-      ["/alpaca-tee?version=large&color=Blue+Jean", "From $29"],
-      ["/dusk-all-over", "$44"],
-      ["/rabbit-tee?version=large&color=Blossom", "From $29"],
-      ["/pelican-tee?version=large&style=beanie", "From $29"],
-      ["/original-star-tee", "From $29"],
+      ["/sky-tee?sky=orbital-sunset", "$50"],
+      ["/day-all-over?style=beanie", "$50"],
+      ["/blue-sky-cotton-shorts", "From $45"],
+      ["/alpaca-tee?version=large&color=Blue+Jean", "From $35"],
+      ["/dusk-all-over", "$50"],
+      ["/rabbit-tee?version=large&color=Blossom", "From $35"],
+      ["/pelican-tee?version=large&style=beanie", "From $35"],
+      ["/original-star-tee", "From $35"],
     ]
   );
 });
@@ -95,7 +95,7 @@ test("after the first seven: everything else, in the usual order, no repeats; Ni
 });
 
 test("the home page is one grid: no separate Featured heading, the first card loads first", () => {
-  const src = readFileSync(path.join(ROOT, "app/page.tsx"), "utf8");
+  const src = readFileSync(path.join(ROOT, "app/HomePage.tsx"), "utf8");
   assert.match(src, /homeCards\(\)\.map\(\(card, index\)/);
   assert.match(src, /priority=\{index === 0\}/);
   assert.doesNotMatch(src, /featuredCards\(\)|restCards\(\)/);

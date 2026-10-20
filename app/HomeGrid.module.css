@@ -117,6 +117,19 @@ main.main {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
+/* The Founding 50 line under the benefits (app/HomePage.tsx, John 10/20): the same dark
+   type as the row, one line on a computer; on a phone it may break between its parts.
+   The code wears the "Free US shipping" pill (.benefitHot). */
+.founding {
+  margin: 0.55rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  color: #14232b;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.75), 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
 /* "Custom orders" card under the new-drops signup */
 .customCard {
   display: flex;
@@ -244,6 +257,12 @@ main.main {
 
   .benefits {
     margin-top: 0.45rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+  }
+
+  .founding {
+    margin-top: 0.4rem;
     font-size: 0.68rem;
     letter-spacing: 0.5px;
   }

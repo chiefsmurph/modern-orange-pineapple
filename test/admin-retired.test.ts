@@ -52,7 +52,7 @@ test("the old admin password is in no tracked file", (t) => {
 });
 
 test("the home button says what it's for now", () => {
-  const src = readFileSync(path.join(ROOT, "app/page.tsx"), "utf8");
+  const src = readFileSync(path.join(ROOT, "app/HomePage.tsx"), "utf8");
   assert.match(src, /href="\/redeem"/);
   assert.match(src, /Got an old MOP card\? Claim it/);
   assert.doesNotMatch(src, /Redeem a Coupon Code/);

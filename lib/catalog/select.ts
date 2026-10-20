@@ -111,7 +111,7 @@ export const priceRange = (
 export const formatPrice = (n: number) =>
   Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`;
 
-/** "$29", or "From $29" when sizes/styles differ. */
+/** "$35", or "From $35" when sizes/styles differ. */
 export const priceLabel = (
   product: Pick<CatalogProduct, "variants">,
   sel: Selection = {}

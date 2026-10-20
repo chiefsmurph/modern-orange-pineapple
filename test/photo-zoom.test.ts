@@ -47,7 +47,7 @@ test("pinch-zoom: allowed on product photos, Out in the wild and The MOP Crew un
   assert.match(box, /tile = false/);
   assert.match(css, /\.tile \{\s*background: var\(--photo-tile\);/);
   assert.match(box, /if \(!e\.isPrimary \|\| zoomed\) swipe\.current = null;/);
-  for (const f of ["app/page.tsx", "components/MopCrew.tsx"]) {
+  for (const f of ["app/HomePage.tsx", "components/MopCrew.tsx"]) {
     const el = /<WildLightbox photos=.*?\/>/.exec(read(f)); // one line
     assert.ok(el, f);
     assert.doesNotMatch(el[0], /pinchZoom|\slabel=|\stile/, f);

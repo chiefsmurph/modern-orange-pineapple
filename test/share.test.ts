@@ -26,12 +26,12 @@ test("a 1200×630 JPEG for the home page and every product, content-hashed", asy
 });
 
 test("product previews: '<name> · $<price>', the copy's first sentence, its own photo, absolute URLs", () => {
-  assert.equal(productShareTitle(getShopProduct("sky-tee")!), "Sky Tee · $44");
-  assert.equal(productShareTitle(getShopProduct("pelican-tee")!), "Pelican Tee · from $29");
+  assert.equal(productShareTitle(getShopProduct("sky-tee")!), "Sky Tee · $50");
+  assert.equal(productShareTitle(getShopProduct("pelican-tee")!), "Pelican Tee · from $35");
   assert.equal(productShareTitle(getShopProduct("clouds-skater-dress")!), "Clouds Skater Dress · $55");
   const m = productShareMeta(getShopProduct("pelican-tee")!);
   const og = m.openGraph as Record<string, any>;
-  assert.equal(og.title, "Pelican Tee · from $29");
+  assert.equal(og.title, "Pelican Tee · from $35");
   assert.equal(og.description, "Yes, this really is the coolest pelican you have ever met.");
   assert.equal(og.url, "https://mopclothing.com/pelican-tee");
   assert.equal(og.siteName, "Modern Orange Pineapple");
@@ -68,7 +68,7 @@ test("home and the other pages: the home image, the new description, a large car
 
 test("the description pairs the slogan with the descriptor (John 10/13), and never claims 'in the USA'", () => {
   assert.match(SITE_DESCRIPTION, /^Escape the ordinary, own a collectible piece of paradise\. Art-inspired designs on real cotton/);
-  for (const f of ["app/layout.tsx", "app/[productId]/page.tsx", "public/manifest.json", "lib/share-meta.ts", "app/page.tsx", "scripts/gen-share-images.mjs"])
+  for (const f of ["app/layout.tsx", "app/[productId]/page.tsx", "public/manifest.json", "lib/share-meta.ts", "app/page.tsx", "app/HomePage.tsx", "scripts/gen-share-images.mjs"])
     assert.doesNotMatch(readFileSync(path.join(ROOT, f), "utf8"), /in the USA/i, f);
   const manifest = JSON.parse(readFileSync(path.join(ROOT, "public/manifest.json"), "utf8"));
   assert.equal(manifest.name, "Modern Orange Pineapple");

@@ -136,7 +136,7 @@ export const getItemPrice = ({ price, sizePrices }: Product, size?: string) =>
 export const getTotalPrice = (product: Product, size?: string) =>
   parseFloat((product.shipping.cost / 100 + getItemPrice(product, size)).toFixed(2));
 
-/** "$40" for a picked size or a one-price product, else "From $40" (as the catalog's priceLabel). */
+/** "$45" for a picked size or a one-price product, else "From $45" (as the catalog's priceLabel). */
 export const getPriceLabel = (product: Product, size?: string) => {
   if (size || !product.sizePrices) return `$${getTotalPrice(product, size)}`;
   const totals = (product.options.size ?? []).map((s) => getTotalPrice(product, s));
@@ -282,9 +282,10 @@ const products: { products: Product[] } = {
       options: {
         size: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
       },
-      // $40 with the 14.53 shipping (free-shipping model); 4XL $42 and 5XL $44 (John, 2026-10-16).
-      price: 25.47,
-      sizePrices: { "4XL": 27.47, "5XL": 29.47 },
+      // $45 with the 14.53 shipping (free-shipping model); 4XL $47 and 5XL $49 (John, 2026-10-20;
+      // were $40 / $42 / $44 from 2026-10-16).
+      price: 30.47,
+      sizePrices: { "4XL": 32.47, "5XL": 34.47 },
       // Where the Printful Sky Shorts sat in the full card list (catalog rank 2). On the
       // home page they're 3rd, among the first cards (lib/catalog/copy.ts `featured`).
       rank: 2,

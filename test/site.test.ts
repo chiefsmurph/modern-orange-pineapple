@@ -115,8 +115,8 @@ test("the old-sky Yoycol shirt is 'coming back soon': off the grid, no new check
 
 const SHORTS_SIZES = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
 
-// $40 total S–3XL, 4XL $42, 5XL $44 (John, 2026-10-16), shipping included.
-const SHORTS_TOTAL_CENTS: Record<string, number> = { S: 4000, M: 4000, L: 4000, XL: 4000, "2XL": 4000, "3XL": 4000, "4XL": 4200, "5XL": 4400 };
+// $45 total S–3XL, 4XL $47, 5XL $49 (John, 2026-10-20; $40/$42/$44 from 10/16), shipping included.
+const SHORTS_TOTAL_CENTS: Record<string, number> = { S: 4500, M: 4500, L: 4500, XL: 4500, "2XL": 4500, "3XL": 4500, "4XL": 4700, "5XL": 4900 };
 
 test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: S–5XL, 3–4 weeks", () => {
   const id = "blue-sky-cotton-shorts";
@@ -131,7 +131,7 @@ test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: S–
   // on the home grid, with the honest Yoycol delivery time
   const cards = shopCards().filter((c) => c.href === `/${id}`);
   assert.equal(cards.length, 1);
-  assert.equal(cards[0].price, "From $40", "4XL/5XL cost more");
+  assert.equal(cards[0].price, "From $45", "4XL/5XL cost more");
   assert.equal(cards[0].freeShipping, true);
   assert.equal(cards[0].delivery, vendorDelivery.yoycol.text);
   assert.match(cards[0].delivery, /3–4 weeks/);
@@ -147,7 +147,7 @@ test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: S–
     assert.deepEqual(priced.delivery, vendorDelivery.yoycol, size);
   }
   const params = checkoutSessionParams(buildItem(id, { size: "M" }, 1, {}));
-  assert.equal(params.line_items![0].price_data!.unit_amount, 4000);
+  assert.equal(params.line_items![0].price_data!.unit_amount, 4500);
   assert.equal(params.shipping_options![0].shipping_rate_data!.fixed_amount!.amount, 0);
   assert.deepEqual(params.shipping_options![0].shipping_rate_data!.delivery_estimate, {
     minimum: { unit: "business_day", value: vendorDelivery.yoycol.minBusinessDays },
@@ -160,24 +160,24 @@ test("the original Blue Sky Cotton Shorts are on sale again through Yoycol: S–
   });
 });
 
-test("the shorts cost $40 in S–3XL, $42 in 4XL and $44 in 5XL: page, checkout and Stripe line follow the size", () => {
+test("the shorts cost $45 in S–3XL, $47 in 4XL and $49 in 5XL (John 10/20): page, checkout and Stripe line follow the size", () => {
   const id = "blue-sky-cotton-shorts";
   const p = legacy.products.find((x) => x.id === id)!;
   for (const size of ["S", "M", "L", "XL", "2XL", "3XL"]) {
-    assert.equal(getTotalPrice(p, size), 40, size);
-    assert.equal(getPriceLabel(p, size), "$40", size);
-    assert.equal(buildItem(id, { size }, 1, {}).item.unitAmount, 4000, size);
+    assert.equal(getTotalPrice(p, size), 45, size);
+    assert.equal(getPriceLabel(p, size), "$45", size);
+    assert.equal(buildItem(id, { size }, 1, {}).item.unitAmount, 4500, size);
   }
-  assert.equal(getTotalPrice(p, "4XL"), 42);
-  assert.equal(getTotalPrice(p, "5XL"), 44);
-  assert.equal(getPriceLabel(p, "4XL"), "$42");
-  assert.equal(getPriceLabel(p, "5XL"), "$44");
-  // before a size is picked the page (and card) say "From $40"
-  assert.equal(getPriceLabel(p), "From $40");
-  assert.equal(buildItem(id, { size: "4XL" }, 1, {}).item.unitAmount, 4200);
-  assert.equal(buildItem(id, { size: "5XL" }, 1, {}).item.unitAmount, 4400);
+  assert.equal(getTotalPrice(p, "4XL"), 47);
+  assert.equal(getTotalPrice(p, "5XL"), 49);
+  assert.equal(getPriceLabel(p, "4XL"), "$47");
+  assert.equal(getPriceLabel(p, "5XL"), "$49");
+  // before a size is picked the page (and card) say "From $45"
+  assert.equal(getPriceLabel(p), "From $45");
+  assert.equal(buildItem(id, { size: "4XL" }, 1, {}).item.unitAmount, 4700);
+  assert.equal(buildItem(id, { size: "5XL" }, 1, {}).item.unitAmount, 4900);
   // the Stripe line carries the size's price, shipping stays free, quantity multiplies the line
-  for (const [size, cents] of [["3XL", 4000], ["4XL", 4200], ["5XL", 4400]] as const) {
+  for (const [size, cents] of [["3XL", 4500], ["4XL", 4700], ["5XL", 4900]] as const) {
     const params = checkoutSessionParams(buildItem(id, { size }, 2, {}));
     assert.equal(params.line_items![0].price_data!.unit_amount, cents, size);
     assert.equal(params.line_items![0].quantity, 2, size);

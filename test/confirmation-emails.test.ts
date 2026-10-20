@@ -65,9 +65,9 @@ function deps(dir: string, fetch: Parameters<typeof makeDeps>[1], env: Record<st
 /** The mixed order: tee + shorts, WELCOME10 (10% off), free shipping. */
 const mixedSession = (over: Record<string, unknown> = {}) =>
   makeSession([tee(), shorts()], {
-    amount_subtotal: 6900,
-    amount_total: 6210,
-    total_details: { amount_shipping: 0, amount_discount: 690, amount_tax: 0 },
+    amount_subtotal: 8000,
+    amount_total: 7200,
+    total_details: { amount_shipping: 0, amount_discount: 800, amount_tax: 0 },
     discounts: [{ coupon: "welcome10pct", promotion_code: "promo_1TestWelcome10" }],
     ...over,
   });
@@ -96,12 +96,12 @@ test("the email: greeting, thanks, timeline, items (thumbnail, name, options, qt
   assert.match(html, /src="https:\/\/mopclothing\.com\/images\/catalog\/pelican-tee\/large-beanie-ivory-model\.[0-9a-f]+-checkout\.jpg"/);
   assert.match(html, /Big · Grind Beanie · Ivory · M/);
   assert.match(html, /Qty 1</);
-  assert.match(html, /Qty 2 · \$29\.00 each/);
-  assert.match(html, />\$29\.00<\/td>/);
-  assert.match(html, />\$58\.00<\/td>/);
-  assert.match(html, /Subtotal<\/td><td[^>]*>\$87\.00</);
+  assert.match(html, /Qty 2 · \$35\.00 each/);
+  assert.match(html, />\$35\.00<\/td>/);
+  assert.match(html, />\$70\.00<\/td>/);
+  assert.match(html, /Subtotal<\/td><td[^>]*>\$105\.00</);
   assert.match(html, /Shipping<\/td><td[^>]*>Free</);
-  assert.match(html, /Total paid<\/td><td[^>]*>\$87\.00</);
+  assert.match(html, /Total paid<\/td><td[^>]*>\$105\.00</);
   assert.doesNotMatch(html, /Discount|Tax</);
 
   assert.match(html, /MOP-[0-9A-F]{8}/);
@@ -117,8 +117,8 @@ test("the email: greeting, thanks, timeline, items (thumbnail, name, options, qt
 
   assert.match(text, /^Hi Ana,\n\nThanks for your order! We've got it\. Here's what happens next\.\n\nWhat happens next:\n1\. Made just for you\n/);
   assert.match(text, /2\. Printed & packed \(2–5 business days\)\n3\. Shipped, with a tracking email from us\n4\. At your door in about 1–2 weeks/);
-  assert.match(text, /Your order:\n- Pelican Tee \(Big · Grind Beanie · Ivory · M\): \$29\.00\n- 2 x Pelican Tee \(Big · Grind Beanie · Ivory · L\): \$58\.00/);
-  assert.match(text, /Subtotal: \$87\.00\nShipping: Free\nTotal paid: \$87\.00/);
+  assert.match(text, /Your order:\n- Pelican Tee \(Big · Grind Beanie · Ivory · M\): \$35\.00\n- 2 x Pelican Tee \(Big · Grind Beanie · Ivory · L\): \$70\.00/);
+  assert.match(text, /Subtotal: \$105\.00\nShipping: Free\nTotal paid: \$105\.00/);
   assert.match(text, /Caring for it:\n- Wash cold, inside out\. Hang dry or tumble dry low\.\n- Don't iron directly on the print\./);
   assert.match(text, /Questions\? Just reply to this email\.\nHow delivery and replacements work: https:\/\/mopclothing\.com\/shipping-returns/);
   assert.match(text, new RegExp(`Order ref: ${ref}$`));
@@ -146,24 +146,24 @@ test("totals are the session's own: subtotal, discount, shipping, tax and the to
   // Odd numbers on purpose: the email shows what Stripe charged, it doesn't add anything up.
   const record = await recordFor(
     makeSession([tee(), shorts()], {
-      amount_subtotal: 6900,
-      amount_total: 7254,
+      amount_subtotal: 8000,
+      amount_total: 10354,
       total_details: { amount_shipping: 399, amount_discount: 0, amount_tax: 1955 },
     })
   );
   const { html, text } = confirmationEmail(confirmationInput(record));
-  assert.match(text, /Subtotal: \$69\.00\nShipping: \$3\.99\nTax: \$19\.55\nTotal paid: \$72\.54/);
-  assert.match(html, /Total paid<\/td><td[^>]*>\$72\.54</);
+  assert.match(text, /Subtotal: \$80\.00\nShipping: \$3\.99\nTax: \$19\.55\nTotal paid: \$103\.54/);
+  assert.match(html, /Total paid<\/td><td[^>]*>\$103\.54</);
   assert.match(html, /Tax<\/td><td[^>]*>\$19\.55</);
-  assert.match(html, />\$29\.00<\/td>/);
-  assert.match(html, />\$40\.00<\/td>/);
+  assert.match(html, />\$35\.00<\/td>/);
+  assert.match(html, />\$45\.00<\/td>/);
 
   // Items that don't add up to the session's subtotal: no per-line prices, only the session's totals.
   const off = await recordFor(makeSession([tee(), shorts()], { amount_subtotal: 6500, amount_total: 6500 }));
   const input = confirmationInput(off);
   assert.equal(input.linePricesShown, false);
   const e = confirmationEmail(input);
-  assert.doesNotMatch(e.html, />\$29\.00<\/td>|>\$40\.00<\/td>/);
+  assert.doesNotMatch(e.html, />\$35\.00<\/td>|>\$45\.00<\/td>/);
   assert.match(e.text, /- Pelican Tee \(Big · Grind Beanie · Ivory · M\)\n- Blue Sky Cotton Shorts \(L\)\n/);
   assert.match(e.text, /Subtotal: \$65\.00\nShipping: Free\nTotal paid: \$65\.00/);
 });
@@ -181,22 +181,22 @@ test("a discount: the line names the code (looked up from the session's promotio
   assert.equal(promo.method, "GET");
   assert.equal(promo.headers.Authorization, "Bearer sk_test_unit");
   const [send] = sends(calls);
-  assert.match(send.body.text, /Subtotal: \$69\.00\nDiscount \(WELCOME10\): -\$6\.90\nShipping: Free\nTotal paid: \$62\.10/);
-  assert.match(send.body.html, /Discount \(WELCOME10\)<\/td><td[^>]*>&minus;\$6\.90</);
+  assert.match(send.body.text, /Subtotal: \$80\.00\nDiscount \(WELCOME10\): -\$8\.00\nShipping: Free\nTotal paid: \$72\.00/);
+  assert.match(send.body.html, /Discount \(WELCOME10\)<\/td><td[^>]*>&minus;\$8\.00</);
 
   // Stripe sent the promotion code expanded: no lookup.
   const expanded = await recordFor(mixedSession({ discounts: [{ coupon: { id: "c1" }, promotion_code: { id: "promo_X", code: "THANKS10" } }] }));
   const w2 = world();
   await sendOrderConfirmation(expanded, { ...deps(tmpDir(), w2.fetch), dir: tmpDir() });
   assert.equal(w2.calls.filter((c) => c.url.startsWith("https://api.stripe.com")).length, 0);
-  assert.match(sends(w2.calls)[0].body.text, /Discount \(THANKS10\): -\$6\.90/);
+  assert.match(sends(w2.calls)[0].body.text, /Discount \(THANKS10\): -\$8\.00/);
 
   // The key can't read promotion codes: still sent, "Discount" without a name.
   const w3 = world({ promo: () => ({ status: 403, json: { error: { message: "The provided key does not have the required permissions" } } }) });
   const d3 = deps(tmpDir(), w3.fetch);
   const r3 = await sendOrderConfirmation(record, { ...d3, dir: tmpDir() });
   assert.equal(r3.status, "emailed");
-  assert.match(sends(w3.calls)[0].body.text, /\nDiscount: -\$6\.90\n/);
+  assert.match(sends(w3.calls)[0].body.text, /\nDiscount: -\$8\.00\n/);
   assert.match(d3.logs.join("\n"), /promotion code promo_1TestWelcome10: HTTP 403: The provided key does not have the required permissions; the email shows "Discount" without the code/);
   assert.doesNotMatch(d3.logs.join("\n"), /sk_test_unit/);
 
@@ -270,7 +270,7 @@ test("the webhook sends it once, after the order is recorded and the supplier or
   assert.deepEqual(rows.map((r) => r.status), ["sending", "emailed"]);
   assert.equal(rows[1].key, ref);
   assert.equal(rows[1].to, "ana@example.com");
-  assert.equal(rows[1].total, 6210);
+  assert.equal(rows[1].total, 7200);
   assert.equal(rows[1].resend_id, "re_1");
   assert.match(d.logs.join("\n"), new RegExp(`\\[confirm\\] ${ref}: confirmation email sent to a\\*\\*\\*@example\\.com, Resend re_1`));
 });
@@ -337,7 +337,7 @@ test("MOP_EMAIL_DRY_RUN=1 logs the email and sends nothing (not marked emailed);
   assert.equal(sends(calls).length, 0);
   const log = d.logs.join("\n");
   assert.match(log, /\[confirm\] DRY-RUN customer email \(not sent\)\nFrom: MOP Clothing <orders@mopclothing\.com>\nTo: ana@example\.com\nReply-To: orders@mopclothing\.com\nSubject: Thanks for your MOP order! Here's what happens next/);
-  assert.match(log, /Discount \(WELCOME10\): -\$6\.90/);
+  assert.match(log, /Discount \(WELCOME10\): -\$8\.00/);
   assert.doesNotMatch(log, /re_test_key|sk_test_unit/);
   assert.deepEqual(ledgerRows(dir).map((r) => r.status), ["sending", "dry_run"]);
   // Not done: the same order can still be sent for real later (the by-hand script).
@@ -371,7 +371,7 @@ test("a failed send never fails the webhook: 200, suppliers placed, John told on
   assert.equal(alert.body.subject, `ACTION NEEDED: order confirmation email failed for ${ref}`);
   assert.match(alert.body.body, /Why: Resend HTTP 503: Service unavailable/);
   assert.match(alert.body.body, /To: ana@example\.com \(from the Stripe checkout\)/);
-  assert.match(alert.body.body, /\$62\.10 paid/);
+  assert.match(alert.body.body, /\$72\.00 paid/);
   assert.match(alert.body.body, new RegExp(`scripts/send-confirmation-email\\.mjs --order-ref ${ref}`));
   assert.match(d.logs.join("\n"), /CONFIRMATION EMAIL FAILED/);
   assert.deepEqual(ledgerRows(dir).map((r) => r.status), ["sending", "failed"]);

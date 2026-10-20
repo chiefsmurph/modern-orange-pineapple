@@ -56,7 +56,7 @@ export function firstSentence(copy: string, min = 40): string {
   return out.length > 200 ? `${out.slice(0, 197).trimEnd()}…` : out;
 }
 
-/** "Pelican Tee · from $29", "Sky Tee · $44". */
+/** "Pelican Tee · from $35", "Sky Tee · $50". */
 export function productShareTitle(p: Pick<ShopProduct, "title" | "variants">): string {
   const r = priceRange(p);
   if (!r) return p.title;
