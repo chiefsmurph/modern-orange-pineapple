@@ -69,7 +69,7 @@ test("what's shown comes from the catalog: name, picks, price, photo, link", () 
   assert.equal(v.unitPrice, 35);
   assert.match(v.image, /^\/images\/catalog\/pelican-tee\/.+-checkout\.jpg$/);
   assert.equal(v.href, "/pelican-tee?version=large&style=classic&color=Lagoon+Blue&size=M");
-  assert.equal(lineView({ id: id("sky-tee", opts("sky-tee", { sky: "aurora", size: "M" })), qty: 1 })!.unitPrice, 50);
+  assert.equal(lineView({ id: id("sky-tee", opts("sky-tee", { sky: "aurora", size: "M" })), qty: 1 })!.unitPrice, 45);
   assert.equal(variantSummary(getShopProduct("star-snapback")!, getShopProduct("star-snapback")!.variants[0].opts).includes("One size"), false);
   assert.equal(lineView({ id: "no-such-shirt-m", qty: 1 }), null);
 });
@@ -118,8 +118,8 @@ test("checkout: one Stripe session for every line, priced by the catalog, same m
   assert.equal(p.line_items!.length, 3);
   assert.deepEqual(p.line_items!.map((l) => [l.price_data!.product_data!.metadata!.productId, l.quantity, l.price_data!.unit_amount]), [
     ["pelican-tee", 2, 3500],
-    ["day-all-over", 1, 5000],
-    ["night-all-over", 3, 5000],
+    ["day-all-over", 1, 4500],
+    ["night-all-over", 3, 4500],
   ]);
   assert.equal(p.allow_promotion_codes, true);
   assert.equal(p.discounts, undefined);
@@ -138,7 +138,7 @@ test("checkout: one Stripe session for every line, priced by the catalog, same m
     assert.equal(md[`mop_item_${i}`], (single.metadata as Record<string, string>).mop_item_0);
     assert.deepEqual(p.line_items![i], single.line_items![0]);
   }
-  assert.equal(r.status === 200 && r.value, 2 * 35 + 50 + 3 * 50);
+  assert.equal(r.status === 200 && r.value, 2 * 35 + 45 + 3 * 45);
 });
 
 test("checkout: anything no longer sold is named back (nothing charged); bad requests are refused", async () => {
@@ -180,9 +180,9 @@ test("a paid bag (3 Printful lines with quantities, plus a Yoycol item): one ord
   assert.equal(pf.length, 1);
   assert.deepEqual(
     pf[0].body.items.map((i: { sync_variant_id: number; quantity: number; retail_price: string }) => [i.sync_variant_id, i.quantity, i.retail_price]),
-    bagItems.map((i) => [i.printful!.syncVariantId, i.qty, "50.00"])
+    bagItems.map((i) => [i.printful!.syncVariantId, i.qty, "45.00"])
   );
-  assert.equal(pf[0].body.retail_costs.subtotal, "300.00"); // (2 + 1 + 3) x $50
+  assert.equal(pf[0].body.retail_costs.subtotal, "270.00"); // (2 + 1 + 3) x $45
   assert.equal(calls.filter((c) => c.url.startsWith("https://www.yoycol.com/")).length >= 1, true);
 
   // one registration code per unit: 2 + 1 + 3 + 1

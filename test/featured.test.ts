@@ -24,15 +24,15 @@ test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee
     "pelican-tee",
     "original-star-tee",
   ]);
-  // the picks John chose on 10/13 travel with each card, at the 10/20 prices ($35 tees, $50 all-overs, $45 shorts)
+  // the picks John chose on 10/13 travel with each card, at the 10/20 prices ($35 tees, $45 all-overs, $45 shorts)
   assert.deepEqual(
     featuredCards().map((c) => [c.href, c.price]),
     [
-      ["/sky-tee?sky=orbital-sunset", "$50"],
-      ["/day-all-over?style=beanie", "$50"],
+      ["/sky-tee?sky=orbital-sunset", "$45"],
+      ["/day-all-over?style=beanie", "$45"],
       ["/blue-sky-cotton-shorts", "From $45"],
       ["/alpaca-tee?version=large&color=Blue+Jean", "From $35"],
-      ["/dusk-all-over", "$50"],
+      ["/dusk-all-over", "$45"],
       ["/rabbit-tee?version=large&color=Blossom", "From $35"],
       ["/pelican-tee?version=large&style=beanie", "From $35"],
       ["/original-star-tee", "From $35"],

@@ -18,22 +18,22 @@ const present = ALLOVER.every((s) => getShopProduct(s));
 const recordFor = async (slug: string, opts: Record<string, string>) =>
   buildOrderRecord(makeSession([buildItem(slug, opts, 1, {}).item]));
 
-test("all five all-overs are in the catalog: $50 (John 10/20; $44 from 10/12, $49 before), XS–2XL, group allover, Printful", { skip: !present }, () => {
+test("all five all-overs are in the catalog: $45 (John 10/20 after the price comps; $44 from 10/12, $49 before), XS–2XL, group allover, Printful", { skip: !present }, () => {
   for (const slug of ALLOVER) {
     const p = getShopProduct(slug)!;
     assert.equal(p.group, "allover", slug);
     assert.equal(p.printfulCatalogProductId, 1414, slug);
     assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL"], slug);
-    assert.ok(p.variants.every((v) => v.price === 50 && v.status === "DECIDED"), `${slug} prices`);
+    assert.ok(p.variants.every((v) => v.price === 45 && v.status === "DECIDED"), `${slug} prices`);
     assert.equal(p.sizeNote, "96% cotton, 4% elastane · runs slim — size up");
     assert.equal(p.delivery, "printful");
   }
 });
 
-test("all-over cards: $50, group allover; the Sky Tee card shows its skies", { skip: !present }, () => {
+test("all-over cards: $45, group allover; the Sky Tee card shows its skies", { skip: !present }, () => {
   const cards = shopCards().filter((c) => c.group === "allover");
   assert.deepEqual(cards.map((c) => c.href), ALLOVER.map((s) => `/${s}`));
-  for (const c of cards) assert.equal(c.price, "$50");
+  for (const c of cards) assert.equal(c.price, "$45");
   const sky = cards.find((c) => c.href === "/sky-tee")!;
   assert.equal(sky.swatches?.length, getShopProduct("sky-tee")!.options.sky.length);
   assert.equal(skySwatches(getShopProduct("day-all-over")!).length, 0);
@@ -45,7 +45,7 @@ test("every all-over variant builds a Printful item whose metadata round-trips",
     for (const v of p.variants) {
       const { item } = buildItem(slug, v.opts, 1, {});
       assert.equal(item.supplier, "printful");
-      assert.equal(item.unitAmount, 5000);
+      assert.equal(item.unitAmount, 4500);
       assert.equal(item.printful?.syncVariantId, catalogFulfilment[slug].variants[variantKey(v.opts)].syncVariantId);
       assert.deepEqual(itemsFromSessionMetadata(sessionMetadata([item])), [item]);
     }
@@ -102,7 +102,7 @@ test("cross-links: pelican → Day (style carried), alpaca → Dusk, rabbit → 
   assert.equal(crossLinkFor("star-polo", {}), null);
 });
 
-test("$50 all the way through: feeds, Meta checkout and the Stripe line item", { skip: !present }, async () => {
+test("$45 all the way through: feeds, Meta checkout and the Stripe line item", { skip: !present }, async () => {
   const { googleFeedXml, feedId } = await import("../lib/google-feed.ts");
   const { shopProducts } = await import("../lib/catalog/index.ts");
   const { checkoutSessionParams } = await import("../lib/orders/checkout.ts");
@@ -112,12 +112,12 @@ test("$50 all the way through: feeds, Meta checkout and the Stripe line item", {
     for (const slug of ALLOVER) {
       const items = xml.split("<item>").filter((i) => i.includes(`<g:item_group_id>${slug}</g:item_group_id>`));
       assert.ok(items.length > 0, slug);
-      for (const i of items) assert.match(i, /<g:price>50\.00 USD<\/g:price>/, `${flavor} ${slug}`);
+      for (const i of items) assert.match(i, /<g:price>45\.00 USD<\/g:price>/, `${flavor} ${slug}`);
     }
   }
   for (const slug of ALLOVER) {
     const v = getShopProduct(slug)!.variants[0];
-    assert.equal(checkoutSessionParams(buildItem(slug, v.opts, 1, {})).line_items![0].price_data!.unit_amount, 5000, slug);
-    assert.equal(resolveMetaCart([{ id: feedId(slug, v.opts), qty: 1 }], {}).priced[0].item.unitAmount, 5000, slug);
+    assert.equal(checkoutSessionParams(buildItem(slug, v.opts, 1, {})).line_items![0].price_data!.unit_amount, 4500, slug);
+    assert.equal(resolveMetaCart([{ id: feedId(slug, v.opts), qty: 1 }], {}).priced[0].item.unitAmount, 4500, slug);
   }
 });

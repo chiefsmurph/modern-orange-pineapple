@@ -26,7 +26,7 @@ test("a 1200×630 JPEG for the home page and every product, content-hashed", asy
 });
 
 test("product previews: '<name> · $<price>', the copy's first sentence, its own photo, absolute URLs", () => {
-  assert.equal(productShareTitle(getShopProduct("sky-tee")!), "Sky Tee · $50");
+  assert.equal(productShareTitle(getShopProduct("sky-tee")!), "Sky Tee · $45");
   assert.equal(productShareTitle(getShopProduct("pelican-tee")!), "Pelican Tee · from $35");
   assert.equal(productShareTitle(getShopProduct("clouds-skater-dress")!), "Clouds Skater Dress · $55");
   const m = productShareMeta(getShopProduct("pelican-tee")!);

@@ -6681,7 +6681,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "beanie",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6689,7 +6689,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "beanie",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6697,7 +6697,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "beanie",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6705,7 +6705,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "beanie",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6713,7 +6713,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "beanie",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6721,7 +6721,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "beanie",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6729,7 +6729,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "classic",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6737,7 +6737,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "classic",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6745,7 +6745,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "classic",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6753,7 +6753,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "classic",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6761,7 +6761,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "classic",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -6769,7 +6769,7 @@ export const catalogProducts: CatalogProduct[] = [
           "style": "classic",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       }
     ],
@@ -6839,42 +6839,42 @@ export const catalogProducts: CatalogProduct[] = [
         "opts": {
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       }
     ],
@@ -6930,42 +6930,42 @@ export const catalogProducts: CatalogProduct[] = [
         "opts": {
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       }
     ],
@@ -7039,7 +7039,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "golden-hour",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7047,7 +7047,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "golden-hour",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7055,7 +7055,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "golden-hour",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7063,7 +7063,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "golden-hour",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7071,7 +7071,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "golden-hour",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7079,7 +7079,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "golden-hour",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7087,7 +7087,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "sunset-glow",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7095,7 +7095,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "sunset-glow",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7103,7 +7103,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "sunset-glow",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7111,7 +7111,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "sunset-glow",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7119,7 +7119,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "sunset-glow",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7127,7 +7127,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "sunset-glow",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7135,7 +7135,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "mackerel-sky",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7143,7 +7143,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "mackerel-sky",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7151,7 +7151,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "mackerel-sky",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7159,7 +7159,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "mackerel-sky",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7167,7 +7167,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "mackerel-sky",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7175,7 +7175,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "mackerel-sky",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7183,7 +7183,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "daydream",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7191,7 +7191,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "daydream",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7199,7 +7199,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "daydream",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7207,7 +7207,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "daydream",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7215,7 +7215,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "daydream",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7223,7 +7223,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "daydream",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7231,7 +7231,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "midnight",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7239,7 +7239,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "midnight",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7247,7 +7247,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "midnight",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7255,7 +7255,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "midnight",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7263,7 +7263,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "midnight",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7271,7 +7271,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "midnight",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7279,7 +7279,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "aurora",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7287,7 +7287,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "aurora",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7295,7 +7295,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "aurora",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7303,7 +7303,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "aurora",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7311,7 +7311,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "aurora",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7319,7 +7319,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "aurora",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7327,7 +7327,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "above-the-clouds",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7335,7 +7335,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "above-the-clouds",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7343,7 +7343,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "above-the-clouds",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7351,7 +7351,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "above-the-clouds",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7359,7 +7359,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "above-the-clouds",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7367,7 +7367,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "above-the-clouds",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7375,7 +7375,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "orbital-sunset",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7383,7 +7383,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "orbital-sunset",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7391,7 +7391,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "orbital-sunset",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7399,7 +7399,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "orbital-sunset",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7407,7 +7407,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "orbital-sunset",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7415,7 +7415,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "orbital-sunset",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7423,7 +7423,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "roman-sunset",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7431,7 +7431,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "roman-sunset",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7439,7 +7439,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "roman-sunset",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7447,7 +7447,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "roman-sunset",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7455,7 +7455,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "roman-sunset",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7463,7 +7463,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "roman-sunset",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7471,7 +7471,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "cloud-study",
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7479,7 +7479,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "cloud-study",
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7487,7 +7487,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "cloud-study",
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7495,7 +7495,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "cloud-study",
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7503,7 +7503,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "cloud-study",
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
@@ -7511,7 +7511,7 @@ export const catalogProducts: CatalogProduct[] = [
           "sky": "cloud-study",
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       }
     ],
@@ -7749,42 +7749,42 @@ export const catalogProducts: CatalogProduct[] = [
         "opts": {
           "size": "XS"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "S"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "M"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "L"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       },
       {
         "opts": {
           "size": "2XL"
         },
-        "price": 50,
+        "price": 45,
         "status": "DECIDED"
       }
     ],
