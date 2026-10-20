@@ -27,8 +27,11 @@ export const retiredOptions: Record<string, Record<string, string[]>> = {
   // blues, Cloud Study ~ Roman Sunset (and muddy). Later the same day John cut the two
   // weakest of the six too: Golden Hour (the Dusk alpaca keeps that sky) and Roman Sunset
   // (a painting, on a "Real skies" site). Four left: Daydream, Midnight, Aurora, Orbital Sunset.
+  // That evening John swapped Midnight (its stars barely showed) for two real night skies,
+  // Milky Way and Cosmic Cliffs ("Yep I like 80% too. I like all this.", 2026-10-20).
+  // Five left: Daydream, Milky Way, Cosmic Cliffs, Aurora, Orbital Sunset.
   "sky-tee": {
-    sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset"],
+    sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset", "midnight"],
   },
 };
 

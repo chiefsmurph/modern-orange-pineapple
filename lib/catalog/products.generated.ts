@@ -7007,7 +7007,9 @@ export const catalogProducts: CatalogProduct[] = [
         "above-the-clouds": "Above the Clouds",
         "orbital-sunset": "Orbital Sunset",
         "roman-sunset": "Roman Sunset",
-        "cloud-study": "Cloud Study"
+        "cloud-study": "Cloud Study",
+        "milky-way": "Milky Way",
+        "cosmic-cliffs": "Cosmic Cliffs"
       }
     },
     "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
@@ -7017,6 +7019,8 @@ export const catalogProducts: CatalogProduct[] = [
         "sunset-glow",
         "mackerel-sky",
         "daydream",
+        "milky-way",
+        "cosmic-cliffs",
         "midnight",
         "aurora",
         "above-the-clouds",
@@ -7221,6 +7225,102 @@ export const catalogProducts: CatalogProduct[] = [
       {
         "opts": {
           "sky": "daydream",
+          "size": "2XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "milky-way",
+          "size": "XS"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "milky-way",
+          "size": "S"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "milky-way",
+          "size": "M"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "milky-way",
+          "size": "L"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "milky-way",
+          "size": "XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "milky-way",
+          "size": "2XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "cosmic-cliffs",
+          "size": "XS"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "cosmic-cliffs",
+          "size": "S"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "cosmic-cliffs",
+          "size": "M"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "cosmic-cliffs",
+          "size": "L"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "cosmic-cliffs",
+          "size": "XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "cosmic-cliffs",
           "size": "2XL"
         },
         "price": 45,
@@ -7568,6 +7668,32 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "sky": "milky-way"
+        },
+        "images": [
+          "/images/catalog/sky-tee/milky-way-model-left-front.b37a33ec.webp",
+          "/images/catalog/sky-tee/milky-way-model2.d8ec6a00.webp",
+          "/images/catalog/sky-tee/milky-way-flat.6a872c1f.webp",
+          "/images/catalog/sky-tee/milky-way-back.b322fdac.webp"
+        ],
+        "checkout": "/images/catalog/sky-tee/milky-way-model-left-front.b37a33ec-checkout.jpg",
+        "swatch": "/images/catalog/sky-tee/milky-way-flat.6a872c1f-swatch.webp"
+      },
+      {
+        "when": {
+          "sky": "cosmic-cliffs"
+        },
+        "images": [
+          "/images/catalog/sky-tee/cosmic-cliffs-model-left-front.0775b7db.webp",
+          "/images/catalog/sky-tee/cosmic-cliffs-model2.951e1a70.webp",
+          "/images/catalog/sky-tee/cosmic-cliffs-flat.bf2d520a.webp",
+          "/images/catalog/sky-tee/cosmic-cliffs-back.98f1db06.webp"
+        ],
+        "checkout": "/images/catalog/sky-tee/cosmic-cliffs-model-left-front.0775b7db-checkout.jpg",
+        "swatch": "/images/catalog/sky-tee/cosmic-cliffs-flat.bf2d520a-swatch.webp"
+      },
+      {
+        "when": {
           "sky": "midnight"
         },
         "images": [
@@ -7674,6 +7800,22 @@ export const catalogProducts: CatalogProduct[] = [
         ],
         "when": {
           "sky": "daydream"
+        }
+      },
+      {
+        "lines": [
+          "Photo: ESO/B. Tafreshi (twanight.org) (CC BY 4.0), cropped, stars brightened, colours boosted"
+        ],
+        "when": {
+          "sky": "milky-way"
+        }
+      },
+      {
+        "lines": [
+          "Image: NASA, ESA, CSA, and STScI (CC BY 4.0), cropped, stars brightened"
+        ],
+        "when": {
+          "sky": "cosmic-cliffs"
         }
       },
       {

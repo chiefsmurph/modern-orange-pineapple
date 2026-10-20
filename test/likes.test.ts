@@ -64,7 +64,7 @@ test("a like is saved per device and design; the count is people, shown from 10,
   const d = deps(dir);
   for (let i = 1; i <= 9; i++) assert.deepEqual((await tap(d, i)).body, { ok: true, count: null });
   // the same person liking a second sky is still one person
-  assert.deepEqual((await tap(d, 9, { opts: { sky: "midnight" } })).body, { ok: true, count: null });
+  assert.deepEqual((await tap(d, 9, { opts: { sky: "milky-way" } })).body, { ok: true, count: null });
   // John's browser (?nostats) is saved but not counted
   assert.deepEqual((await tap(d, 99, { self: true })).body, { ok: true, count: null });
   assert.deepEqual((await tap(d, 10)).body, { ok: true, count: 10 });

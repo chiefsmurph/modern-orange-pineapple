@@ -2603,6 +2603,54 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
         "syncVariantId": 5568376549,
         "catalogVariantId": 33942
       },
+      "milky-way|XS": {
+        "syncVariantId": 5585834433,
+        "catalogVariantId": 33937
+      },
+      "milky-way|S": {
+        "syncVariantId": 5585834434,
+        "catalogVariantId": 33938
+      },
+      "milky-way|M": {
+        "syncVariantId": 5585834436,
+        "catalogVariantId": 33939
+      },
+      "milky-way|L": {
+        "syncVariantId": 5585834438,
+        "catalogVariantId": 33940
+      },
+      "milky-way|XL": {
+        "syncVariantId": 5585834440,
+        "catalogVariantId": 33941
+      },
+      "milky-way|2XL": {
+        "syncVariantId": 5585834441,
+        "catalogVariantId": 33942
+      },
+      "cosmic-cliffs|XS": {
+        "syncVariantId": 5585834477,
+        "catalogVariantId": 33937
+      },
+      "cosmic-cliffs|S": {
+        "syncVariantId": 5585834479,
+        "catalogVariantId": 33938
+      },
+      "cosmic-cliffs|M": {
+        "syncVariantId": 5585834480,
+        "catalogVariantId": 33939
+      },
+      "cosmic-cliffs|L": {
+        "syncVariantId": 5585834482,
+        "catalogVariantId": 33940
+      },
+      "cosmic-cliffs|XL": {
+        "syncVariantId": 5585834487,
+        "catalogVariantId": 33941
+      },
+      "cosmic-cliffs|2XL": {
+        "syncVariantId": 5585834492,
+        "catalogVariantId": 33942
+      },
       "midnight|XS": {
         "syncVariantId": 5568376610,
         "catalogVariantId": 33937

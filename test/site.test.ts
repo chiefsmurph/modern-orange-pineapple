@@ -256,20 +256,25 @@ test("the Printful Sky Shorts are retired: off the grid, feeds and bag, no new c
   assert.equal(old.unitAmount, 4000);
 });
 
-test("the Sky Tee keeps four skies (John 10/20): the other six are off the picker, cards, feeds and bag, refused at checkout, but checkouts started before still go to Printful", () => {
+test("the Sky Tee keeps five skies (John 10/20): Midnight and the other six are off the picker, cards, feeds and bag, refused at checkout, but checkouts started before still go to Printful", () => {
   const slug = "sky-tee";
-  const RETIRED = ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset"];
+  const RETIRED = ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset", "midnight"];
   assert.deepEqual(retiredOptions[slug], { sky: RETIRED });
   const p = getShopProduct(slug)!;
-  assert.deepEqual(p.options.sky, ["daydream", "midnight", "aurora", "orbital-sunset"]);
+  // picker order: Daydream (the default) first, then the two night skies that replaced Midnight
+  assert.deepEqual(p.options.sky, ["daydream", "milky-way", "cosmic-cliffs", "aurora", "orbital-sunset"]);
+  assert.deepEqual(p.options.sky!.map((v) => valueLabel("sky", v, p.optionLabels)), ["Daydream", "Milky Way", "Cosmic Cliffs", "Aurora", "Orbital Sunset"]);
   assert.ok(p.variants.every((v) => !RETIRED.includes(v.opts.sky)));
-  assert.equal(p.variants.length, 4 * p.options.size!.length);
-  // the home card shows one swatch per kept sky
+  assert.equal(p.variants.length, 5 * p.options.size!.length);
+  // the card shows one swatch per kept sky, in picker order (the home Featured card stays on
+  // Orbital Sunset: test/featured.test.ts)
   const card = shopCards().find((c) => c.href.split("?")[0] === `/${slug}`)!;
-  assert.equal(card.swatches?.length, 4);
-  // a link to a retired sky opens on the default sky (Daydream, now the first)
+  assert.deepEqual(card.swatches?.map((s) => s.label), ["Daydream", "Milky Way", "Cosmic Cliffs", "Aurora", "Orbital Sunset"]);
+  // a link to a retired sky opens on the default sky (Daydream, the first)
   assert.equal(normalizeSelection(p, { sky: "sunset-glow" }).sky, "daydream");
   assert.equal(normalizeSelection(p, { sky: "golden-hour" }).sky, "daydream");
+  assert.equal(normalizeSelection(p, { sky: "midnight" }).sky, "daydream");
+  assert.equal(normalizeSelection(p).sky, "daydream");
   for (const flavor of ["google", "meta"] as const) {
     const xml = googleFeedXml(shopProducts, new Date(), flavor);
     for (const sky of RETIRED) assert.doesNotMatch(xml, new RegExp(`sky-tee[^<]*${sky}`), `${flavor} ${sky}`);
@@ -278,7 +283,7 @@ test("the Sky Tee keeps four skies (John 10/20): the other six are off the picke
 
   // the full product (every sky, its Printful variants and images) stays for paid orders
   const all = getShopProductIncludingRetired(slug)!;
-  assert.equal(all.options.sky!.length, 10);
+  assert.equal(all.options.sky!.length, 12);
   const old = all.variants.find((v) => v.opts.sky === "sunset-glow" && v.opts.size === "M")!;
   const fid = feedId(slug, old.opts);
   assert.equal(lineView({ id: fid, qty: 1 }), null);
@@ -293,4 +298,57 @@ test("the Sky Tee keeps four skies (John 10/20): the other six are off the picke
   const { item } = buildItem(slug, { sky: "sunset-glow", size: "M" }, 1, {});
   assert.equal(item.printful?.syncVariantId, catalogFulfilment[slug].variants["sunset-glow|M"].syncVariantId);
   assert.deepEqual(itemsFromSessionMetadata(sessionMetadata([item])), [item]);
+  // Midnight too: refused for new checkouts, but its Printful product (480750267) still maps
+  assert.deepEqual(checkoutBlock(slug, { sky: "midnight", size: "XL" }), { status: 410, error: "no longer available" });
+  assert.equal(buildItem(slug, { sky: "midnight", size: "XL" }, 1, {}).item.printful?.syncVariantId, 5568376631);
+});
+
+test("the two night skies (John 10/20): Milky Way and Cosmic Cliffs sell like the other skies, with their exact CC BY credit lines", () => {
+  const slug = "sky-tee";
+  const p = getShopProduct(slug)!;
+  const NEW = {
+    "milky-way": {
+      label: "Milky Way",
+      // Printful "MOP · Sky Tee — Milky Way" (483492895), XS..2XL
+      ids: [5585834433, 5585834434, 5585834436, 5585834438, 5585834440, 5585834441],
+      credit: "Photo: ESO/B. Tafreshi (twanight.org) (CC BY 4.0), cropped, stars brightened, colours boosted",
+    },
+    "cosmic-cliffs": {
+      label: "Cosmic Cliffs",
+      // Printful "MOP · Sky Tee — Cosmic Cliffs" (483492897), XS..2XL
+      ids: [5585834477, 5585834479, 5585834480, 5585834482, 5585834487, 5585834492],
+      credit: "Image: NASA, ESA, CSA, and STScI (CC BY 4.0), cropped, stars brightened",
+    },
+  };
+  const sizes = ["XS", "S", "M", "L", "XL", "2XL"];
+  assert.deepEqual(p.options.size, sizes);
+  for (const [sky, n] of Object.entries(NEW)) {
+    assert.equal(valueLabel("sky", sky, p.optionLabels), n.label);
+    // the same sizes and price as the other skies, each on its own Printful sync variant
+    sizes.forEach((size, i) => {
+      const v = p.variants.find((x) => x.opts.sky === sky && x.opts.size === size)!;
+      assert.equal(v.price, p.variants.find((x) => x.opts.sky === "aurora" && x.opts.size === size)!.price, `${sky} ${size}`);
+      assert.equal(catalogFulfilment[slug].variants[`${sky}|${size}`].syncVariantId, n.ids[i]);
+      assert.equal(checkoutBlock(slug, { sky, size }), null);
+      const { item, description } = buildItem(slug, { sky, size }, 1, {});
+      assert.equal(item.printful?.syncVariantId, n.ids[i]);
+      assert.equal(description, `Sky: ${n.label}, Size: ${size}`);
+    });
+    // the same photo set as Midnight had: model, back-of-model, flat, flat back (+ checkout JPEG, swatch)
+    const set = p.images.find((s) => s.when.sky === sky)!;
+    assert.deepEqual(set.images.map((src) => src.split("/").pop()!.replace(/\.[0-9a-f]{8}\.webp$/, "")),
+      [`${sky}-model-left-front`, `${sky}-model2`, `${sky}-flat`, `${sky}-back`]);
+    assert.match(set.checkout!, new RegExp(`/sky-tee/${sky}-model-left-front\\.[0-9a-f]{8}-checkout\\.jpg$`));
+    assert.match(set.swatch!, new RegExp(`/sky-tee/${sky}-flat\\.[0-9a-f]{8}-swatch\\.webp$`));
+    // the credit (required by CC BY): only this sky's line, shown exactly as written (no "by" byline, no avatar)
+    const lines = creditLinesFor(p, { sky, size: "M" });
+    assert.deepEqual(lines, [n.credit]);
+    const design = designFromCreditLines(lines)!;
+    assert.deepEqual(design.credits, []);
+    assert.equal(creditText(design), n.credit);
+    for (const flavor of ["google", "meta"] as const)
+      assert.match(googleFeedXml(shopProducts, new Date(), flavor), new RegExp(feedId(slug, { sky, size: "M" })), `${flavor} ${sky}`);
+  }
+  // the other skies keep their own credit lines
+  assert.deepEqual(creditLinesFor(p, { sky: "aurora", size: "M" }), ["Photo: NASA (ISS)"]);
 });
