@@ -105,12 +105,16 @@ main.main {
   white-space: nowrap;
 }
 
-/* "Free US shipping": MOP orange, a size up, with a warm glow over the dark shadow that keeps it legible on the sky */
+/* "Free US shipping": white on an MOP-orange pill (John 10/19: the glow was hard to read) */
 .benefitHot {
-  font-size: 1.18em;
+  font-size: 1.12em;
   font-weight: 800;
-  color: #ff9a4d;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 0.75), 0 0 14px rgba(238, 122, 48, 0.85);
+  color: #fff;
+  background: #ee7a30;
+  padding: 0.12em 0.55em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 /* "Custom orders" card under the new-drops signup */

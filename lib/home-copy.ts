@@ -15,5 +15,5 @@ export const HERO_LINE = "Real skies and original characters, on cotton.";
  *  "Tees from $29" = the cheapest tee on sale (test/home-top.test.ts checks it against the catalog; John 10/17). */
 export const BENEFITS = ["Tees from $29", "Free US shipping", "Original art, made to order"] as const;
 
-/** The benefit that stands out in the row (orange, bold, a touch bigger; John 10/19). */
+/** The benefit that stands out in the row: white on an orange pill (John 10/19). */
 export const BENEFIT_HIGHLIGHT: (typeof BENEFITS)[number] = "Free US shipping";
