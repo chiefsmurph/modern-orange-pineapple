@@ -1,5 +1,6 @@
 import { QueryProvider } from "@/components/QueryProvider";
 import { Analytics } from "@/components/Analytics";
+import PaidEngagement from "@/components/PaidEngagement";
 import BagButton from "@/components/BagButton";
 import { Orbitron } from "next/font/google";
 import type { Viewport } from "next";
@@ -83,6 +84,8 @@ export default function RootLayout({
         {/* the shopping bag, top right on every page */}
         <BagButton />
         <Analytics />
+        {/* seen / looked-at time / scroll depth, PopAds visits only (lib/paid-engagement.ts) */}
+        <PaidEngagement />
       </body>
     </html>
   );
