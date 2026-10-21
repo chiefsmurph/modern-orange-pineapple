@@ -1,3 +1,4 @@
+import { trackOnce } from "@/lib/umami";
 import { getTotalPrice, Product } from "@/public/products";
 import StripeButton from "./StripeButton";
 import { Options } from "./ProductClientView";
@@ -18,8 +19,11 @@ export default function PurchaseForm(props: PurchaseFormProps) {
   );
 
   const handleSelect =
-    (key: "color" | "size") => (e: React.ChangeEvent<HTMLSelectElement>) =>
-      setOptions((prev) => ({ ...prev, [key]: e.target.value }));
+    (key: "color" | "size") => (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value;
+      trackOnce(`pick|${product.id}|${key}|${value}`, "pick", { slug: product.id, option: key, value });
+      setOptions((prev) => ({ ...prev, [key]: value }));
+    };
   return (
     <div className={styles.purchaseForm}>
       {Object.entries(product.options).map(([key, values]) => (

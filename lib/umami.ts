@@ -39,3 +39,14 @@ export function track(name: string, data?: Record<string, string | number | unde
     // analytics must never break the page
   }
 }
+
+// Choices recorded once per value per tab (John 10/20: "record every choice, not every click"),
+// so flicking back and forth between two skies counts each sky once. A reload starts over.
+const sentOnce = new Set<string>();
+
+/** track(), but only the first time this key is seen in this tab. */
+export function trackOnce(key: string, name: string, data?: Record<string, string | number | undefined>) {
+  if (sentOnce.has(key)) return;
+  sentOnce.add(key);
+  track(name, data);
+}

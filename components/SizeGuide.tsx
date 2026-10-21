@@ -1,4 +1,5 @@
 "use client";
+import { trackOnce } from "@/lib/umami";
 import { useEffect, useRef, useState } from "react";
 import type { SizeGuide as Guide } from "@/lib/catalog/sizes.generated";
 import styles from "./SizeGuide.module.css";
@@ -41,7 +42,14 @@ export default function SizeGuide({
   if (shown.length === 0) return null;
   return (
     <>
-      <button type="button" className={styles.link} onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className={styles.link}
+        onClick={() => {
+          trackOnce(`size-guide|${title}`, "size-guide", { product: title });
+          setOpen(true);
+        }}
+      >
         Size guide
       </button>
       {open && (

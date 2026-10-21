@@ -4,14 +4,17 @@ import Link from "next/link";
 import styles from "./ProductCard.module.css";
 import type { ShopCard } from "@/lib/shop-cards";
 import { rememberHomeCard } from "@/lib/home-scroll";
+import { track } from "@/lib/umami";
 
 type Props = {
   card: ShopCard;
   /** above the fold (the home page's first card): load eagerly, preloaded */
   priority?: boolean;
+  /** 1-based place on the home grid, for the "card-click" event (does anyone get past the first row?) */
+  position?: number;
 };
 
-export default function ProductCard({ card, priority = false }: Props) {
+export default function ProductCard({ card, priority = false, position }: Props) {
   const { href, title, shortTitle, image, price, freeShipping, delivery, fabricNote, swatches } = card;
   return (
     <Link
@@ -19,7 +22,10 @@ export default function ProductCard({ card, priority = false }: Props) {
       className={styles.card}
       // so "← Home" on the product page can bring the visitor back to this spot
       // (by path: a Featured card's link carries its picks, ?version=large&style=beanie)
-      onClick={() => rememberHomeCard(href.split("?")[0], window.scrollY)}
+      onClick={() => {
+        rememberHomeCard(href.split("?")[0], window.scrollY);
+        if (position) track("card-click", { slug: href.split("?")[0].slice(1), position });
+      }}
     >
       {/* next/image: served as AVIF/WebP at the card's real width (was a raw 0.5–1.9 MB PNG) */}
       <Image

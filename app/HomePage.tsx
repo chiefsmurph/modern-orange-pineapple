@@ -138,7 +138,7 @@ export default function HomePage({ founding50 }: { founding50: Founding50Line | 
       >
         {homeCards().map((card, index) => (
           <div key={card.href} className={styles.cell}>
-            <ProductCard card={card} priority={index === 0} />
+            <ProductCard card={card} priority={index === 0} position={index + 1} />
           </div>
         ))}
         <div className={`${styles.cell} ${styles.wide}`}>

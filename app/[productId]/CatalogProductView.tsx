@@ -36,7 +36,7 @@ import reviewStyles from "@/components/ProductReviews.module.css";
 import type { PublicReview } from "@/lib/reviews";
 import SizeGuide from "@/components/SizeGuide";
 import { sizeGuides } from "@/lib/catalog/sizes.generated";
-import { track } from "@/lib/umami";
+import { track, trackOnce } from "@/lib/umami";
 import styles from "./ProductClientView.module.css";
 import own from "./CatalogProductView.module.css";
 
@@ -68,7 +68,12 @@ export default function CatalogProductView({
 
   // Pick a value; any other pick that no longer exists with it is moved to the
   // first value that does (size is cleared instead, so nobody buys the wrong size).
-  const pick = (name: string, value: string) =>
+  const pick = (name: string, value: string) => {
+    // every choice (print, style, colour, sky, size), once per value per visit
+    trackOnce(`pick|${product.slug}|${name}|${value}`, "pick", { slug: product.slug, option: name, value });
+    applyPick(name, value);
+  };
+  const applyPick = (name: string, value: string) =>
     setSel((prev) => {
       const next: Selection = { ...prev, [name]: value };
       for (const other of names) {
@@ -143,7 +148,10 @@ export default function CatalogProductView({
         <div className={`${styles.gallerySide} ${own.gallery}`}>
           <CatalogGallery
             index={photo}
-            onIndexChange={setPhoto}
+            onIndexChange={(i) => {
+              trackOnce(`photo|${product.slug}|${i}`, "photo", { slug: product.slug, photo: i + 1 });
+              setPhoto(i);
+            }}
             queue={queue.current}
             onReady={() => {
               setPhotosReady(true);
