@@ -30,6 +30,7 @@ export const retiredOptions: Record<string, Record<string, string[]>> = {
   // That evening John swapped Midnight (its stars barely showed) for two real night skies,
   // Milky Way and Cosmic Cliffs ("Yep I like 80% too. I like all this.", 2026-10-20).
   // Five left: Daydream, Milky Way, Cosmic Cliffs, Aurora, Orbital Sunset.
+  // A sixth, Last Light (the wrap-around sunset), went on after Orbital Sunset (John 2026-10-21: "let's do one").
   "sky-tee": {
     sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset", "midnight"],
   },

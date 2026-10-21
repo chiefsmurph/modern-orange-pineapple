@@ -2915,6 +2915,30 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
         "syncVariantId": 5568380184,
         "catalogVariantId": 33942
       },
+      "last-light|XS": {
+        "syncVariantId": 5587201073,
+        "catalogVariantId": 33937
+      },
+      "last-light|S": {
+        "syncVariantId": 5587201074,
+        "catalogVariantId": 33938
+      },
+      "last-light|M": {
+        "syncVariantId": 5587201075,
+        "catalogVariantId": 33939
+      },
+      "last-light|L": {
+        "syncVariantId": 5587201077,
+        "catalogVariantId": 33940
+      },
+      "last-light|XL": {
+        "syncVariantId": 5587201078,
+        "catalogVariantId": 33941
+      },
+      "last-light|2XL": {
+        "syncVariantId": 5587201079,
+        "catalogVariantId": 33942
+      },
       "roman-sunset|XS": {
         "syncVariantId": 5568380217,
         "catalogVariantId": 33937

@@ -7568,7 +7568,8 @@ export const catalogProducts: CatalogProduct[] = [
         "roman-sunset": "Roman Sunset",
         "cloud-study": "Cloud Study",
         "milky-way": "Milky Way",
-        "cosmic-cliffs": "Cosmic Cliffs"
+        "cosmic-cliffs": "Cosmic Cliffs",
+        "last-light": "Last Light"
       }
     },
     "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
@@ -7584,6 +7585,7 @@ export const catalogProducts: CatalogProduct[] = [
         "aurora",
         "above-the-clouds",
         "orbital-sunset",
+        "last-light",
         "roman-sunset",
         "cloud-study"
       ],
@@ -8079,6 +8081,54 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "sky": "last-light",
+          "size": "XS"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "last-light",
+          "size": "S"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "last-light",
+          "size": "M"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "last-light",
+          "size": "L"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "last-light",
+          "size": "XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "sky": "last-light",
+          "size": "2XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
           "sky": "roman-sunset",
           "size": "XS"
         },
@@ -8304,6 +8354,19 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "sky": "last-light"
+        },
+        "images": [
+          "/images/catalog/sky-tee/last-light-model-right-front.7e83198f.webp",
+          "/images/catalog/sky-tee/last-light-model2.5992072c.webp",
+          "/images/catalog/sky-tee/last-light-flat.9e420f59.webp",
+          "/images/catalog/sky-tee/last-light-back.b40683e2.webp"
+        ],
+        "checkout": "/images/catalog/sky-tee/last-light-model-right-front.7e83198f-checkout.jpg",
+        "swatch": "/images/catalog/sky-tee/last-light-flat.9e420f59-swatch.webp"
+      },
+      {
+        "when": {
           "sky": "roman-sunset"
         },
         "images": [
@@ -8407,6 +8470,14 @@ export const catalogProducts: CatalogProduct[] = [
         ],
         "when": {
           "sky": "orbital-sunset"
+        }
+      },
+      {
+        "lines": [
+          "Sun: Hari Samynaath (CC BY 4.0) · Sky and clouds: M. Roselund/ESO (CC BY 4.0) · Sea: Rick Obst (CC BY 4.0) · modified"
+        ],
+        "when": {
+          "sky": "last-light"
         }
       },
       {
