@@ -8,13 +8,19 @@ import path from "node:path";
 import {
   LIKES_FILE,
   LIKES_SHOW_MIN,
+  LIKE_EMAILS_PER_DAY,
+  createDailyCap,
   createLikeStore,
   designKey,
+  geoFrom,
   handleLike,
   isBotUa,
+  likeEmail,
   normalizeSrc,
+  placeOf,
   shownCount,
   type LikeDeps,
+  type LikeRow,
 } from "../lib/likes.ts";
 import { getShopProduct } from "../lib/catalog/index.ts";
 
@@ -120,4 +126,63 @@ test("scripts/likes-summary.mjs shows every count, by design and source, without
   assert.match(out, /sky-tee: 2 people {2}\(by source: popads 2, direct 1\)/);
   assert.match(out, /2 {2}sky=aurora/);
   assert.match(out, /1 {2}sky=daydream/);
+});
+
+test("Cloudflare location headers become city, region and country; unknown and Tor countries are dropped", () => {
+  const h = (o: Record<string, string>) => ({ get: (n: string) => o[n] ?? null });
+  assert.deepEqual(geoFrom(h({ "cf-ipcity": "Glendale", "cf-region": "California", "cf-region-code": "CA", "cf-ipcountry": "US" })), {
+    city: "Glendale",
+    region: "California",
+    country: "US",
+  });
+  assert.deepEqual(geoFrom(h({ "cf-ipcity": "S%C3%A3o%20Paulo", "cf-region-code": "SP", "cf-ipcountry": "br" })), {
+    city: "São Paulo",
+    region: "SP",
+    country: "BR",
+  });
+  assert.deepEqual(geoFrom(h({ "cf-ipcountry": "XX" })), { city: undefined, region: undefined, country: undefined });
+  assert.equal(placeOf({ city: "Glendale", region: "California", country: "US" }), "Glendale, California, US");
+  assert.equal(placeOf({ country: "US" }), "US");
+  assert.equal(placeOf({}), null);
+});
+
+test("the like-email cap: 25 a Pacific day, then quiet until the next day", () => {
+  let now = new Date("2026-10-21T18:00:00Z");
+  const cap = createDailyCap(2, () => now);
+  assert.deepEqual([cap(), cap(), cap()], [true, true, false]);
+  now = new Date("2026-10-22T08:00:00Z"); // 1 AM Pacific the next day
+  assert.equal(cap(), true);
+  assert.equal(LIKE_EMAILS_PER_DAY, 25);
+});
+
+test("a NEW like from a real person emails John with the city; un-likes, repeats, John's own and bots don't", async () => {
+  const sent: { row: LikeRow; count: number }[] = [];
+  const d = deps(tmp(), { notify: async (row, count) => void sent.push({ row, count }) });
+  const geo = { city: "Glendale", region: "California", country: "US" };
+  const run = async (r: Awaited<ReturnType<typeof handleLike>>) => {
+    await r.after?.();
+    return r;
+  };
+  const tapGeo = (device: number, body: Record<string, unknown> = {}, ua: string | null = UA) =>
+    handleLike({ slug: "sky-tee", opts: { sky: "aurora" }, on: true, device: dev(device), ...body }, { ip: "1.2.3.4", userAgent: ua, geo }, d);
+  await run(await tapGeo(1));
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].count, 1);
+  assert.deepEqual([sent[0].row.city, sent[0].row.region, sent[0].row.country], ["Glendale", "California", "US"]);
+  await run(await tapGeo(1)); // the same like again: nothing new
+  await run(await tapGeo(1, { on: false })); // un-like
+  await run(await tapGeo(2, { self: true })); // John's own browser
+  await run(await tapGeo(3, {}, "Googlebot/2.1")); // a bot
+  assert.equal(sent.length, 1);
+  await run(await tapGeo(1)); // liked again after un-liking: a new like
+  assert.equal(sent.length, 2);
+
+  const m = likeEmail(sent[0].row, { title: "Sky Tee", designLabel: "Aurora", count: 1, url: "https://mopclothing.com/sky-tee?sky=aurora" });
+  assert.equal(m.subject, "♥ New like: Sky Tee · Aurora (Glendale, California, US)");
+  assert.match(m.body, /Where: Glendale, California, US/);
+  assert.match(m.body, /Came from: a direct visit/);
+  assert.match(m.body, /People who like the Sky Tee now: 1/);
+  const noGeo = likeEmail({ ...sent[0].row, city: undefined, region: undefined, country: undefined }, { title: "Gulf Coast Tee", count: 3, url: "u" });
+  assert.equal(noGeo.subject, "♥ New like: Gulf Coast Tee");
+  assert.match(noGeo.body, /Where: unknown/);
 });
