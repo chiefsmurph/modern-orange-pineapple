@@ -7951,6 +7951,88 @@ export const catalogProducts: CatalogProduct[] = [
     ]
   },
   {
+    "slug": "coast-tee",
+    "title": "Gulf Coast Tee",
+    "supplier": "printful",
+    "delivery": "printful",
+    "printfulCatalogProductId": 1414,
+    "group": "allover",
+    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "options": {
+      "size": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ]
+    },
+    "variants": [
+      {
+        "opts": {
+          "size": "XS"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "size": "S"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "size": "M"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "size": "L"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "size": "XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "size": "2XL"
+        },
+        "price": 45,
+        "status": "DECIDED"
+      }
+    ],
+    "images": [
+      {
+        "when": {},
+        "images": [
+          "/images/catalog/coast-tee/model-left-front.844ff4d5.webp",
+          "/images/catalog/coast-tee/model2.29fa42cb.webp",
+          "/images/catalog/coast-tee/flat.78c7c689.webp",
+          "/images/catalog/coast-tee/back.8984d341.webp"
+        ],
+        "checkout": "/images/catalog/coast-tee/model-left-front.844ff4d5-checkout.jpg"
+      }
+    ],
+    "credits": [
+      {
+        "lines": [
+          "Photos: \"surf\", \"view2\" and \"view\" by Matt Billings, \"Gulf of America\" and \"Northwest Florida\" by Olin Gilbert, \"White Sands – Pensacola Beach\" by Tony Webster (CC BY 2.0); \"Johnson's Beach Access E\" by NPS/Breault (public domain); combined, retouched and colour-graded"
+        ]
+      }
+    ]
+  },
+  {
     "slug": "sky-shorts",
     "title": "Sky Shorts",
     "supplier": "printful",

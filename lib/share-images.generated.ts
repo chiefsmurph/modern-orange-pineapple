@@ -11,6 +11,7 @@ export const shareImages: Record<string, string> = {
   "sky-tee": "/images/share/sky-tee.7ad2d2ec.jpg",
   "gold-stripes": "/images/share/gold-stripes.3eca8293.jpg",
   "sky-shorts": "/images/share/sky-shorts.10cf6ff9.jpg",
+  "coast-tee": "/images/share/coast-tee.cfe9ee4e.jpg",
   "pelican-tee": "/images/share/pelican-tee.561243bf.jpg",
   "pelican-tee?color=Ivory": "/images/share/pelican-tee--ivory.9a3dccee.jpg",
   "pelican-tee?color=Butter": "/images/share/pelican-tee--butter.50c499d3.jpg",

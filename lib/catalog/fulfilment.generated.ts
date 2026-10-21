@@ -2827,6 +2827,35 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
     },
     "royalties": []
   },
+  "coast-tee": {
+    "variants": {
+      "XS": {
+        "syncVariantId": 5586098566,
+        "catalogVariantId": 33937
+      },
+      "S": {
+        "syncVariantId": 5586098567,
+        "catalogVariantId": 33938
+      },
+      "M": {
+        "syncVariantId": 5586098568,
+        "catalogVariantId": 33939
+      },
+      "L": {
+        "syncVariantId": 5586098570,
+        "catalogVariantId": 33940
+      },
+      "XL": {
+        "syncVariantId": 5586098571,
+        "catalogVariantId": 33941
+      },
+      "2XL": {
+        "syncVariantId": 5586098572,
+        "catalogVariantId": 33942
+      }
+    },
+    "royalties": []
+  },
   "sky-shorts": {
     "variants": {
       "XS": {

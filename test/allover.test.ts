@@ -12,13 +12,13 @@ import { royaltyRows } from "../lib/orders/royalties.ts";
 import { buildOrderRecord } from "../lib/orders/session.ts";
 import { makeSession } from "./helpers.ts";
 
-const ALLOVER = ["day-all-over", "dusk-all-over", "night-all-over", "sky-tee", "gold-stripes"];
+const ALLOVER = ["day-all-over", "dusk-all-over", "night-all-over", "sky-tee", "gold-stripes", "coast-tee"];
 const present = ALLOVER.every((s) => getShopProduct(s));
 
 const recordFor = async (slug: string, opts: Record<string, string>) =>
   buildOrderRecord(makeSession([buildItem(slug, opts, 1, {}).item]));
 
-test("all five all-overs are in the catalog: $45 (John 10/20 after the price comps; $44 from 10/12, $49 before), XS–2XL, group allover, Printful", { skip: !present }, () => {
+test("all six all-overs (the Gulf Coast Tee joined 10/20) are in the catalog: $45 (John 10/20 after the price comps; $44 from 10/12, $49 before), XS–2XL, group allover, Printful", { skip: !present }, () => {
   for (const slug of ALLOVER) {
     const p = getShopProduct(slug)!;
     assert.equal(p.group, "allover", slug);

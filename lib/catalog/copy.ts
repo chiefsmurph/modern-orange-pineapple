@@ -68,6 +68,14 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
   { match: /^night-all-over/, text: () => "The rabbit under a night sky, printed edge to edge.", rank: 1 },
   { match: /^sky-tee/, text: () => "Pick your sky. Every one is printed edge to edge.", rank: 1 },
   { match: /stripes/, text: () => "Gold stripes, printed edge to edge.", rank: 1 },
+  // John 10/20: added to the shop, after the other all-overs (one in, one out: not in `featured`).
+  // `coast-tee` so more coasts can become a picker on this page later.
+  {
+    match: /^coast-tee/,
+    text: () =>
+      "The Gulf at Pensacola Beach: emerald water, sugar-white dunes and a big blue sky, printed edge to edge. The back is a different stretch of the same coast, lined up at the seams so the horizon runs all the way around.",
+    rank: 1,
+  },
   {
     match: /^sky-shorts/,
     text: () => "Big summer clouds on a bright day sky, printed edge to edge, with a little MOP rabbit by the left hem.",
