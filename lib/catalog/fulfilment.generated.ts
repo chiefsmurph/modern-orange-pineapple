@@ -1604,172 +1604,340 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
   },
   "original-star-tee": {
     "variants": {
-      "large|White|S": {
+      "star|large|White|S": {
         "syncVariantId": 5567829355,
         "catalogVariantId": 15124
       },
-      "large|White|M": {
+      "star|large|White|M": {
         "syncVariantId": 5567829356,
         "catalogVariantId": 15125
       },
-      "large|White|L": {
+      "star|large|White|L": {
         "syncVariantId": 5567829357,
         "catalogVariantId": 15126
       },
-      "large|White|XL": {
+      "star|large|White|XL": {
         "syncVariantId": 5567829358,
         "catalogVariantId": 15127
       },
-      "large|White|2XL": {
+      "star|large|White|2XL": {
         "syncVariantId": 5567829359,
         "catalogVariantId": 15128
       },
-      "large|White|3XL": {
+      "star|large|White|3XL": {
         "syncVariantId": 5567829360,
         "catalogVariantId": 16335
       },
-      "large|White|4XL": {
+      "star|large|White|4XL": {
         "syncVariantId": 5567829361,
         "catalogVariantId": 17508
       },
-      "large|Black|S": {
+      "star|large|Black|S": {
         "syncVariantId": 5567829369,
         "catalogVariantId": 15114
       },
-      "large|Black|M": {
+      "star|large|Black|M": {
         "syncVariantId": 5567829370,
         "catalogVariantId": 15115
       },
-      "large|Black|L": {
+      "star|large|Black|L": {
         "syncVariantId": 5567829371,
         "catalogVariantId": 15116
       },
-      "large|Black|XL": {
+      "star|large|Black|XL": {
         "syncVariantId": 5567829372,
         "catalogVariantId": 15117
       },
-      "large|Black|2XL": {
+      "star|large|Black|2XL": {
         "syncVariantId": 5567829373,
         "catalogVariantId": 15118
       },
-      "large|Black|3XL": {
+      "star|large|Black|3XL": {
         "syncVariantId": 5567829374,
         "catalogVariantId": 16326
       },
-      "large|Black|4XL": {
+      "star|large|Black|4XL": {
         "syncVariantId": 5567829375,
         "catalogVariantId": 17500
       },
-      "large|Red|S": {
+      "star|large|Red|S": {
         "syncVariantId": 5567829376,
         "catalogVariantId": 15119
       },
-      "large|Red|M": {
+      "star|large|Red|M": {
         "syncVariantId": 5567829377,
         "catalogVariantId": 15120
       },
-      "large|Red|L": {
+      "star|large|Red|L": {
         "syncVariantId": 5567829378,
         "catalogVariantId": 15121
       },
-      "large|Red|XL": {
+      "star|large|Red|XL": {
         "syncVariantId": 5567829379,
         "catalogVariantId": 15123
       },
-      "large|Red|2XL": {
+      "star|large|Red|2XL": {
         "syncVariantId": 5567829380,
         "catalogVariantId": 15122
       },
-      "large|Red|3XL": {
+      "star|large|Red|3XL": {
         "syncVariantId": 5567829381,
         "catalogVariantId": 16331
       },
-      "large|Red|4XL": {
+      "star|large|Red|4XL": {
         "syncVariantId": 5567829382,
         "catalogVariantId": 17512
       },
-      "small|White|S": {
+      "star|small|White|S": {
         "syncVariantId": 5567830173,
         "catalogVariantId": 15124
       },
-      "small|White|M": {
+      "star|small|White|M": {
         "syncVariantId": 5567830174,
         "catalogVariantId": 15125
       },
-      "small|White|L": {
+      "star|small|White|L": {
         "syncVariantId": 5567830175,
         "catalogVariantId": 15126
       },
-      "small|White|XL": {
+      "star|small|White|XL": {
         "syncVariantId": 5567830176,
         "catalogVariantId": 15127
       },
-      "small|White|2XL": {
+      "star|small|White|2XL": {
         "syncVariantId": 5567830177,
         "catalogVariantId": 15128
       },
-      "small|White|3XL": {
+      "star|small|White|3XL": {
         "syncVariantId": 5567830178,
         "catalogVariantId": 16335
       },
-      "small|White|4XL": {
+      "star|small|White|4XL": {
         "syncVariantId": 5567830179,
         "catalogVariantId": 17508
       },
-      "small|Black|S": {
+      "star|small|Black|S": {
         "syncVariantId": 5567830180,
         "catalogVariantId": 15114
       },
-      "small|Black|M": {
+      "star|small|Black|M": {
         "syncVariantId": 5567830181,
         "catalogVariantId": 15115
       },
-      "small|Black|L": {
+      "star|small|Black|L": {
         "syncVariantId": 5567830182,
         "catalogVariantId": 15116
       },
-      "small|Black|XL": {
+      "star|small|Black|XL": {
         "syncVariantId": 5567830183,
         "catalogVariantId": 15117
       },
-      "small|Black|2XL": {
+      "star|small|Black|2XL": {
         "syncVariantId": 5567830185,
         "catalogVariantId": 15118
       },
-      "small|Black|3XL": {
+      "star|small|Black|3XL": {
         "syncVariantId": 5567830188,
         "catalogVariantId": 16326
       },
-      "small|Black|4XL": {
+      "star|small|Black|4XL": {
         "syncVariantId": 5567830189,
         "catalogVariantId": 17500
       },
-      "small|Red|S": {
+      "star|small|Red|S": {
         "syncVariantId": 5567830190,
         "catalogVariantId": 15119
       },
-      "small|Red|M": {
+      "star|small|Red|M": {
         "syncVariantId": 5567830191,
         "catalogVariantId": 15120
       },
-      "small|Red|L": {
+      "star|small|Red|L": {
         "syncVariantId": 5567830192,
         "catalogVariantId": 15121
       },
-      "small|Red|XL": {
+      "star|small|Red|XL": {
         "syncVariantId": 5567830193,
         "catalogVariantId": 15123
       },
-      "small|Red|2XL": {
+      "star|small|Red|2XL": {
         "syncVariantId": 5567830194,
         "catalogVariantId": 15122
       },
-      "small|Red|3XL": {
+      "star|small|Red|3XL": {
         "syncVariantId": 5567830195,
         "catalogVariantId": 16331
       },
-      "small|Red|4XL": {
+      "star|small|Red|4XL": {
         "syncVariantId": 5567830196,
+        "catalogVariantId": 17512
+      },
+      "bolt|large|White|S": {
+        "syncVariantId": 5587073342,
+        "catalogVariantId": 15124
+      },
+      "bolt|large|White|M": {
+        "syncVariantId": 5587073343,
+        "catalogVariantId": 15125
+      },
+      "bolt|large|White|L": {
+        "syncVariantId": 5587073345,
+        "catalogVariantId": 15126
+      },
+      "bolt|large|White|XL": {
+        "syncVariantId": 5587073356,
+        "catalogVariantId": 15127
+      },
+      "bolt|large|White|2XL": {
+        "syncVariantId": 5587073365,
+        "catalogVariantId": 15128
+      },
+      "bolt|large|White|3XL": {
+        "syncVariantId": 5587073369,
+        "catalogVariantId": 16335
+      },
+      "bolt|large|White|4XL": {
+        "syncVariantId": 5587073371,
+        "catalogVariantId": 17508
+      },
+      "bolt|large|Black|S": {
+        "syncVariantId": 5587073330,
+        "catalogVariantId": 15114
+      },
+      "bolt|large|Black|M": {
+        "syncVariantId": 5587073331,
+        "catalogVariantId": 15115
+      },
+      "bolt|large|Black|L": {
+        "syncVariantId": 5587073333,
+        "catalogVariantId": 15116
+      },
+      "bolt|large|Black|XL": {
+        "syncVariantId": 5587073334,
+        "catalogVariantId": 15117
+      },
+      "bolt|large|Black|2XL": {
+        "syncVariantId": 5587073335,
+        "catalogVariantId": 15118
+      },
+      "bolt|large|Black|3XL": {
+        "syncVariantId": 5587073366,
+        "catalogVariantId": 16326
+      },
+      "bolt|large|Black|4XL": {
+        "syncVariantId": 5587073370,
+        "catalogVariantId": 17500
+      },
+      "bolt|large|Red|S": {
+        "syncVariantId": 5587073336,
+        "catalogVariantId": 15119
+      },
+      "bolt|large|Red|M": {
+        "syncVariantId": 5587073337,
+        "catalogVariantId": 15120
+      },
+      "bolt|large|Red|L": {
+        "syncVariantId": 5587073339,
+        "catalogVariantId": 15121
+      },
+      "bolt|large|Red|XL": {
+        "syncVariantId": 5587073341,
+        "catalogVariantId": 15123
+      },
+      "bolt|large|Red|2XL": {
+        "syncVariantId": 5587073340,
+        "catalogVariantId": 15122
+      },
+      "bolt|large|Red|3XL": {
+        "syncVariantId": 5587073368,
+        "catalogVariantId": 16331
+      },
+      "bolt|large|Red|4XL": {
+        "syncVariantId": 5587073372,
+        "catalogVariantId": 17512
+      },
+      "bolt|small|White|S": {
+        "syncVariantId": 5587073529,
+        "catalogVariantId": 15124
+      },
+      "bolt|small|White|M": {
+        "syncVariantId": 5587073530,
+        "catalogVariantId": 15125
+      },
+      "bolt|small|White|L": {
+        "syncVariantId": 5587073531,
+        "catalogVariantId": 15126
+      },
+      "bolt|small|White|XL": {
+        "syncVariantId": 5587073532,
+        "catalogVariantId": 15127
+      },
+      "bolt|small|White|2XL": {
+        "syncVariantId": 5587073533,
+        "catalogVariantId": 15128
+      },
+      "bolt|small|White|3XL": {
+        "syncVariantId": 5587073537,
+        "catalogVariantId": 16335
+      },
+      "bolt|small|White|4XL": {
+        "syncVariantId": 5587073539,
+        "catalogVariantId": 17508
+      },
+      "bolt|small|Black|S": {
+        "syncVariantId": 5587073519,
+        "catalogVariantId": 15114
+      },
+      "bolt|small|Black|M": {
+        "syncVariantId": 5587073520,
+        "catalogVariantId": 15115
+      },
+      "bolt|small|Black|L": {
+        "syncVariantId": 5587073521,
+        "catalogVariantId": 15116
+      },
+      "bolt|small|Black|XL": {
+        "syncVariantId": 5587073522,
+        "catalogVariantId": 15117
+      },
+      "bolt|small|Black|2XL": {
+        "syncVariantId": 5587073523,
+        "catalogVariantId": 15118
+      },
+      "bolt|small|Black|3XL": {
+        "syncVariantId": 5587073534,
+        "catalogVariantId": 16326
+      },
+      "bolt|small|Black|4XL": {
+        "syncVariantId": 5587073538,
+        "catalogVariantId": 17500
+      },
+      "bolt|small|Red|S": {
+        "syncVariantId": 5587073524,
+        "catalogVariantId": 15119
+      },
+      "bolt|small|Red|M": {
+        "syncVariantId": 5587073525,
+        "catalogVariantId": 15120
+      },
+      "bolt|small|Red|L": {
+        "syncVariantId": 5587073526,
+        "catalogVariantId": 15121
+      },
+      "bolt|small|Red|XL": {
+        "syncVariantId": 5587073528,
+        "catalogVariantId": 15123
+      },
+      "bolt|small|Red|2XL": {
+        "syncVariantId": 5587073527,
+        "catalogVariantId": 15122
+      },
+      "bolt|small|Red|3XL": {
+        "syncVariantId": 5587073535,
+        "catalogVariantId": 16331
+      },
+      "bolt|small|Red|4XL": {
+        "syncVariantId": 5587073540,
         "catalogVariantId": 17512
       }
     },

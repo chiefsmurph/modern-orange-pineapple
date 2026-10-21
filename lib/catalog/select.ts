@@ -16,7 +16,7 @@ const orderIndex = (name: string) => {
   return i === -1 ? OPTION_ORDER.length : i;
 };
 
-/** Option names in picker order (version, style, emblem, colour, size, then any others). */
+/** Option names in picker order (design, version, style, emblem, sky, colour, size, then any others). */
 export const sortOptionNames = (names: string[]) =>
   [...names].sort((a, b) => orderIndex(a) - orderIndex(b) || a.localeCompare(b));
 

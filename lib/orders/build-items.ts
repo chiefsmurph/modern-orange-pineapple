@@ -14,6 +14,7 @@ import { getShopProduct, getShopProductIncludingRetired } from "../catalog/index
 import { isRetiredCatalog, isRetiredOption } from "../catalog/retired.ts";
 import { catalogFulfilment } from "../catalog/fulfilment.generated.ts";
 import {
+  canonicalValue,
   findVariant,
   imageSetFor,
   imagesFor,
@@ -22,6 +23,7 @@ import {
   variantKey,
 } from "../catalog/select.ts";
 import { optionTitle, valueLabel } from "../catalog/copy.ts";
+import { addedDefault } from "../catalog/added.ts";
 import { yoycolFor, yoycolSku } from "./yoycol-config.ts";
 import type { OrderItem } from "./types.ts";
 
@@ -143,6 +145,8 @@ export function buildItem(
   const sel = normalizeSelection(product, rawOptions, { fillDefaults: false });
   for (const name of optionNames(product)) {
     if (!sel[name] && product.options[name].length === 1) sel[name] = product.options[name][0];
+    // an option added after the product went on sale (the star's design): missing = what it sold as before
+    if (!sel[name] && rawOptions[name] === undefined) sel[name] = canonicalValue(product, name, addedDefault(product.slug, name));
     if (!sel[name]) throw new CheckoutError(`invalid ${name}`);
   }
   const variant = findVariant(product, sel);

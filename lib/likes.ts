@@ -21,6 +21,7 @@
 import crypto from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { withoutAddedDefaults } from "./catalog/added.ts";
 
 export const LIKES_FILE = "likes.jsonl";
 export const LIKES_SHOW_MIN = 10;
@@ -209,7 +210,8 @@ export async function handleLike(
   const row: LikeRow = {
     ts: deps.now().toISOString(),
     slug,
-    design: designKey(opts),
+    // the star before its Bolt existed and the star now are the same design (lib/catalog/added.ts)
+    design: designKey(withoutAddedDefaults(slug, opts)),
     device: hash(device),
     on: body.on,
     src: normalizeSrc(body.src),

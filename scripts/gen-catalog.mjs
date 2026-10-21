@@ -31,7 +31,7 @@ import { cardCrop, writeCard } from "./card-crop.mjs";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = path.join(ROOT, "lib/catalog");
 const PUBLIC_DIR = path.join(ROOT, "public/images/catalog");
-const OPTION_ORDER = ["version", "style", "emblem", "sky", "color", "size"];
+const OPTION_ORDER = ["design", "version", "style", "emblem", "sky", "color", "size"]; // = lib/catalog/types.ts
 // Top-level routes a slug must not shadow.
 const RESERVED = ["api", "preview", "redeem", "register", "moderate", "custom", "shipping-returns", "feeds", "bag", "meta-checkout", "images", "videos", "_next"];
 

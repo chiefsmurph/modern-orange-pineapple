@@ -210,6 +210,7 @@ export const catalogRank = (slug: string) => introFor(slug)?.rank ?? 90;
 
 /** Picker headings. The option keys (version: large/small) stay as they are in catalog.json. */
 export const optionTitles: Record<string, string> = {
+  design: "Design",
   version: "Print",
   style: "Style",
   emblem: "Emblem",

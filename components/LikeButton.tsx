@@ -8,6 +8,7 @@
 // Every failure (storage blocked, offline) leaves the page working.
 import { useEffect, useState } from "react";
 import { track } from "@/lib/umami";
+import { withoutAddedDefaults } from "@/lib/catalog/added";
 import styles from "./LikeButton.module.css";
 
 const LIKES_KEY = "mop-likes";
@@ -78,7 +79,8 @@ export default function LikeButton({
   opts: Record<string, string | undefined>;
   className?: string;
 }) {
-  const design = designOf(opts);
+  // a like on the star from before the Bolt existed is the same like (lib/catalog/added.ts)
+  const design = designOf(withoutAddedDefaults(slug, opts));
   const key = `${slug}|${design}`;
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState<number | null>(null);

@@ -4567,7 +4567,17 @@ export const catalogProducts: CatalogProduct[] = [
     "supplier": "printful",
     "delivery": "printful",
     "printfulCatalogProductId": 586,
+    "optionLabels": {
+      "design": {
+        "star": "Star",
+        "bolt": "Bolt"
+      }
+    },
     "options": {
+      "design": [
+        "star",
+        "bolt"
+      ],
       "version": [
         "large",
         "small"
@@ -4590,6 +4600,7 @@ export const catalogProducts: CatalogProduct[] = [
     "variants": [
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "S"
@@ -4599,6 +4610,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "M"
@@ -4608,6 +4620,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "L"
@@ -4617,6 +4630,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "XL"
@@ -4626,6 +4640,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "2XL"
@@ -4635,6 +4650,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "3XL"
@@ -4644,6 +4660,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "White",
           "size": "4XL"
@@ -4653,6 +4670,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "S"
@@ -4662,6 +4680,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "M"
@@ -4671,6 +4690,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "L"
@@ -4680,6 +4700,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "XL"
@@ -4689,6 +4710,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "2XL"
@@ -4698,6 +4720,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "3XL"
@@ -4707,6 +4730,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Black",
           "size": "4XL"
@@ -4716,6 +4740,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "S"
@@ -4725,6 +4750,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "M"
@@ -4734,6 +4760,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "L"
@@ -4743,6 +4770,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "XL"
@@ -4752,6 +4780,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "2XL"
@@ -4761,6 +4790,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "3XL"
@@ -4770,6 +4800,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "large",
           "color": "Red",
           "size": "4XL"
@@ -4779,6 +4810,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "S"
@@ -4788,6 +4820,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "M"
@@ -4797,6 +4830,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "L"
@@ -4806,6 +4840,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "XL"
@@ -4815,6 +4850,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "2XL"
@@ -4824,6 +4860,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "3XL"
@@ -4833,6 +4870,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "White",
           "size": "4XL"
@@ -4842,6 +4880,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "S"
@@ -4851,6 +4890,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "M"
@@ -4860,6 +4900,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "L"
@@ -4869,6 +4910,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "XL"
@@ -4878,6 +4920,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "2XL"
@@ -4887,6 +4930,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "3XL"
@@ -4896,6 +4940,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Black",
           "size": "4XL"
@@ -4905,6 +4950,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Red",
           "size": "S"
@@ -4914,6 +4960,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Red",
           "size": "M"
@@ -4923,6 +4970,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Red",
           "size": "L"
@@ -4932,6 +4980,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Red",
           "size": "XL"
@@ -4941,6 +4990,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Red",
           "size": "2XL"
@@ -4950,6 +5000,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
           "version": "small",
           "color": "Red",
           "size": "3XL"
@@ -4959,6 +5010,427 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "opts": {
+          "design": "star",
+          "version": "small",
+          "color": "Red",
+          "size": "4XL"
+        },
+        "price": 41,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "S"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "M"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "L"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "XL"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "2XL"
+        },
+        "price": 37,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "3XL"
+        },
+        "price": 39,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White",
+          "size": "4XL"
+        },
+        "price": 41,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "S"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "M"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "L"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "XL"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "2XL"
+        },
+        "price": 37,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "3XL"
+        },
+        "price": 39,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black",
+          "size": "4XL"
+        },
+        "price": 41,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "S"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "M"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "L"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "XL"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "2XL"
+        },
+        "price": 37,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "3XL"
+        },
+        "price": 39,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red",
+          "size": "4XL"
+        },
+        "price": 41,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "S"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "M"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "L"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "XL"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "2XL"
+        },
+        "price": 37,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "3XL"
+        },
+        "price": 39,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White",
+          "size": "4XL"
+        },
+        "price": 41,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "S"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "M"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "L"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "XL"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "2XL"
+        },
+        "price": 37,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "3XL"
+        },
+        "price": 39,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black",
+          "size": "4XL"
+        },
+        "price": 41,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red",
+          "size": "S"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red",
+          "size": "M"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red",
+          "size": "L"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red",
+          "size": "XL"
+        },
+        "price": 35,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red",
+          "size": "2XL"
+        },
+        "price": 37,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red",
+          "size": "3XL"
+        },
+        "price": 39,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "design": "bolt",
           "version": "small",
           "color": "Red",
           "size": "4XL"
@@ -4970,6 +5442,7 @@ export const catalogProducts: CatalogProduct[] = [
     "images": [
       {
         "when": {
+          "design": "star",
           "version": "large",
           "color": "White"
         },
@@ -4982,6 +5455,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "design": "star",
           "version": "large",
           "color": "Black"
         },
@@ -4994,6 +5468,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "design": "star",
           "version": "large",
           "color": "Red"
         },
@@ -5006,6 +5481,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "design": "star",
           "version": "small",
           "color": "White"
         },
@@ -5018,6 +5494,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "design": "star",
           "version": "small",
           "color": "Black"
         },
@@ -5030,6 +5507,7 @@ export const catalogProducts: CatalogProduct[] = [
       },
       {
         "when": {
+          "design": "star",
           "version": "small",
           "color": "Red"
         },
@@ -5039,6 +5517,84 @@ export const catalogProducts: CatalogProduct[] = [
           "/images/catalog/original-star-tee/small-red-flat.0cce262d.webp"
         ],
         "checkout": "/images/catalog/original-star-tee/small-red-model-womens.336e687e-checkout.jpg"
+      },
+      {
+        "when": {
+          "design": "bolt",
+          "version": "large",
+          "color": "White"
+        },
+        "images": [
+          "/images/catalog/original-star-tee/bolt-large-white-model-womens.d42afb22.webp",
+          "/images/catalog/original-star-tee/bolt-large-white-model-mens-2.24799e11.webp",
+          "/images/catalog/original-star-tee/bolt-large-white-flat.ea17b348.webp"
+        ],
+        "checkout": "/images/catalog/original-star-tee/bolt-large-white-model-womens.d42afb22-checkout.jpg"
+      },
+      {
+        "when": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Black"
+        },
+        "images": [
+          "/images/catalog/original-star-tee/bolt-large-black-model-womens.5c13fcd6.webp",
+          "/images/catalog/original-star-tee/bolt-large-black-model-mens-2.dc3fc144.webp",
+          "/images/catalog/original-star-tee/bolt-large-black-flat.98474649.webp"
+        ],
+        "checkout": "/images/catalog/original-star-tee/bolt-large-black-model-womens.5c13fcd6-checkout.jpg"
+      },
+      {
+        "when": {
+          "design": "bolt",
+          "version": "large",
+          "color": "Red"
+        },
+        "images": [
+          "/images/catalog/original-star-tee/bolt-large-red-model-womens.f926d36c.webp",
+          "/images/catalog/original-star-tee/bolt-large-red-model-mens-2.fdb6891f.webp",
+          "/images/catalog/original-star-tee/bolt-large-red-flat.71e3602b.webp"
+        ],
+        "checkout": "/images/catalog/original-star-tee/bolt-large-red-model-womens.f926d36c-checkout.jpg"
+      },
+      {
+        "when": {
+          "design": "bolt",
+          "version": "small",
+          "color": "White"
+        },
+        "images": [
+          "/images/catalog/original-star-tee/bolt-small-white-model-womens.4b510b14.webp",
+          "/images/catalog/original-star-tee/bolt-small-white-model-mens-2.c57c5060.webp",
+          "/images/catalog/original-star-tee/bolt-small-white-flat.1171d68a.webp"
+        ],
+        "checkout": "/images/catalog/original-star-tee/bolt-small-white-model-womens.4b510b14-checkout.jpg"
+      },
+      {
+        "when": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Black"
+        },
+        "images": [
+          "/images/catalog/original-star-tee/bolt-small-black-model-womens.d3a5397b.webp",
+          "/images/catalog/original-star-tee/bolt-small-black-model-mens-2.d8ca8753.webp",
+          "/images/catalog/original-star-tee/bolt-small-black-flat.209dac8e.webp"
+        ],
+        "checkout": "/images/catalog/original-star-tee/bolt-small-black-model-womens.d3a5397b-checkout.jpg"
+      },
+      {
+        "when": {
+          "design": "bolt",
+          "version": "small",
+          "color": "Red"
+        },
+        "images": [
+          "/images/catalog/original-star-tee/bolt-small-red-model-womens.156a54f4.webp",
+          "/images/catalog/original-star-tee/bolt-small-red-model-mens-2.5bfc3ef6.webp",
+          "/images/catalog/original-star-tee/bolt-small-red-flat.188c5631.webp"
+        ],
+        "checkout": "/images/catalog/original-star-tee/bolt-small-red-model-womens.156a54f4-checkout.jpg"
       }
     ],
     "card": "/images/catalog/original-star-tee/large-white-model-womens.e44c17f5-card.webp",
@@ -5047,7 +5603,10 @@ export const catalogProducts: CatalogProduct[] = [
         "lines": [
           "Original star by Sunshine Austina",
           "Colour & design by MOP"
-        ]
+        ],
+        "when": {
+          "design": "star"
+        }
       }
     ]
   },

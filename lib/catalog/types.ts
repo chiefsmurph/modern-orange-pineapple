@@ -5,8 +5,12 @@
 //   fulfilment.generated.ts — server-only: Printful sync variant ids and royalty rules.
 // Costs from catalog.json are never copied into the repo (it's public).
 
-/** Picker order on the page. Unknown option names sort after these. */
-export const OPTION_ORDER = ["version", "style", "emblem", "sky", "color", "size"] as const;
+/**
+ * Picker order on the page. Unknown option names sort after these. `design` (the
+ * Original Star Tee's Star / Bolt, John 10/21) comes first: which picture, then
+ * how big it's printed, then the shirt.
+ */
+export const OPTION_ORDER = ["design", "version", "style", "emblem", "sky", "color", "size"] as const;
 
 /** Option name -> chosen value. */
 export type Selection = Record<string, string | undefined>;

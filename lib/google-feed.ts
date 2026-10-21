@@ -7,6 +7,7 @@
 import type { ShopProduct } from "./catalog/index.ts";
 import { imageSetFor, imagesFor, optionNames, syncedQuery } from "./catalog/select.ts";
 import { valueLabel } from "./catalog/copy.ts";
+import { withoutAddedDefaults } from "./catalog/added.ts";
 
 export const SITE = "https://mopclothing.com";
 export const BRAND = "Modern Orange Pineapple";
@@ -37,9 +38,13 @@ export const categoryFor = (p: Pick<ShopProduct, "printfulCatalogProductId" | "s
 export const genderFor = (p: Pick<ShopProduct, "printfulCatalogProductId" | "slug">) =>
   p.printfulCatalogProductId === 636 || p.printfulCatalogProductId === 315 || /crop|dress/.test(p.slug) ? "female" : "unisex";
 
-/** A stable id per variant (Google allows 50 characters). */
+/**
+ * A stable id per variant (Google allows 50 characters). An option added to a
+ * product later (lib/catalog/added.ts) is left out at its old value, so the ids
+ * that existed before it (bags, Meta carts, the listings) stay the same.
+ */
 export const feedId = (slug: string, opts: Record<string, string>) => {
-  const id = [slug, ...Object.values(opts)].join("-").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const id = [slug, ...Object.values(withoutAddedDefaults(slug, opts))].join("-").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   if (id.length <= 50) return id;
   let h = 0;
   for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
