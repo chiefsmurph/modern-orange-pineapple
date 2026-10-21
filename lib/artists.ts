@@ -96,6 +96,8 @@ export const getDesign = (
  * other line (e.g. "Sky photo: John Robert McPherson (CC0, Wikimedia Commons)")
  * is shown exactly as written, with no avatar. Only a lowercase " by " is a
  * byline: "CC BY 4.0" is a licence, and a CC BY credit must stay unaltered.
+ * A labelled source line ("Photo: …", "Photos: “surf” by …, “view” by …") is
+ * not a byline either, even with " by " in it: it is shown as written.
  */
 export const designFromCreditLines = (lines: string[]): Design | undefined => {
   if (lines.length === 0) return undefined;
@@ -109,7 +111,7 @@ export const designFromCreditLines = (lines: string[]): Design | undefined => {
   const notes: string[] = [];
   for (const line of lines) {
     const m = /^(.*?)\s+by\s+(.+)$/.exec(line.trim());
-    if (!m) {
+    if (!m || m[1].includes(":")) {
       notes.push(line.trim());
       continue;
     }

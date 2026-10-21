@@ -235,8 +235,11 @@ for (const p of catalog.products ?? []) {
   for (const c of credits) {
     for (const [k, v] of Object.entries(c.when ?? {}))
       if (!options[k] || (v !== "*" && !options[k].some((x) => eq(x, v)))) fail(`${where}: credit_when ${k}=${v} matches nothing`);
-    for (const l of c.lines)
-      if (!/ by /.test(l)) console.log(`note: ${where}: credit "${l}" shows as written, without an avatar`);
+    for (const l of c.lines) {
+      // the same rule as designFromCreditLines (lib/artists.ts): "<role> by <name>", no ":" in the role, is a byline
+      const byline = /^(.*?)\s+by\s+(.+)$/.exec(l.trim());
+      if (!byline || byline[1].includes(":")) console.log(`note: ${where}: credit "${l}" shows as written, without an avatar`);
+    }
   }
 
   // Display labels for coded values (catalog `option_labels`).
