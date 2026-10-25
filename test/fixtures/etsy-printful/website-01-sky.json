@@ -1,0 +1,237 @@
+{
+ "sync_product": {
+  "id": 483492897,
+  "external_id": "6ad7d7be36d538",
+  "name": "MOP · Sky Tee — Cosmic Cliffs",
+  "variants": 6,
+  "synced": 6,
+  "is_ignored": false
+ },
+ "sync_variants": [
+  {
+   "id": 5585834477,
+   "external_id": "6ad7d7be37a594",
+   "sync_product_id": 483492897,
+   "name": "MOP · Sky Tee — Cosmic Cliffs / White / XS",
+   "synced": true,
+   "variant_id": 33937,
+   "retail_price": "44.00",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "White",
+   "size": "XS",
+   "files": [
+    {
+     "type": "front_dtfabric",
+     "id": 1090668200,
+     "filename": "mop-sky-cosmic-cliffs-front.jpg",
+     "width": 4200,
+     "height": 5400,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "back_dtfabric",
+     "id": 1090668196,
+     "filename": "mop-sky-cosmic-cliffs-back.jpg",
+     "width": 4200,
+     "height": 5400,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "sleeve_left_dtfabric",
+     "id": 1090668203,
+     "filename": "mop-sky-cosmic-cliffs-sleeve_left.jpg",
+     "width": 3000,
+     "height": 1800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "sleeve_right_dtfabric",
+     "id": 1090668206,
+     "filename": "mop-sky-cosmic-cliffs-sleeve_right.jpg",
+     "width": 3000,
+     "height": 1800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1090671341,
+     "filename": "all-over-print-mens-cotton-crew-neck-t-shirt-white-front-6ad7d7f017467.png",
+     "width": 1000,
+     "height": 1000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "stitch_color",
+     "value": "black"
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 1414,
+    "variant_id": 33937,
+    "name": "All-Over Print Men’s Cotton Crew Neck T-Shirt (White / XS)"
+   }
+  },
+  {
+   "id": 5585834480,
+   "external_id": "6ad7d7be54b948",
+   "sync_product_id": 483492897,
+   "name": "MOP · Sky Tee — Cosmic Cliffs / White / M",
+   "synced": true,
+   "variant_id": 33939,
+   "retail_price": "44.00",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "White",
+   "size": "M",
+   "files": [
+    {
+     "type": "front_dtfabric",
+     "id": 1090668200,
+     "filename": "mop-sky-cosmic-cliffs-front.jpg",
+     "width": 4200,
+     "height": 5400,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "back_dtfabric",
+     "id": 1090668196,
+     "filename": "mop-sky-cosmic-cliffs-back.jpg",
+     "width": 4200,
+     "height": 5400,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "sleeve_left_dtfabric",
+     "id": 1090668203,
+     "filename": "mop-sky-cosmic-cliffs-sleeve_left.jpg",
+     "width": 3000,
+     "height": 1800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "sleeve_right_dtfabric",
+     "id": 1090668206,
+     "filename": "mop-sky-cosmic-cliffs-sleeve_right.jpg",
+     "width": 3000,
+     "height": 1800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1090671341,
+     "filename": "all-over-print-mens-cotton-crew-neck-t-shirt-white-front-6ad7d7f017467.png",
+     "width": 1000,
+     "height": 1000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "stitch_color",
+     "value": "black"
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 1414,
+    "variant_id": 33939,
+    "name": "All-Over Print Men’s Cotton Crew Neck T-Shirt (White / M)"
+   }
+  },
+  {
+   "id": 5585834492,
+   "external_id": "6ad7d7be822ff8",
+   "sync_product_id": 483492897,
+   "name": "MOP · Sky Tee — Cosmic Cliffs / White / 2XL",
+   "synced": true,
+   "variant_id": 33942,
+   "retail_price": "44.00",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "White",
+   "size": "2XL",
+   "files": [
+    {
+     "type": "front_dtfabric",
+     "id": 1090668200,
+     "filename": "mop-sky-cosmic-cliffs-front.jpg",
+     "width": 4200,
+     "height": 5400,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "back_dtfabric",
+     "id": 1090668196,
+     "filename": "mop-sky-cosmic-cliffs-back.jpg",
+     "width": 4200,
+     "height": 5400,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "sleeve_left_dtfabric",
+     "id": 1090668203,
+     "filename": "mop-sky-cosmic-cliffs-sleeve_left.jpg",
+     "width": 3000,
+     "height": 1800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "sleeve_right_dtfabric",
+     "id": 1090668206,
+     "filename": "mop-sky-cosmic-cliffs-sleeve_right.jpg",
+     "width": 3000,
+     "height": 1800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1090671341,
+     "filename": "all-over-print-mens-cotton-crew-neck-t-shirt-white-front-6ad7d7f017467.png",
+     "width": 1000,
+     "height": 1000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "stitch_color",
+     "value": "black"
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 1414,
+    "variant_id": 33942,
+    "name": "All-Over Print Men’s Cotton Crew Neck T-Shirt (White / 2XL)"
+   }
+  }
+ ]
+}

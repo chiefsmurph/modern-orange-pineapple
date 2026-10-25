@@ -1,0 +1,428 @@
+{
+ "sync_product": {
+  "id": 485358135,
+  "external_id": "4602997513",
+  "name": "Pelican in a Beanie T-Shirt, Funny Pelican Tee on Comfort Colors Heavyweight Cotton, Original Art Bird Shirt, Gift for Men and Women",
+  "variants": 28,
+  "synced": 28,
+  "is_ignored": false
+ },
+ "sync_variants": [
+  {
+   "id": 5595182794,
+   "external_id": "35241095143",
+   "sync_product_id": 485358135,
+   "name": "Pelican in a Beanie T-Shirt, Funny Pelican Tee on Comfort Colors Heavyweight Cotton, Original Art Bird Shirt, Gift for Men and Women / Washed Denim / S",
+   "synced": true,
+   "variant_id": 21506,
+   "retail_price": "38.27",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "Washed Denim",
+   "size": "S",
+   "files": [
+    {
+     "type": "default",
+     "id": 1088326864,
+     "filename": "mop-pelican-beanie-left-A-d.png",
+     "width": 3600,
+     "height": 4800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1094760560,
+     "filename": "unisex-garment-dyed-heavyweight-t-shirt-washed-denim-front-6ade52183cb36.jpg",
+     "width": 2000,
+     "height": 2000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "embroidery_type",
+     "value": "flat"
+    },
+    {
+     "id": "thread_colors",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors",
+     "value": []
+    },
+    {
+     "id": "thread_colors_3d",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "lifelike",
+     "value": false
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 586,
+    "variant_id": 21506,
+    "name": "Unisex Garment-Dyed Heavyweight T-Shirt | Comfort Colors 1717 (Washed Denim / S)"
+   }
+  },
+  {
+   "id": 5595182806,
+   "external_id": "35622194110",
+   "sync_product_id": 485358135,
+   "name": "Pelican in a Beanie T-Shirt, Funny Pelican Tee on Comfort Colors Heavyweight Cotton, Original Art Bird Shirt, Gift for Men and Women / Lagoon Blue / 2XL",
+   "synced": true,
+   "variant_id": 17683,
+   "retail_price": "40.27",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "Lagoon Blue",
+   "size": "2XL",
+   "files": [
+    {
+     "type": "default",
+     "id": 1088326864,
+     "filename": "mop-pelican-beanie-left-A-d.png",
+     "width": 3600,
+     "height": 4800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1094760566,
+     "filename": "unisex-garment-dyed-heavyweight-t-shirt-lagoon-blue-front-6ade52183ea32.jpg",
+     "width": 2000,
+     "height": 2000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "embroidery_type",
+     "value": "flat"
+    },
+    {
+     "id": "thread_colors",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors",
+     "value": []
+    },
+    {
+     "id": "thread_colors_3d",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "lifelike",
+     "value": false
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 586,
+    "variant_id": 17683,
+    "name": "Unisex Garment-Dyed Heavyweight T-Shirt | Comfort Colors 1717 (Lagoon Blue / 2XL)"
+   }
+  },
+  {
+   "id": 5595182815,
+   "external_id": "35622194102",
+   "sync_product_id": 485358135,
+   "name": "Pelican in a Beanie T-Shirt, Funny Pelican Tee on Comfort Colors Heavyweight Cotton, Original Art Bird Shirt, Gift for Men and Women / Butter / 4XL",
+   "synced": true,
+   "variant_id": 17511,
+   "retail_price": "44.27",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "Butter",
+   "size": "4XL",
+   "files": [
+    {
+     "type": "default",
+     "id": 1088326864,
+     "filename": "mop-pelican-beanie-left-A-d.png",
+     "width": 3600,
+     "height": 4800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1094760569,
+     "filename": "unisex-garment-dyed-heavyweight-t-shirt-butter-front-6ade521841b8f.jpg",
+     "width": 2000,
+     "height": 2000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "embroidery_type",
+     "value": "flat"
+    },
+    {
+     "id": "thread_colors",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors",
+     "value": []
+    },
+    {
+     "id": "thread_colors_3d",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "lifelike",
+     "value": false
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 586,
+    "variant_id": 17511,
+    "name": "Unisex Garment-Dyed Heavyweight T-Shirt | Comfort Colors 1717 (Butter / 4XL)"
+   }
+  },
+  {
+   "id": 5595182817,
+   "external_id": "35622194100",
+   "sync_product_id": 485358135,
+   "name": "Pelican in a Beanie T-Shirt, Funny Pelican Tee on Comfort Colors Heavyweight Cotton, Original Art Bird Shirt, Gift for Men and Women / Ivory / M",
+   "synced": true,
+   "variant_id": 16524,
+   "retail_price": "38.27",
+   "currency": "USD",
+   "is_ignored": false,
+   "color": "Ivory",
+   "size": "M",
+   "files": [
+    {
+     "type": "default",
+     "id": 1088326864,
+     "filename": "mop-pelican-beanie-left-A-d.png",
+     "width": 3600,
+     "height": 4800,
+     "visible": true,
+     "status": "ok"
+    },
+    {
+     "type": "preview",
+     "id": 1094760570,
+     "filename": "unisex-garment-dyed-heavyweight-t-shirt-ivory-front-6ade521845138.jpg",
+     "width": 2000,
+     "height": 2000,
+     "visible": false,
+     "status": "ok"
+    }
+   ],
+   "options": [
+    {
+     "id": "embroidery_type",
+     "value": "flat"
+    },
+    {
+     "id": "thread_colors",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors",
+     "value": []
+    },
+    {
+     "id": "thread_colors_3d",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_left",
+     "value": []
+    },
+    {
+     "id": "thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_chest_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_large_center",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_left_top",
+     "value": []
+    },
+    {
+     "id": "thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "text_thread_colors_sleeve_right_top",
+     "value": []
+    },
+    {
+     "id": "lifelike",
+     "value": false
+    },
+    {
+     "id": "license_type",
+     "value": []
+    }
+   ],
+   "product": {
+    "product_id": 586,
+    "variant_id": 16524,
+    "name": "Unisex Garment-Dyed Heavyweight T-Shirt | Comfort Colors 1717 (Ivory / M)"
+   }
+  }
+ ]
+}

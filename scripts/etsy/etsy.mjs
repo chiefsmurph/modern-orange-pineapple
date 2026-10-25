@@ -7,6 +7,9 @@
 //   node scripts/etsy/etsy.mjs whoami                shop id, shipping/return/processing profiles, sections, partners
 //   node scripts/etsy/etsy.mjs create 3 --dry-run    print every request it would send; no writes
 //   node scripts/etsy/etsy.mjs create 3              make the draft: listing, colour × size prices, photos
+//   node scripts/etsy/etsy.mjs link 3 --dry-run      the per-variant plan for connecting listing 03 to Printful; no writes
+//   node scripts/etsy/etsy.mjs link 3                connect it: Etsy orders for its variants then fulfil on their own
+//   node scripts/etsy/etsy.mjs orders-check          Etsy-store Printful orders that need a look (draft, failed, on hold, unsynced)
 //
 // create options:
 //   --dry-run              print the payloads; no network writes (reads the shop if tokens exist)
@@ -16,16 +19,28 @@
 //                          or $MOP_ETSY_LISTINGS_DIR)
 //   --resume <listing_id>  finish a draft whose create stopped part-way (inventory, missing photos)
 //
-// Credentials: ~/.config/mop-etsy/etsy.env and tokens.json (see lib/config.mjs). Nothing
-// here prints them. Shop ids are looked up by name at run time, never stored in the repo.
+// link: Printful imports each Etsy listing into the Etsy store (active listings at once,
+// drafts about daily). For every unsynced variant, link copies the website product's
+// variant of the same colour + size (catalog variant, print files, options) from the
+// website product the listing file names under "Printful source", and sets retail_price
+// to the listing's price. Any variant without an exact match stops the whole listing.
+// Variants already synced are left alone. Re-running is safe.
+//   --dry-run              print the plan; nothing is written to Printful
+//
+// Credentials: ~/.config/mop-etsy/etsy.env, tokens.json and printful.env (see lib/config.mjs).
+// Nothing here prints them. Shop ids are looked up by name at run time, never stored in the
+// repo; listing ids go to ~/.config/mop-etsy/listings.json. The website store's Printful
+// token never leaves the server (lib/printful-client.mjs reads its products over ssh).
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { hasTokens, redact } from "./lib/config.mjs";
+import { STATE_FILE, hasTokens, listingIdFor, recordListingId, redact } from "./lib/config.mjs";
 import { createClient } from "./lib/etsy-client.mjs";
 import { parseListingMd } from "./lib/listing-md.mjs";
 import { runAuth } from "./lib/oauth.mjs";
+import { PrintfulError, createPrintfulClient, fetchWebsiteProduct } from "./lib/printful-client.mjs";
+import { orderAttention, planLink } from "./lib/printful-link.mjs";
 import {
   READY_LISTINGS,
   buildDraftListing,
@@ -239,6 +254,7 @@ async function cmdCreate(n, opts) {
     listingId = created.listing_id;
     console.log(`draft ${listingId} created (state: ${created.state})`);
   }
+  recordListingId(n, listingId);
 
   try {
     await client.request("PUT", `/application/listings/${listingId}/inventory`, { json: inventory });
@@ -251,6 +267,135 @@ async function cmdCreate(n, opts) {
   const final = await client.request("GET", `/application/listings/${listingId}`);
   console.log(`\ndone: draft ${listingId} (state: ${final.state}). Review and publish it on Etsy:`);
   console.log(`  https://www.etsy.com/your/shops/me/listing-editor/edit/${listingId}`);
+}
+
+/** The Etsy listing_id for listing n: listings.json, else the one Etsy listing with its title (then recorded). */
+async function resolveListingId(n, listing) {
+  const known = listingIdFor(n);
+  if (known) return known;
+  if (!hasTokens()) throw new Error(`no Etsy listing id for #${n} in ${STATE_FILE}, and no Etsy tokens to look it up by title`);
+  const client = createClient();
+  const me = await client.request("GET", "/application/users/me");
+  const hits = await findSameTitle(client, me.shop_id, listing.title);
+  if (hits.length !== 1) {
+    throw new Error(
+      hits.length
+        ? `${hits.length} Etsy listings have #${n}'s title (${hits.map((h) => `${h.listing_id} ${h.state}`).join(", ")}); put the right one in ${STATE_FILE}`
+        : `no Etsy listing has #${n}'s title yet; run create ${n} first`,
+    );
+  }
+  recordListingId(n, hits[0].listing_id);
+  console.log(`(found #${n} on Etsy by title: ${hits[0].listing_id}, ${hits[0].state}; recorded in ${STATE_FILE})`);
+  return hits[0].listing_id;
+}
+
+function printPlan(plan) {
+  const w = Math.max(4, ...plan.rows.map((r) => (r.label ?? r.name).length));
+  for (const r of plan.rows) {
+    const label = (r.label ?? r.name).padEnd(w);
+    if (r.action === "link") {
+      console.log(`  link     ${label}  → catalog ${r.variant_id}  ${r.files.join(" + ")}${r.retail_price ? `  $${r.retail_price}` : ""}${r.note ? `  (${r.note})` : ""}`);
+    } else if (r.action === "synced") {
+      console.log(`  synced   ${label}  = catalog ${r.variant_id}  ${r.files.join(" + ")}${r.differs ? `  !! differs from the website: ${r.differs}` : ""}`);
+    } else if (r.action === "ignored") {
+      console.log(`  ignored  ${label}  (ignored in Printful; left alone)`);
+    } else {
+      console.log(`  NO MATCH ${label}  ${r.problem}`);
+    }
+  }
+}
+
+async function cmdLink(n, opts) {
+  if (!Number.isInteger(n)) throw new Error("usage: link <listing-number> [--dry-run]");
+  const dry = opts["dry-run"];
+  const { listing } = loadListing(opts.dir, n);
+  if (!listing.printfulSourceId) throw new Error(`listing ${n}'s file names no website "(sync product NNN)" under Printful source; can't tell which design to copy`);
+  const listingId = await resolveListingId(n, listing);
+  const pf = createPrintfulClient({ readOnly: dry });
+
+  let etsy;
+  try {
+    etsy = (await pf.request("GET", `/sync/products/@${listingId}`)).result;
+  } catch (e) {
+    if (e instanceof PrintfulError && e.status === 404) {
+      console.log(`#${n} (Etsy listing ${listingId}) is not in Printful yet; publish it on Etsy, then re-run.`);
+      console.log("(Printful imports active listings right away; drafts only about once a day.)");
+      return;
+    }
+    throw e;
+  }
+  const web = fetchWebsiteProduct(listing.printfulSourceId, { allowCache: dry });
+  if (web.warning) console.log(`!! website product read from ${web.from}: ${web.warning}`);
+  const plan = planLink(etsy, web.product, listing.pricesBySize);
+  const c = plan.counts;
+
+  console.log(`${dry ? "DRY RUN: nothing is written to Printful.\n" : ""}#${n} ${listing.name}`);
+  console.log(`  Etsy listing ${listingId} → Printful sync product ${etsy.sync_product.id} (Etsy store): ${etsy.sync_product.synced}/${etsy.sync_product.variants} synced`);
+  console.log(`  design from website product ${web.product.sync_product.id} "${web.product.sync_product.name}" (${web.from})`);
+  printPlan(plan);
+  console.log(`  ${c.total} variants: ${c.synced} already synced, ${c.link} to link, ${c.ignored} ignored, ${c.problem} without a match${c.differs ? `; ${c.differs} synced variant(s) differ from the website` : ""}`);
+
+  if (plan.problems.length) {
+    throw new Error(`stopping #${n}: ${plan.problems.length} variant(s) have no exact website match, so nothing is linked:\n  - ${plan.problems.join("\n  - ")}`);
+  }
+  if (!plan.toLink.length) {
+    console.log("nothing to do.");
+    return;
+  }
+  if (dry) {
+    const one = plan.toLink[0];
+    console.log(`\nwould send ${plan.toLink.length} × PUT /sync/variant/{id} (X-PF-Store-Id ${pf.storeId}); the first:`);
+    console.log(`PUT /sync/variant/${one.id}  ${JSON.stringify(one.body)}`);
+    return;
+  }
+
+  let done = 0;
+  let withPrice = true;
+  const unpriced = ({ retail_price, ...rest }) => rest;
+  for (const step of plan.toLink) {
+    let body = withPrice ? step.body : unpriced(step.body);
+    try {
+      try {
+        await pf.request("PUT", `/sync/variant/${step.id}`, { json: body });
+      } catch (e) {
+        // A PUT is idempotent; if this store won't take a retail price, link the rest without one.
+        if (!(e instanceof PrintfulError && e.status === 400 && /price/i.test(e.message) && body.retail_price)) throw e;
+        withPrice = false;
+        body = unpriced(body);
+        await pf.request("PUT", `/sync/variant/${step.id}`, { json: body });
+        console.log(`  (Printful refused retail_price: ${e.message}; linking without it)`);
+      }
+    } catch (e) {
+      e.message += `\n\n${done} of ${plan.toLink.length} linked before this. Re-run link ${n} to finish (synced variants are skipped).`;
+      throw e;
+    }
+    done++;
+    console.log(`  linked ${done}/${plan.toLink.length}  ${step.label}  → catalog ${body.variant_id}`);
+  }
+  const after = (await pf.request("GET", `/sync/products/${etsy.sync_product.id}`)).result;
+  const left = after.sync_variants.filter((v) => !v.synced && !v.is_ignored);
+  console.log(`\ndone: ${after.sync_product.synced}/${after.sync_product.variants} synced in Printful.`);
+  if (left.length) console.log(`still unsynced: ${left.map((v) => v.name).join("; ")}`);
+}
+
+async function cmdOrdersCheck() {
+  const pf = createPrintfulClient({ readOnly: true });
+  const orders = await pf.all("/orders");
+  const flagged = orders.map((o) => ({ o, why: orderAttention(o) })).filter((x) => x.why.length);
+  const when = (t) => (t ? new Date(t * 1000).toISOString().slice(0, 16).replace("T", " ") : "?");
+  console.log(`Printful Etsy store ${pf.storeId}: ${orders.length} order(s) read.`);
+  if (!flagged.length) {
+    console.log("none need attention.");
+    return;
+  }
+  console.log(`${flagged.length} need attention:`);
+  for (const { o, why } of flagged) {
+    const items = (o.items ?? []).map((i) => `${i.quantity}× ${i.name}`).join("; ");
+    console.log(`  #${o.id}  Etsy ${o.external_id ?? "?"}  ${o.status}  ${when(o.created)}  ${o.recipient?.name ?? ""}`);
+    console.log(`      ${why.join(" · ")}`);
+    if (items) console.log(`      ${items}`);
+  }
+  console.log("Printful → Stores → the Etsy store → Orders to fix or confirm them.");
 }
 
 async function main() {
@@ -278,8 +423,12 @@ async function main() {
     await cmdWhoami();
   } else if (cmd === "create") {
     await cmdCreate(Number(arg), values);
+  } else if (cmd === "link") {
+    await cmdLink(Number(arg), values);
+  } else if (cmd === "orders-check") {
+    await cmdOrdersCheck();
   } else {
-    throw new Error(`unknown command "${cmd}" (auth | whoami | create)`);
+    throw new Error(`unknown command "${cmd}" (auth | whoami | create | link | orders-check)`);
   }
 }
 

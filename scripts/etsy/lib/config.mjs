@@ -1,6 +1,10 @@
 // Credentials live outside the repo, in ~/.config/mop-etsy/ (dir 0700, files 0600):
-//   etsy.env     ETSY_KEYSTRING=…  ETSY_SHARED_SECRET=…  (optional ETSY_REDIRECT_URI=…)
-//   tokens.json  OAuth access + refresh tokens, written by `etsy.mjs auth`
+//   etsy.env       ETSY_KEYSTRING=…  ETSY_SHARED_SECRET=…  (optional ETSY_REDIRECT_URI=…)
+//   tokens.json    OAuth access + refresh tokens, written by `etsy.mjs auth`
+//   printful.env   PRINTFUL_ETSY_STORE_ID=…  PRINTFUL_ETSY_TOKEN=…  (the Etsy store's Printful token)
+// Local state, also outside the repo:
+//   listings.json  listing number → Etsy listing_id, written by `create` (and by `link` when it finds one by title)
+//   cache/         website-<id>.json: the website's Printful products, as `link` last read them
 // Nothing in this tool prints these values; `redact()` scrubs them from any error text.
 import fs from "node:fs";
 import os from "node:os";
@@ -9,6 +13,9 @@ import path from "node:path";
 export const CONFIG_DIR = process.env.MOP_ETSY_CONFIG_DIR || path.join(os.homedir(), ".config", "mop-etsy");
 export const ENV_FILE = path.join(CONFIG_DIR, "etsy.env");
 export const TOKENS_FILE = path.join(CONFIG_DIR, "tokens.json");
+export const PRINTFUL_ENV_FILE = path.join(CONFIG_DIR, "printful.env");
+export const STATE_FILE = path.join(CONFIG_DIR, "listings.json");
+export const CACHE_DIR = path.join(CONFIG_DIR, "cache");
 // Must match, character for character, a Callback URL registered on the Etsy app.
 export const DEFAULT_REDIRECT_URI = "http://localhost:3003/oauth/redirect";
 
@@ -58,6 +65,45 @@ export function loadTokens() {
   const t = JSON.parse(fs.readFileSync(TOKENS_FILE, "utf8"));
   remember(t.access_token, t.refresh_token);
   return t;
+}
+
+/** The Etsy store's Printful token and store id (sent as X-PF-Store-Id). */
+export function loadPrintfulEnv() {
+  if (!fs.existsSync(PRINTFUL_ENV_FILE)) throw new Error(`missing ${PRINTFUL_ENV_FILE} (PRINTFUL_ETSY_STORE_ID=…, PRINTFUL_ETSY_TOKEN=…)`);
+  const env = parseEnv(fs.readFileSync(PRINTFUL_ENV_FILE, "utf8"));
+  if (!env.PRINTFUL_ETSY_TOKEN || !/^\d+$/.test(env.PRINTFUL_ETSY_STORE_ID ?? "")) {
+    throw new Error(`${PRINTFUL_ENV_FILE} needs PRINTFUL_ETSY_TOKEN and a numeric PRINTFUL_ETSY_STORE_ID`);
+  }
+  remember(env.PRINTFUL_ETSY_TOKEN);
+  return { token: env.PRINTFUL_ETSY_TOKEN, storeId: env.PRINTFUL_ETSY_STORE_ID };
+}
+
+/** Writes `text` atomically as a 0600 file, making its folder 0700. */
+export function writePrivate(file, text) {
+  fs.mkdirSync(path.dirname(file), { recursive: true, mode: 0o700 });
+  fs.chmodSync(path.dirname(file), 0o700);
+  const tmp = `${file}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, text, { mode: 0o600 });
+  fs.chmodSync(tmp, 0o600);
+  fs.renameSync(tmp, file);
+}
+
+/** { listings: { "3": 4603036990, … } }: the Etsy listing_id each listing number became. */
+export function loadState(file = STATE_FILE) {
+  if (!fs.existsSync(file)) return { listings: {} };
+  const s = JSON.parse(fs.readFileSync(file, "utf8"));
+  return { ...s, listings: s.listings ?? {} };
+}
+
+export function listingIdFor(n, file = STATE_FILE) {
+  const id = loadState(file).listings[String(n)];
+  return id == null ? null : Number(id);
+}
+
+export function recordListingId(n, listingId, file = STATE_FILE) {
+  const s = loadState(file);
+  s.listings[String(n)] = Number(listingId);
+  writePrivate(file, JSON.stringify(s, null, 2) + "\n");
 }
 
 /** Atomic write, 0600 file in a 0700 dir. */

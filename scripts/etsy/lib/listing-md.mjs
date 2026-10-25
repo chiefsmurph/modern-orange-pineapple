@@ -1,6 +1,7 @@
 // Parses one Etsy listing file (listings/NN-*.md in the marketplace handoff) into
 // plain data. The format is the one the handoff writes:
 //   # NN · Name
+//   **Printful source:** … (sync product NNN)   the website's Printful product
 //   **Shop section:** …
 //   ## Title / ## Tags (13) / ## Description   each with a ``` fenced block
 //   ## Materials / ## Price (by size) / ## Variations   one line each
@@ -122,6 +123,12 @@ export function parsePhotos(text, colors) {
   return { folder, photos };
 }
 
+/** "… Grind Beanie (sync product 480715448)" → 480715448; null when the line names none. */
+export function printfulSourceId(line) {
+  const m = /\(sync product (\d+)\b/.exec(line ?? "");
+  return m ? Number(m[1]) : null;
+}
+
 export function parseListingMd(md) {
   const h1 = /^#\s+(\d+)\s*·\s*(.+?)\s*$/m.exec(md);
   if (!h1) throw new Error('no "# NN · Name" heading');
@@ -152,6 +159,7 @@ export function parseListingMd(md) {
     number: Number(h1[1]),
     name: h1[2],
     status: field("Status"),
+    printfulSourceId: printfulSourceId(field("Printful source")),
     section: field("Shop section"),
     title,
     tags,
