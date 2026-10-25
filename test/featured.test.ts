@@ -28,14 +28,14 @@ test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee
   assert.deepEqual(
     featuredCards().map((c) => [c.href, c.price]),
     [
-      ["/sky-tee?sky=orbital-sunset", "$45"],
-      ["/day-all-over?style=beanie", "$45"],
-      ["/blue-sky-cotton-shorts", "From $45"],
-      ["/alpaca-tee?version=large&color=Blue+Jean", "From $35"],
-      ["/dusk-all-over", "$45"],
-      ["/rabbit-tee?version=large&color=Blossom", "From $35"],
-      ["/pelican-tee?version=large&style=beanie", "From $35"],
-      ["/original-star-tee", "From $35"],
+      ["/sky-tee?sky=orbital-sunset", "$44.76"],
+      ["/day-all-over?style=beanie", "$44.76"],
+      ["/blue-sky-cotton-shorts", "From $44.43"],
+      ["/alpaca-tee?version=large&color=Blue+Jean", "From $34.73"],
+      ["/dusk-all-over", "$44.76"],
+      ["/rabbit-tee?version=large&color=Blossom", "From $34.73"],
+      ["/pelican-tee?version=large&style=beanie", "From $34.73"],
+      ["/original-star-tee", "From $34.73"],
     ]
   );
 });

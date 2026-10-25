@@ -18,7 +18,7 @@ const css = readFileSync(path.join(ROOT, "app/HomeGrid.module.css"), "utf8");
 
 test("the words: one sentence under the brand line, and the benefits row", () => {
   assert.equal(HERO_LINE, "Real skies and original characters, on cotton.");
-  assert.equal(BENEFITS.join(" · "), "Tees from $35 · Free US shipping · Original art, made to order");
+  assert.equal(BENEFITS.join(" · "), "Tees from $34.73 · Free US shipping · Original art, made to order");
   // nothing we can't back up
   for (const t of [HERO_LINE, ...BENEFITS]) assert.doesNotMatch(t, /made in|USA|America|organic|handmade/i, t);
 });
@@ -120,13 +120,13 @@ test("the logo sits on the sky with no card (John 10/17): dark Orbitron with a s
   assert.match(phone, /\.bunny \{[^}]*height: min\(76px, 19\.5vw\);/);
 });
 
-test('"Tees from $35" is true: the cheapest tee on sale costs exactly $35 (John 10/17; $35 since 10/20)', () => {
+test('"Tees from $34.73" is true: the cheapest tee on sale costs exactly $34.73 (John 10/17; $35 from 10/20, $34.73 since 10/24)', () => {
   const tees = shopProducts.filter((p) => /-tee$/.test(p.slug));
   assert.ok(tees.length > 0);
   const prices = tees.flatMap((p) => p.variants.map((v) => Number(v.price)));
   assert.ok(prices.every(Number.isFinite), "every tee variant has a price");
-  assert.equal(Math.min(...prices), 35);
-  assert.ok(BENEFITS.includes("Tees from $35"));
+  assert.equal(Math.min(...prices), 34.73);
+  assert.ok(BENEFITS.includes("Tees from $34.73"));
 });
 
 test("no scroll bounce: the page root has overscroll-behavior none (John 10/17)", () => {

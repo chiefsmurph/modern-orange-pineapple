@@ -18,9 +18,9 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 const ID = "blue-sky-cotton-shorts";
 const shorts = legacy.products.find((p) => p.id === ID)!;
 const SIZES = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
-const CENTS: Record<string, number> = { S: 4500, M: 4500, L: 4500, XL: 4500, "2XL": 4500, "3XL": 4500, "4XL": 4700, "5XL": 4900 }; // John 10/20 (were $40/$42/$44)
+const CENTS: Record<string, number> = { S: 4443, M: 4443, L: 4443, XL: 4443, "2XL": 4443, "3XL": 4443, "4XL": 4643, "5XL": 4843 }; // John 10/24 endings (were $45/$47/$49 from 10/20, $40/$42/$44 before)
 
-test("the shorts' page product: size pills S–5XL at $45/$47/$49, Yoycol delivery, Buy now only", () => {
+test("the shorts' page product: size pills S–5XL at $44.43/$46.43/$48.43, Yoycol delivery, Buy now only", () => {
   const page = legacyPageProduct(shorts)!;
   assert.ok(page);
   assert.equal(page.slug, ID);
@@ -32,7 +32,7 @@ test("the shorts' page product: size pills S–5XL at $45/$47/$49, Yoycol delive
     page.variants.map((v) => [v.opts.size, v.price]),
     SIZES.map((s) => [s, CENTS[s] / 100])
   );
-  assert.equal(priceLabel(page, {}), "From $45");
+  assert.equal(priceLabel(page, {}), "From $44.43");
   assert.deepEqual(imagesFor(page, {}), shorts.images);
   // no size picked from the URL: "Choose a size"; ?size=4XL preselects it
   assert.deepEqual(normalizeSelection(page, {}), { size: undefined });

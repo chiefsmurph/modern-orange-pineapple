@@ -96,12 +96,12 @@ test("the email: greeting, thanks, timeline, items (thumbnail, name, options, qt
   assert.match(html, /src="https:\/\/mopclothing\.com\/images\/catalog\/pelican-tee\/large-beanie-ivory-model\.[0-9a-f]+-checkout\.jpg"/);
   assert.match(html, /Big · Grind Beanie · Ivory · M/);
   assert.match(html, /Qty 1</);
-  assert.match(html, /Qty 2 · \$35\.00 each/);
-  assert.match(html, />\$35\.00<\/td>/);
-  assert.match(html, />\$70\.00<\/td>/);
-  assert.match(html, /Subtotal<\/td><td[^>]*>\$105\.00</);
+  assert.match(html, /Qty 2 · \$34\.73 each/);
+  assert.match(html, />\$34\.73<\/td>/);
+  assert.match(html, />\$69\.46<\/td>/);
+  assert.match(html, /Subtotal<\/td><td[^>]*>\$104\.19</);
   assert.match(html, /Shipping<\/td><td[^>]*>Free</);
-  assert.match(html, /Total paid<\/td><td[^>]*>\$105\.00</);
+  assert.match(html, /Total paid<\/td><td[^>]*>\$104\.19</);
   assert.doesNotMatch(html, /Discount|Tax</);
 
   assert.match(html, /MOP-[0-9A-F]{8}/);
@@ -117,8 +117,8 @@ test("the email: greeting, thanks, timeline, items (thumbnail, name, options, qt
 
   assert.match(text, /^Hi Ana,\n\nThanks for your order! We've got it\. Here's what happens next\.\n\nWhat happens next:\n1\. Made just for you\n/);
   assert.match(text, /2\. Printed & packed \(2–5 business days\)\n3\. Shipped, with a tracking email from us\n4\. At your door in about 1–2 weeks/);
-  assert.match(text, /Your order:\n- Pelican Tee \(Big · Grind Beanie · Ivory · M\): \$35\.00\n- 2 x Pelican Tee \(Big · Grind Beanie · Ivory · L\): \$70\.00/);
-  assert.match(text, /Subtotal: \$105\.00\nShipping: Free\nTotal paid: \$105\.00/);
+  assert.match(text, /Your order:\n- Pelican Tee \(Big · Grind Beanie · Ivory · M\): \$34\.73\n- 2 x Pelican Tee \(Big · Grind Beanie · Ivory · L\): \$69\.46/);
+  assert.match(text, /Subtotal: \$104\.19\nShipping: Free\nTotal paid: \$104\.19/);
   assert.match(text, /Caring for it:\n- Wash cold, inside out\. Hang dry or tumble dry low\.\n- Don't iron directly on the print\./);
   assert.match(text, /Questions\? Just reply to this email\.\nHow delivery and replacements work: https:\/\/mopclothing\.com\/shipping-returns/);
   assert.match(text, new RegExp(`Order ref: ${ref}$`));
@@ -146,24 +146,24 @@ test("totals are the session's own: subtotal, discount, shipping, tax and the to
   // Odd numbers on purpose: the email shows what Stripe charged, it doesn't add anything up.
   const record = await recordFor(
     makeSession([tee(), shorts()], {
-      amount_subtotal: 8000,
-      amount_total: 10354,
+      amount_subtotal: 7916,
+      amount_total: 10270,
       total_details: { amount_shipping: 399, amount_discount: 0, amount_tax: 1955 },
     })
   );
   const { html, text } = confirmationEmail(confirmationInput(record));
-  assert.match(text, /Subtotal: \$80\.00\nShipping: \$3\.99\nTax: \$19\.55\nTotal paid: \$103\.54/);
-  assert.match(html, /Total paid<\/td><td[^>]*>\$103\.54</);
+  assert.match(text, /Subtotal: \$79\.16\nShipping: \$3\.99\nTax: \$19\.55\nTotal paid: \$102\.70/);
+  assert.match(html, /Total paid<\/td><td[^>]*>\$102\.70</);
   assert.match(html, /Tax<\/td><td[^>]*>\$19\.55</);
-  assert.match(html, />\$35\.00<\/td>/);
-  assert.match(html, />\$45\.00<\/td>/);
+  assert.match(html, />\$34\.73<\/td>/);
+  assert.match(html, />\$44\.43<\/td>/);
 
   // Items that don't add up to the session's subtotal: no per-line prices, only the session's totals.
   const off = await recordFor(makeSession([tee(), shorts()], { amount_subtotal: 6500, amount_total: 6500 }));
   const input = confirmationInput(off);
   assert.equal(input.linePricesShown, false);
   const e = confirmationEmail(input);
-  assert.doesNotMatch(e.html, />\$35\.00<\/td>|>\$45\.00<\/td>/);
+  assert.doesNotMatch(e.html, />\$34\.73<\/td>|>\$44\.43<\/td>/);
   assert.match(e.text, /- Pelican Tee \(Big · Grind Beanie · Ivory · M\)\n- Blue Sky Cotton Shorts \(L\)\n/);
   assert.match(e.text, /Subtotal: \$65\.00\nShipping: Free\nTotal paid: \$65\.00/);
 });

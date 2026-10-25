@@ -284,8 +284,10 @@ const products: { products: Product[] } = {
       },
       // $45 with the 14.53 shipping (free-shipping model); 4XL $47 and 5XL $49 (John, 2026-10-20;
       // were $40 / $42 / $44 from 2026-10-16).
-      price: 30.47,
-      sizePrices: { "4XL": 32.47, "5XL": 34.47 },
+      // 2026-10-24 (John, "Go"): non-round, mixed endings site-wide; the shorts end in .43 →
+      // $44.43 total (29.90 + 14.53 shipping), 4XL $46.43, 5XL $48.43.
+      price: 29.9,
+      sizePrices: { "4XL": 31.9, "5XL": 33.9 },
       // Where the Printful Sky Shorts sat in the full card list (catalog rank 2). On the
       // home page they're 3rd, among the first cards (lib/catalog/copy.ts `featured`).
       rank: 2,

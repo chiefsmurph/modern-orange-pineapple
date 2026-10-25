@@ -26,12 +26,12 @@ test("a 1200×630 JPEG for the home page and every product, content-hashed", asy
 });
 
 test("product previews: '<name> · $<price>', the copy's first sentence, its own photo, absolute URLs", () => {
-  assert.equal(productShareTitle(getShopProduct("sky-tee")!), "Sky Tee · $45");
-  assert.equal(productShareTitle(getShopProduct("pelican-tee")!), "Pelican Tee · from $35");
-  assert.equal(productShareTitle(getShopProduct("clouds-skater-dress")!), "Clouds Skater Dress · $55");
+  assert.equal(productShareTitle(getShopProduct("sky-tee")!), "Sky Tee · $44.76");
+  assert.equal(productShareTitle(getShopProduct("pelican-tee")!), "Pelican Tee · from $34.73");
+  assert.equal(productShareTitle(getShopProduct("clouds-skater-dress")!), "Clouds Skater Dress · $54.27");
   const m = productShareMeta(getShopProduct("pelican-tee")!);
   const og = m.openGraph as Record<string, any>;
-  assert.equal(og.title, "Pelican Tee · from $35");
+  assert.equal(og.title, "Pelican Tee · from $34.73");
   assert.equal(og.description, "Yes, this really is the coolest pelican you have ever met.");
   assert.equal(og.url, "https://mopclothing.com/pelican-tee");
   assert.equal(og.siteName, "Modern Orange Pineapple");

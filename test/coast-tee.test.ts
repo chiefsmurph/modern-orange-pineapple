@@ -23,18 +23,18 @@ const SYNC = { XS: 5586098566, S: 5586098567, M: 5586098568, L: 5586098570, XL: 
 const coast = getShopProduct("coast-tee");
 const present = !!coast;
 
-test("the Gulf Coast Tee is on sale: $45 in XS–2XL, free shipping, an all-over like the Sky Tee", { skip: !present }, () => {
+test("the Gulf Coast Tee is on sale: $44.76 in XS–2XL, free shipping, an all-over like the Sky Tee", { skip: !present }, () => {
   const p = coast!;
   assert.equal(p.title, "Gulf Coast Tee");
   assert.equal(p.group, "allover");
   assert.equal(p.printfulCatalogProductId, 1414);
   assert.deepEqual(Object.keys(p.options), ["size"], "no picker yet: sizes only");
   assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL"]);
-  assert.ok(p.variants.every((v) => v.price === 45 && v.status === "DECIDED"));
+  assert.ok(p.variants.every((v) => v.price === 44.76 && v.status === "DECIDED"));
   assert.equal(p.sizeNote, getShopProduct("sky-tee")!.sizeNote);
   assert.equal(p.fabricNote, getShopProduct("sky-tee")!.fabricNote);
   const card = shopCards().find((c) => c.href === "/coast-tee")!;
-  assert.equal(card.price, "$45");
+  assert.equal(card.price, "$44.76");
   assert.ok(card.freeShipping);
 });
 
@@ -42,7 +42,7 @@ test("each size maps to its Printful sync variant (product 483547766)", { skip: 
   for (const [size, id] of Object.entries(SYNC)) {
     assert.equal(catalogFulfilment["coast-tee"].variants[variantKey({ size })].syncVariantId, id, size);
     const { item } = buildItem("coast-tee", { size }, 1, {});
-    assert.equal(item.unitAmount, 4500);
+    assert.equal(item.unitAmount, 4476);
     assert.equal(item.printful?.syncVariantId, id);
   }
 });
@@ -88,14 +88,14 @@ test("photos, checkout JPEG and share image are on disk", { skip: !present }, ()
   assert.ok(share && existsSync(path.join(ROOT, "public", share)), "share image");
 });
 
-test("the feeds list all six sizes at $45", { skip: !present }, async () => {
+test("the feeds list all six sizes at $44.76", { skip: !present }, async () => {
   const { googleFeedXml } = await import("../lib/google-feed.ts");
   for (const flavor of ["google", "meta"] as const) {
     const xml = googleFeedXml(shopProducts, new Date(), flavor);
     const items = xml.split("<item>").filter((i) => i.includes("<g:item_group_id>coast-tee</g:item_group_id>"));
     assert.equal(items.length, 6, flavor);
     for (const i of items) {
-      assert.match(i, /<g:price>45\.00 USD<\/g:price>/);
+      assert.match(i, /<g:price>44\.76 USD<\/g:price>/);
       assert.match(i, /Gulf Coast Tee/);
       assert.match(i, /\/images\/catalog\/coast-tee\//);
     }

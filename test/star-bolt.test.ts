@@ -116,7 +116,7 @@ test("checkout: Bolt sells the bolt; a pick made before the Design picker existe
   const old = buildItem(SLUG, { version: "large", color: "White", size: "M" }, 1, {});
   assert.equal(old.item.printful?.syncVariantId, STAR_SYNC["star|large|White|M"]);
   assert.equal(old.item.opts.design, "star");
-  assert.equal(old.item.unitAmount, 3500);
+  assert.equal(old.item.unitAmount, 3473);
   assert.throws(() => buildItem(SLUG, { design: "moon", version: "large", color: "White", size: "M" }, 1, {}), CheckoutError);
 });
 
