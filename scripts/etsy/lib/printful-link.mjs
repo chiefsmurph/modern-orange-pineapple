@@ -9,24 +9,27 @@
 // variant_id, print files (by file id: Printful's file library is account-wide, so
 // the website's ids work in the Etsy store) and options. No exact match, no link:
 // a variant is never guessed.
-import { SIZE_ORDER } from "./listing-md.mjs";
+import { ONE_SIZE, SIZE_ORDER } from "./listing-md.mjs";
 
-/** "2X" (Etsy's label) → "2XL" (Printful's); "s" → "S"; anything else that isn't a size → null. */
+/** "2X" (Etsy's label) → "2XL" (Printful's); "s" → "S"; "One size" → "One size"; anything else that isn't a size → null. */
 export function normSize(s) {
   if (s == null) return null;
+  if (/^one[\s-]*size$/i.test(String(s).trim())) return ONE_SIZE;
   let v = String(s).trim().toUpperCase();
   const etsy = /^([2-5])X$/.exec(v);
   if (etsy) v = `${etsy[1]}XL`;
   return SIZE_ORDER.includes(v) ? v : null;
 }
 
-const normColor = (c) => String(c).trim().replace(/\s+/g, " ").toLowerCase();
+/** Case, runs of spaces and spaces around "/" don't count: Printful's "Natural/ Black" is Etsy's "Natural/Black". */
+export const normColor = (c) => String(c).trim().replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").toLowerCase();
 
 /**
  * A sync variant's colour and size: its own `color`/`size` when Printful filled them
  * (synced variants), else parsed from its name. `productName` (the Etsy title) is
- * stripped from the front so a "/" in a title can't shift the parts.
- * → { color: "Lagoon Blue" | null, size: "2XL" } ; throws when it can't tell.
+ * stripped from the front so a "/" in a title can't shift the parts. A name with one
+ * part that isn't a size is a colour-only (one-size) Etsy listing: "<title> / Navy".
+ * → { color: "Lagoon Blue" | null, size: "2XL" | "One size" } ; throws when it can't tell.
  */
 export function variantColorSize(v, productName) {
   if (v.size && normSize(v.size)) return { color: v.color || null, size: normSize(v.size) };
@@ -36,6 +39,7 @@ export function variantColorSize(v, productName) {
   else if (name.includes(" / ")) rest = name.slice(name.indexOf(" / ") + 3);
   else throw new Error(`can't read colour/size from variant name "${name}"`);
   const parts = rest.split(" / ").map((p) => p.trim()).filter(Boolean);
+  if (parts.length === 1 && !normSize(parts[0])) return { color: parts[0], size: ONE_SIZE };
   const sizes = parts.filter((p) => normSize(p));
   if (sizes.length !== 1 || parts.length > 2) throw new Error(`can't read colour/size from variant name "${name}"`);
   const color = parts.find((p) => !normSize(p)) ?? null;
@@ -75,7 +79,8 @@ const fileIds = (files) => (files ?? []).filter((f) => f.type !== "preview").map
 
 /**
  * The website variant for (color, size). A size-only Etsy listing (color null) matches
- * on size alone, and only when the website product comes in exactly one colour.
+ * on size alone, and only when the website product comes in exactly one colour. A
+ * colour-only listing (size "One size") matches only website variants sized "One size".
  * → { src } | { problem }
  */
 export function findWebsiteVariant(website, color, size) {

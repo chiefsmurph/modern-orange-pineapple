@@ -7,9 +7,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { printfulSourceId } from "../scripts/etsy/lib/listing-md.mjs";
+import { ONE_SIZE, printfulSourceId } from "../scripts/etsy/lib/listing-md.mjs";
 import {
   findWebsiteVariant,
+  normColor,
   normSize,
   orderAttention,
   planLink,
@@ -186,6 +187,58 @@ test("retail_price: two-decimal string from cents; left out when the listing fil
   assert.equal(plan.toLink.length, 1);
   assert.ok(!("retail_price" in plan.toLink[0].body));
   assert.match(plan.rows[0].note, /no M price/);
+});
+
+// The website's Star Snapback as Printful lists it (shape and spellings from the real 10/25
+// answer; file ids made up): colour "Natural/ Black" with a space, size "One size".
+const WEB_SNAP = {
+  sync_product: { id: 480715419, name: "MOP · Star Snapback", variants: 2, synced: 2 },
+  sync_variants: [
+    { id: 1, name: "MOP · Star Snapback / Navy / One size", synced: true, is_ignored: false, variant_id: 4802, color: "Navy", size: "One size",
+      files: [{ type: "embroidery_front_large", id: 900101, filename: "mop-hat-star-keyline.png" }, { type: "preview", id: 900102, filename: "mock.png" }],
+      options: [{ id: "thread_colors_front_large", value: ["#FFFFFF"] }] },
+    { id: 2, name: "MOP · Star Snapback / Natural/ Black / One size", synced: true, is_ignored: false, variant_id: 4801, color: "Natural/ Black", size: "One size",
+      files: [{ type: "embroidery_front_large", id: 900103, filename: "mop-hat-star-original.png" }],
+      options: [{ id: "thread_colors_front_large", value: ["#000000"] }] },
+  ],
+};
+
+test("one size: 'One size' is a size; a one-part non-size name is a colour-only (one-size) Etsy variant", () => {
+  assert.equal(normSize("One size"), ONE_SIZE);
+  assert.equal(normSize("one-size"), ONE_SIZE);
+  assert.equal(normSize("Navy"), null);
+  assert.deepEqual(variantColorSize({ name: "Star Snapback Hat / Navy" }, "Star Snapback Hat"), { color: "Navy", size: ONE_SIZE });
+  assert.deepEqual(variantColorSize({ name: "Star Snapback Hat / Natural/Black" }, "Star Snapback Hat"), { color: "Natural/Black", size: ONE_SIZE }, "a '/' inside the colour is kept");
+  assert.deepEqual(variantColorSize({ name: "x", color: "Navy", size: "One size" }, "x"), { color: "Navy", size: ONE_SIZE }, "Printful's own fields when synced");
+  assert.throws(() => variantColorSize({ name: "Star Snapback Hat / Navy / Huge" }, "Star Snapback Hat"), /can't read/, "two non-size parts still stop");
+});
+
+test("colours: Printful's 'Natural/ Black' is Etsy's 'Natural/Black'; case and spaces don't count", () => {
+  assert.equal(normColor("Natural/ Black"), normColor("Natural/Black"));
+  assert.equal(normColor(" natural /black "), "natural/black");
+  assert.equal(normColor("Lagoon  Blue"), "lagoon blue");
+  assert.notEqual(normColor("Natural/Black"), normColor("Natural Black"));
+});
+
+test("the snapback links: each colour-only Etsy variant takes its colour's One size website variant, embroidery file and thread options", () => {
+  const title = "Embroidered Star Snapback Hat, Painted Zentangle Star Cap";
+  const etsy = {
+    sync_product: { id: 77, external_id: "4603999999", name: title, variants: 2, synced: 0 },
+    sync_variants: [
+      { ...UNSYNCED, id: 31, is_ignored: false, name: `${title} / Navy` },
+      { ...UNSYNCED, id: 32, is_ignored: false, name: `${title} / Natural/Black` },
+    ],
+  };
+  const plan = planLink(etsy, WEB_SNAP, { [ONE_SIZE]: 3662 });
+  assert.deepEqual(plan.problems, []);
+  assert.deepEqual(plan.toLink.map((s: any) => [s.label, s.body.variant_id, s.body.files, s.body.retail_price]), [
+    ["Navy / One size", 4802, [{ type: "embroidery_front_large", id: 900101 }], "36.62"],
+    ["Natural/Black / One size", 4801, [{ type: "embroidery_front_large", id: 900103 }], "36.62"],
+  ]);
+  assert.deepEqual(plan.toLink[1].body.options, [{ id: "thread_colors_front_large", value: ["#000000"] }]);
+  // a colour-only Etsy variant never matches a sized website product, and an unknown colour stops
+  assert.match(findWebsiteVariant(WEB_04, "Ivory", ONE_SIZE).problem ?? "", /no website variant Ivory \/ One size/);
+  assert.match(findWebsiteVariant(WEB_SNAP, "Red", ONE_SIZE).problem ?? "", /no website variant Red \/ One size/);
 });
 
 test("orders-check: draft / failed / on hold / in review and unsynced items need a look; shipped or cancelled don't", () => {

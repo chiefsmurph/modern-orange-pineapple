@@ -5,6 +5,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import {
+  ONE_SIZE,
   expandSizeRange,
   parseListingMd,
   parsePriceBySize,
@@ -13,9 +14,16 @@ import {
 import {
   PROP_COLOR,
   PROP_SIZE,
+  PROP_WOMENS_SIZE,
   READY_LISTINGS,
+  TAXONOMY_CROP_TOPS,
+  TAXONOMY_DRESSES,
+  TAXONOMY_HATS,
+  TAXONOMY_POLOS,
   TAXONOMY_TSHIRTS,
+  WOMENS_SIZE_VALUES,
   buildDraftListing,
+  categoryFor,
   buildInventory,
   chooseColors,
   formEncode,
@@ -236,8 +244,112 @@ test("Etsy's field rules: long titles, repeated ':' and bad tags are caught befo
   assert.throws(() => validateListing({ ...l, tags: [...l.tags.slice(0, 12), "50% off"] }), /character Etsy rejects/);
 });
 
-test("only 01, 02, 03, 05, 06 and the Sky Tees 13–17 are cleared to build (04 is hand-built; 07–12 wait)", () => {
-  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 13, 14, 15, 16, 17]);
+test("cleared to build: 01–03, 05–08, the Sky Tees 13–17 and batch 2 (20–34); 04 is hand-built, the city shirts 09–12 wait", () => {
+  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 7, 8, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34]);
+  for (const n of [4, 9, 10, 11, 12, 18, 19, 35]) assert.ok(!READY_LISTINGS.includes(n), String(n));
+});
+
+// ---- categories, size scales and the one-size snapback (batch 2, 10/25)
+
+const withCategory = (md: string, category: string) =>
+  md.replace("## Description", `## About this listing (Etsy)\n\n- Who made it? **Another company or person**\n- Category: ${category}\n- Renewal: automatic\n\n## Description`);
+
+const CROP = withCategory(
+  FIXTURE.replace("S–XL $38.27 · 2XL $40.27 · 3XL $42.27 · 4XL $44.27", "XS–XL $36.83")
+    .replace(/Primary colour: .*\n/, "Primary colour: White, Bone · Size: XS–XL (one price)\n"),
+  "Clothing › Women's Clothing › Tops & Tees › Crop & Tube Tops › Crop Tops",
+);
+const DRESS = withCategory(SKY.replace("XS–XL $48.67 · 2XL $48.67", "XS–3XL $58.73").replace("Size: XS, S, M, L, XL, 2XL (one price)", "Size: XS, S, M, L, XL, 2XL, 3XL (one price)"),
+  "Clothing › Women's Clothing › Dresses");
+const POLO = withCategory(
+  FIXTURE.replace("S–XL $38.27 · 2XL $40.27 · 3XL $42.27 · 4XL $44.27", "S–4XL $45.56")
+    .replace(/Primary colour: .*\n/, "Primary colour: White, Navy · Size: S–4XL (one price; 5XL left off: Etsy's size scale stops at 4X)\n"),
+  "Clothing › Gender-Neutral Adult Clothing › Tops & Tees › Polos",
+);
+const SNAPBACK = withCategory(
+  FIXTURE.replace("**Shop section:** Character tees\n", "")
+    .replace("S–XL $38.27 · 2XL $40.27 · 3XL $42.27 · 4XL $44.27", "One size $36.62")
+    .replace(/Primary colour: .*\n/, "Primary colour: Navy, Natural/Black (one size, one price)\n")
+    .replace(/- `0[1-5].*\n/g, "")
+    .replace("## Money", "- `01-navy-model.jpg`: Navy, on model (1600×1600)\n- `02-natural-black-flat.jpg`: Natural/Black, flat (1600×1600)\n\n## Money"),
+  "Accessories › Hats & Head Coverings › Hats & Caps",
+);
+
+test("one size: 'One size $36.62' prices the single size; a colour-only Variations line means one size", () => {
+  assert.deepEqual(expandSizeRange("One size"), [ONE_SIZE]);
+  assert.deepEqual(parsePriceBySize("One size $36.62"), { [ONE_SIZE]: 3662 });
+  assert.deepEqual(parseVariations("Primary colour: Navy, Natural/Black (one size, one price)"), { colors: ["Navy", "Natural/Black"], sizes: [ONE_SIZE] });
+  assert.deepEqual(parseVariations("Primary colour: Navy · Size: One size"), { colors: ["Navy"], sizes: [ONE_SIZE] });
+  assert.throws(() => parseVariations("Primary colour: Navy · Size: One size, S"), /can't be mixed/);
+  assert.throws(() => parseVariations("Materials: cotton"), /unsupported variation/);
+  // a tee file that lost its "Size:" part still fails: its prices name real sizes
+  assert.throws(() => parseListingMd(FIXTURE.replace(" · Size: S–4XL (price varies by size)", "")), /size One size has no price/);
+});
+
+test("category line → Etsy taxonomy: T-shirts (default), Polos 480, Crop Tops 1839, Dresses 505, Hats & Caps 25; unknown refused", () => {
+  assert.equal(parseListingMd(FIXTURE).category, null);
+  assert.equal(categoryFor(parseListingMd(FIXTURE)).taxonomyId, TAXONOMY_TSHIRTS);
+  const cases: [string, number][] = [[POLO, TAXONOMY_POLOS], [CROP, TAXONOMY_CROP_TOPS], [DRESS, TAXONOMY_DRESSES], [SNAPBACK, TAXONOMY_HATS]];
+  for (const [md, id] of cases) {
+    const l = parseListingMd(md);
+    validateListing(l);
+    assert.equal(formFields(buildDraftListing(l, SHOP)).taxonomy_id, String(id), l.category);
+  }
+  assert.deepEqual([TAXONOMY_POLOS, TAXONOMY_CROP_TOPS, TAXONOMY_DRESSES, TAXONOMY_HATS], [480, 1839, 505, 25]);
+  assert.equal(parseListingMd(CROP).category, "Clothing › Women's Clothing › Tops & Tees › Crop & Tube Tops › Crop Tops");
+  assert.equal(categoryFor({ number: 1, category: "clothing > women’s clothing > dresses" }).taxonomyId, 505, "arrow style, case and curly apostrophe don't matter");
+  const odd = parseListingMd(withCategory(FIXTURE, "Clothing › Men's Clothing › Socks"));
+  assert.throws(() => validateListing(odd), /no Etsy taxonomy mapped for category "Clothing › Men's Clothing › Socks"/);
+  assert.throws(() => buildDraftListing(odd, SHOP), /no Etsy taxonomy mapped/);
+});
+
+test("crop tops and the dress use Etsy's women's size (US letter); polos keep the unisex scale, which has no 5X", () => {
+  const crop = parseListingMd(CROP);
+  const inv = buildInventory(crop, crop.colors, 333);
+  assert.equal(inv.products.length, 10);
+  assert.deepEqual(inv.price_on_property, []);
+  const bone = inv.products.find((p: any) => p.property_values[0].values[0] === "Bone" && p.property_values[1].values[0] === "XS");
+  assert.deepEqual(bone.property_values[1], { property_id: PROP_WOMENS_SIZE.id, property_name: "Women's clothing size", scale_id: 25, value_ids: [1678], values: ["XS"] });
+  assert.equal(bone.offerings[0].price, 36.83);
+  assert.deepEqual(inv.products.filter((p: any) => p.property_values[0].values[0] === "White").map((p: any) => p.property_values[1].value_ids[0]), [1678, 1694, 1709, 1724, 1733]);
+
+  const dress = parseListingMd(DRESS);
+  const dinv = buildInventory(dress, [], 333);
+  assert.deepEqual(dinv.products.map((p: any) => p.property_values[0].values[0]), ["XS", "S", "M", "L", "XL", "2X", "3X"]);
+  assert.deepEqual(dinv.products.slice(-2).map((p: any) => p.property_values[0].value_ids[0]), [WOMENS_SIZE_VALUES["2XL"].id, WOMENS_SIZE_VALUES["3XL"].id]);
+  assert.ok(dinv.products.every((p: any) => p.property_values[0].property_id === 52047899294));
+
+  const polo = parseListingMd(POLO);
+  assert.deepEqual(polo.sizes, ["S", "M", "L", "XL", "2XL", "3XL", "4XL"], "the note in brackets doesn't leak into the sizes");
+  const pinv = buildInventory(polo, polo.colors, 333);
+  assert.equal(pinv.products.length, 14);
+  assert.ok(pinv.products.every((p: any) => p.property_values[1].property_id === PROP_SIZE.id && p.property_values[1].scale_id === 51));
+  const fivex = { ...polo, sizes: [...polo.sizes, "5XL"], pricesBySize: { ...polo.pricesBySize, "5XL": 4556 } };
+  assert.throws(() => validateListing(fivex), /size 5XL has no Etsy value on "Unisex shirt size"/);
+});
+
+test("the snapback: one product per colour, no size property, one price, no section; its photos follow their colour", () => {
+  const l = parseListingMd(SNAPBACK);
+  validateListing(l);
+  assert.equal(l.section, null);
+  assert.deepEqual(l.sizes, [ONE_SIZE]);
+  assert.deepEqual(l.pricesBySize, { [ONE_SIZE]: 3662 });
+  const f = formFields(buildDraftListing(l, SHOP));
+  assert.equal(f.price, "36.62");
+  assert.ok(!("shop_section_id" in f));
+  const inv = buildInventory(l, l.colors, 333);
+  assert.deepEqual(inv.products.map((p: any) => p.property_values), [
+    [{ property_id: PROP_COLOR.id, property_name: "Primary color", scale_id: null, value_ids: [], values: ["Navy"] }],
+    [{ property_id: PROP_COLOR.id, property_name: "Primary color", scale_id: null, value_ids: [], values: ["Natural/Black"] }],
+  ]);
+  assert.deepEqual(inv.price_on_property, []);
+  assert.ok(inv.products.every((p: any) => p.offerings[0].price === 36.62));
+  assert.deepEqual(l.photos.map((p) => p.color), ["Navy", "Natural/Black"]);
+  assert.deepEqual(planImages(l, ["Navy"]).map((i) => i.file), ["01-navy-model.jpg"]);
+  // a hat can't take real sizes: Hats & Caps has no size property
+  const sized = { ...l, sizes: ["S", "M"], pricesBySize: { S: 3662, M: 3662 } };
+  assert.throws(() => validateListing(sized), /has no size property; list it as one size/);
+  assert.throws(() => buildInventory(sized, l.colors, 333), /has no size property/);
 });
 
 // The real handoff files, when this machine has them (John's Mac).
@@ -250,7 +362,16 @@ test("every real listing file parses and passes Etsy's checks", { skip: !existsS
     validateListing(l);
     assert.equal(l.tags.length, 13, f);
     assert.ok(l.photos.length > 0, f);
-    if (READY_LISTINGS.includes(l.number)) assert.ok(l.photos[0].desc.toLowerCase().includes("model"), `${f}: photo 01 is the model shot`);
+    // model shots come first (Nolli 22 has none: the site's only one is a smaller-print "-womens-2")
+    const hasModel = l.photos.some((p) => p.desc.toLowerCase().includes("model"));
+    if (READY_LISTINGS.includes(l.number) && hasModel) assert.ok(l.photos[0].desc.toLowerCase().includes("model"), `${f}: photo 01 is the model shot`);
+    assert.ok(l.photos.length <= 20, `${f}: Etsy takes 20 photos at most`);
+    if (l.number >= 20) {
+      // batch 2 rules: no smaller-print "-womens-2" shots; with colours, every photo names its colour
+      for (const p of l.photos) assert.ok(!p.file.includes("-womens-2"), `${f}: ${p.file} is a smaller-print -womens-2 shot`);
+      if (l.colors.length) for (const p of l.photos) assert.ok(p.color, `${f}: ${p.file} names no colour, so it can't follow its colour`);
+      assert.ok(l.printfulSourceId, `${f}: names its website sync product`);
+    }
     const inv = buildInventory(l, l.colors, 1);
     assert.equal(inv.products.length, Math.max(1, l.colors.length) * l.sizes.length, f);
   }

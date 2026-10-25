@@ -10,6 +10,11 @@
 
 export const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
 
+// A listing with no size choice (the snapback): its price line reads "One size $36.62" and its
+// Variations line has no "Size:" part. Etsy gets no size property for it at all.
+export const ONE_SIZE = "One size";
+const isOneSize = (s) => /^one[\s-]*size$/i.test(String(s ?? "").trim());
+
 const DASH = /\s*[–—-]\s*/; // en dash in the files; accept a hyphen too
 
 /** "## Heading" → the text up to the next "## " heading (heading line excluded). */
@@ -47,8 +52,9 @@ export function parseDollars(s) {
   return Number(m[1]) * 100 + Number(m[2]);
 }
 
-/** "S–4XL" → ["S","M","L","XL","2XL","3XL","4XL"]; "2XL" → ["2XL"]. */
+/** "S–4XL" → ["S","M","L","XL","2XL","3XL","4XL"]; "2XL" → ["2XL"]; "One size" → ["One size"]. */
 export function expandSizeRange(s) {
+  if (isOneSize(s)) return [ONE_SIZE];
   const parts = s.trim().split(DASH).filter(Boolean);
   const idx = (x) => {
     const i = SIZE_ORDER.indexOf(x.toUpperCase());
@@ -85,6 +91,7 @@ export function parsePriceBySize(line) {
 /**
  * "Primary colour: Lagoon Blue, Ivory · Size: S–4XL (price varies by size)" → { colors: [...], sizes: [...] }
  * "Size: XS, S, M, L, XL, 2XL (one price)" → { colors: [], sizes: [...] }
+ * "Primary colour: Navy, Natural/Black (one size, one price)" → { colors: [...], sizes: ["One size"] }
  */
 export function parseVariations(line) {
   let colors = [];
@@ -104,7 +111,13 @@ export function parseVariations(line) {
       throw new Error(`unsupported variation "${m[1]}"`);
     }
   }
-  if (!sizes) throw new Error(`no Size in variations "${line}"`);
+  if (!sizes) {
+    // Colour only: a one-size piece. A file that forgot its Size part still fails, at
+    // "size One size has no price", because its price line names real sizes.
+    if (!colors.length) throw new Error(`no Size in variations "${line}"`);
+    sizes = [ONE_SIZE];
+  }
+  if (sizes.includes(ONE_SIZE) && sizes.length > 1) throw new Error(`"${ONE_SIZE}" can't be mixed with other sizes in "${line}"`);
   return { colors, sizes };
 }
 
@@ -154,6 +167,8 @@ export function parseListingMd(md) {
   for (const s of sizes) if (!(s in pricesBySize)) throw new Error(`size ${s} has no price`);
   for (const s of Object.keys(pricesBySize)) if (!sizes.includes(s)) throw new Error(`priced size ${s} is not a variation`);
   const { folder, photos } = parsePhotos(section(secs, "Photos"), colors);
+  // "- Category: Clothing › Women's Clothing › Dresses" under "About this listing" (null when absent).
+  const category = /^\s*-\s*Category:\s*(.+?)\s*$/m.exec(section(secs, "About this listing") ?? "")?.[1] ?? null;
 
   return {
     number: Number(h1[1]),
@@ -161,6 +176,7 @@ export function parseListingMd(md) {
     status: field("Status"),
     printfulSourceId: printfulSourceId(field("Printful source")),
     section: field("Shop section"),
+    category,
     title,
     tags,
     materials,

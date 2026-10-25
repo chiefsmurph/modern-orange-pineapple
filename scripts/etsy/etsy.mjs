@@ -235,7 +235,7 @@ async function cmdWhoami() {
 async function cmdCreate(n, opts) {
   if (!Number.isInteger(n)) throw new Error("usage: create <listing-number> [--dry-run]");
   if (!READY_LISTINGS.includes(n)) {
-    throw new Error(`listing ${n} isn't cleared for building (ready: ${READY_LISTINGS.join(", ")}; 04 was built by hand in Printful, 07/08 need print files, 09–12 need John's OK)`);
+    throw new Error(`listing ${n} isn't cleared for building (ready: ${READY_LISTINGS.join(", ")}; 04 was built by hand in Printful, 09–12 need John's OK)`);
   }
   const { file, listing } = loadListing(opts.dir, n);
   const colorList = opts.colors ? opts.colors.split(",").map((c) => c.trim()).filter(Boolean) : null;

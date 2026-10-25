@@ -6,9 +6,17 @@
 // Etsy's public taxonomy ids below were read from getSellerTaxonomyNodes /
 // getPropertiesByTaxonomyId (10/25/2026); they're Etsy's catalogue, not ours.
 
+import { ONE_SIZE } from "./listing-md.mjs";
+
 export const TAXONOMY_TSHIRTS = 482; // Clothing › Gender-Neutral Adult Clothing › Tops & Tees › T-shirts
+export const TAXONOMY_POLOS = 480; // Clothing › Gender-Neutral Adult Clothing › Tops & Tees › Polos
+export const TAXONOMY_CROP_TOPS = 1839; // Clothing › Women's Clothing › Tops & Tees › Crop & Tube Tops › Crop Tops
+export const TAXONOMY_DRESSES = 505; // Clothing › Women's Clothing › Dresses
+export const TAXONOMY_HATS = 25; // Accessories › Hats & Head Coverings › Hats & Caps
 export const PROP_COLOR = { id: 200, name: "Primary color" };
 export const PROP_SIZE = { id: 62809790533, name: "Unisex shirt size", scaleId: 51 }; // scale "Unisex letter size"
+// Crop tops and dresses take this one instead (T-shirts' unisex size isn't a property of theirs).
+export const PROP_WOMENS_SIZE = { id: 52047899294, name: "Women's clothing size", scaleId: 25 }; // scale "US letter"
 
 // Etsy's own values for that size scale. Etsy writes 2X/3X/4X (buyers see that label).
 export const SIZE_VALUES = {
@@ -23,6 +31,46 @@ export const SIZE_VALUES = {
   "4XL": { id: 2151, label: "4X" },
 };
 
+// Etsy's own values for "Women's clothing size", US letter scale (25). Same labels as the unisex scale.
+export const WOMENS_SIZE_VALUES = {
+  XXS: { id: 1672, label: "XXS" },
+  XS: { id: 1678, label: "XS" },
+  S: { id: 1694, label: "S" },
+  M: { id: 1709, label: "M" },
+  L: { id: 1724, label: "L" },
+  XL: { id: 1733, label: "XL" },
+  "2XL": { id: 1745, label: "2X" },
+  "3XL": { id: 1761, label: "3X" },
+  "4XL": { id: 1772, label: "4X" },
+  "5XL": { id: 1783, label: "5X" },
+};
+
+const UNISEX = { ...PROP_SIZE, values: SIZE_VALUES };
+const WOMENS = { ...PROP_WOMENS_SIZE, values: WOMENS_SIZE_VALUES };
+
+// The listing file's "- Category:" line → Etsy's taxonomy node and the size property that node
+// uses for variations (each read from getPropertiesByTaxonomyId, 10/25). Polos share the
+// T-shirts' unisex size (no 5X on that scale); the hat has no size property, so one size only.
+export const CATEGORIES = {
+  "Clothing › Gender-Neutral Adult Clothing › Tops & Tees › T-shirts": { taxonomyId: TAXONOMY_TSHIRTS, size: UNISEX },
+  "Clothing › Gender-Neutral Adult Clothing › Tops & Tees › Polos": { taxonomyId: TAXONOMY_POLOS, size: UNISEX },
+  "Clothing › Women's Clothing › Tops & Tees › Crop & Tube Tops › Crop Tops": { taxonomyId: TAXONOMY_CROP_TOPS, size: WOMENS },
+  "Clothing › Women's Clothing › Dresses": { taxonomyId: TAXONOMY_DRESSES, size: WOMENS },
+  "Accessories › Hats & Head Coverings › Hats & Caps": { taxonomyId: TAXONOMY_HATS, size: null },
+};
+const DEFAULT_CATEGORY = "Clothing › Gender-Neutral Adult Clothing › Tops & Tees › T-shirts";
+const catKey = (s) => String(s).replace(/\s*(›|>)\s*/g, " › ").replace(/[’]/g, "'").replace(/\s+/g, " ").trim().toLowerCase();
+
+/** The listing's Etsy category: its file's "- Category:" line (T-shirts when the file has none). Throws on one we don't map. */
+export function categoryFor(l) {
+  const want = catKey(l.category ?? DEFAULT_CATEGORY);
+  const hit = Object.entries(CATEGORIES).find(([k]) => catKey(k) === want);
+  if (!hit) throw new Error(`listing ${l.number}: no Etsy taxonomy mapped for category "${l.category}" (known: ${Object.keys(CATEGORIES).join(" | ")})`);
+  return { name: hit[0], ...hit[1] };
+}
+
+const isOneSizeListing = (l) => l.sizes.length === 1 && l.sizes[0] === ONE_SIZE;
+
 // Etsy's predefined Primary color values. A colour named exactly like one of these
 // uses its id (buyers can filter on it); any other name (Lagoon Blue, Butter, …) is
 // sent as a custom value with value_ids [] (Etsy's third-variation tutorial).
@@ -35,10 +83,12 @@ export const COLOR_VALUE_IDS = {
 // Colours that take the "-dark" print file on the website's Printful products.
 export const DARK_COLORS = ["Black", "Pepper", "True Navy"];
 
-// Listings cleared for building (10/25): 04 was built by hand, 07/08 lack current
-// print files, 09–12 (city shirts) wait for John's OK; 13–17 are the other on-sale
-// Sky Tees (Daydream, Milky Way, Aurora, Orbital Sunset, Last Light).
-export const READY_LISTINGS = [1, 2, 3, 5, 6, 13, 14, 15, 16, 17];
+// Listings cleared for building (10/25): 04 was built by hand, 09–12 (city shirts) wait for
+// John's OK; 13–17 are the other on-sale Sky Tees (Daydream, Milky Way, Aurora, Orbital Sunset,
+// Last Light); 07 (dress) and 08 (Day, beanie) link to the website's print files like the rest;
+// 20–34 are batch 2 (alpaca, bolt, Nolli, crop tops, polos, snapback, Day classic, Dusk, Night,
+// Gold Stripes).
+export const READY_LISTINGS = [1, 2, 3, 5, 6, 7, 8, 13, 14, 15, 16, 17, ...Array.from({ length: 15 }, (_, i) => 20 + i)];
 
 export const OFFERING_QUANTITY = 999; // made to order; Etsy's per-offering maximum
 
@@ -60,7 +110,16 @@ export function validateListing(l) {
     if (TAG_CHARS.test(t)) errs.push(`tag "${t}" has a character Etsy rejects`);
   }
   for (const m of l.materials) if (MATERIAL_CHARS.test(m)) errs.push(`material "${m}" has a character Etsy rejects`);
-  for (const s of l.sizes) if (!SIZE_VALUES[s]) errs.push(`size ${s} has no Etsy unisex size value`);
+  let cat = null;
+  try {
+    cat = categoryFor(l);
+  } catch (e) {
+    errs.push(e.message);
+  }
+  if (cat && !isOneSizeListing(l)) {
+    if (!cat.size) errs.push(`category "${cat.name}" has no size property; list it as one size`);
+    else for (const s of l.sizes) if (!cat.size.values[s]) errs.push(`size ${s} has no Etsy value on "${cat.size.name}"`);
+  }
   for (const [s, c] of Object.entries(l.pricesBySize)) if (c % 10 === 0) errs.push(`price for ${s} ends in 0`);
   if (errs.length) throw new Error(`listing ${l.number} fails Etsy checks:\n  - ${errs.join("\n  - ")}`);
 }
@@ -97,7 +156,7 @@ export function buildDraftListing(l, shop) {
     who_made: "someone_else",
     when_made: "made_to_order",
     is_supply: false,
-    taxonomy_id: TAXONOMY_TSHIRTS,
+    taxonomy_id: categoryFor(l).taxonomyId,
     type: "physical",
     shipping_profile_id: shop.shippingProfileId,
     readiness_state_id: shop.readinessStateId,
@@ -135,13 +194,13 @@ function colorValue(name) {
   };
 }
 
-function sizeValue(size) {
-  const v = SIZE_VALUES[size];
-  if (!v) throw new Error(`no Etsy size value for ${size}`);
+function sizeValue(size, scale = UNISEX) {
+  const v = scale.values[size];
+  if (!v) throw new Error(`no Etsy size value for ${size} on "${scale.name}"`);
   return {
-    property_id: PROP_SIZE.id,
-    property_name: PROP_SIZE.name,
-    scale_id: PROP_SIZE.scaleId,
+    property_id: scale.id,
+    property_name: scale.name,
+    scale_id: scale.scaleId,
     value_ids: [v.id],
     values: [v.label],
   };
@@ -149,8 +208,9 @@ function sizeValue(size) {
 
 /**
  * updateListingInventory body: one product per colour × size (or per size when
- * the listing has no colour), each with its size's price. Price varies on size
- * only when the sizes differ in price.
+ * the listing has no colour), each with its size's price, on the size property of
+ * the listing's category. A one-size listing (the snapback) has one product per
+ * colour and no size property. Price varies on size only when the sizes differ in price.
  */
 export function buildInventory(l, colors, readinessStateId) {
   const offering = (size) => ({
@@ -159,20 +219,24 @@ export function buildInventory(l, colors, readinessStateId) {
     is_enabled: true,
     readiness_state_id: readinessStateId,
   });
+  const oneSize = isOneSizeListing(l);
+  const scale = oneSize ? null : categoryFor(l).size;
+  if (!oneSize && !scale) throw new Error(`listing ${l.number}: its category has no size property; list it as one size`);
+  const sizeValues = (s) => (oneSize ? [] : [sizeValue(s, scale)]);
   const products = [];
   if (colors.length) {
     for (const c of colors) {
       for (const s of l.sizes) {
-        products.push({ sku: "", property_values: [colorValue(c), sizeValue(s)], offerings: [offering(s)] });
+        products.push({ sku: "", property_values: [colorValue(c), ...sizeValues(s)], offerings: [offering(s)] });
       }
     }
   } else {
-    for (const s of l.sizes) products.push({ sku: "", property_values: [sizeValue(s)], offerings: [offering(s)] });
+    for (const s of l.sizes) products.push({ sku: "", property_values: sizeValues(s), offerings: [offering(s)] });
   }
   const priceVaries = new Set(l.sizes.map((s) => l.pricesBySize[s])).size > 1;
   return {
     products,
-    price_on_property: priceVaries ? [PROP_SIZE.id] : [],
+    price_on_property: priceVaries ? [scale.id] : [],
     quantity_on_property: [],
     sku_on_property: [],
     readiness_state_on_property: [],
