@@ -210,7 +210,20 @@ export const HEAD_STYLE = `<style>
  * shared head, header and footer. `title` is the subject; `preheader` is the
  * inbox preview line.
  */
-export function emailDocument({ title, preheader, orderRef, rows }: { title: string; preheader: string; orderRef: string; rows: string[] }) {
+export function emailDocument({
+  title,
+  preheader,
+  orderRef,
+  rows,
+  footer = emailFooter(orderRef),
+}: {
+  title: string;
+  preheader: string;
+  orderRef: string;
+  rows: string[];
+  /** The <tr> under the card; default: the order footer ("…because you ordered…"). The idea emails have their own. */
+  footer?: string;
+}) {
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -238,7 +251,7 @@ ${rows.join("\n")}
 </table>
 </td></tr>
 
-${emailFooter(orderRef)}
+${footer}
 
 </table>
 </td></tr>

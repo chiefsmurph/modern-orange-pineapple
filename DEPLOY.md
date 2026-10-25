@@ -530,8 +530,9 @@ Umami (stats.chiefsmurph.com) records page views with their query string, so Ins
 links like `?ref=ig` show on the landing page view. Product pages rewrite the query on every
 pick; `lib/umami.ts` drops those as page views (same path) and keeps the other params in the
 URL. Custom events: `buy-click` (slug, options, price), `gallery-open` (from, photo), `signup`
-(source), `crosslink-allover` (from, to), and `meta-checkout` from the server (see Instagram Shop). They're fire-and-forget: with Umami blocked,
-nothing changes (checkout never waits on it).
+(source), `crosslink-allover` (from, to), `idea-submit` (no data), and `meta-checkout` from the server (see Instagram Shop). They're fire-and-forget: with Umami blocked,
+nothing changes (checkout never waits on it). John's `/moderate/…` pages are never recorded
+(page views or events): their links carry the signature that opens them.
 
 Feed links are tagged, after the variant's picks, so listing clicks show up as campaigns:
 Google `utm_source=google&utm_medium=shopping&utm_campaign=free_listings`, Meta
@@ -691,6 +692,69 @@ location = /api/custom-request {
 ```
 
 (or `client_max_body_size 12m;` in the mopclothing.com server block). Then `nginx -t` and reload.
+
+## Shirt ideas (/ideas)
+
+Anyone can send a T-shirt idea in words; MOP makes the art. John approves or denies each
+one, and an idea made into a shirt earns its sender **$1.50 a shirt sold** (website or Etsy),
+paid monthly by Venmo or Zelle from $20. Linked from the home page ("Submit an idea →", under
+Custom orders). Code: `lib/ideas.ts` (fields, terms, checks), `lib/ideas-server.ts`,
+`lib/ideas-email.ts`, `components/IdeaForm.tsx`, `app/moderate/ideas/page.tsx`.
+
+- **The form**: idea (≤1,000 characters), name, email, and a ticked box agreeing to the terms
+  shown on the page (`TERMS`; each idea saves `terms: TERMS_VERSION`, so change the version when
+  the wording changes). No payout field: John asks for a Venmo/Zelle once he approves one.
+  Honeypot + 3 ideas / 10 min per visitor (the /custom limiter). A thank-you shows on the page;
+  **no email goes to the sender**.
+- **Storage**: `$MOP_DATA_DIR/ideas.jsonl`, one line per idea: `id, createdAt, idea, name, email,
+  payout, ipHash, status (new | approved | denied | launched), notes, productUrl, decidedAt, terms`.
+  Every write rewrites the file to a temp file and renames it over (atomic), in one queue.
+  `ipHash` is an HMAC of the IP with `MOP_LINK_SECRET` (same sender = same hash); the IP itself
+  is never stored. Emails and payout handles never reach a public page or a log line (logs carry
+  the idea id; even masked addresses are hidden). Keep the file in the nightly backup.
+- **John's email** (PingPigeon, like /custom): "New shirt idea #N from <name>: <start of the
+  idea>", with the idea, name, email and the review link. A failed email is logged by id; the
+  idea stays saved.
+- **Review page**: `https://mopclothing.com/moderate/ideas?sig=…`, the same protection as the other
+  `/moderate` pages (signed with `MOP_LINK_SECRET`; a wrong or missing `sig` is a 404; each button
+  is a POST with its own signature to `/api/ideas/admin`). The link is in every new-idea email;
+  to print it on the box (it's a password: don't paste it anywhere public):
+
+```sh
+sudo -u mopclothing env MOP_DATA_DIR=/var/lib/mopclothing node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \
+  --env-file=/srv/mopclothing/.env /srv/mopclothing/scripts/ideas-admin.mjs
+```
+
+  It lists ideas newest first with All / New / Approved / Denied / Launched filters, and per idea:
+  **Approve**, **Deny** (+ "also send the 'not this time' email" when that email is on),
+  **Mark launched** (needs the shirt's https link; "Update link" afterwards), and **Save notes**
+  (private notes + their Venmo/Zelle once they send it).
+- **Delete a test idea**: `… scripts/ideas-admin.mjs --delete <id> --dry-run`, then without `--dry-run`.
+
+### Emails to the sender (off until John approves the wording)
+
+| Variable | What |
+|---|---|
+| `MOP_IDEA_LIVE_EMAIL_ENABLED` | `1`: **Mark launched** emails them "Your idea is live! 🎉" (the shirt's link to share + the royalty line; asks for their Venmo/Zelle unless John recorded one). |
+| `MOP_IDEA_DECLINE_EMAIL_ENABLED` | `1`: **Deny** shows "also send the 'not this time' email"; ticked, it sends "About your MOP shirt idea". |
+
+Unset / anything but `1`: nothing is sent (the log says `… email is off … not sent`, without the
+address) and the review page says the email is off. Both go through Resend from `MOP_EMAIL_FROM`
+(reply-to `MOP_EMAIL_REPLY_TO`), in the order emails' look, **once per idea**
+(`$MOP_DATA_DIR/idea-emails.jsonl` + a Resend Idempotency-Key): pressing the button again never
+sends a second one. A failed send is logged, John gets "ACTION NEEDED: idea email failed for …",
+and pressing the button again retries. To turn one on: add the line to `/srv/mopclothing/.env` and
+`systemctl restart mopclothing`. An idea marked launched while the email was off gets it if John
+presses **Update link** after turning it on.
+
+**Checks after a deploy**
+
+```sh
+curl -s -o /dev/null -w '%{http_code}\n' https://mopclothing.com/ideas                                  # 200
+curl -s -o /dev/null -w '%{http_code}\n' https://mopclothing.com/moderate/ideas                         # 404 (no signature)
+curl -s -o /dev/null -w '%{http_code}\n' -X POST https://mopclothing.com/api/ideas -H 'Content-Type: application/json' -d '{}'   # 400
+journalctl -u mopclothing -n 50 --no-pager | grep '\[ideas\]'
+```
 
 ## Welcome code (10% off a first order)
 

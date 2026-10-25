@@ -3,6 +3,7 @@ import Link from "next/link";
 import { homeCards } from "@/lib/shop-cards";
 import { BENEFITS, BENEFIT_HIGHLIGHT, HERO_LINE } from "@/lib/home-copy";
 import { FOUNDING50, founding50Parts, type Founding50Line } from "@/lib/founding50";
+import { ROYALTY } from "@/lib/ideas";
 
 import styles from "./HomeGrid.module.css";
 import ProductCard from "@/components/ProductCard";
@@ -204,6 +205,11 @@ export default function HomePage({ founding50 }: { founding50: Founding50Line | 
       <Link href="/custom" className={styles.customCard}>
         <span>Want your own design, or shirts for your team?</span>
         <b>Custom orders →</b>
+      </Link>
+
+      <Link href="/ideas" className={styles.customCard}>
+        <span>Got a shirt idea? If we make it, you get {ROYALTY} for every one sold.</span>
+        <b>Submit an idea →</b>
       </Link>
 
       <nav className={`button-container ${styles.links}`} aria-label="More">

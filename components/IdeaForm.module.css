@@ -1,0 +1,33 @@
+/* The terms box above the checkbox on /ideas (components/IdeaForm.tsx). */
+.terms {
+  padding: 0.75rem 1rem 0.5rem;
+  border: 1.5px solid #9aa7ae;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.termsTitle {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.termsList {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #24343c;
+}
+
+.termsList li {
+  margin: 0 0 0.35rem;
+}
+
+/* "It's my own idea and I agree to these terms.": the size of the other small labels */
+.agree {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}

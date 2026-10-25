@@ -13,12 +13,15 @@ export const UMAMI_BEFORE_SEND = "mopUmamiBeforeSend";
 export const UMAMI_HOST = "https://stats.chiefsmurph.com";
 export const UMAMI_WEBSITE_ID = "ba4cac44-a005-45f5-8d24-3b897178364c";
 
+// John's /moderate pages aren't counted at all: their links carry a signature.
 export const UMAMI_BEFORE_SEND_JS =
   "(function(w){var last=null;w." +
   UMAMI_BEFORE_SEND +
   "=function(type,payload){" +
-  "if(type!=='event'||!payload||payload.name)return payload;" +
+  "if(type!=='event'||!payload)return payload;" +
   "var path=String(payload.url||'').split('?')[0].split('#')[0];" +
+  "if(/^([a-z]+:\\/\\/[^\\/]+)?\\/moderate(\\/|$)/i.test(path))return null;" +
+  "if(payload.name)return payload;" +
   "if(path===last)return null;" +
   "last=path;return payload;};})(window);";
 
