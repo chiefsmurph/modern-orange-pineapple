@@ -236,8 +236,8 @@ test("Etsy's field rules: long titles, repeated ':' and bad tags are caught befo
   assert.throws(() => validateListing({ ...l, tags: [...l.tags.slice(0, 12), "50% off"] }), /character Etsy rejects/);
 });
 
-test("only 01, 02, 03, 05, 06 are cleared to build (04 is hand-built; 07–12 wait)", () => {
-  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6]);
+test("only 01, 02, 03, 05, 06 and the Sky Tees 13–17 are cleared to build (04 is hand-built; 07–12 wait)", () => {
+  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 13, 14, 15, 16, 17]);
 });
 
 // The real handoff files, when this machine has them (John's Mac).

@@ -36,8 +36,9 @@ export const COLOR_VALUE_IDS = {
 export const DARK_COLORS = ["Black", "Pepper", "True Navy"];
 
 // Listings cleared for building (10/25): 04 was built by hand, 07/08 lack current
-// print files, 09–12 (city shirts) wait for John's OK.
-export const READY_LISTINGS = [1, 2, 3, 5, 6];
+// print files, 09–12 (city shirts) wait for John's OK; 13–17 are the other on-sale
+// Sky Tees (Daydream, Milky Way, Aurora, Orbital Sunset, Last Light).
+export const READY_LISTINGS = [1, 2, 3, 5, 6, 13, 14, 15, 16, 17];
 
 export const OFFERING_QUANTITY = 999; // made to order; Etsy's per-offering maximum
 

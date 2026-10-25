@@ -10,6 +10,10 @@
 //   node scripts/etsy/etsy.mjs link 3 --dry-run      the per-variant plan for connecting listing 03 to Printful; no writes
 //   node scripts/etsy/etsy.mjs link 3                connect it: Etsy orders for its variants then fulfil on their own
 //   node scripts/etsy/etsy.mjs orders-check          Etsy-store Printful orders that need a look (draft, failed, on hold, unsynced)
+//   node scripts/etsy/etsy.mjs add-colors 3 --colors "Black,Pepper,True Navy" [--dry-run]
+//                                                    add colours to a LIVE listing: its products kept exactly, new ones appended, their photos after
+//   node scripts/etsy/etsy.mjs replace-photos 4 [--dry-run]
+//                                                    swap a listing's photos for the listing file's (only colours the listing has)
 //
 // create options:
 //   --dry-run              print the payloads; no network writes (reads the shop if tokens exist)
@@ -27,6 +31,23 @@
 // Variants already synced are left alone. Re-running is safe.
 //   --dry-run              print the plan; nothing is written to Printful
 //
+// add-colors: reads the live inventory and PUTs it back unchanged (sku, price, quantity,
+// processing profile) with colour × size products appended at the listing file's prices
+// (each must equal the live price of that size, or it stops). The live inventory is saved
+// first to ~/.config/mop-etsy/cache/inventory-<listing_id>-<time>.json. Afterwards it
+// says whether Etsy kept the existing product_ids (Printful's sync-variant external ids),
+// uploads the added colours' photos after the ones there, then waits (read-only) for
+// Printful to show the new variant set (5–15+ minutes on 10/25). Then run `link N`. On
+// 10/25 (listings 03, 04, 05) Etsy kept all 28 existing product_ids each, Printful-built
+// 04's SKUs included, so the existing links held and only the added variants needed
+// linking; if ids ever change, link sees those variants unsynced and links them again.
+//   --colors "A,B"         required: colours from the listing file's set
+//   --no-wait              don't wait for Printful
+//
+// replace-photos: the new photo k goes in with overwrite at rank k (the count never
+// passes Etsy's 20), then every other image is deleted, only once all uploads worked
+// and the new photos are in place. Deleted Etsy images can be re-attached by id.
+//
 // Credentials: ~/.config/mop-etsy/etsy.env, tokens.json and printful.env (see lib/config.mjs).
 // Nothing here prints them. Shop ids are looked up by name at run time, never stored in the
 // repo; listing ids go to ~/.config/mop-etsy/listings.json. The website store's Printful
@@ -35,12 +56,20 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { STATE_FILE, hasTokens, listingIdFor, recordListingId, redact } from "./lib/config.mjs";
+import { CACHE_DIR, STATE_FILE, hasTokens, listingIdFor, recordListingId, redact, writePrivate } from "./lib/config.mjs";
 import { createClient } from "./lib/etsy-client.mjs";
 import { parseListingMd } from "./lib/listing-md.mjs";
 import { runAuth } from "./lib/oauth.mjs";
 import { PrintfulError, createPrintfulClient, fetchWebsiteProduct } from "./lib/printful-client.mjs";
 import { orderAttention, planLink } from "./lib/printful-link.mjs";
+import {
+  appendColors,
+  assertKeepsLive,
+  compareInventories,
+  liveColors,
+  planAddedImages,
+  planReplaceImages,
+} from "./lib/inventory-merge.mjs";
 import {
   READY_LISTINGS,
   buildDraftListing,
@@ -163,14 +192,20 @@ function describe(listing, colors, images, skipped) {
   console.log(`  photos   ${images.length} to upload${skipped.length ? `; skipping ${skipped.map((p) => p.file).join(", ")}` : ""}`);
 }
 
+/** uploadListingImage for one planned photo; `overwrite` swaps out the image at its rank. */
+async function uploadImage(client, shopId, listingId, img, { overwrite = false } = {}) {
+  const fd = new FormData();
+  fd.append("image", new Blob([fs.readFileSync(img.path)], { type: "image/jpeg" }), img.file);
+  fd.append("rank", String(img.rank));
+  fd.append("alt_text", img.alt_text);
+  if (overwrite) fd.append("overwrite", "true");
+  return client.request("POST", `/application/shops/${shopId}/listings/${listingId}/images`, { multipart: fd });
+}
+
 async function uploadImages(client, shopId, listingId, images, alreadyThere = 0) {
   for (const img of images) {
     if (img.rank <= alreadyThere) continue;
-    const fd = new FormData();
-    fd.append("image", new Blob([fs.readFileSync(img.path)], { type: "image/jpeg" }), img.file);
-    fd.append("rank", String(img.rank));
-    fd.append("alt_text", img.alt_text);
-    await client.request("POST", `/application/shops/${shopId}/listings/${listingId}/images`, { multipart: fd });
+    await uploadImage(client, shopId, listingId, img);
     console.log(`  photo ${img.rank}/${images.length} ${img.file}`);
   }
 }
@@ -200,7 +235,7 @@ async function cmdWhoami() {
 async function cmdCreate(n, opts) {
   if (!Number.isInteger(n)) throw new Error("usage: create <listing-number> [--dry-run]");
   if (!READY_LISTINGS.includes(n)) {
-    throw new Error(`listing ${n} isn't cleared for building (ready: ${READY_LISTINGS.join(", ")}; 04 is already a hand-built draft, 07/08 need print files, 09–12 need John's OK)`);
+    throw new Error(`listing ${n} isn't cleared for building (ready: ${READY_LISTINGS.join(", ")}; 04 was built by hand in Printful, 07/08 need print files, 09–12 need John's OK)`);
   }
   const { file, listing } = loadListing(opts.dir, n);
   const colorList = opts.colors ? opts.colors.split(",").map((c) => c.trim()).filter(Boolean) : null;
@@ -378,6 +413,166 @@ async function cmdLink(n, opts) {
   if (left.length) console.log(`still unsynced: ${left.map((v) => v.name).join("; ")}`);
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const sameText = (a, b) => String(a).trim().toLowerCase() === String(b).trim().toLowerCase();
+
+/** The Etsy listing that listing file n describes: in this shop, with the file's title. */
+async function liveListing(client, n, listing) {
+  const listingId = await resolveListingId(n, listing);
+  const me = await client.request("GET", "/application/users/me");
+  const l = await client.request("GET", `/application/listings/${listingId}`);
+  if (l.shop_id !== me.shop_id) throw new Error(`Etsy listing ${listingId} isn't in this shop`);
+  if (!sameTitle(l.title ?? "", listing.title)) throw new Error(`Etsy listing ${listingId}'s title isn't #${n}'s; not touching it`);
+  return { listingId, shopId: me.shop_id, state: l.state };
+}
+
+const listImages = async (client, listingId) =>
+  ((await client.request("GET", `/application/listings/${listingId}/images`)).results ?? [])
+    .map((i) => ({ listing_image_id: i.listing_image_id, rank: i.rank, alt_text: i.alt_text ?? "" }))
+    .sort((a, b) => a.rank - b.rank);
+
+/**
+ * Polls (GETs only) until Printful's Etsy-store copy of the listing has one variant per
+ * Etsy product, keyed on the current product_ids, and nothing else.
+ */
+async function waitForPrintful(n, listingId, inv, { timeoutMs = 15 * 60_000, everyMs = 30_000 } = {}) {
+  const pf = createPrintfulClient({ readOnly: true });
+  const want = new Set(inv.products.map((p) => String(p.product_id)));
+  const start = Date.now();
+  console.log(`waiting for Printful to show the ${want.size} variants (every ${everyMs / 1000}s, up to ${timeoutMs / 60_000} min; read-only)`);
+  for (;;) {
+    let sp = null;
+    try {
+      sp = (await pf.request("GET", `/sync/products/@${listingId}`)).result;
+    } catch (e) {
+      if (!(e instanceof PrintfulError && e.status === 404)) throw e;
+    }
+    const secs = Math.round((Date.now() - start) / 1000);
+    if (sp) {
+      const cur = sp.sync_variants.filter((v) => want.has(String(v.external_id)));
+      const stale = sp.sync_variants.length - cur.length;
+      console.log(`  ${secs}s  Printful ${sp.sync_product.id}: ${sp.sync_variants.length} variants, ${cur.length}/${want.size} on Etsy's current products (${cur.filter((v) => v.synced).length} synced)${stale ? `, ${stale} on old ids` : ""}`);
+      if (cur.length === want.size && !stale) return sp;
+    } else {
+      console.log(`  ${secs}s  Printful: listing ${listingId} not found`);
+    }
+    if (Date.now() - start > timeoutMs) {
+      console.log(`Printful hasn't caught up yet; run link ${n} --dry-run later.`);
+      return null;
+    }
+    await sleep(everyMs);
+  }
+}
+
+async function cmdAddColors(n, opts) {
+  if (!Number.isInteger(n) || !opts.colors) throw new Error('usage: add-colors <listing-number> --colors "Black,Pepper,True Navy" [--dry-run] [--no-wait]');
+  const dry = opts["dry-run"];
+  const { listing } = loadListing(opts.dir, n);
+  const colors = chooseColors(listing, { colors: opts.colors.split(",").map((c) => c.trim()).filter(Boolean) });
+  if (!hasTokens()) throw new Error("no Etsy tokens yet — run: node scripts/etsy/etsy.mjs auth");
+  const client = createClient();
+  const { listingId, shopId, state } = await liveListing(client, n, listing);
+  const inv = await client.request("GET", `/application/listings/${listingId}/inventory`);
+  const plan = appendColors(inv, listing, colors);
+  assertKeepsLive(inv, plan.body);
+  const images = await listImages(client, listingId);
+  const photos = planAddedImages(listing, colors, images);
+  for (const img of photos) if (!fs.existsSync(img.path)) throw new Error(`photo missing: ${img.path}`);
+
+  console.log(`${dry ? "DRY RUN: nothing is written to Etsy or Printful.\n" : ""}#${n} ${listing.name}  (Etsy listing ${listingId}, ${state})`);
+  console.log(`  live      ${inv.products.length} products (${liveColors(inv).join(", ")}); ${images.length} photos`);
+  if (plan.alreadyLive.length) console.log(`  skipped   ${plan.alreadyLive.join(", ")}: already on the listing`);
+  console.log(`  inventory keep all ${plan.kept} live products exactly, add ${plan.added.length} → ${plan.body.products.length}`);
+  for (const a of plan.added) console.log(`    + ${a.key.padEnd(18)} ${money(a.price)}`);
+  console.log(`  photos    ${photos.length ? photos.map((p) => `rank ${p.rank} ${p.file}`).join(", ") : "none to add"}`);
+  if (dry) {
+    if (plan.added.length) {
+      console.log(`\nwould send PUT /v3/application/listings/${listingId}/inventory with all ${plan.body.products.length} products: the ${plan.kept} live ones as Etsy returned them (minus ids), then these:`);
+      console.log(inventoryJson({ ...plan.body, products: plan.body.products.slice(plan.kept) }));
+    }
+    return;
+  }
+
+  let after = inv;
+  if (plan.added.length) {
+    const snap = path.join(CACHE_DIR, `inventory-${listingId}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+    writePrivate(snap, JSON.stringify(inv, null, 2) + "\n");
+    console.log(`  saved the live inventory to ${snap}`);
+    await client.request("PUT", `/application/listings/${listingId}/inventory`, { json: plan.body });
+    after = await client.request("GET", `/application/listings/${listingId}/inventory`);
+    const cmp = compareInventories(inv, after, plan.added);
+    console.log(`  inventory updated: ${after.products.length} products`);
+    console.log(`  existing product ids: ${cmp.idsKept} kept, ${cmp.idsChanged} new${cmp.idsChanged ? " (Printful's sync variants are keyed on them, so those links need re-linking)" : ""}`);
+    const wrong = [...cmp.missing.map((k) => `missing ${k}`), ...cmp.changed, ...cmp.unexpected.map((k) => `unexpected ${k}`)];
+    if (wrong.length) {
+      throw new Error(`the inventory after the update isn't what was sent; stopping before photos:\n  - ${wrong.join("\n  - ")}\nThe inventory from before is in ${snap}`);
+    }
+  }
+  for (const img of photos) {
+    await uploadImage(client, shopId, listingId, img);
+    console.log(`  photo rank ${img.rank} ${img.file}`);
+  }
+  if (!plan.added.length) return;
+  if (opts["no-wait"] || state !== "active") {
+    if (state !== "active") console.log(`listing is ${state}; Printful imports non-active listings about daily.`);
+    console.log(`next: node scripts/etsy/etsy.mjs link ${n} --dry-run, then link ${n}`);
+    return;
+  }
+  await waitForPrintful(n, listingId, after);
+  console.log(`next: node scripts/etsy/etsy.mjs link ${n} --dry-run, then link ${n}`);
+}
+
+async function cmdReplacePhotos(n, opts) {
+  if (!Number.isInteger(n)) throw new Error("usage: replace-photos <listing-number> [--dry-run]");
+  const dry = opts["dry-run"];
+  const { listing } = loadListing(opts.dir, n);
+  if (!hasTokens()) throw new Error("no Etsy tokens yet — run: node scripts/etsy/etsy.mjs auth");
+  const client = createClient();
+  const { listingId, shopId, state } = await liveListing(client, n, listing);
+  const inv = await client.request("GET", `/application/listings/${listingId}/inventory`);
+  const live = liveColors(inv);
+  const colors = listing.colors.filter((c) => live.some((x) => sameText(x, c)));
+  const planned = planImages(listing, colors);
+  for (const img of planned) if (!fs.existsSync(img.path)) throw new Error(`photo missing: ${img.path}`);
+  const existing = await listImages(client, listingId);
+  const plan = planReplaceImages(planned, existing);
+
+  console.log(`${dry ? "DRY RUN: nothing is written to Etsy.\n" : ""}#${n} ${listing.name}  (Etsy listing ${listingId}, ${state})`);
+  console.log(`  now   ${existing.length} photos`);
+  console.log(`  new   ${planned.length} photos (colours on the listing: ${colors.join(", ") || "none"}${skippedImages(listing, colors).length ? `; not uploading ${skippedImages(listing, colors).map((p) => p.file).join(", ")}` : ""})`);
+  for (const img of planned) {
+    const up = plan.uploads.find((u) => u.rank === img.rank);
+    console.log(`    rank ${String(img.rank).padStart(2)}  ${img.file}  ${up ? (up.overwrite ? `overwrites image ${up.replaces}` : "upload") : "already there"}`);
+  }
+  console.log(`  then delete ${plan.deleteAfter.length} old image(s)${plan.deleteAfter.length ? `: ${plan.deleteAfter.join(", ")}` : ""}, once every upload worked and the new ones are in place`);
+  if (dry) return;
+
+  const newIds = new Map(plan.skip.map((s) => [s.rank, s.listing_image_id]));
+  for (const u of plan.uploads) {
+    const r = await uploadImage(client, shopId, listingId, u, { overwrite: u.overwrite });
+    newIds.set(u.rank, r.listing_image_id);
+    console.log(`  photo rank ${u.rank} ${u.file}${u.overwrite ? ` (in place of ${u.replaces})` : ""}`);
+  }
+  const now = await listImages(client, listingId);
+  const head = now.slice(0, planned.length);
+  const inPlace = planned.every((p, i) => head[i]?.listing_image_id === newIds.get(p.rank) && head[i]?.alt_text === p.alt_text);
+  if (!inPlace) {
+    throw new Error(
+      `the new photos aren't the first ${planned.length} in order, so nothing was deleted; the listing has ${now.length} images:\n` +
+        now.map((i) => `  rank ${i.rank}  ${i.listing_image_id}  ${i.alt_text.slice(0, 70)}`).join("\n"),
+    );
+  }
+  const ours = new Set(newIds.values());
+  const toDelete = now.filter((i) => !ours.has(i.listing_image_id));
+  for (const i of toDelete) {
+    await client.request("DELETE", `/application/shops/${shopId}/listings/${listingId}/images/${i.listing_image_id}`);
+    console.log(`  deleted old image ${i.listing_image_id} (was rank ${i.rank})`);
+  }
+  const final = await listImages(client, listingId);
+  console.log(`\ndone: ${final.length} photos on Etsy listing ${listingId}:`);
+  for (const i of final) console.log(`  rank ${String(i.rank).padStart(2)}  ${i.alt_text}`);
+}
+
 async function cmdOrdersCheck() {
   const pf = createPrintfulClient({ readOnly: true });
   const orders = await pf.all("/orders");
@@ -407,6 +602,7 @@ async function main() {
       colors: { type: "string" },
       dir: { type: "string", default: DEFAULT_DIR },
       resume: { type: "string" },
+      "no-wait": { type: "boolean", default: false },
       help: { type: "boolean", short: "h", default: false },
     },
   });
@@ -427,8 +623,12 @@ async function main() {
     await cmdLink(Number(arg), values);
   } else if (cmd === "orders-check") {
     await cmdOrdersCheck();
+  } else if (cmd === "add-colors") {
+    await cmdAddColors(Number(arg), values);
+  } else if (cmd === "replace-photos") {
+    await cmdReplacePhotos(Number(arg), values);
   } else {
-    throw new Error(`unknown command "${cmd}" (auth | whoami | create | link | orders-check)`);
+    throw new Error(`unknown command "${cmd}" (auth | whoami | create | link | orders-check | add-colors | replace-photos)`);
   }
 }
 
