@@ -201,6 +201,13 @@ main.main {
   margin: 0 0 1rem;
 }
 
+/* "More about MOP →" under the story: /about (app/about/page.tsx) */
+.storyMore {
+  color: #ffb347;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ---- a short, non-blocking fade; content is in the HTML from the start ---- */
 @keyframes fadeIn {
   from {

@@ -285,6 +285,11 @@ export default function HomePage({ founding50 }: { founding50: Founding50Line | 
           on your face — and very possibly have strangers stopping to say “I
           love your shirt” or giving you a thumbs up as they pass.
         </p>
+        <p>
+          <Link href="/about" className={styles.storyMore}>
+            More about MOP →
+          </Link>
+        </p>
       </section>
     </main>
   );
