@@ -227,7 +227,8 @@ export default function HomePage({ founding50 }: { founding50: Founding50Line | 
               : "linear-gradient(to bottom, #ff8c00aa, #ff8c0055)", // soft warm gradient
             textDecoration: "none",
             fontWeight: "bold",
-            boxShadow: isCouponHovered ? "0 4px 12px rgba(0,0,0,0.25)" : "none",
+            boxShadow: isCouponHovered ? "0 8px 16px rgba(0,0,0,0.2)" : "none",
+            transform: isCouponHovered ? "scale(1.05)" : "scale(1)",
             transition: "all 0.3s ease",
           }}
           onMouseEnter={() => setIsCouponHovered(true)}
@@ -252,8 +253,9 @@ export default function HomePage({ founding50 }: { founding50: Founding50Line | 
             textDecoration: "none",
             fontWeight: "bold",
             boxShadow: isHoveredBtn2
-              ? "0 4px 12px rgba(0, 0, 0, 0.25)"
+              ? "0 8px 16px rgba(0, 0, 0, 0.2)"
               : "none",
+            transform: isHoveredBtn2 ? "scale(1.05)" : "scale(1)",
             transition: "all 0.3s ease",
             textShadow: isHoveredBtn2 ? "0 0 8px #fff" : "none",
           }}
