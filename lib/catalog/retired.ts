@@ -31,6 +31,9 @@ export const retiredOptions: Record<string, Record<string, string[]>> = {
   // Milky Way and Cosmic Cliffs ("Yep I like 80% too. I like all this.", 2026-10-20).
   // Five left: Daydream, Milky Way, Cosmic Cliffs, Aurora, Orbital Sunset.
   // A sixth, Last Light (the wrap-around sunset), went on after Orbital Sunset (John 2026-10-21: "let's do one").
+  // John hates the Blue Jean colour on the alpaca; True Navy is its default now (2026-10-26).
+  // The Printful sync variants stay (harmless), so this only takes it off sale.
+  "alpaca-tee": { color: ["Blue Jean"] },
   "sky-tee": {
     sky: ["sunset-glow", "mackerel-sky", "above-the-clouds", "cloud-study", "golden-hour", "roman-sunset", "midnight"],
   },

@@ -2393,13 +2393,13 @@ export const catalogProducts: CatalogProduct[] = [
         "small"
       ],
       "color": [
+        "True Navy",
         "Blue Jean",
         "Ivory",
         "Grey",
         "Bay",
         "Black",
-        "Pepper",
-        "True Navy"
+        "Pepper"
       ],
       "size": [
         "S",

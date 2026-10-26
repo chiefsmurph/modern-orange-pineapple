@@ -31,7 +31,7 @@ test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee
       ["/sky-tee?sky=orbital-sunset", "$44.76"],
       ["/day-all-over?style=beanie", "$44.76"],
       ["/blue-sky-cotton-shorts", "From $44.43"],
-      ["/alpaca-tee?version=large&color=Blue+Jean", "From $34.73"],
+      ["/alpaca-tee?version=large&color=True+Navy", "From $34.73"],
       ["/dusk-all-over", "$44.76"],
       ["/rabbit-tee?version=large&color=Blossom", "From $34.73"],
       ["/pelican-tee?version=large&style=beanie", "From $34.73"],
