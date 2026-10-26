@@ -171,6 +171,11 @@ export function buildDraftListing(l, shop) {
   return fields;
 }
 
+/** The text a listing file owns, for updating an existing draft (no price, state or profiles). */
+export function textFields(l) {
+  return { title: l.title, description: l.description, tags: l.tags, materials: l.materials };
+}
+
 /** The fields exactly as they go on the wire: strings, arrays comma-joined. */
 export function formFields(fields) {
   const out = {};

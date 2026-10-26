@@ -12,6 +12,9 @@
 //   node scripts/etsy/etsy.mjs orders-check          Etsy-store Printful orders that need a look (draft, failed, on hold, unsynced)
 //   node scripts/etsy/etsy.mjs add-colors 3 --colors "Black,Pepper,True Navy" [--dry-run]
 //                                                    add colours to a LIVE listing: its products kept exactly, new ones appended, their photos after
+//   node scripts/etsy/etsy.mjs update-text 10 [--dry-run]
+//                                                    push the listing file's title, description, tags and materials to its
+//                                                    Etsy DRAFT (refuses any listing that isn't a draft; never sends a state)
 //   node scripts/etsy/etsy.mjs replace-photos 4 [--ranks 2,4] [--dry-run]
 //                                                    swap a listing's photos for the listing file's (only colours the listing has)
 //
@@ -76,6 +79,7 @@ import {
   buildInventory,
   chooseColors,
   formFields,
+  textFields,
   planImages,
   skippedImages,
   validateListing,
@@ -580,6 +584,27 @@ async function cmdReplacePhotos(n, opts) {
   for (const i of final) console.log(`  rank ${String(i.rank).padStart(2)}  ${i.alt_text}`);
 }
 
+async function cmdUpdateText(n, opts) {
+  if (!Number.isInteger(n)) throw new Error("usage: update-text <listing-number> [--dry-run]");
+  const { listing } = loadListing(opts.dir, n);
+  if (!hasTokens()) throw new Error("no Etsy tokens yet — run: node scripts/etsy/etsy.mjs auth");
+  const client = createClient();
+  // by listing id (not title): this is the command that changes the title
+  const listingId = await resolveListingId(n, listing);
+  const me = await client.request("GET", "/application/users/me");
+  const l = await client.request("GET", `/application/listings/${listingId}`);
+  if (l.shop_id !== me.shop_id) throw new Error(`Etsy listing ${listingId} isn't in this shop`);
+  if (l.state !== "draft") throw new Error(`Etsy listing ${listingId} is ${l.state}, not a draft; update-text only edits drafts`);
+  const fields = formFields(textFields(listing));
+  console.log(`${opts["dry-run"] ? "DRY RUN: nothing is written to Etsy.\n" : ""}#${n} Etsy draft ${listingId}`);
+  console.log(`  title  ${l.title}\n      -> ${fields.title}`);
+  console.log(`  tags   ${(l.tags ?? []).join(", ")}\n      -> ${fields.tags}`);
+  console.log(`  description ${fields.description.length} chars, materials ${fields.materials}`);
+  if (opts["dry-run"]) return;
+  const r = await client.request("PATCH", `/application/shops/${me.shop_id}/listings/${listingId}`, { form: fields });
+  console.log(`done: ${r.state} · ${r.title}`);
+}
+
 async function cmdOrdersCheck() {
   const pf = createPrintfulClient({ readOnly: true });
   const orders = await pf.all("/orders");
@@ -633,10 +658,12 @@ async function main() {
     await cmdOrdersCheck();
   } else if (cmd === "add-colors") {
     await cmdAddColors(Number(arg), values);
+  } else if (cmd === "update-text") {
+    await cmdUpdateText(Number(arg), values);
   } else if (cmd === "replace-photos") {
     await cmdReplacePhotos(Number(arg), values);
   } else {
-    throw new Error(`unknown command "${cmd}" (auth | whoami | create | link | orders-check | add-colors | replace-photos)`);
+    throw new Error(`unknown command "${cmd}" (auth | whoami | create | link | orders-check | add-colors | update-text | replace-photos)`);
   }
 }
 
