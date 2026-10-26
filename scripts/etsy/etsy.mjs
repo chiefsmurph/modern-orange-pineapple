@@ -12,7 +12,7 @@
 //   node scripts/etsy/etsy.mjs orders-check          Etsy-store Printful orders that need a look (draft, failed, on hold, unsynced)
 //   node scripts/etsy/etsy.mjs add-colors 3 --colors "Black,Pepper,True Navy" [--dry-run]
 //                                                    add colours to a LIVE listing: its products kept exactly, new ones appended, their photos after
-//   node scripts/etsy/etsy.mjs replace-photos 4 [--dry-run]
+//   node scripts/etsy/etsy.mjs replace-photos 4 [--ranks 2,4] [--dry-run]
 //                                                    swap a listing's photos for the listing file's (only colours the listing has)
 //
 // create options:
@@ -523,7 +523,7 @@ async function cmdAddColors(n, opts) {
 }
 
 async function cmdReplacePhotos(n, opts) {
-  if (!Number.isInteger(n)) throw new Error("usage: replace-photos <listing-number> [--dry-run]");
+  if (!Number.isInteger(n)) throw new Error("usage: replace-photos <listing-number> [--ranks 2,4] [--dry-run]");
   const dry = opts["dry-run"];
   const { listing } = loadListing(opts.dir, n);
   if (!hasTokens()) throw new Error("no Etsy tokens yet — run: node scripts/etsy/etsy.mjs auth");
@@ -536,6 +536,13 @@ async function cmdReplacePhotos(n, opts) {
   for (const img of planned) if (!fs.existsSync(img.path)) throw new Error(`photo missing: ${img.path}`);
   const existing = await listImages(client, listingId);
   const plan = planReplaceImages(planned, existing);
+  // --ranks 2,4,6: re-upload those ranks even when the alt text already matches (the photo file changed).
+  const force = new Set(String(opts.ranks ?? "").split(",").filter(Boolean).map(Number));
+  for (const s of plan.skip.filter((s) => force.has(s.rank))) {
+    plan.skip.splice(plan.skip.indexOf(s), 1);
+    plan.uploads.push({ ...s, overwrite: true, replaces: s.listing_image_id });
+  }
+  plan.uploads.sort((a, b) => a.rank - b.rank);
 
   console.log(`${dry ? "DRY RUN: nothing is written to Etsy.\n" : ""}#${n} ${listing.name}  (Etsy listing ${listingId}, ${state})`);
   console.log(`  now   ${existing.length} photos`);
@@ -600,6 +607,7 @@ async function main() {
       "dry-run": { type: "boolean", default: false },
       "light-only": { type: "boolean", default: false },
       colors: { type: "string" },
+      ranks: { type: "string" },
       dir: { type: "string", default: DEFAULT_DIR },
       resume: { type: "string" },
       "no-wait": { type: "boolean", default: false },
