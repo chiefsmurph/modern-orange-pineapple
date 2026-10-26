@@ -237,7 +237,7 @@ export default function HomePage({ founding50 }: { founding50: Founding50Line | 
           Got an old MOP card? Claim it
         </Link>
         <a
-          href="https://www.instagram.com/modernorangepineapple"
+          href="https://www.instagram.com/mopclothingco/"
           target="_blank"
           rel="noopener noreferrer"
           style={{

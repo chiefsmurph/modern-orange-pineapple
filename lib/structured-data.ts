@@ -5,7 +5,7 @@
 // with SITE_DESCRIPTION and app/about/page.tsx, and never add one the site can't back.
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./share-meta.ts";
 
-export const INSTAGRAM_URL = "https://www.instagram.com/modernorangepineapple/";
+export const INSTAGRAM_URL = "https://www.instagram.com/mopclothingco/";
 export const ETSY_URL = "https://www.etsy.com/shop/ModOrangePineapple";
 /** The brand's official profiles (Organization sameAs). No Facebook page is linked on the site yet. */
 export const SAME_AS = [INSTAGRAM_URL, ETSY_URL];

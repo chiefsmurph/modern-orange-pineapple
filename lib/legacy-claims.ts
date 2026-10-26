@@ -234,7 +234,7 @@ export function cleanContact(raw: string | undefined): { value: string | null; e
   }
   const handle = s.replace(/^@/, "").replace(/^https?:\/\/(www\.)?instagram\.com\//i, "").replace(/\/+$/, "");
   if (/^[A-Za-z0-9._]{1,30}$/.test(handle)) return { value: `@${handle}` };
-  return { value: null, error: "Add an email or an Instagram handle (like @modernorangepineapple)" };
+  return { value: null, error: "Add an email or an Instagram handle (like @mopclothingco)" };
 }
 
 export async function handleClaim(input: ClaimInput, photo: UploadIn | null, ip: string, deps: ClaimDeps): Promise<ClaimResult> {
