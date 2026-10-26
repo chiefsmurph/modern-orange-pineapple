@@ -6,7 +6,8 @@ import { formatPrice, priceRange } from "./catalog/select.ts";
 import { SHARE_IMAGE_SIZE, shareImages } from "./share-images.generated.ts";
 
 export const SITE_URL = "https://mopclothing.com";
-export const SITE_NAME = "Modern Orange Pineapple";
+/** The brand name Google shows (og:site_name, JSON-LD); "Modern Orange Pineapple" is an alternateName (John 10/26). */
+export const SITE_NAME = "MOP Clothing";
 /** The site's description: the slogan + the descriptor, as in the Instagram bio (John 10/13). No country-of-printing claim: Printful picks the print facility. */
 export const SITE_DESCRIPTION =
   "Escape the ordinary, own a collectible piece of paradise. Art-inspired designs on real cotton, even the all-overs. Made to order · Morro Bay, CA";

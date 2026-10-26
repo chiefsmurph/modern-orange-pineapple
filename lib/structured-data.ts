@@ -5,8 +5,11 @@
 // with SITE_DESCRIPTION and app/about/page.tsx, and never add one the site can't back.
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./share-meta.ts";
 
-export const INSTAGRAM_URL = "https://www.instagram.com/modernorangepineapple";
-export const ALTERNATE_NAMES = ["MOP", "MOP Clothing"];
+export const INSTAGRAM_URL = "https://www.instagram.com/modernorangepineapple/";
+export const ETSY_URL = "https://www.etsy.com/shop/ModOrangePineapple";
+/** The brand's official profiles (Organization sameAs). No Facebook page is linked on the site yet. */
+export const SAME_AS = [INSTAGRAM_URL, ETSY_URL];
+export const ALTERNATE_NAMES = ["Modern Orange Pineapple", "MOP"];
 /** Where the brand says it's from (the Instagram bio and SITE_DESCRIPTION end "Morro Bay, CA"). */
 export const HOME_TOWN = { locality: "Morro Bay", region: "CA", country: "US" };
 
@@ -30,7 +33,7 @@ export function organizationNode(): Node {
       addressRegion: HOME_TOWN.region,
       addressCountry: HOME_TOWN.country,
     },
-    sameAs: [INSTAGRAM_URL],
+    sameAs: SAME_AS,
   };
 }
 

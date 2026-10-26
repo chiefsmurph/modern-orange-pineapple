@@ -21,7 +21,7 @@ test("the store: name, MOP aliases, the rabbit logo, Morro Bay, Instagram", () =
   const org = organizationNode();
   assert.equal(org["@type"], "OnlineStore");
   assert.equal(org.name, SITE_NAME);
-  assert.deepEqual(org.alternateName, ["MOP", "MOP Clothing"]);
+  assert.deepEqual(org.alternateName, ["Modern Orange Pineapple", "MOP"]);
   assert.equal(org.url, `${SITE_URL}/`);
   assert.equal(org.logo, `${SITE_URL}/apple-icon.png`);
   assert.ok(existsSync(path.join(ROOT, "public", "apple-icon.png")));
@@ -31,7 +31,9 @@ test("the store: name, MOP aliases, the rabbit logo, Morro Bay, Instagram", () =
     addressRegion: "CA",
     addressCountry: "US",
   });
-  assert.deepEqual(org.sameAs, [INSTAGRAM_URL]);
+  assert.deepEqual(org.sameAs, [INSTAGRAM_URL, "https://www.etsy.com/shop/ModOrangePineapple"]);
+  assert.equal(org.name, "MOP Clothing");
+  assert.deepEqual(org.alternateName, ["Modern Orange Pineapple", "MOP"]);
 });
 
 test("the home town is the one the site already states", () => {

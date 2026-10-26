@@ -34,7 +34,7 @@ test("product previews: '<name> · $<price>', the copy's first sentence, its own
   assert.equal(og.title, "Pelican Tee · from $34.73");
   assert.equal(og.description, "Yes, this really is the coolest pelican you have ever met.");
   assert.equal(og.url, "https://mopclothing.com/pelican-tee");
-  assert.equal(og.siteName, "Modern Orange Pineapple");
+  assert.equal(og.siteName, "MOP Clothing");
   assert.match(og.images[0].url, /^https:\/\/mopclothing\.com\/images\/share\/pelican-tee\.[0-9a-f]{8}\.jpg$/);
   assert.equal(og.images[0].width, 1200);
   assert.equal(og.images[0].height, 630);
