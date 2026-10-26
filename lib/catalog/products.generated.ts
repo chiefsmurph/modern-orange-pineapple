@@ -7339,9 +7339,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/day-all-over/beanie-model.a3ecd116.webp",
-          "/images/catalog/day-all-over/beanie-model2.d9f104c9.webp",
+          "/images/catalog/day-all-over/beanie-model2.2b314fa0.webp",
           "/images/catalog/day-all-over/beanie-flat.b0e4c85e.webp",
-          "/images/catalog/day-all-over/beanie-back.ffac7adf.webp"
+          "/images/catalog/day-all-over/beanie-back.0009192d.webp"
         ],
         "checkout": "/images/catalog/day-all-over/beanie-model.a3ecd116-checkout.jpg"
       },
@@ -7351,9 +7351,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/day-all-over/classic-model.7086ba15.webp",
-          "/images/catalog/day-all-over/classic-model2.1294b605.webp",
+          "/images/catalog/day-all-over/classic-model2.2b314fa0.webp",
           "/images/catalog/day-all-over/classic-flat.4b1a6c1b.webp",
-          "/images/catalog/day-all-over/classic-back.04f9b7d4.webp"
+          "/images/catalog/day-all-over/classic-back.0009192d.webp"
         ],
         "checkout": "/images/catalog/day-all-over/classic-model.7086ba15-checkout.jpg"
       }
@@ -7442,8 +7442,8 @@ export const catalogProducts: CatalogProduct[] = [
         "when": {},
         "images": [
           "/images/catalog/dusk-all-over/flat.166d8f3a.webp",
-          "/images/catalog/dusk-all-over/model2.601f3f0d.webp",
-          "/images/catalog/dusk-all-over/back.93a6f9fa.webp"
+          "/images/catalog/dusk-all-over/model2.d1db4aef.webp",
+          "/images/catalog/dusk-all-over/back.cf753db7.webp"
         ],
         "checkout": "/images/catalog/dusk-all-over/flat.166d8f3a-checkout.jpg"
       }
@@ -7534,8 +7534,8 @@ export const catalogProducts: CatalogProduct[] = [
         "images": [
           "/images/catalog/night-all-over/flat.51f645f6.webp",
           "/images/catalog/night-all-over/model-left-front.837ad816.webp",
-          "/images/catalog/night-all-over/back.8f839cc6.webp",
-          "/images/catalog/night-all-over/model2.234e2e4e.webp"
+          "/images/catalog/night-all-over/back.f3d8949a.webp",
+          "/images/catalog/night-all-over/model2.c8da5e47.webp"
         ],
         "checkout": "/images/catalog/night-all-over/flat.51f645f6-checkout.jpg"
       }
@@ -8231,8 +8231,8 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/golden-hour-flat.00e10f74.webp",
-          "/images/catalog/sky-tee/golden-hour-model2.601f3f0d.webp",
-          "/images/catalog/sky-tee/golden-hour-back.93a6f9fa.webp"
+          "/images/catalog/sky-tee/golden-hour-model2.d1db4aef.webp",
+          "/images/catalog/sky-tee/golden-hour-back.cf753db7.webp"
         ],
         "checkout": "/images/catalog/sky-tee/golden-hour-flat.00e10f74-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/golden-hour-flat.00e10f74-swatch.webp"
@@ -8243,9 +8243,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/sunset-glow-model-left-front.6c732b30.webp",
-          "/images/catalog/sky-tee/sunset-glow-model2.0f3b3f4c.webp",
+          "/images/catalog/sky-tee/sunset-glow-model2.57288249.webp",
           "/images/catalog/sky-tee/sunset-glow-flat.e447784d.webp",
-          "/images/catalog/sky-tee/sunset-glow-back.519af4cb.webp"
+          "/images/catalog/sky-tee/sunset-glow-back.8f0d7b62.webp"
         ],
         "checkout": "/images/catalog/sky-tee/sunset-glow-model-left-front.6c732b30-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/sunset-glow-flat.e447784d-swatch.webp"
@@ -8256,9 +8256,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/mackerel-sky-model-right-front.2adbc953.webp",
-          "/images/catalog/sky-tee/mackerel-sky-model2.5e1132af.webp",
+          "/images/catalog/sky-tee/mackerel-sky-model2.f83ec21d.webp",
           "/images/catalog/sky-tee/mackerel-sky-flat.98141df6.webp",
-          "/images/catalog/sky-tee/mackerel-sky-back.a37a1a8b.webp"
+          "/images/catalog/sky-tee/mackerel-sky-back.b8021d14.webp"
         ],
         "checkout": "/images/catalog/sky-tee/mackerel-sky-model-right-front.2adbc953-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/mackerel-sky-flat.98141df6-swatch.webp"
@@ -8269,8 +8269,8 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/daydream-flat.61478997.webp",
-          "/images/catalog/sky-tee/daydream-model2.fc07d5db.webp",
-          "/images/catalog/sky-tee/daydream-back.961844a1.webp"
+          "/images/catalog/sky-tee/daydream-model2.f2e8122f.webp",
+          "/images/catalog/sky-tee/daydream-back.7fca5c57.webp"
         ],
         "checkout": "/images/catalog/sky-tee/daydream-flat.61478997-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/daydream-flat.61478997-swatch.webp"
@@ -8281,9 +8281,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/milky-way-model-left-front.b37a33ec.webp",
-          "/images/catalog/sky-tee/milky-way-model2.d8ec6a00.webp",
+          "/images/catalog/sky-tee/milky-way-model2.42c0dbd6.webp",
           "/images/catalog/sky-tee/milky-way-flat.6a872c1f.webp",
-          "/images/catalog/sky-tee/milky-way-back.b322fdac.webp"
+          "/images/catalog/sky-tee/milky-way-back.d2008700.webp"
         ],
         "checkout": "/images/catalog/sky-tee/milky-way-model-left-front.b37a33ec-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/milky-way-flat.6a872c1f-swatch.webp"
@@ -8294,9 +8294,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/cosmic-cliffs-model-left-front.0775b7db.webp",
-          "/images/catalog/sky-tee/cosmic-cliffs-model2.951e1a70.webp",
+          "/images/catalog/sky-tee/cosmic-cliffs-model2.4205a57d.webp",
           "/images/catalog/sky-tee/cosmic-cliffs-flat.bf2d520a.webp",
-          "/images/catalog/sky-tee/cosmic-cliffs-back.98f1db06.webp"
+          "/images/catalog/sky-tee/cosmic-cliffs-back.dacc322d.webp"
         ],
         "checkout": "/images/catalog/sky-tee/cosmic-cliffs-model-left-front.0775b7db-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/cosmic-cliffs-flat.bf2d520a-swatch.webp"
@@ -8307,9 +8307,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/midnight-model-left-front.55f2c355.webp",
-          "/images/catalog/sky-tee/midnight-model2.cf4d89d7.webp",
+          "/images/catalog/sky-tee/midnight-model2.c8da5e47.webp",
           "/images/catalog/sky-tee/midnight-flat.b527e0a0.webp",
-          "/images/catalog/sky-tee/midnight-back.ef1a768b.webp"
+          "/images/catalog/sky-tee/midnight-back.f3d8949a.webp"
         ],
         "checkout": "/images/catalog/sky-tee/midnight-model-left-front.55f2c355-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/midnight-flat.b527e0a0-swatch.webp"
@@ -8320,9 +8320,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/aurora-model-right-front.4173e6d6.webp",
-          "/images/catalog/sky-tee/aurora-model2.134ff6ea.webp",
+          "/images/catalog/sky-tee/aurora-model2.c6f736cf.webp",
           "/images/catalog/sky-tee/aurora-flat.5621c35a.webp",
-          "/images/catalog/sky-tee/aurora-back.3c788ac5.webp"
+          "/images/catalog/sky-tee/aurora-back.6eb95967.webp"
         ],
         "checkout": "/images/catalog/sky-tee/aurora-model-right-front.4173e6d6-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/aurora-flat.5621c35a-swatch.webp"
@@ -8333,8 +8333,8 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/above-the-clouds-flat.696edc6a.webp",
-          "/images/catalog/sky-tee/above-the-clouds-model2.f3497d17.webp",
-          "/images/catalog/sky-tee/above-the-clouds-back.97375a8a.webp"
+          "/images/catalog/sky-tee/above-the-clouds-model2.507db7e0.webp",
+          "/images/catalog/sky-tee/above-the-clouds-back.8806c332.webp"
         ],
         "checkout": "/images/catalog/sky-tee/above-the-clouds-flat.696edc6a-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/above-the-clouds-flat.696edc6a-swatch.webp"
@@ -8345,9 +8345,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/orbital-sunset-model-left-front.8b280477.webp",
-          "/images/catalog/sky-tee/orbital-sunset-model2.409924ca.webp",
+          "/images/catalog/sky-tee/orbital-sunset-model2.99072119.webp",
           "/images/catalog/sky-tee/orbital-sunset-flat.501d930c.webp",
-          "/images/catalog/sky-tee/orbital-sunset-back.8822f96f.webp"
+          "/images/catalog/sky-tee/orbital-sunset-back.8cefc836.webp"
         ],
         "checkout": "/images/catalog/sky-tee/orbital-sunset-model-left-front.8b280477-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/orbital-sunset-flat.501d930c-swatch.webp"
@@ -8358,9 +8358,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/last-light-model-right-front.7e83198f.webp",
-          "/images/catalog/sky-tee/last-light-model2.5992072c.webp",
+          "/images/catalog/sky-tee/last-light-model2.5a40801b.webp",
           "/images/catalog/sky-tee/last-light-flat.9e420f59.webp",
-          "/images/catalog/sky-tee/last-light-back.b40683e2.webp"
+          "/images/catalog/sky-tee/last-light-back.fb1dc41a.webp"
         ],
         "checkout": "/images/catalog/sky-tee/last-light-model-right-front.7e83198f-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/last-light-flat.9e420f59-swatch.webp"
@@ -8371,9 +8371,9 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/roman-sunset-model-right-front.c4433255.webp",
-          "/images/catalog/sky-tee/roman-sunset-model2.b09b8322.webp",
+          "/images/catalog/sky-tee/roman-sunset-model2.d521c062.webp",
           "/images/catalog/sky-tee/roman-sunset-flat.fac4bd80.webp",
-          "/images/catalog/sky-tee/roman-sunset-back.1e76cd71.webp"
+          "/images/catalog/sky-tee/roman-sunset-back.bd22a034.webp"
         ],
         "checkout": "/images/catalog/sky-tee/roman-sunset-model-right-front.c4433255-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/roman-sunset-flat.fac4bd80-swatch.webp"
@@ -8384,8 +8384,8 @@ export const catalogProducts: CatalogProduct[] = [
         },
         "images": [
           "/images/catalog/sky-tee/cloud-study-flat.2c7b3262.webp",
-          "/images/catalog/sky-tee/cloud-study-model2.f11581cd.webp",
-          "/images/catalog/sky-tee/cloud-study-back.319c2a3b.webp"
+          "/images/catalog/sky-tee/cloud-study-model2.2d4d2236.webp",
+          "/images/catalog/sky-tee/cloud-study-back.632a47fc.webp"
         ],
         "checkout": "/images/catalog/sky-tee/cloud-study-flat.2c7b3262-checkout.jpg",
         "swatch": "/images/catalog/sky-tee/cloud-study-flat.2c7b3262-swatch.webp"
@@ -8566,8 +8566,8 @@ export const catalogProducts: CatalogProduct[] = [
         "images": [
           "/images/catalog/gold-stripes/flat.03abbb3a.webp",
           "/images/catalog/gold-stripes/model-right-front.d0fa615a.webp",
-          "/images/catalog/gold-stripes/back.6c871361.webp",
-          "/images/catalog/gold-stripes/model2.a7f7d742.webp"
+          "/images/catalog/gold-stripes/back.2e7e627e.webp",
+          "/images/catalog/gold-stripes/model2.736e4b9e.webp"
         ],
         "checkout": "/images/catalog/gold-stripes/flat.03abbb3a-checkout.jpg"
       }
@@ -8647,9 +8647,9 @@ export const catalogProducts: CatalogProduct[] = [
         "when": {},
         "images": [
           "/images/catalog/coast-tee/model-left-front.844ff4d5.webp",
-          "/images/catalog/coast-tee/model2.29fa42cb.webp",
+          "/images/catalog/coast-tee/model2.cf58b5df.webp",
           "/images/catalog/coast-tee/flat.78c7c689.webp",
-          "/images/catalog/coast-tee/back.8984d341.webp"
+          "/images/catalog/coast-tee/back.bdc86e28.webp"
         ],
         "checkout": "/images/catalog/coast-tee/model-left-front.844ff4d5-checkout.jpg"
       }
