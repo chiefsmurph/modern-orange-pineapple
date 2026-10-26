@@ -245,8 +245,8 @@ test("Etsy's field rules: long titles, repeated ':' and bad tags are caught befo
 });
 
 test("cleared to build: 01–03, 05–08, the Sky Tees 13–17, batch 2 (20–34) and the logo tee 99; 04 is hand-built, the city shirts 09–12 wait", () => {
-  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 7, 8, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 99]);
-  for (const n of [4, 9, 10, 11, 12, 18, 19, 35]) assert.ok(!READY_LISTINGS.includes(n), String(n));
+  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 99]);
+  for (const n of [4, 11, 12, 18, 19, 35]) assert.ok(!READY_LISTINGS.includes(n), String(n));
 });
 
 // ---- categories, size scales and the one-size snapback (batch 2, 10/25)
