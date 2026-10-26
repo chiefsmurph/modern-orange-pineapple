@@ -5460,11 +5460,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/original-star-tee/large-black-model-womens.d72f8ab7.webp",
-          "/images/catalog/original-star-tee/large-black-model-mens-2.9779e4f0.webp",
-          "/images/catalog/original-star-tee/large-black-flat.e9f049dd.webp"
+          "/images/catalog/original-star-tee/large-black-model-womens.36eb2aac.webp",
+          "/images/catalog/original-star-tee/large-black-model-mens-2.61a33154.webp",
+          "/images/catalog/original-star-tee/large-black-flat.a2984805.webp"
         ],
-        "checkout": "/images/catalog/original-star-tee/large-black-model-womens.d72f8ab7-checkout.jpg"
+        "checkout": "/images/catalog/original-star-tee/large-black-model-womens.36eb2aac-checkout.jpg"
       },
       {
         "when": {
@@ -5499,11 +5499,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/original-star-tee/small-black-model-womens.95a891dc.webp",
-          "/images/catalog/original-star-tee/small-black-model-mens-2.3a345bab.webp",
-          "/images/catalog/original-star-tee/small-black-flat.f6c7ed79.webp"
+          "/images/catalog/original-star-tee/small-black-model-womens.6429a674.webp",
+          "/images/catalog/original-star-tee/small-black-model-mens-2.1a8d193d.webp",
+          "/images/catalog/original-star-tee/small-black-flat.11c9435b.webp"
         ],
-        "checkout": "/images/catalog/original-star-tee/small-black-model-womens.95a891dc-checkout.jpg"
+        "checkout": "/images/catalog/original-star-tee/small-black-model-womens.6429a674-checkout.jpg"
       },
       {
         "when": {
@@ -7102,11 +7102,11 @@ export const catalogProducts: CatalogProduct[] = [
           "color": "Black"
         },
         "images": [
-          "/images/catalog/star-crop-top/black-model-womens-lifestyle-2.4434814e.webp",
-          "/images/catalog/star-crop-top/black-model-womens-3.5e791059.webp",
-          "/images/catalog/star-crop-top/black-flat.bf73fb0c.webp"
+          "/images/catalog/star-crop-top/black-model-womens-lifestyle-2.164a40fd.webp",
+          "/images/catalog/star-crop-top/black-model-womens-3.6e29e3d0.webp",
+          "/images/catalog/star-crop-top/black-flat.09e0e920.webp"
         ],
-        "checkout": "/images/catalog/star-crop-top/black-model-womens-lifestyle-2.4434814e-checkout.jpg"
+        "checkout": "/images/catalog/star-crop-top/black-model-womens-lifestyle-2.164a40fd-checkout.jpg"
       }
     ],
     "credits": [
