@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = getPreview(slug);
   if (!p) return { robots: { index: false, follow: false } };
   const design = getDesign(p.design);
-  const cover = p.gallery[0] ?? p.sketch?.[p.sketch.length - 1];
-  const title = `${p.headline} | Modern Orange Pineapple`;
+  const cover = p.gallery[0] ?? p.options?.[0]?.images[0] ?? p.sketch?.[p.sketch.length - 1];
+  const title = `${p.headline} | MOP Clothing`;
   return {
     title,
     description: p.line,
@@ -51,8 +51,8 @@ export default async function PreviewPage({ params }: Props) {
   return (
     <main className={styles.page}>
       <Link href="/" className={styles.brand}>
-        mopclothing.com
-        <i className={styles.brandSub}>Modern Orange Pineapple</i>
+        MOP Clothing
+        <i className={styles.brandSub}>mopclothing.com</i>
       </Link>
 
       <header className={styles.hero}>
@@ -89,6 +89,38 @@ export default async function PreviewPage({ params }: Props) {
           ))}
         </section>
       )}
+
+      {p.options?.map((o) => (
+        <section key={o.name} className={styles.option} aria-label={o.name}>
+          {o.tier && <p className={styles.tier}>{o.tier}</p>}
+          <h2 className={styles.optionName}>{o.name}</h2>
+          <div className={styles.swipe}>
+            {o.images.map((g, i) => (
+              <figure key={g.src} className={styles.slide}>
+                <div className={styles.tile}>
+                  <Image
+                    src={g.src}
+                    alt={g.alt}
+                    width={g.width}
+                    height={g.height}
+                    sizes="(max-width: 600px) 86vw, 520px"
+                    // every slide loads up front (preloaded, eager) so swiping never waits
+                    priority
+                  />
+                </div>
+                <figcaption className={styles.caption}>{g.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+          {o.images.length > 1 && <p className={styles.hint}>swipe for more →</p>}
+          <p className={styles.line}>{o.line}</p>
+          <p className={styles.price}>
+            Wholesale <b>{o.wholesale}</b> each · suggested retail <b>{o.retail}</b>
+          </p>
+        </section>
+      ))}
+
+      {p.terms && <p className={styles.line}>{p.terms}</p>}
 
       <p className={styles.foot}>Private preview · mockups, not final products</p>
     </main>

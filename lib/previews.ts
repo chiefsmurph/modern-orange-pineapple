@@ -23,6 +23,21 @@ export type Preview = {
   line: string;
   sketch?: SketchStep[];
   gallery: PreviewImage[];
+  /** Product options, each a swipeable row of images (store pitch pages). */
+  options?: PreviewOption[];
+  /** Small line under the options (order terms). */
+  terms?: string;
+};
+
+export type PreviewOption = {
+  name: string;
+  /** Small tier label, e.g. "Premium · printed edge to edge". */
+  tier?: string;
+  line: string;
+  /** Wholesale = per shirt to the shop; never MOP's cost. */
+  wholesale: string;
+  retail: string;
+  images: PreviewImage[];
 };
 
 const img = (
@@ -55,6 +70,7 @@ const ALPACA = "alpaca-79015f8f";
 const STAR = "star-95c35cbf";
 const BEANIE = "beanie-ad578892";
 const MORRO = "morro-bay-0b7d6793";
+const IMG = (name: string, alt: string, caption: string) => img(MORRO, name, 1000, 1000, alt, caption);
 // Town exclusives for local-shop outreach (concept mockups; print after a shop says yes).
 // Never print or caption "Flower Fields", "Carlsbad Ranch", "O'side", "Ruby's" (test/previews.test.ts).
 // Every town design comes two ways (10/13): all-over, and a lower-priced BASIC tee (the same art as a
@@ -116,14 +132,60 @@ export const previews: Preview[] = [
   },
   {
     slug: MORRO,
-    headline: "Morro Bay exclusives",
-    line: "Two shirts made just for your shop, not sold online. Printed edge to edge on soft cotton, with \u201cMorro Bay, CA\u201d on the front.",
-    gallery: [
-      img(MORRO, "set", 1400, 650, "The Morro Rock shirt and the sea otter shirt side by side", "The pair", true),
-      img(MORRO, "morro-rock-front", 1000, 941, "All-over tee with Morro Rock at sunrise and Morro Bay, CA script", "Morro Rock \u00b7 front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
-      img(MORRO, "morro-rock-back", 1000, 941, "Back of the Morro Rock tee: MOP logo and a small sea otter badge", "Morro Rock \u00b7 back"),
-      img(MORRO, "otter-front", 1000, 941, "All-over tee with a sea otter floating on its back and Morro Bay, CA script", "Sea Otter \u00b7 front"),
-      img(MORRO, "otter-back", 1000, 941, "Back of the sea otter tee: MOP logo and a small Morro Rock badge", "Sea Otter \u00b7 back"),
+    headline: "Morro Bay designs for your shop",
+    line: "Swipe each one to see front, back and on a person.",
+    gallery: [],
+    terms: "Sizes S\u20132XL, 3XL available",
+    options: [
+      {
+        name: "Curious Otter",
+        tier: "Premium \u00b7 printed edge to edge",
+        line: "All-over print, edge to edge on soft cotton. Our favourite.",
+        wholesale: "$24",
+        retail: "$45",
+        images: [
+          IMG("otter-allover-front", "All-over tee: a sea otter floating on its back in blue water, with Morro Bay, CA script", "Front \u00b7 photo: Erin Strand / USFWS (public domain)"),
+          IMG("otter-allover-model", "The Curious Otter all-over tee, worn", "Worn"),
+          IMG("otter-allover-back", "Back of the otter tee: the MOP bunny logo and a small Morro Rock badge", "Back"),
+          IMG("otter-allover-model-back", "The back of the Curious Otter tee, worn", "Back, worn"),
+        ],
+      },
+      {
+        name: "Morro Rock",
+        tier: "Premium \u00b7 printed edge to edge",
+        line: "All-over print, edge to edge on soft cotton.",
+        wholesale: "$24",
+        retail: "$45",
+        images: [
+          IMG("rock-allover-front", "All-over tee: Morro Rock at sunrise over the beach, with Morro Bay, CA script", "Front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
+          IMG("rock-allover-model", "The Morro Rock all-over tee, worn", "Worn"),
+          IMG("rock-allover-back", "Back of the Morro Rock tee: the MOP bunny logo and a small sea otter badge", "Back"),
+        ],
+      },
+      {
+        name: "Morro Rock + Otter tee",
+        line: "Comfort Colors heavyweight garment-dyed cotton. Shown in Black and Butter; also comes in Bay (sage).",
+        wholesale: "$20",
+        retail: "$37",
+        images: [
+          IMG("rock-tee-black", "Black tee with an arched print of Morro Rock and a sea otter, Morro Bay, CA below, worn", "Black"),
+          IMG("rock-tee-black-flat", "The black Morro Rock and otter tee, laid flat", "Black, flat"),
+          IMG("rock-tee-butter", "Butter yellow tee with the same Morro Rock and otter print, worn", "Butter"),
+          IMG("rock-tee-butter-flat", "The butter Morro Rock and otter tee, laid flat", "Butter, flat"),
+        ],
+      },
+      {
+        name: "Otter line-art tee",
+        line: "Comfort Colors heavyweight garment-dyed cotton.",
+        wholesale: "$20",
+        retail: "$37",
+        images: [
+          IMG("otter-tee-black", "Black tee with a line drawing of a floating sea otter, Morro Bay, CA below, worn", "Black"),
+          IMG("otter-tee-black-flat", "The black otter line-art tee, laid flat", "Black, flat"),
+          IMG("otter-tee-butter", "Butter yellow tee with the otter line drawing, worn", "Butter"),
+          IMG("otter-tee-butter-flat", "The butter otter line-art tee, laid flat", "Butter, flat"),
+        ],
+      },
     ],
   },
   {
