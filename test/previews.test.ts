@@ -16,7 +16,7 @@ test("every preview slug ends in 8 random hex characters and is unique", () => {
 
 test("every preview image is a WebP in public/preview/<slug>/, at most 300 KB", () => {
   for (const p of previews) {
-    for (const g of [...p.gallery, ...(p.sketch ?? [])]) {
+    for (const g of [...p.gallery, ...(p.sketch ?? []), ...(p.options ?? []).flatMap((o) => o.images)]) {
       assert.ok(g.src.startsWith(`/preview/${p.slug}/`) && g.src.endsWith(".webp"), g.src);
       const file = path.join(ROOT, "public", g.src);
       assert.ok(existsSync(file), g.src);
@@ -123,4 +123,18 @@ test("no preview names a trademark or business (outreach research 10/13)", () =>
     const text = [p.headline, p.line, ...p.gallery.flatMap((g) => [g.alt, g.caption])].join("\n");
     for (const b of banned) assert.doesNotMatch(text, b, `${p.slug}: ${b}`);
   }
+});
+
+test("Morro Bay pitch: four options, Curious Otter first, prices shown, MOP Clothing brand", () => {
+  const p = getPreview("morro-bay-0b7d6793")!;
+  assert.deepEqual(p.options!.map((o) => o.name), ["Curious Otter", "Morro Rock", "Morro Rock + Otter tee", "Otter line-art tee"]);
+  for (const o of p.options!) {
+    assert.match(o.wholesale, /^\$\d+$/);
+    assert.match(o.retail, /^\$\d+$/);
+    assert.ok(o.images.length >= 3, o.name);
+  }
+  assert.match(p.terms!, /Sizes S–2XL, 3XL available/);
+  assert.doesNotMatch(JSON.stringify(p), /minimum/i);
+  const page = readFileSync(path.join(ROOT, "app/preview/[slug]/page.tsx"), "utf8");
+  assert.doesNotMatch(page, /Modern Orange Pineapple/);
 });
