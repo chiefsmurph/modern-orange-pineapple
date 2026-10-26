@@ -90,7 +90,7 @@ export default async function PreviewPage({ params }: Props) {
         </section>
       )}
 
-      {p.options?.map((o, oi) => (
+      {p.options?.map((o) => (
         <section key={o.name} className={styles.option} aria-label={o.name}>
           {o.tier && <p className={styles.tier}>{o.tier}</p>}
           <h2 className={styles.optionName}>{o.name}</h2>
@@ -104,7 +104,8 @@ export default async function PreviewPage({ params }: Props) {
                     width={g.width}
                     height={g.height}
                     sizes="(max-width: 600px) 86vw, 520px"
-                    priority={oi === 0 && i === 0}
+                    // every slide loads up front (preloaded, eager) so swiping never waits
+                    priority
                   />
                 </div>
                 <figcaption className={styles.caption}>{g.caption}</figcaption>

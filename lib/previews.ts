@@ -132,8 +132,8 @@ export const previews: Preview[] = [
   },
   {
     slug: MORRO,
-    headline: "Options for your shop",
-    line: "Morro Bay shirts made just for your shop, not sold online. Swipe each one to see front, back and on a person.",
+    headline: "Morro Bay designs for your shop",
+    line: "Swipe each one to see front, back and on a person.",
     gallery: [],
     terms: "Sizes S\u20132XL, 3XL available",
     options: [

@@ -134,7 +134,7 @@ test("Morro Bay pitch: four options, Curious Otter first, prices shown, MOP Clot
     assert.ok(o.images.length >= 3, o.name);
   }
   assert.match(p.terms!, /Sizes S–2XL, 3XL available/);
-  assert.doesNotMatch(JSON.stringify(p), /minimum/i);
+  assert.doesNotMatch(JSON.stringify(p), /minimum|exclusive|not sold online|only for/i);
   const page = readFileSync(path.join(ROOT, "app/preview/[slug]/page.tsx"), "utf8");
   assert.doesNotMatch(page, /Modern Orange Pineapple/);
 });
