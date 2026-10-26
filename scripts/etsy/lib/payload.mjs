@@ -88,7 +88,7 @@ export const DARK_COLORS = ["Black", "Pepper", "True Navy"];
 // Last Light); 07 (dress) and 08 (Day, beanie) link to the website's print files like the rest;
 // 20–34 are batch 2 (alpaca, bolt, Nolli, crop tops, polos, snapback, Day classic, Dusk, Night,
 // Gold Stripes).
-export const READY_LISTINGS = [1, 2, 3, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, ...Array.from({ length: 15 }, (_, i) => 20 + i), 99];
+export const READY_LISTINGS = [1, 2, 3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, ...Array.from({ length: 15 }, (_, i) => 20 + i), 99];
 
 export const OFFERING_QUANTITY = 999; // made to order; Etsy's per-offering maximum
 
