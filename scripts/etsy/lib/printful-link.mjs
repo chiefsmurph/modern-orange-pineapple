@@ -46,13 +46,18 @@ export function variantColorSize(v, productName) {
   return { color, size: normSize(sizes[0]) };
 }
 
-/** The print files to copy: everything but Printful's generated mockups, by id, with type and position. */
+/**
+ * The print files to copy: everything but Printful's generated mockups, by id, with type and position.
+ * With more than one placement Printful rejects "default" (the website store's name for the
+ * front print), so it goes out as "front" (listings 7 and 99 had to be linked by hand, 10/25).
+ */
 export function printFiles(files) {
-  return (files ?? [])
-    .filter((f) => f.type !== "preview")
+  const prints = (files ?? []).filter((f) => f.type !== "preview");
+  const multi = prints.length > 1;
+  return prints
     .map((f) => {
       if (!f.id && !f.url) throw new Error(`print file "${f.filename}" (${f.type}) has neither id nor url`);
-      const out = { type: f.type };
+      const out = { type: multi && f.type === "default" ? "front" : f.type };
       if (f.id) out.id = f.id;
       else out.url = f.url;
       if (f.position) out.position = f.position;

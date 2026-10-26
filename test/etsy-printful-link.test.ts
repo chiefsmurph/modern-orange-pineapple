@@ -262,3 +262,13 @@ test("the server-side fetch: token read and used on the server only; the id must
   assert.ok(!/source |\. \/srv/.test(cmd), "never sources the .env");
   assert.throws(() => websiteProductCommand("1; rm -rf /"), /not a number/);
 });
+
+test("printFiles: 'default' becomes 'front' when there is more than one placement", () => {
+  const files = [
+    { type: "default", id: 11, filename: "front.png" },
+    { type: "back", id: 12, filename: "back.png" },
+    { type: "preview", id: 13, filename: "mock.png" },
+  ];
+  assert.deepEqual(printFiles(files).map((f) => f.type), ["front", "back"]);
+  assert.deepEqual(printFiles([{ type: "default", id: 11 }, { type: "preview", id: 13 }]).map((f) => f.type), ["default"]);
+});

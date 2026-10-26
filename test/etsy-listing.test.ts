@@ -244,8 +244,8 @@ test("Etsy's field rules: long titles, repeated ':' and bad tags are caught befo
   assert.throws(() => validateListing({ ...l, tags: [...l.tags.slice(0, 12), "50% off"] }), /character Etsy rejects/);
 });
 
-test("cleared to build: 01–03, 05–08, the Sky Tees 13–17 and batch 2 (20–34); 04 is hand-built, the city shirts 09–12 wait", () => {
-  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 7, 8, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34]);
+test("cleared to build: 01–03, 05–08, the Sky Tees 13–17, batch 2 (20–34) and the logo tee 99; 04 is hand-built, the city shirts 09–12 wait", () => {
+  assert.deepEqual(READY_LISTINGS, [1, 2, 3, 5, 6, 7, 8, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 99]);
   for (const n of [4, 9, 10, 11, 12, 18, 19, 35]) assert.ok(!READY_LISTINGS.includes(n), String(n));
 });
 
@@ -364,7 +364,8 @@ test("every real listing file parses and passes Etsy's checks", { skip: !existsS
     assert.ok(l.photos.length > 0, f);
     // model shots come first (Nolli 22 has none: the site's only one is a smaller-print "-womens-2")
     const hasModel = l.photos.some((p) => p.desc.toLowerCase().includes("model"));
-    if (READY_LISTINGS.includes(l.number) && hasModel) assert.ok(l.photos[0].desc.toLowerCase().includes("model"), `${f}: photo 01 is the model shot`);
+    // (99, the logo tee, leads with its flat front: the wordmark is the product)
+    if (READY_LISTINGS.includes(l.number) && l.number !== 99 && hasModel) assert.ok(l.photos[0].desc.toLowerCase().includes("model"), `${f}: photo 01 is the model shot`);
     assert.ok(l.photos.length <= 20, `${f}: Etsy takes 20 photos at most`);
     if (l.number >= 20) {
       // batch 2 rules: no smaller-print "-womens-2" shots; with colours, every photo names its colour
