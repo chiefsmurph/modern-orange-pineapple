@@ -37,6 +37,8 @@ export type PreviewOption = {
   /** Wholesale = per shirt to the shop; never MOP's cost. */
   wholesale: string;
   retail: string;
+  /** Lead time to ship, e.g. "Ships in 1 week". Shown next to the price. */
+  ships?: string;
   images: PreviewImage[];
 };
 
@@ -143,6 +145,7 @@ export const previews: Preview[] = [
         line: "All-over print, edge to edge on soft cotton. Our favourite.",
         wholesale: "$24",
         retail: "$45",
+        ships: "Ships in 2\u20133 weeks",
         images: [
           IMG("otter-allover-front", "All-over tee: a sea otter floating on its back in blue water, with Morro Bay, CA script", "Front \u00b7 photo: Erin Strand / USFWS (public domain)"),
           IMG("otter-allover-model", "The Curious Otter all-over tee, worn", "Worn"),
@@ -156,6 +159,7 @@ export const previews: Preview[] = [
         line: "All-over print, edge to edge on soft cotton.",
         wholesale: "$24",
         retail: "$45",
+        ships: "Ships in 2\u20133 weeks",
         images: [
           IMG("rock-allover-front", "All-over tee: Morro Rock at sunrise over the beach, with Morro Bay, CA script", "Front \u00b7 photo: Vanessa Kay (CC BY 3.0)"),
           IMG("rock-allover-model", "The Morro Rock all-over tee, worn", "Worn"),
@@ -167,6 +171,7 @@ export const previews: Preview[] = [
         line: "Comfort Colors heavyweight garment-dyed cotton. Shown in Black and Butter; also comes in Bay (sage).",
         wholesale: "$20",
         retail: "$37",
+        ships: "Ships in ~1 week",
         images: [
           IMG("rock-tee-black", "Black tee with an arched print of Morro Rock and a sea otter, Morro Bay, CA below, worn", "Black"),
           IMG("rock-tee-black-flat", "The black Morro Rock and otter tee, laid flat", "Black, flat"),
@@ -179,6 +184,7 @@ export const previews: Preview[] = [
         line: "Comfort Colors heavyweight garment-dyed cotton.",
         wholesale: "$20",
         retail: "$37",
+        ships: "Ships in ~1 week",
         images: [
           IMG("otter-tee-black", "Black tee with a line drawing of a floating sea otter, Morro Bay, CA below, worn", "Black"),
           IMG("otter-tee-black-flat", "The black otter line-art tee, laid flat", "Black, flat"),

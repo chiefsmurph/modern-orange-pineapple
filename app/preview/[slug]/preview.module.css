@@ -188,6 +188,13 @@
   text-shadow: 0 0 6px rgba(0, 0, 0, 0.75);
 }
 
+.ships {
+  margin: 0.15rem 0 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
 @media (min-width: 600px) {
   .slide {
     flex-basis: 60%;

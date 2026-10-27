@@ -117,6 +117,7 @@ export default async function PreviewPage({ params }: Props) {
           <p className={styles.price}>
             Wholesale <b>{o.wholesale}</b> each · suggested retail <b>{o.retail}</b>
           </p>
+          {o.ships && <p className={styles.ships}>{o.ships}</p>}
         </section>
       ))}
 
