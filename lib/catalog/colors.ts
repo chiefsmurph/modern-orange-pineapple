@@ -57,6 +57,12 @@ const swatches: Record<number, Record<string, string[]>> = {
     wine: ["#816977"],
     yam: ["#db642f"],
   },
+  // Bella+Canvas 6882GD garment-dyed cropped tee
+  1579: {
+    lightwasheddenim: ["#dde9f3"],
+    vintagewhite: ["#f9f6f2"],
+    washedblack: ["#313438"],
+  },
   // AS Colour 4062 crop top
   636: {
     black: ["#151515"],
