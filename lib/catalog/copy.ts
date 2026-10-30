@@ -97,9 +97,14 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
     rank: 61,
   },
   {
-    match: /^rabbit-crop/,
+    match: /^rabbit-crop-top$/,
     text: () => "The MOP rabbit, monocle and bow tie and all, on a garment-dyed Washed Black crop top.",
     rank: 31,
+  },
+  {
+    match: /^rabbit-crop-top-classic$/,
+    text: () => "The MOP rabbit, monocle and orange bow tie and all, on a soft cotton crop top. He's our logo, scaled down to fit.",
+    rank: 32,
   },
   {
     match: /crop/,

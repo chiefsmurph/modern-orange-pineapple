@@ -8823,5 +8823,132 @@ export const catalogProducts: CatalogProduct[] = [
       }
     ],
     "credits": []
+  },
+  {
+    "slug": "rabbit-crop-top-classic",
+    "title": "Rabbit Crop Top",
+    "supplier": "printful",
+    "delivery": "printful",
+    "printfulCatalogProductId": 636,
+    "options": {
+      "color": [
+        "White",
+        "Black"
+      ],
+      "size": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    "variants": [
+      {
+        "opts": {
+          "color": "White",
+          "size": "XS"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "S"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "M"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "L"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "XL"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "XS"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "S"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "M"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "L"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "XL"
+        },
+        "price": 33.46,
+        "status": "DECIDED"
+      }
+    ],
+    "images": [
+      {
+        "when": {
+          "color": "White"
+        },
+        "images": [
+          "/images/catalog/rabbit-crop-top-classic/white-model-womens-lifestyle-2.fc532f34.webp",
+          "/images/catalog/rabbit-crop-top-classic/white-model-womens-3.0437a8ee.webp",
+          "/images/catalog/rabbit-crop-top-classic/white-flat.a1089bcd.webp"
+        ],
+        "checkout": "/images/catalog/rabbit-crop-top-classic/white-model-womens-lifestyle-2.fc532f34-checkout.jpg"
+      },
+      {
+        "when": {
+          "color": "Black"
+        },
+        "images": [
+          "/images/catalog/rabbit-crop-top-classic/black-model-womens-lifestyle-2.ee4d8ef4.webp",
+          "/images/catalog/rabbit-crop-top-classic/black-model-womens-3.106775cf.webp",
+          "/images/catalog/rabbit-crop-top-classic/black-flat.f178f757.webp"
+        ],
+        "checkout": "/images/catalog/rabbit-crop-top-classic/black-model-womens-lifestyle-2.ee4d8ef4-checkout.jpg"
+      }
+    ],
+    "credits": []
   }
 ];

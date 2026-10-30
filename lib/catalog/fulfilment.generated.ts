@@ -3105,5 +3105,50 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
       }
     },
     "royalties": []
+  },
+  "rabbit-crop-top-classic": {
+    "variants": {
+      "White|XS": {
+        "syncVariantId": 5607252365,
+        "catalogVariantId": 16119
+      },
+      "White|S": {
+        "syncVariantId": 5607252366,
+        "catalogVariantId": 16120
+      },
+      "White|M": {
+        "syncVariantId": 5607252367,
+        "catalogVariantId": 16121
+      },
+      "White|L": {
+        "syncVariantId": 5607252368,
+        "catalogVariantId": 16122
+      },
+      "White|XL": {
+        "syncVariantId": 5607252369,
+        "catalogVariantId": 16123
+      },
+      "Black|XS": {
+        "syncVariantId": 5607252370,
+        "catalogVariantId": 16094
+      },
+      "Black|S": {
+        "syncVariantId": 5607252371,
+        "catalogVariantId": 16095
+      },
+      "Black|M": {
+        "syncVariantId": 5607252376,
+        "catalogVariantId": 16096
+      },
+      "Black|L": {
+        "syncVariantId": 5607252388,
+        "catalogVariantId": 16097
+      },
+      "Black|XL": {
+        "syncVariantId": 5607252399,
+        "catalogVariantId": 16098
+      }
+    },
+    "royalties": []
   }
 };

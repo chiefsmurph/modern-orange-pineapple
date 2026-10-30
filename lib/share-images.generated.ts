@@ -33,6 +33,8 @@ export const shareImages: Record<string, string> = {
   "rabbit-tee?color=Pepper": "/images/share/rabbit-tee--pepper.75aee3ab.jpg",
   "rabbit-tee?color=True Navy": "/images/share/rabbit-tee--true-navy.cb0cbc12.jpg",
   "rabbit-crop-top": "/images/share/rabbit-crop-top.48954235.jpg",
+  "rabbit-crop-top-classic": "/images/share/rabbit-crop-top-classic.2cd25904.jpg",
+  "rabbit-crop-top-classic?color=Black": "/images/share/rabbit-crop-top-classic--black.e5041732.jpg",
   "original-star-tee": "/images/share/original-star-tee.128682dd.jpg",
   "original-star-tee?color=White": "/images/share/original-star-tee--white.d04b3662.jpg",
   "original-star-tee?color=Black": "/images/share/original-star-tee--black.48c8f33e.jpg",
