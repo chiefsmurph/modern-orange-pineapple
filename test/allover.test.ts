@@ -25,7 +25,7 @@ test("all six all-overs (the Gulf Coast Tee joined 10/20) are in the catalog: $4
     assert.equal(p.printfulCatalogProductId, 1414, slug);
     assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL"], slug);
     assert.ok(p.variants.every((v) => v.price === 44.76 && v.status === "DECIDED"), `${slug} prices`);
-    assert.equal(p.sizeNote, "96% cotton, 4% elastane · runs slim — size up");
+    assert.equal(p.sizeNote, "Runs small: order one size up · 96% cotton, 4% elastane");
     assert.equal(p.delivery, "printful");
   }
 });

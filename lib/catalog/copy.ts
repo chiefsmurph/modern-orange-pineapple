@@ -37,7 +37,7 @@ const garments: Record<number, Garment> = {
   1414: {
     details:
       "- Printed edge to edge: front, back and both sleeves\n- Fabric: 96% cotton, 4% elastane\n- Midweight: 5.6 oz/yd² (189 g/m²)\n- Slight stretch, keeps its shape",
-    sizeNote: "96% cotton, 4% elastane · runs slim — size up",
+    sizeNote: "Runs small: order one size up · 96% cotton, 4% elastane",
   },
   // All-Over Print Unisex Cotton Shorts (the Sky Shorts)
   1481: {

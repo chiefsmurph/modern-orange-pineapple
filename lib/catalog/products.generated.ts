@@ -7219,7 +7219,7 @@ export const catalogProducts: CatalogProduct[] = [
         "classic": "Classic"
       }
     },
-    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "sizeNote": "Runs small: order one size up · 96% cotton, 4% elastane",
     "options": {
       "style": [
         "beanie",
@@ -7382,7 +7382,7 @@ export const catalogProducts: CatalogProduct[] = [
     "delivery": "printful",
     "printfulCatalogProductId": 1414,
     "group": "allover",
-    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "sizeNote": "Runs small: order one size up · 96% cotton, 4% elastane",
     "options": {
       "size": [
         "XS",
@@ -7473,7 +7473,7 @@ export const catalogProducts: CatalogProduct[] = [
     "delivery": "printful",
     "printfulCatalogProductId": 1414,
     "group": "allover",
-    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "sizeNote": "Runs small: order one size up · 96% cotton, 4% elastane",
     "options": {
       "size": [
         "XS",
@@ -7572,7 +7572,7 @@ export const catalogProducts: CatalogProduct[] = [
         "last-light": "Last Light"
       }
     },
-    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "sizeNote": "Runs small: order one size up · 96% cotton, 4% elastane",
     "options": {
       "sky": [
         "golden-hour",
@@ -8505,7 +8505,7 @@ export const catalogProducts: CatalogProduct[] = [
     "delivery": "printful",
     "printfulCatalogProductId": 1414,
     "group": "allover",
-    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "sizeNote": "Runs small: order one size up · 96% cotton, 4% elastane",
     "options": {
       "size": [
         "XS",
@@ -8587,7 +8587,7 @@ export const catalogProducts: CatalogProduct[] = [
     "delivery": "printful",
     "printfulCatalogProductId": 1414,
     "group": "allover",
-    "sizeNote": "96% cotton, 4% elastane · runs slim — size up",
+    "sizeNote": "Runs small: order one size up · 96% cotton, 4% elastane",
     "options": {
       "size": [
         "XS",
