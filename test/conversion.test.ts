@@ -12,6 +12,7 @@ import { shopProducts, getShopProduct } from "../lib/catalog/index.ts";
 import { sizeGuides } from "../lib/catalog/sizes.generated.ts";
 import { googleFeedXml, feedId, categoryFor, genderFor } from "../lib/google-feed.ts";
 import legacy from "../public/products.ts";
+import { onSaleLegacy } from "../lib/shop-cards.ts";
 import { tmpDir } from "./helpers.ts";
 
 test("Checkout shows 'Add promotion code'; nothing else about the price changes", () => {
@@ -51,7 +52,10 @@ test("every garment in the shop has a size guide covering its sizes, with a fit 
 test("Google feed: one item per variant, every required field, valid XML", () => {
   const xml = googleFeedXml(shopProducts, new Date("2026-10-12T20:00:00Z"));
   const items = xml.split("<item>").slice(1);
-  assert.equal(items.length, shopProducts.reduce((n, p) => n + p.variants.length, 0));
+  // one per catalog variant, plus one per size of the one older product (the
+  // Blue Sky Cotton Shorts) that has no generated catalog product at its slug
+  const legacyCount = legacy.products.filter(onSaleLegacy).reduce((n, p) => n + (p.options.size?.length ?? 1), 0);
+  assert.equal(items.length, shopProducts.reduce((n, p) => n + p.variants.length, 0) + legacyCount);
   const ids = new Set<string>();
   for (const it of items) {
     for (const tag of ["id", "item_group_id", "title", "description", "link", "image_link", "price", "availability", "condition", "brand", "identifier_exists", "google_product_category", "size", "gender", "age_group", "shipping"])
@@ -61,7 +65,7 @@ test("Google feed: one item per variant, every required field, valid XML", () =>
     assert.ok(!ids.has(id), `duplicate ${id}`);
     ids.add(id);
     assert.match(it, /<g:link>https:\/\/mopclothing\.com\/[a-z0-9-]+\?[^<]*utm_source=google&amp;utm_medium=shopping&amp;utm_campaign=free_listings<\/g:link>/);
-    assert.match(it, /<g:image_link>https:\/\/mopclothing\.com\/images\/catalog\/.+-checkout\.jpg<\/g:image_link>/);
+    assert.match(it, /<g:image_link>https:\/\/mopclothing\.com\/images\/(catalog\/.+|blue-sky-cotton-shorts\/worn-front-shorts-crop-v2)-checkout\.jpg<\/g:image_link>/);
     assert.match(it, /<g:availability>in_stock<\/g:availability>/);
     assert.match(it, /<g:brand>Modern Orange Pineapple<\/g:brand>/);
     assert.match(it, /<g:shipping><g:country>US<\/g:country><g:service>Standard<\/g:service><g:price>0.00 USD<\/g:price><\/g:shipping>/);

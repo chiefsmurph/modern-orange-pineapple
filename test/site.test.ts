@@ -193,6 +193,31 @@ test("the shorts cost $44.43 in S–3XL, $46.43 in 4XL and $48.43 in 5XL (John 1
   assert.equal(buildItem("pelican-beanie-t-shirt", { color: "White", size: "5XL" }, 1, {}).item.unitAmount, 2700);
 });
 
+test("the Blue Sky Cotton Shorts (the one older product with no generated catalog product at its slug) are in both feeds, one item per size; the dress and the old pelican tee are already covered under a catalog product and aren't duplicated", () => {
+  const id = "blue-sky-cotton-shorts";
+  const sizes = legacy.products.find((p) => p.id === id)!.options.size!;
+  for (const flavor of ["google", "meta"] as const) {
+    const xml = googleFeedXml(shopProducts, new Date(), flavor);
+    const idCount = [...xml.matchAll(new RegExp(`<g:item_group_id>${id}</g:item_group_id>`, "g"))].length;
+    assert.equal(idCount, sizes.length, `${flavor} item count`);
+    for (const size of sizes) {
+      assert.match(xml, new RegExp(feedId(id, { size })), `${flavor} ${size}`);
+      assert.ok(xml.includes(`https://mopclothing.com/${id}?size=${size}`), `${flavor} ${size} link`);
+    }
+    // the same hand-made checkout JPEG for every size, both flavors
+    assert.ok(
+      xml.includes(`https://mopclothing.com/images/${id}/worn-front-shorts-crop-v2-checkout.jpg`),
+      `${flavor} checkout image`
+    );
+    // not duplicated: the old pelican tee is retired (its feed items come from
+    // pelican-tee's beanie style instead), and the dress is already its own
+    // catalog item, so neither this legacy loop nor a second copy shows up
+    assert.doesNotMatch(xml, /pelican-beanie-t-shirt/, flavor);
+    const dressCount = [...xml.matchAll(/<g:item_group_id>clouds-skater-dress<\/g:item_group_id>/g)].length;
+    assert.equal(dressCount, shopProducts.find((p) => p.slug === "clouds-skater-dress")!.variants.length, `${flavor} dress not duplicated`);
+  }
+});
+
 test("the shorts are 3rd on the home grid (John 10/16); their rank keeps them near the top of the full list", () => {
   const home = homeCards().map((c) => c.href.split("?")[0].slice(1));
   assert.equal(home.indexOf("blue-sky-cotton-shorts"), 2, home.join(", "));

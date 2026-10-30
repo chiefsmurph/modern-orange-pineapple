@@ -63,7 +63,7 @@ export const skySwatches = (product: ShopProduct) =>
   });
 
 /** An older product (public/products.ts) that's on sale and not replaced by a generated one. */
-const onSaleLegacy = (p: Product) =>
+export const onSaleLegacy = (p: Product) =>
   !p.retired && !p.comingSoon && !(p.superseded && shopProducts.some((s) => s.slug === p.id));
 
 /**

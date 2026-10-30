@@ -13,6 +13,8 @@ import { buildItem, checkoutBlock, CheckoutError, type PricedItem } from "./buil
 import { cartSessionParams, SITE_ORIGIN } from "./checkout.ts";
 import { shopProducts, type ShopProduct } from "../catalog/index.ts";
 import { feedId } from "../google-feed.ts";
+import legacy from "../../public/products.ts";
+import { onSaleLegacy } from "../shop-cards.ts";
 
 /** Distinct lines per cart (Stripe metadata allows 50 keys; each line takes one). */
 export const MAX_LINES = 20;
@@ -45,15 +47,26 @@ export function parseMetaProducts(raw: string | null | undefined): { lines: Meta
   return { lines: Array.from(qtys, ([id, qty]) => ({ id, qty })), bad };
 }
 
-type Indexed = { product: ShopProduct; opts: Record<string, string> };
+type Indexed = { slug: string; opts: Record<string, string> };
 let index: Map<string, Indexed> | null = null;
 
-/** Feed id -> product + variant, for the same products and ids as /feeds/meta.xml. */
+/**
+ * Feed id -> slug + variant, for the same products and ids as /feeds/meta.xml:
+ * the given catalog products, plus (always) the older products
+ * (public/products.ts) still on sale with no generated catalog product at
+ * their slug, e.g. the Blue Sky Cotton Shorts — so a Meta Shop cart for one of
+ * those feed ids checks out instead of being skipped as "unknown id".
+ */
 export function feedIndex(products: ShopProduct[] = shopProducts): Map<string, Indexed> {
   if (products === shopProducts && index) return index;
   const map = new Map<string, Indexed>();
   for (const product of products)
-    for (const v of product.variants) map.set(feedId(product.slug, v.opts), { product, opts: { ...v.opts } });
+    for (const v of product.variants) map.set(feedId(product.slug, v.opts), { slug: product.slug, opts: { ...v.opts } });
+  for (const p of legacy.products.filter(onSaleLegacy))
+    for (const size of p.options.size ?? [undefined]) {
+      const opts = size ? { size } : {};
+      map.set(feedId(p.id, opts), { slug: p.id, opts });
+    }
   if (products === shopProducts) index = map;
   return map;
 }
@@ -75,7 +88,7 @@ export function resolveMetaCart(
       skipped.push({ id, reason: "unknown id" });
       continue;
     }
-    const slug = hit.product.slug;
+    const slug = hit.slug;
     const blocked = block(slug, hit.opts);
     if (blocked) {
       skipped.push({ id, slug, reason: blocked.error });

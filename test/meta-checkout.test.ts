@@ -73,7 +73,7 @@ test("the products parameter: id:qty pairs, URL-encoded, repeats added up, bad e
   assert.deepEqual(parseMetaProducts("evil\nline:1,../x:1").bad, ["evil?line:1", "../x:1"]);
 });
 
-test("every id in /feeds/meta.xml maps to its variant at the feed's price, ready for Printful", () => {
+test("every id in /feeds/meta.xml maps to its variant at the feed's price, ready for its supplier (Printful, or Yoycol for the one older product with no generated catalog product at its slug)", () => {
   const xml = googleFeedXml(shopProducts, new Date(), "meta");
   const items = xml.split("<item>").slice(1);
   assert.ok(items.length > 100);
@@ -83,7 +83,8 @@ test("every id in /feeds/meta.xml maps to its variant at the feed's price, ready
     const { priced, skipped } = resolveMetaCart([{ id, qty: 1 }], {});
     assert.deepEqual(skipped, [], id);
     assert.equal(priced[0].item.unitAmount, Math.round(price * 100), id);
-    assert.ok(priced[0].item.printful?.syncVariantId, id);
+    if (priced[0].item.supplier === "yoycol") assert.ok(priced[0].item.yoycol?.skuCode, id);
+    else assert.ok(priced[0].item.printful?.syncVariantId, id);
     assert.equal(feedId(priced[0].item.slug, priced[0].item.opts), id);
   }
   assert.equal(feedIndex().size, items.length);

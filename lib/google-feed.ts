@@ -4,10 +4,27 @@
 //   /feeds/meta.xml    Meta Commerce Manager (Instagram / Facebook Shop): the same
 //                      feed in Meta's spelling ("in stock") and with JPEG images
 //                      only (Meta's catalog takes JPG/PNG/GIF; our extra photos are WebP).
-import type { ShopProduct } from "./catalog/index.ts";
+import { shopProducts, type ShopProduct } from "./catalog/index.ts";
 import { imageSetFor, imagesFor, optionNames, syncedQuery } from "./catalog/select.ts";
 import { valueLabel } from "./catalog/copy.ts";
 import { withoutAddedDefaults } from "./catalog/added.ts";
+import legacy, { getTotalPrice } from "../public/products.ts";
+import { onSaleLegacy } from "./shop-cards.ts";
+
+/**
+ * Pre-generated checkout JPEGs (scripts/gen-catalog.mjs makes these for every
+ * generated product; these hand-written products get one by hand, the same
+ * way: 600px wide, white-flattened, quality 80 mozjpeg) for the older
+ * products (public/products.ts) that aren't covered by a generated catalog
+ * product under the same slug. Only one of the three older on-sale products
+ * needs this: clouds-skater-dress and pelican-beanie-t-shirt already have a
+ * generated catalog product at their slug (resp. a direct replacement and the
+ * Pelican Tee's beanie style), so they're already in shopProducts and this
+ * file's main loop below.
+ */
+const LEGACY_CHECKOUT_JPEG: Record<string, string> = {
+  "blue-sky-cotton-shorts": "/images/blue-sky-cotton-shorts/worn-front-shorts-crop-v2-checkout.jpg",
+};
 
 export const SITE = "https://mopclothing.com";
 export const BRAND = "Modern Orange Pineapple";
@@ -118,6 +135,61 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
       );
     }
   }
+
+  // Older hand-written products (public/products.ts) still on sale and not
+  // already covered above under a generated catalog product at the same slug
+  // (lib/shop-cards.ts onSaleLegacy): one size-only variant per size, or a
+  // single item for a one-size product. comingSoon / retired / superseded
+  // (replaced) products are left out by onSaleLegacy. Only for the real,
+  // whole-site feed (products === shopProducts): a caller passing a subset,
+  // like a single product for a test, gets only that product's own items.
+  for (const p of products === shopProducts ? legacy.products.filter(onSaleLegacy) : []) {
+    const sizes = p.options.size ?? [undefined];
+    const heroPath = LEGACY_CHECKOUT_JPEG[p.id];
+    const images = Array.isArray(p.images) ? p.images : Object.values(p.images)[0];
+    const hero = heroPath ?? images[0];
+    if (!hero) continue;
+    const extra = flavor === "meta" ? [] : images.filter((src) => src !== images[0]).slice(0, 3);
+    const category = /dress/.test(p.id)
+      ? "Apparel & Accessories > Clothing > Dresses"
+      : /shorts/.test(p.id)
+        ? "Apparel & Accessories > Clothing > Shorts"
+        : "Apparel & Accessories > Clothing > Shirts & Tops";
+    const gender = /crop|dress/.test(p.id) ? "female" : "unisex";
+    for (const size of sizes) {
+      // The catalog's v.price above already includes US shipping (freeShippingMode);
+      // getTotalPrice is the same all-in total for an older product.
+      const price = getTotalPrice(p, size);
+      const title = `${p.title}${size ? `, size ${size}` : ""}`.slice(0, 150);
+      const query = size ? `size=${encodeURIComponent(size)}` : "";
+      items.push(
+        [
+          "<item>",
+          `<g:id>${xml(feedId(p.id, size ? { size } : {}))}</g:id>`,
+          `<g:item_group_id>${xml(p.id)}</g:item_group_id>`,
+          `<g:title>${xml(title)}</g:title>`,
+          `<g:description>${xml(plain(p.description).slice(0, 4900))}</g:description>`,
+          `<g:link>${xml(`${SITE}/${p.id}?${[query, FEED_UTM[flavor]].filter(Boolean).join("&")}`)}</g:link>`,
+          `<g:image_link>${xml(abs(hero))}</g:image_link>`,
+          ...extra.map((src) => `<g:additional_image_link>${xml(abs(src))}</g:additional_image_link>`),
+          `<g:price>${price.toFixed(2)} USD</g:price>`,
+          `<g:availability>${flavor === "meta" ? "in stock" : "in_stock"}</g:availability>`,
+          "<g:condition>new</g:condition>",
+          `<g:brand>${xml(BRAND)}</g:brand>`,
+          "<g:identifier_exists>no</g:identifier_exists>",
+          `<g:google_product_category>${xml(category)}</g:google_product_category>`,
+          size ? `<g:size>${xml(size)}</g:size>` : "",
+          `<g:gender>${gender}</g:gender>`,
+          "<g:age_group>adult</g:age_group>",
+          "<g:shipping><g:country>US</g:country><g:service>Standard</g:service><g:price>0.00 USD</g:price></g:shipping>",
+          "</item>",
+        ]
+          .filter(Boolean)
+          .join("\n    ")
+      );
+    }
+  }
+
   return (
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n` +
