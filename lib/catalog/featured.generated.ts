@@ -5,7 +5,7 @@ export const featuredCardImages: Record<string, string> = {
   "day-all-over": "/images/catalog/day-all-over/beanie-model.a3ecd116-card.webp",
   "alpaca-tee": "/images/catalog/alpaca-tee/large-true-navy-model.1fdd1d9e.webp",
   "dusk-all-over": "/images/catalog/dusk-all-over/flat.166d8f3a.webp",
-  "rabbit-tee": "/images/featured/rabbit-tee.3009b977.webp",
+  "rabbit-tee": "/images/featured/rabbit-tee.cf3a5605.webp",
   "pelican-tee": "/images/featured/pelican-tee.0c977ce2.webp",
   "original-star-tee": "/images/catalog/original-star-tee/large-white-model-womens.e44c17f5-card.webp"
 };
