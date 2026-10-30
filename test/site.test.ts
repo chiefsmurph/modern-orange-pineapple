@@ -32,11 +32,12 @@ test("the old $27 pelican is off the home grid but still in the product data", (
   assert.ok(legacy.products.some((p) => p.id === "pelican-beanie-t-shirt" && p.retired));
 });
 
-test("retired URLs redirect permanently: the old pelican to the beanie style, the Printful Sky Shorts to the original shorts", async () => {
+test("retired URLs redirect permanently: the old pelican to the beanie style, the Printful Sky Shorts to the original shorts, the classic rabbit crop top to White on the merged page", async () => {
   const redirects = await nextConfig.redirects!();
   assert.deepEqual(redirects, [
     { source: "/pelican-beanie-t-shirt", destination: "/pelican-tee?style=beanie", statusCode: 301 },
     { source: "/sky-shorts", destination: "/blue-sky-cotton-shorts", statusCode: 301 },
+    { source: "/rabbit-crop-top-classic", destination: "/rabbit-crop-top?color=White", statusCode: 301 },
   ]);
   // the original shorts' own page is live again: nothing sends it away
   assert.ok(!redirects.some((r) => r.source === "/blue-sky-cotton-shorts"));

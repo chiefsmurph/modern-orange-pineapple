@@ -9,6 +9,7 @@ import { buildItem } from "../lib/orders/build-items.ts";
 import { checkoutSessionParams } from "../lib/orders/checkout.ts";
 import { createSubscriberStore, handleSubscribe } from "../lib/subscribers.ts";
 import { shopProducts, getShopProduct } from "../lib/catalog/index.ts";
+import { catalogProductIdFor } from "../lib/catalog/select.ts";
 import { sizeGuides } from "../lib/catalog/sizes.generated.ts";
 import { googleFeedXml, feedId, categoryFor, genderFor } from "../lib/google-feed.ts";
 import legacy from "../public/products.ts";
@@ -36,12 +37,24 @@ test("signup returns the welcome code (new or repeat) only when it's configured"
 });
 
 test("every garment in the shop has a size guide covering its sizes, with a fit note", () => {
+  // A product can span more than one Printful catalog product (the Rabbit Crop
+  // Top: White/Black on AS Colour 4062, Washed Black on Bella+Canvas 6882GD),
+  // so each VARIANT's own blank (catalogProductIdFor) must cover that variant's
+  // size, rather than the product-level id covering every size the product sells.
   for (const p of shopProducts) {
-    const g = sizeGuides[p.printfulCatalogProductId!];
-    assert.ok(g, `${p.slug}: no size guide`);
-    assert.ok(g.fit, `${p.slug}: fit note`);
-    for (const s of p.options.size ?? []) assert.ok(g.rows.some((r) => r.values[s]), `${p.slug}: ${s}`);
-    for (const r of g.rows) assert.doesNotMatch(r.label, /^[A-F]$/, `${p.slug}: unnamed column`);
+    const ids = new Set<number>();
+    for (const v of p.variants) {
+      const id = catalogProductIdFor(p, v.opts) ?? p.printfulCatalogProductId;
+      ids.add(id!);
+      const g = sizeGuides[id!];
+      assert.ok(g, `${p.slug}: no size guide`);
+      if (v.opts.size) assert.ok(g.rows.some((r) => r.values[v.opts.size!]), `${p.slug}: ${v.opts.size}`);
+    }
+    for (const id of ids) {
+      const g = sizeGuides[id]!;
+      assert.ok(g.fit, `${p.slug}: fit note`);
+      for (const r of g.rows) assert.doesNotMatch(r.label, /^[A-F]$/, `${p.slug}: unnamed column`);
+    }
   }
   assert.equal(sizeGuides[586].fit, "Relaxed, heavyweight; true to size.");
   assert.equal(sizeGuides[1414].fit, "Runs slim — size up.");

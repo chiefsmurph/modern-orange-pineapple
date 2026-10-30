@@ -3083,31 +3083,6 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
   },
   "rabbit-crop-top": {
     "variants": {
-      "Washed Black|S": {
-        "syncVariantId": 5607311890,
-        "catalogVariantId": 49804
-      },
-      "Washed Black|M": {
-        "syncVariantId": 5607311892,
-        "catalogVariantId": 49807
-      },
-      "Washed Black|L": {
-        "syncVariantId": 5607311893,
-        "catalogVariantId": 49810
-      },
-      "Washed Black|XL": {
-        "syncVariantId": 5607311895,
-        "catalogVariantId": 49813
-      },
-      "Washed Black|2XL": {
-        "syncVariantId": 5607311896,
-        "catalogVariantId": 49816
-      }
-    },
-    "royalties": []
-  },
-  "rabbit-crop-top-classic": {
-    "variants": {
       "White|XS": {
         "syncVariantId": 5607252365,
         "catalogVariantId": 16119
@@ -3147,6 +3122,26 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
       "Black|XL": {
         "syncVariantId": 5607252399,
         "catalogVariantId": 16098
+      },
+      "Washed Black|S": {
+        "syncVariantId": 5607311890,
+        "catalogVariantId": 49804
+      },
+      "Washed Black|M": {
+        "syncVariantId": 5607311892,
+        "catalogVariantId": 49807
+      },
+      "Washed Black|L": {
+        "syncVariantId": 5607311893,
+        "catalogVariantId": 49810
+      },
+      "Washed Black|XL": {
+        "syncVariantId": 5607311895,
+        "catalogVariantId": 49813
+      },
+      "Washed Black|2XL": {
+        "syncVariantId": 5607311896,
+        "catalogVariantId": 49816
       }
     },
     "royalties": []

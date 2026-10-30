@@ -91,6 +91,34 @@ export const variantsMatching = (
     Object.entries(sel).every(([k, val]) => val === undefined || eq(v.opts[k], val))
   );
 
+/**
+ * The Printful catalog product id for a (partial) selection: a variant's own
+ * override (CatalogVariant.printfulCatalogProductId), when matching variants
+ * carry one, else the product-level id. Lets one product span more than one
+ * Printful catalog product (e.g. the Rabbit Crop Top's White/Black vs Washed
+ * Black blanks) while most callers that pass a full variant selection still
+ * get the single, unambiguous answer.
+ */
+export const catalogProductIdFor = (
+  product: Pick<CatalogProduct, "variants" | "printfulCatalogProductId">,
+  sel: Selection
+): number | undefined => {
+  const withOverride = variantsMatching(product, sel).find(
+    (v) => v.printfulCatalogProductId !== undefined
+  );
+  return withOverride?.printfulCatalogProductId ?? product.printfulCatalogProductId;
+};
+
+/** Every distinct Printful catalog product id a product's variants use (product-level id when none override it). */
+export const catalogProductIdsFor = (
+  product: Pick<CatalogProduct, "variants" | "printfulCatalogProductId">
+): number[] => {
+  const ids = product.variants
+    .map((v) => v.printfulCatalogProductId ?? product.printfulCatalogProductId)
+    .filter((id): id is number => id !== undefined);
+  return Array.from(new Set(ids));
+};
+
 /** Whether picking `name = value` (keeping the other picks) leads to a real variant. */
 export const isAvailable = (
   product: Pick<CatalogProduct, "variants">,

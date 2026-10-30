@@ -2,6 +2,7 @@
 import { catalogProducts } from "./products.generated.ts";
 import { catalogDescription, catalogFabricNote, catalogRank, catalogSizeNote, crossLinks } from "./copy.ts";
 import { isRetiredCatalog, isRetiredOption, retiredOptions } from "./retired.ts";
+import { catalogProductIdsFor } from "./select.ts";
 import type { CatalogProduct, Selection } from "./types.ts";
 
 export type ShopProduct = CatalogProduct & {
@@ -22,7 +23,7 @@ export type ShopProduct = CatalogProduct & {
 export const allShopProducts: ShopProduct[] = catalogProducts
   .map((p) => ({
     ...p,
-    description: catalogDescription(p.slug, p.printfulCatalogProductId),
+    description: catalogDescription(p.slug, catalogProductIdsFor(p)),
     fabricNote: catalogFabricNote(p.printfulCatalogProductId),
     sizeNote: p.sizeNote ?? catalogSizeNote(p.printfulCatalogProductId),
     rank: catalogRank(p.slug),

@@ -11,6 +11,8 @@ type Garment = {
   fabricNote?: string;
   /** One line under the size picker. */
   sizeNote?: string;
+  /** Which colour(s) this blank is, e.g. "White / Black" — only shown when a product spans more than one blank. */
+  colorLabel?: string;
 };
 
 /** Garment details per Printful catalog product id (from Printful's catalog). */
@@ -24,6 +26,7 @@ const garments: Record<number, Garment> = {
   636: {
     details:
       "- Fabric: 100% combed cotton\n- Fabric weight: 5.3 oz/yd² (180 g/m²)\n- Relaxed fit, cropped length, dropped shoulders\n- Ribbed crew neck",
+    colorLabel: "White / Black",
   },
   // SOL'S 11362 Premium Piqué
   810: {
@@ -51,7 +54,8 @@ const garments: Record<number, Garment> = {
   // Bella+Canvas 6882GD (the Rabbit Crop Top, Washed Black)
   1579: {
     details:
-      "- Bella+Canvas 6882GD, garment-dyed cropped tee\n- Fabric: 100% ring-spun cotton\n- Fabric weight: 6.5 oz/yd² (220 g/m²)\n- Cropped, boxy fit with oversized sleeves\n- Soft garment-dyed finish: colour varies slightly piece to piece",
+      "- Bella+Canvas 6882GD, garment-dyed cropped tee\n- Fabric: garment-dyed 100% ring-spun cotton\n- Fabric weight: 6.5 oz/yd² (220 g/m²)\n- Cropped, boxy fit with oversized sleeves\n- Soft garment-dyed finish: colour varies slightly piece to piece",
+    colorLabel: "Washed Black",
   },
   // Yupoong 6089M
   99: {
@@ -98,13 +102,9 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
   },
   {
     match: /^rabbit-crop-top$/,
-    text: () => "The MOP rabbit, monocle and bow tie and all, on a garment-dyed Washed Black crop top.",
+    text: () =>
+      "The MOP rabbit, monocle and orange bow tie and all, on a soft cotton crop top. He's our logo, scaled down to fit. White and Black are a lighter AS Colour blank; Washed Black is a heavier, garment-dyed Bella+Canvas.",
     rank: 31,
-  },
-  {
-    match: /^rabbit-crop-top-classic$/,
-    text: () => "The MOP rabbit, monocle and orange bow tie and all, on a soft cotton crop top. He's our logo, scaled down to fit.",
-    rank: 32,
   },
   {
     match: /crop/,
@@ -146,10 +146,28 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
 
 const introFor = (slug: string) => intros.find((i) => i.match.test(slug));
 
-export const catalogDescription = (slug: string, printfulCatalogProductId?: number) =>
-  [introFor(slug)?.text(slug), garments[printfulCatalogProductId ?? -1]?.details]
-    .filter(Boolean)
-    .join("\n\n");
+/**
+ * `printfulCatalogProductIds`: usually one id. A product spanning more than one
+ * Printful catalog product (e.g. the Rabbit Crop Top: White/Black on AS Colour
+ * 4062, Washed Black on Bella+Canvas 6882GD) passes every id its variants use
+ * (catalogProductIdsFor in select.ts); each garment's own bullet block follows
+ * the intro, in that order, so every blank gets its own fabric facts.
+ */
+export const catalogDescription = (
+  slug: string,
+  printfulCatalogProductIds?: number | number[]
+) => {
+  const ids = Array.isArray(printfulCatalogProductIds)
+    ? printfulCatalogProductIds
+    : [printfulCatalogProductIds ?? -1];
+  const multi = ids.length > 1;
+  const blocks = ids.map((id) => {
+    const g = garments[id];
+    if (!g) return undefined;
+    return multi && g.colorLabel ? `${g.colorLabel}:\n${g.details}` : g.details;
+  });
+  return [introFor(slug)?.text(slug), ...blocks].filter(Boolean).join("\n\n");
+};
 
 export const catalogFabricNote = (printfulCatalogProductId?: number) =>
   garments[printfulCatalogProductId ?? -1]?.fabricNote;

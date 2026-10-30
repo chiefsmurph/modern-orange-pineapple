@@ -5,7 +5,7 @@
 //                      feed in Meta's spelling ("in stock") and with JPEG images
 //                      only (Meta's catalog takes JPG/PNG/GIF; our extra photos are WebP).
 import { shopProducts, type ShopProduct } from "./catalog/index.ts";
-import { imageSetFor, imagesFor, optionNames, syncedQuery } from "./catalog/select.ts";
+import { catalogProductIdFor, imageSetFor, imagesFor, optionNames, syncedQuery } from "./catalog/select.ts";
 import { valueLabel } from "./catalog/copy.ts";
 import { withoutAddedDefaults } from "./catalog/added.ts";
 import legacy, { getTotalPrice } from "../public/products.ts";
@@ -107,6 +107,10 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
       const query = syncedQuery("", names, sel);
       const color = v.opts.color ?? (p.group === "allover" || /dress|shorts/.test(p.slug) ? "Multicolor" : undefined);
       const extra = flavor === "meta" ? [] : images.filter((src) => src !== images[0]).slice(0, 3);
+      // A variant can be on a different Printful catalog product than the product-level
+      // default (e.g. the Rabbit Crop Top's White/Black blank vs its Washed Black blank):
+      // category/gender follow this variant's own garment.
+      const variantId = { printfulCatalogProductId: catalogProductIdFor(p, v.opts), slug: p.slug };
       items.push(
         [
           "<item>",
@@ -122,10 +126,10 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
           "<g:condition>new</g:condition>",
           `<g:brand>${xml(BRAND)}</g:brand>`,
           "<g:identifier_exists>no</g:identifier_exists>",
-          `<g:google_product_category>${xml(categoryFor(p))}</g:google_product_category>`,
+          `<g:google_product_category>${xml(categoryFor(variantId))}</g:google_product_category>`,
           color ? `<g:color>${xml(color)}</g:color>` : "",
           v.opts.size ? `<g:size>${xml(v.opts.size)}</g:size>` : "",
-          `<g:gender>${genderFor(p)}</g:gender>`,
+          `<g:gender>${genderFor(variantId)}</g:gender>`,
           "<g:age_group>adult</g:age_group>",
           "<g:shipping><g:country>US</g:country><g:service>Standard</g:service><g:price>0.00 USD</g:price></g:shipping>",
           "</item>",

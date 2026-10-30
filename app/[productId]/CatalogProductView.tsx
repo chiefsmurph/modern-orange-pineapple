@@ -7,6 +7,7 @@ import Link from "next/link";
 import type { PageProduct } from "@/lib/product-page";
 import type { Selection } from "@/lib/catalog/types";
 import {
+  catalogProductIdFor,
   creditLinesFor,
   findVariant,
   formatPrice,
@@ -18,7 +19,7 @@ import {
   priceLabel,
   syncedQuery,
 } from "@/lib/catalog/select";
-import { optionTitle, valueLabel } from "@/lib/catalog/copy";
+import { catalogFabricNote, catalogSizeNote, optionTitle, valueLabel } from "@/lib/catalog/copy";
 import { crossLinkFor } from "@/lib/catalog";
 import { swatchFor } from "@/lib/catalog/colors";
 import { designFromCreditLines } from "@/lib/artists";
@@ -131,6 +132,13 @@ export default function CatalogProductView({
     .map((n) => valueLabel(n, sel[n]!, product.optionLabels))
     .join(" · ");
   const missing = names.filter((n) => !sel[n]);
+  // A product can span more than one Printful catalog product (e.g. the Rabbit
+  // Crop Top: White/Black on AS Colour 4062, Washed Black on Bella+Canvas
+  // 6882GD): resolve the garment id (and its fabric pill / size note / size
+  // guide) from the current colour, falling back to the product-level default.
+  const activeCatalogId = catalogProductIdFor(product, withoutSize);
+  const fabricNote = catalogFabricNote(activeCatalogId) ?? product.fabricNote;
+  const activeSizeNote = catalogSizeNote(activeCatalogId) ?? product.sizeNote;
 
   return (
     <div className={styles.container}>
@@ -140,8 +148,8 @@ export default function CatalogProductView({
       <RatingSummary data={reviews} styles={reviewStyles} />
       <p className={styles.price}>{price}</p>
       <LikeButton slug={product.slug} opts={sel} />
-      {product.fabricNote && (
-        <p className={styles.fabricNote}>{product.fabricNote}</p>
+      {fabricNote && (
+        <p className={styles.fabricNote}>{fabricNote}</p>
       )}
 
       <div className={styles.productPage}>
@@ -171,8 +179,8 @@ export default function CatalogProductView({
                     <span className={own.current}>: {valueLabel(name, sel[name]!, product.optionLabels)}</span>
                   )}
                 </legend>
-                {name === "size" && product.sizeNote && (
-                  <p className={own.sizeNote}>{product.sizeNote}</p>
+                {name === "size" && activeSizeNote && (
+                  <p className={own.sizeNote}>{activeSizeNote}</p>
                 )}
                 <div className={name === "sky" ? own.thumbChoices : own.choices}>
                   {product.options[name].map((value) => {
@@ -205,7 +213,10 @@ export default function CatalogProductView({
                     // any other pick is always allowed and pick() adjusts the rest.
                     const available =
                       name !== "size" || isAvailable(product, withoutSize, name, value);
-                    const swatch = name === "color" ? swatchFor(value, product.printfulCatalogProductId) : undefined;
+                    const swatch =
+                      name === "color"
+                        ? swatchFor(value, catalogProductIdFor(product, { ...withoutSize, color: value }))
+                        : undefined;
                     return (
                       <button
                         key={value}
@@ -235,9 +246,9 @@ export default function CatalogProductView({
                     );
                   })}
                 </div>
-                {name === "size" && sizeGuides[product.printfulCatalogProductId ?? -1] && (
+                {name === "size" && sizeGuides[activeCatalogId ?? -1] && (
                   <SizeGuide
-                    guide={sizeGuides[product.printfulCatalogProductId!]}
+                    guide={sizeGuides[activeCatalogId!]}
                     title={product.title}
                     sizes={product.options.size}
                     selected={sel.size}

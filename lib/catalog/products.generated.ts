@@ -8757,9 +8757,12 @@ export const catalogProducts: CatalogProduct[] = [
     "printfulCatalogProductId": 1579,
     "options": {
       "color": [
+        "White",
+        "Black",
         "Washed Black"
       ],
       "size": [
+        "XS",
         "S",
         "M",
         "L",
@@ -8768,6 +8771,96 @@ export const catalogProducts: CatalogProduct[] = [
       ]
     },
     "variants": [
+      {
+        "opts": {
+          "color": "White",
+          "size": "XS"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "S"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "M"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "L"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "White",
+          "size": "XL"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "XS"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "S"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "M"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "L"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
+      {
+        "opts": {
+          "color": "Black",
+          "size": "XL"
+        },
+        "price": 33.46,
+        "status": "DECIDED",
+        "printfulCatalogProductId": 636
+      },
       {
         "opts": {
           "color": "Washed Black",
@@ -8812,122 +8905,6 @@ export const catalogProducts: CatalogProduct[] = [
     "images": [
       {
         "when": {
-          "color": "Washed Black"
-        },
-        "images": [
-          "/images/catalog/rabbit-crop-top/model.95e49449.webp",
-          "/images/catalog/rabbit-crop-top/flat.c9a7d896.webp",
-          "/images/catalog/rabbit-crop-top/ghost.1bc1a851.webp"
-        ],
-        "checkout": "/images/catalog/rabbit-crop-top/model.95e49449-checkout.jpg"
-      }
-    ],
-    "credits": []
-  },
-  {
-    "slug": "rabbit-crop-top-classic",
-    "title": "Rabbit Crop Top",
-    "supplier": "printful",
-    "delivery": "printful",
-    "printfulCatalogProductId": 636,
-    "options": {
-      "color": [
-        "White",
-        "Black"
-      ],
-      "size": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL"
-      ]
-    },
-    "variants": [
-      {
-        "opts": {
-          "color": "White",
-          "size": "XS"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "White",
-          "size": "S"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "White",
-          "size": "M"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "White",
-          "size": "L"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "White",
-          "size": "XL"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "Black",
-          "size": "XS"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "Black",
-          "size": "S"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "Black",
-          "size": "M"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "Black",
-          "size": "L"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      },
-      {
-        "opts": {
-          "color": "Black",
-          "size": "XL"
-        },
-        "price": 33.46,
-        "status": "DECIDED"
-      }
-    ],
-    "images": [
-      {
-        "when": {
           "color": "White"
         },
         "images": [
@@ -8947,6 +8924,17 @@ export const catalogProducts: CatalogProduct[] = [
           "/images/catalog/rabbit-crop-top-classic/black-flat.f178f757.webp"
         ],
         "checkout": "/images/catalog/rabbit-crop-top-classic/black-model-womens-lifestyle-2.ee4d8ef4-checkout.jpg"
+      },
+      {
+        "when": {
+          "color": "Washed Black"
+        },
+        "images": [
+          "/images/catalog/rabbit-crop-top/model.95e49449.webp",
+          "/images/catalog/rabbit-crop-top/flat.c9a7d896.webp",
+          "/images/catalog/rabbit-crop-top/ghost.1bc1a851.webp"
+        ],
+        "checkout": "/images/catalog/rabbit-crop-top/model.95e49449-checkout.jpg"
       }
     ],
     "credits": []

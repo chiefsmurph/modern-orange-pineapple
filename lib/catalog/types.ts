@@ -25,6 +25,13 @@ export type CatalogVariant = {
   price: number;
   /** DECIDED, or PROPOSED until John approves it. */
   status: string;
+  /**
+   * Overrides the product-level printfulCatalogProductId for this variant, when a
+   * product spans more than one Printful catalog product (e.g. the Rabbit Crop
+   * Top: White/Black on AS Colour 4062, Washed Black on Bella+Canvas 6882GD).
+   * Falls back to the product-level id (catalogProductIdFor in select.ts).
+   */
+  printfulCatalogProductId?: number;
 };
 
 export type CatalogImageSet = {
