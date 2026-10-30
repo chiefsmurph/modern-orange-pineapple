@@ -3080,5 +3080,30 @@ export const catalogFulfilment: Record<string, FulfilmentEntry> = {
       }
     },
     "royalties": []
+  },
+  "rabbit-crop-top": {
+    "variants": {
+      "Washed Black|S": {
+        "syncVariantId": 5607311890,
+        "catalogVariantId": 49804
+      },
+      "Washed Black|M": {
+        "syncVariantId": 5607311892,
+        "catalogVariantId": 49807
+      },
+      "Washed Black|L": {
+        "syncVariantId": 5607311893,
+        "catalogVariantId": 49810
+      },
+      "Washed Black|XL": {
+        "syncVariantId": 5607311895,
+        "catalogVariantId": 49813
+      },
+      "Washed Black|2XL": {
+        "syncVariantId": 5607311896,
+        "catalogVariantId": 49816
+      }
+    },
+    "royalties": []
   }
 };

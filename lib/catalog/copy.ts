@@ -48,6 +48,11 @@ const garments: Record<number, Garment> = {
       "- 78% polyester, 22% elastane\n- Fabric weight: 8.56 oz/yd² (290 g/m²)\n- Smooth, elastic fabric\n- Mid-thigh flared skirt with elastic waistline\n- Overlock seams & cover-stitch hem",
     fabricNote: "Not cotton: 78% polyester",
   },
+  // Bella+Canvas 6882GD (the Rabbit Crop Top, Washed Black)
+  1579: {
+    details:
+      "- Bella+Canvas 6882GD, garment-dyed cropped tee\n- Fabric: 100% ring-spun cotton\n- Fabric weight: 6.5 oz/yd² (220 g/m²)\n- Cropped, boxy fit with oversized sleeves\n- Soft garment-dyed finish: colour varies slightly piece to piece",
+  },
   // Yupoong 6089M
   99: {
     details:
@@ -90,6 +95,11 @@ const intros: { match: RegExp; text: (slug: string) => string; rank: number }[] 
     match: /^star-crop/,
     text: () => "The painted star that started MOP, on a soft cotton crop top.",
     rank: 61,
+  },
+  {
+    match: /^rabbit-crop/,
+    text: () => "The MOP rabbit, monocle and bow tie and all, on a garment-dyed Washed Black crop top.",
+    rank: 31,
   },
   {
     match: /crop/,

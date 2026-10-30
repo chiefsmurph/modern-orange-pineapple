@@ -25,6 +25,7 @@ const FIT = {
   315: "Fitted top, flared skirt; between sizes, size up.",
   99: "One size, adjustable snap.",
   1481: "Elastic waist, short 2⅝″ inseam; between sizes, size up.",
+  1579: "Cropped, boxy fit; oversized sleeves.",
 };
 
 const NAMES = [

@@ -8748,5 +8748,80 @@ export const catalogProducts: CatalogProduct[] = [
         ]
       }
     ]
+  },
+  {
+    "slug": "rabbit-crop-top",
+    "title": "Rabbit Crop Top",
+    "supplier": "printful",
+    "delivery": "printful",
+    "printfulCatalogProductId": 1579,
+    "options": {
+      "color": [
+        "Washed Black"
+      ],
+      "size": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ]
+    },
+    "variants": [
+      {
+        "opts": {
+          "color": "Washed Black",
+          "size": "S"
+        },
+        "price": 34.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Washed Black",
+          "size": "M"
+        },
+        "price": 34.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Washed Black",
+          "size": "L"
+        },
+        "price": 34.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Washed Black",
+          "size": "XL"
+        },
+        "price": 34.46,
+        "status": "DECIDED"
+      },
+      {
+        "opts": {
+          "color": "Washed Black",
+          "size": "2XL"
+        },
+        "price": 36.46,
+        "status": "DECIDED"
+      }
+    ],
+    "images": [
+      {
+        "when": {
+          "color": "Washed Black"
+        },
+        "images": [
+          "/images/catalog/rabbit-crop-top/model.95e49449.webp",
+          "/images/catalog/rabbit-crop-top/flat.c9a7d896.webp",
+          "/images/catalog/rabbit-crop-top/ghost.1bc1a851.webp"
+        ],
+        "checkout": "/images/catalog/rabbit-crop-top/model.95e49449-checkout.jpg"
+      }
+    ],
+    "credits": []
   }
 ];

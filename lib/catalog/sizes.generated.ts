@@ -307,5 +307,37 @@ export const sizeGuides: Record<number, SizeGuide> = {
       }
     ],
     "fit": "Elastic waist, short 2⅝″ inseam; between sizes, size up."
+  },
+  "1579": {
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "rows": [
+      {
+        "label": "Length",
+        "values": {
+          "S": "17 1/2",
+          "M": "18 1/4",
+          "L": "19 3/4",
+          "XL": "21 1/4",
+          "2XL": "22 1/4"
+        }
+      },
+      {
+        "label": "Chest width (laid flat)",
+        "values": {
+          "S": "20",
+          "M": "22 1/8",
+          "L": "23 5/8",
+          "XL": "23 5/8",
+          "2XL": "27 5/8"
+        }
+      }
+    ],
+    "fit": "Cropped, boxy fit; oversized sleeves."
   }
 };
