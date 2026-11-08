@@ -30,6 +30,8 @@ export type PageProduct = Pick<
   buyNowOnly?: boolean;
   /** Public products.ts `pageBackground`; default on (CatalogProductView's Ghost). */
   pageBackground?: boolean | Record<string, string>;
+  /** One line under the back picker, when a plain-back photo isn't available for every color. */
+  backNote?: string;
 };
 
 /**
@@ -70,10 +72,24 @@ export function legacyPageProduct(p: Product): PageProduct | null {
     variants: combos.map((opts) => ({ opts, price: getTotalPrice(p, opts.size), status: "DECIDED" })),
     images: Array.isArray(p.images)
       ? [{ when: {}, images: p.images }]
-      : Object.entries(p.images).map(([color, images]) => ({ when: { color }, images })),
+      : Object.entries(p.images).flatMap(([color, images]) => {
+          const sets: { when: Record<string, string>; images: string[] }[] = [{ when: { color }, images }];
+          // A dedicated set for back=Plain, when that color has a plain-back
+          // mockup (public/products.ts plainBackImages); imageSetFor's "most
+          // specific `when` wins" picks this over the plain {color} set once
+          // back=Plain is selected, and falls back to the Logo set otherwise.
+          const plain = p.plainBackImages?.[color];
+          if (plain) sets.push({ when: { color, back: "Plain" }, images: plain });
+          return sets;
+        }),
     credits,
     delivery: p.vendor.platform,
     buyNowOnly: true,
     pageBackground: p.pageBackground,
+    // Products.ts, keyed by color: which colors are missing a plain-back photo
+    // (shown as a one-line note under the picker instead - app/[productId]/CatalogProductView.tsx).
+    backNote: p.options.back && !Object.keys(p.images).every((c) => p.plainBackImages?.[c])
+      ? "Plain back: no logo"
+      : undefined,
   };
 }

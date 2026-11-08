@@ -63,7 +63,11 @@ export function feedIndex(products: ShopProduct[] = shopProducts): Map<string, I
   for (const product of products)
     for (const v of product.variants) map.set(feedId(product.slug, v.opts), { slug: product.slug, opts: { ...v.opts } });
   for (const p of legacy.products.filter(onSaleLegacy))
-    for (const opts of legacyVariantCombos(p)) map.set(feedId(p.id, opts), { slug: p.id, opts });
+    // Same "one per color" pin as the feed itself (lib/google-feed.ts): a
+    // "back" option (the Supersize Alpaca Tee) isn't its own feed listing, so
+    // its id never reaches a Meta cart either.
+    for (const opts of legacyVariantCombos(p).filter((o) => !p.options.back || o.back === p.options.back[0]))
+      map.set(feedId(p.id, opts), { slug: p.id, opts });
   if (products === shopProducts) index = map;
   return map;
 }

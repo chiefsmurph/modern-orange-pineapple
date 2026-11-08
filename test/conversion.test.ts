@@ -68,7 +68,11 @@ test("Google feed: one item per variant, every required field, valid XML", () =>
   // one per catalog variant, plus one per variant (size, or color x size) of each
   // older product with no generated catalog product at its slug (the Blue Sky
   // Cotton Shorts, and the Supersize Alpaca Tee's 3 colors x 8 sizes)
-  const legacyCount = legacy.products.filter(onSaleLegacy).reduce((n, p) => n + legacyVariantCombos(p).length, 0);
+  // Same "one per color" pin as the feed itself: a "back" option (the
+  // Supersize Alpaca Tee) isn't its own feed listing (John, 11/08).
+  const legacyCount = legacy.products
+    .filter(onSaleLegacy)
+    .reduce((n, p) => n + legacyVariantCombos(p).filter((o) => !p.options.back || o.back === p.options.back[0]).length, 0);
   assert.equal(items.length, shopProducts.reduce((n, p) => n + p.variants.length, 0) + legacyCount);
   const ids = new Set<string>();
   for (const it of items) {

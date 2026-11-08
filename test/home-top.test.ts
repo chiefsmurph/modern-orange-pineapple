@@ -31,7 +31,10 @@ test("'Free US shipping' is true: every card is free shipping, checkout ships to
   assert.ok(onSale.length > 0);
   for (const p of onSale) {
     assert.ok(p.freeShippingMode, `${p.id} is free shipping`);
-    const opts = { size: p.options.size?.[0] ?? "M", ...(p.options.color ? { color: p.options.color[0] } : {}) };
+    // Every option the product declares (color, back, size, ...), its first value.
+    const opts = Object.fromEntries(
+      Object.entries(p.options).map(([name, values]) => [name, name === "size" ? values?.[0] ?? "M" : values?.[0]])
+    );
     assert.equal(buildItem(p.id, opts, 1, {}).shippingCents, 0, p.id);
   }
 });
