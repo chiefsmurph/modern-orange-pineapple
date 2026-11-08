@@ -77,15 +77,20 @@ export type Product = {
   /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
   design?: ProductDesign;
   /**
-   * Desktop-only faint left/right ghost copies of the product photo, behind
-   * the page (app/[productId]/CatalogProductView.tsx `Ghost`). Looks right
-   * with the site's usual background-removed cutout photos
-   * (erasebg-transformed*.png); looks wrong with a full photographic mockup
-   * that has its own scene/backdrop (e.g. supersize-alpaca-tee's sandy Yoycol
-   * mockups). Unset = on, as before. Flip back to true (or delete this line)
-   * once that product has a transparent cutout photo of its own.
+   * Desktop-only faint left/right ghost copies behind the page
+   * (app/[productId]/CatalogProductView.tsx `Ghost`), normally the same URL
+   * as the big photo (images[0]/[1]) - looks right when that's already a
+   * background-removed cutout (the site's usual erasebg-transformed*.png
+   * convention).
+   *   - unset / true: the default above (images[0]/[1]).
+   *   - false: off (a product whose own photos are a full scene/backdrop,
+   *     e.g. a Yoycol mockup, where reusing them as a ghost looks wrong).
+   *   - { [color]: path }: a dedicated cutout per color/images-key, used
+   *     instead of images[0] (e.g. supersize-alpaca-tee's model cutouts -
+   *     the gallery photo itself keeps its studio backdrop, only the ghost
+   *     uses the cutout).
    */
-  pageBackground?: boolean;
+  pageBackground?: boolean | Record<string, string>;
 };
 
 export type Delivery = {
@@ -238,16 +243,27 @@ const products: { products: Product[] } = {
         productId: "SPU 3MTXVYM32 (3 colourways)",
       },
       design: "smoking-alpaca",
+      // Order: model-wearing (front, back), then the flat-lay (front, back) -
+      // Yoycol regenerated the model shots 11/08 after John set them as each
+      // template's default mockup (still not exposed by the Open API itself;
+      // pulled via the website template endpoint instead - see
+      // ~/code/_handoff/2026-11-07-big-alpaca-allover/mockups-model/).
       images: {
         White: [
+          "/images/supersize-alpaca-tee/white-model-front.webp",
+          "/images/supersize-alpaca-tee/white-model-back.webp",
           "/images/supersize-alpaca-tee/white-front.webp",
           "/images/supersize-alpaca-tee/white-back.webp",
         ],
         Sky: [
+          "/images/supersize-alpaca-tee/sky-model-front.webp",
+          "/images/supersize-alpaca-tee/sky-model-back.webp",
           "/images/supersize-alpaca-tee/sky-front.webp",
           "/images/supersize-alpaca-tee/sky-back.webp",
         ],
         Black: [
+          "/images/supersize-alpaca-tee/black-model-front.webp",
+          "/images/supersize-alpaca-tee/black-model-back.webp",
           "/images/supersize-alpaca-tee/black-front.webp",
           "/images/supersize-alpaca-tee/black-back.webp",
         ],
@@ -258,11 +274,17 @@ const products: { products: Product[] } = {
       },
       freeShippingMode: true,
       sizeNote: "Runs small: we ship one size up from what you pick (so order your normal size).",
-      // Off (John, 11/08): the Yoycol mockups are full photos (sand, shorts,
-      // flip-flops), not a transparent cutout, so the usual faded ghost
-      // background looked wrong here. Flip back to true/delete once there's
-      // a cut-out model shot (transparent PNG) for this product.
-      pageBackground: false,
+      // Back on (John, 11/08), per color: a transparent cut-out of the model
+      // shot's FRONT photo (rembg/bria-rmbg, background removed locally; same
+      // erasebg-transformed*.png convention as the rest of the site), since
+      // the model photos themselves keep their studio backdrop and reusing
+      // them as-is for the ghost (the default behavior) would fade in a grey
+      // rectangle, not a silhouette.
+      pageBackground: {
+        White: "/images/supersize-alpaca-tee/white-erasebg-transformed.png",
+        Sky: "/images/supersize-alpaca-tee/sky-erasebg-transformed.png",
+        Black: "/images/supersize-alpaca-tee/black-erasebg-transformed.png",
+      },
     },
     {
       id: "clouds-skater-dress",

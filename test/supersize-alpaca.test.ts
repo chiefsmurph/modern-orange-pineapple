@@ -58,11 +58,27 @@ test("on sale, free US shipping, $37.73 PRICE_TBD placeholder, 3 colors x 8 size
   assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"]);
 });
 
-test("pageBackground is off (John, 11/08: the Yoycol mockups are a full scene, not a cutout) and reaches the page product", () => {
+test("pageBackground is a per-color cut-out (John, 11/08: model shot's FRONT, background removed) and reaches the page product", () => {
   const p = legacy.products.find((x) => x.id === SLUG)!;
-  assert.equal(p.pageBackground, false);
+  assert.deepEqual(p.pageBackground, {
+    White: "/images/supersize-alpaca-tee/white-erasebg-transformed.png",
+    Sky: "/images/supersize-alpaca-tee/sky-erasebg-transformed.png",
+    Black: "/images/supersize-alpaca-tee/black-erasebg-transformed.png",
+  });
   const page = legacyPageProduct(p)!;
-  assert.equal(page.pageBackground, false);
+  assert.deepEqual(page.pageBackground, p.pageBackground);
+});
+
+test("gallery order per color: model front, model back, then the flat-lay front, back", () => {
+  const p = legacy.products.find((x) => x.id === SLUG)!;
+  for (const color of ["White", "Sky", "Black"]) {
+    const images = (p.images as Record<string, string[]>)[color];
+    assert.equal(images.length, 4, color);
+    assert.match(images[0], /model-front\.webp$/, color);
+    assert.match(images[1], /model-back\.webp$/, color);
+    assert.match(images[2], /-front\.webp$/, color);
+    assert.match(images[3], /-back\.webp$/, color);
+  }
 });
 
 test("every other legacy product keeps its page background on (the flag is per-product, not a global off-switch)", () => {

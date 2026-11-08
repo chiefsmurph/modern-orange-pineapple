@@ -29,7 +29,7 @@ export type PageProduct = Pick<
   /** Not in the bag: the page offers "Buy now" (its own Stripe checkout) only. */
   buyNowOnly?: boolean;
   /** Public products.ts `pageBackground`; default on (CatalogProductView's Ghost). */
-  pageBackground?: boolean;
+  pageBackground?: boolean | Record<string, string>;
 };
 
 /**
