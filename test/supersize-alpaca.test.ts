@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildItem } from "../lib/orders/build-items.ts";
 import { yoycolForColor, yoycolSizeShiftUp } from "../lib/orders/yoycol-config.ts";
-import legacy from "../public/products.ts";
+import legacy, { getTotalPrice } from "../public/products.ts";
 import { legacyPageProduct } from "../lib/product-page.ts";
 
 const SLUG = "supersize-alpaca-tee";
@@ -48,12 +48,13 @@ test("an invalid color is refused like any other bad option", () => {
   assert.throws(() => buildItem(SLUG, { color: "Purple", size: "M" }, 1, {}), /invalid color/);
 });
 
-test("on sale, free US shipping, $37.73 PRICE_TBD placeholder, 3 colors x 8 sizes", () => {
+test("on sale, free US shipping, $44.76 displayed total (matches the other all-overs), 3 colors x 8 sizes", () => {
   const p = legacy.products.find((x) => x.id === SLUG)!;
   assert.ok(p, "product exists in public/products.ts");
   assert.ok(!p.retired && !p.comingSoon && !p.superseded);
   assert.equal(p.freeShippingMode, true);
-  assert.equal(p.price, 37.73, "PRICE_TBD placeholder - needs John's confirmed price before going live");
+  assert.equal(p.price, 37.24);
+  assert.equal(getTotalPrice(p), 44.76, "displayed total matches the other all-overs");
   assert.deepEqual(p.options.color, ["White", "Sky", "Black"]);
   assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"]);
 });

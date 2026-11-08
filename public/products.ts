@@ -226,12 +226,10 @@ const products: { products: Product[] } = {
       title: "Supersize Alpaca Tee",
       description:
         "The big alpaca, collar to hem. Rabbit logo and MODERN ORANGE PINEAPPLE on the back.\n\n- All-over print, 100% cotton\n- Regular fit with classic O-neck\n- Fabric weight: 190 g/m²\n- Made to order, ships in about 3-4 weeks",
-      // PRICE_TBD (John, 2026-11-07): his message proposed $37.40, but that ends
-      // in a round 0 - breaks the "mixed endings, last digit != 0" rule
-      // (feedback-prices-end-70-40-20.md: tees in the proposed MOP set end .73).
-      // Using $37.73 as a compliant placeholder; NEEDS JOHN'S CONFIRMED PRICE
-      // before this goes live.
-      price: 37.73,
+      // Item price set so the displayed total (item + $7.52 shipping,
+      // freeShippingMode) equals $44.76 - the same displayed price as the
+      // other all-overs (John, approved launch 11/08).
+      price: 37.24,
       options: {
         color: ["White", "Sky", "Black"],
         size: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
