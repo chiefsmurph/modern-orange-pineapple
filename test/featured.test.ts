@@ -13,25 +13,28 @@ import { featuredCards, homeCards, restCards, shopCards } from "../lib/shop-card
 const ROOT = path.resolve(import.meta.dirname, "..");
 const slugOf = (href: string) => href.split("?")[0].slice(1);
 
-test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee, Dusk, Rabbit, Pelican, Original Star (John 10/20)", () => {
-  assert.deepEqual(homeCards().slice(0, 8).map((c) => slugOf(c.href)), [
-    "sky-tee",
+test("the home grid opens with Supersize Alpaca, then Day, Sky, Alpaca, then the shorts, Dusk, Rabbit, Pelican, Original Star (John 11/08)", () => {
+  assert.deepEqual(homeCards().slice(0, 9).map((c) => slugOf(c.href)), [
+    "supersize-alpaca-tee",
     "day-all-over",
-    "blue-sky-cotton-shorts",
+    "sky-tee",
     "alpaca-tee",
+    "blue-sky-cotton-shorts",
     "dusk-all-over",
     "rabbit-tee",
     "pelican-tee",
     "original-star-tee",
   ]);
-  // the picks John chose on 10/13 travel with each card, at the 10/20 prices ($35 tees, $45 all-overs, $45 shorts)
+  // the picks John chose on 10/13 travel with each card, at the 10/20 prices ($35 tees, $45 all-overs, $45 shorts),
+  // Supersize Alpaca at the same displayed $44.76 as the other all-overs (John, approved launch 11/08)
   assert.deepEqual(
     featuredCards().map((c) => [c.href, c.price]),
     [
-      ["/sky-tee?sky=orbital-sunset", "$44.76"],
+      ["/supersize-alpaca-tee", "$44.76"],
       ["/day-all-over?style=beanie", "$44.76"],
-      ["/blue-sky-cotton-shorts", "From $44.43"],
+      ["/sky-tee?sky=orbital-sunset", "$44.76"],
       ["/alpaca-tee?version=large&color=True+Navy", "From $34.73"],
+      ["/blue-sky-cotton-shorts", "From $44.43"],
       ["/dusk-all-over", "$44.76"],
       ["/rabbit-tee?version=large&color=Blossom", "From $34.73"],
       ["/pelican-tee?version=large&style=beanie", "From $34.73"],
@@ -40,8 +43,8 @@ test("the home grid opens with the Sky Tee, then Day, the shorts, the Alpaca Tee
   );
 });
 
-test("the first card, the Sky Tee, keeps its row of skies", () => {
-  const sky = homeCards()[0];
+test("the Sky Tee (3rd card) keeps its row of skies", () => {
+  const sky = homeCards()[2];
   assert.equal(sky.title, "Sky Tee");
   assert.equal(sky.swatches?.length, getShopProduct("sky-tee")!.options.sky.length);
   assert.ok(sky.swatches!.length > 1);

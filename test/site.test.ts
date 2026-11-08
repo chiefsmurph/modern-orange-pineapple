@@ -219,9 +219,9 @@ test("the Blue Sky Cotton Shorts (the one older product with no generated catalo
   }
 });
 
-test("the shorts are 3rd on the home grid (John 10/16); their rank keeps them near the top of the full list", () => {
+test("the shorts are 5th on the home grid (John 11/08, out of the top row); their rank keeps them near the top of the full list", () => {
   const home = homeCards().map((c) => c.href.split("?")[0].slice(1));
-  assert.equal(home.indexOf("blue-sky-cotton-shorts"), 2, home.join(", "));
+  assert.equal(home.indexOf("blue-sky-cotton-shorts"), 4, home.join(", "));
   // shopCards (every card on sale, also the Meta "unavailable" page): where the Printful Sky Shorts sat
   const all = shopCards().map((c) => c.href.split("?")[0].slice(1));
   const at = all.indexOf("blue-sky-cotton-shorts");

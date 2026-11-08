@@ -197,11 +197,13 @@ export const shortNames: Record<string, string> = {
 export const shortName = (slug: string, title: string) => shortNames[slug] ?? title;
 
 /**
- * The first cards on the home grid, in this order (John, 10/16): the Sky Tee
- * first, then Day, the Blue Sky Cotton Shorts, Dusk, the Rabbit, Pelican and
- * Original Star tees. Everything else follows (catalogRank order) without
- * repeating these. Reorder freely here. (Until 10/16 these were a separate
- * "Featured" section above the grid, in John's 10/13 order.)
+ * The first cards on the home grid, in this order (John, 11/08): the Supersize
+ * Alpaca tee first, then Day, the Sky Tee, the Alpaca tee, the Blue Sky Cotton
+ * Shorts, Dusk, the Rabbit, Pelican and Original Star tees. The three alpaca
+ * products (Supersize Alpaca, Alpaca, Dusk) are kept non-adjacent on purpose.
+ * Everything else follows (catalogRank order) without repeating these.
+ * Reorder freely here. (Until 10/16 these were a separate "Featured" section
+ * above the grid, in John's 10/13 order.)
  *   slug   a generated product, or an older one from public/products.ts (the
  *          shorts), which shows its own first photo and takes no pick or photo
  *   pick   the card opens the product with these picks (and shows that photo)
@@ -213,11 +215,16 @@ export const shortName = (slug: string, title: string) => shortNames[slug] ?? ti
 export type FeaturedItem = { slug: string; pick?: Record<string, string>; photo?: "womens" | "mens" | "flat" };
 export const featured: { items: FeaturedItem[] } = {
   items: [
-    { slug: "sky-tee", pick: { sky: "orbital-sunset" }, photo: "flat" },
+    // Top row (John 11/08): Supersize Alpaca, Day, Sky, Alpaca.
+    { slug: "supersize-alpaca-tee" },
     { slug: "day-all-over", pick: { style: "beanie" } },
-    { slug: "blue-sky-cotton-shorts" },
+    { slug: "sky-tee", pick: { sky: "orbital-sunset" }, photo: "flat" },
     // a basic tee ($29 then, $35 from 10/20) in the first four (John 10/20): the alpaca, the design people stop him about
     { slug: "alpaca-tee", pick: { version: "large", color: "True Navy" } },
+    // second row: the shorts moved out of the top row, then the rest in their
+    // prior relative order. The shorts also keeps Dusk away from Alpaca above,
+    // so none of the three alpaca products (Supersize Alpaca, Alpaca, Dusk) are adjacent.
+    { slug: "blue-sky-cotton-shorts" },
     { slug: "dusk-all-over" },
     { slug: "rabbit-tee", pick: { version: "large", color: "Blossom" }, photo: "mens" },
     { slug: "pelican-tee", pick: { version: "large", style: "beanie" }, photo: "womens" },
