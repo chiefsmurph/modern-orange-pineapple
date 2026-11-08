@@ -54,3 +54,69 @@ export const yoycolFor = (
 
 export const yoycolSku = (p: YoycolProduct, size: string) =>
   `ADS-${p.spu}-00000-${p.colorHex}-${size.toUpperCase()}`;
+
+// --- Multi-colourway Yoycol products (one SPU, one designCode per colour) ---
+//
+// Unlike the single-colour products above, a colourway here is a different
+// all-over print design (the garment itself is always white - the print
+// covers it), so the SKU's colour segment stays FFFFFF for every colourway;
+// only designCode changes. Override with
+//   YOYCOL_DESIGN_CODES="supersize-alpaca-tee:White=NEWCODE"
+// (falls back to a plain "<slug>=CODE" override applied to every colour, then
+// to the colour's saved code below).
+
+export type YoycolColorProduct = {
+  spu: string;
+  templateName: string;
+  colors: Record<string, { designCode: string; colorHex: string }>;
+};
+
+export const yoycolColorProducts: Record<string, YoycolColorProduct> = {
+  // Templates 17055006 (White/PY8DV), 17054489 (Sky/PY7X7), 17055032
+  // (Black/PY8EN), tee 3MTXVYM32 (Yoycol Open API, read 2026-11-07). All
+  // three are the same blank (White AOP O-neck tee); the colourway is the
+  // print design, so colorHex is FFFFFF for every one.
+  "supersize-alpaca-tee": {
+    spu: "3MTXVYM32",
+    templateName: "Supersize Alpaca",
+    colors: {
+      White: { designCode: "PY8DV", colorHex: "FFFFFF" },
+      Sky: { designCode: "PY7X7", colorHex: "FFFFFF" },
+      Black: { designCode: "PY8EN", colorHex: "FFFFFF" },
+    },
+  },
+};
+
+export const yoycolForColor = (
+  slug: string,
+  color: string | undefined,
+  env: Record<string, string | undefined> = process.env
+): YoycolProduct | undefined => {
+  const base = yoycolColorProducts[slug];
+  const variant = color ? base?.colors[color] : undefined;
+  if (!base || !variant) return undefined;
+  const codes = parseDesignCodes(env.YOYCOL_DESIGN_CODES);
+  const designCode = codes[`${slug}:${color}`] ?? codes[slug] ?? variant.designCode;
+  return { spu: base.spu, designCode, colorHex: variant.colorHex, templateName: base.templateName };
+};
+
+// --- Customer size -> Yoycol size (ship one size up; John, 2026-11-07) ---
+//
+// Yoycol's fit for this template runs small, so every order goes out one
+// size above what the customer picked (S orders as M, M as L, ... 3XL as
+// 4XL). There's no size above 4XL to shift 4XL into, so a 4XL order is NOT
+// shifted and is flagged for John to confirm by hand (see the order email's
+// neck-label TODO note - same unresolved "no server-side extra step" spot).
+export const SUPERSIZE_ALPACA_SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+
+export const yoycolSizeShiftUp = (
+  size: string,
+  order: readonly string[] = SUPERSIZE_ALPACA_SIZE_ORDER
+): { size: string; shifted: boolean; atTop: boolean } => {
+  const idx = order.indexOf(size.toUpperCase());
+  if (idx === -1 || idx === order.length - 1) {
+    // Unknown size, or already the top of the chart: nothing to shift into.
+    return { size, shifted: false, atTop: idx === order.length - 1 };
+  }
+  return { size: order[idx + 1], shifted: true, atTop: false };
+};

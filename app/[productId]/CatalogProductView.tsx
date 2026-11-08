@@ -319,11 +319,36 @@ export default function CatalogProductView({
         </Link>
       </div>
 
-      {/* Desktop-only faint ghosts at the sides: the same URLs as the big photo
-          (no extra downloads), once the photos are in. */}
-      {photosReady && <Ghost src={images[0]} side="left" />}
-      {photosReady && images[1] && queue.current?.status(preloadKey({ kind: "main", src: images[1] })) === "loaded" && (
-        <Ghost src={images[1]} side="right" />
+      {/* Desktop-only faint ghosts at the sides (public/products.ts
+          `pageBackground`): normally the same URLs as the big photo, no extra
+          downloads (images[0]/[1], once they're in); false turns them off for
+          a product whose own photos are a full scene, not a background-removed
+          cutout; a { color: path } map (e.g. supersize-alpaca-tee) uses a
+          dedicated cutout per color instead, on both sides, not gated on the
+          gallery's own preload since it's a separate small asset. */}
+      {typeof product.pageBackground === "object" ? (
+        (() => {
+          const src = product.pageBackground[sel.color ?? ""] ?? Object.values(product.pageBackground)[0];
+          return (
+            photosReady &&
+            src && (
+              <>
+                <Ghost src={src} side="left" />
+                <Ghost src={src} side="right" />
+              </>
+            )
+          );
+        })()
+      ) : (
+        <>
+          {product.pageBackground !== false && photosReady && <Ghost src={images[0]} side="left" />}
+          {product.pageBackground !== false &&
+            photosReady &&
+            images[1] &&
+            queue.current?.status(preloadKey({ kind: "main", src: images[1] })) === "loaded" && (
+              <Ghost src={images[1]} side="right" />
+            )}
+        </>
       )}
     </div>
   );

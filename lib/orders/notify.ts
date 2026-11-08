@@ -72,6 +72,12 @@ export function orderEmail(
   if (record.items.length === 0) lines.push("- Couldn't read the items: check the Stripe payment (link below).");
   for (const i of record.items) {
     lines.push(`- ${i.qty} x ${i.title}: ${itemSummary(i) || "no options"}, ${money(i.unitAmount)} each [${supplierName[i.supplier]}]`);
+    // A note set alongside a placed (non-"manual") supplier order - e.g. the Supersize
+    // Alpaca's one-size-up shift or its neck-label TODO (yoycol-neck-label-automation.md:
+    // no server-side way to attach the label yet) - still needs John's eyes, so it's
+    // surfaced here too, not just in the "manual" failure branch below.
+    if (i.manual && i.supplier !== "manual") lines.push(`  NOTE: ${i.manual}`);
+    if (i.supplier === "yoycol") lines.push(`  NECK LABEL: add "MOP tag" by hand in the Yoycol dashboard before it ships - not automated yet.`);
   }
   lines.push("", "WHAT TO DO");
   for (const r of Object.values(results)) {

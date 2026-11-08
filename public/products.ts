@@ -76,6 +76,21 @@ export type Product = {
   comingSoon?: { message: string };
   /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
   design?: ProductDesign;
+  /**
+   * Desktop-only faint left/right ghost copies behind the page
+   * (app/[productId]/CatalogProductView.tsx `Ghost`), normally the same URL
+   * as the big photo (images[0]/[1]) - looks right when that's already a
+   * background-removed cutout (the site's usual erasebg-transformed*.png
+   * convention).
+   *   - unset / true: the default above (images[0]/[1]).
+   *   - false: off (a product whose own photos are a full scene/backdrop,
+   *     e.g. a Yoycol mockup, where reusing them as a ghost looks wrong).
+   *   - { [color]: path }: a dedicated cutout per color/images-key, used
+   *     instead of images[0] (e.g. supersize-alpaca-tee's model cutouts -
+   *     the gallery photo itself keeps its studio backdrop, only the ghost
+   *     uses the cutout).
+   */
+  pageBackground?: boolean | Record<string, string>;
 };
 
 export type Delivery = {
@@ -112,6 +127,23 @@ export const getProductImages = (
   { images, options: { color: colorOptions = [] } }: Product,
   color: string | undefined = colorOptions[0]
 ) => (Array.isArray(images) ? images : images[color]);
+
+/**
+ * Every combination of a product's options (e.g. each size, or each
+ * color x size for a multi-colour one like the Supersize Alpaca Tee), in
+ * option-declaration order. Shared by the product page (lib/product-page.ts),
+ * the feeds (lib/google-feed.ts) and Meta Shops checkout (lib/orders/meta-checkout.ts)
+ * so a product with more than one option (not just `size`) is covered everywhere.
+ */
+export const legacyVariantCombos = (p: Product): Record<string, string>[] => {
+  const options = Object.fromEntries(
+    Object.entries(p.options).filter((e): e is [string, string[]] => !!e[1]?.length)
+  );
+  return Object.keys(options).reduce<Record<string, string>[]>(
+    (acc, name) => acc.flatMap((o) => options[name].map((v) => ({ ...o, [name]: v }))),
+    [{}]
+  );
+};
 
 /** The design for the current selection (option name → chosen value). */
 export const getProductDesignId = (
@@ -183,6 +215,74 @@ const products: { products: Product[] } = {
         cost: 752,
       },
       freeShippingMode: true,
+    },
+    {
+      id: "supersize-alpaca-tee",
+      // Big alpaca, collar to hem, front; rabbit logo + wordmark on the back
+      // (lib/orders/yoycol-config.ts yoycolColorProducts). 3 colourways, one
+      // all-over print design per colour, all on the same White AOP O-neck
+      // blank (3MTXVYM32). John art-directed; original alpaca drawing by
+      // Austin Maxwell (lib/artists.ts "smoking-alpaca").
+      title: "Supersize Alpaca Tee",
+      description:
+        "The big alpaca, collar to hem. Rabbit logo and MODERN ORANGE PINEAPPLE on the back.\n\n- All-over print, 100% cotton\n- Regular fit with classic O-neck\n- Fabric weight: 190 g/m²\n- Made to order, ships in about 3-4 weeks",
+      // Item price set so the displayed total (item + $7.52 shipping,
+      // freeShippingMode) equals $44.76 - the same displayed price as the
+      // other all-overs (John, approved launch 11/08).
+      price: 37.24,
+      options: {
+        color: ["White", "Sky", "Black"],
+        size: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+      },
+      vendor: {
+        platform: "yoycol",
+        // 3 colourways / designCodes on one SPU - see yoycolColorProducts
+        // (lib/orders/yoycol-config.ts) for White/Sky/Black -> PY8DV/PY7X7/PY8EN.
+        productId: "SPU 3MTXVYM32 (3 colourways)",
+      },
+      design: "smoking-alpaca",
+      // Order: model-wearing (front, back), then the flat-lay (front, back) -
+      // Yoycol regenerated the model shots 11/08 after John set them as each
+      // template's default mockup (still not exposed by the Open API itself;
+      // pulled via the website template endpoint instead - see
+      // ~/code/_handoff/2026-11-07-big-alpaca-allover/mockups-model/).
+      images: {
+        White: [
+          "/images/supersize-alpaca-tee/white-model-front.webp",
+          "/images/supersize-alpaca-tee/white-model-back.webp",
+          "/images/supersize-alpaca-tee/white-front.webp",
+          "/images/supersize-alpaca-tee/white-back.webp",
+        ],
+        Sky: [
+          "/images/supersize-alpaca-tee/sky-model-front.webp",
+          "/images/supersize-alpaca-tee/sky-model-back.webp",
+          "/images/supersize-alpaca-tee/sky-front.webp",
+          "/images/supersize-alpaca-tee/sky-back.webp",
+        ],
+        Black: [
+          "/images/supersize-alpaca-tee/black-model-front.webp",
+          "/images/supersize-alpaca-tee/black-model-back.webp",
+          "/images/supersize-alpaca-tee/black-front.webp",
+          "/images/supersize-alpaca-tee/black-back.webp",
+        ],
+      },
+      shipping: {
+        name: "Standard Shipping",
+        cost: 752,
+      },
+      freeShippingMode: true,
+      sizeNote: "Runs small: we ship one size up from what you pick (so order your normal size).",
+      // Back on (John, 11/08), per color: a transparent cut-out of the model
+      // shot's FRONT photo (rembg/bria-rmbg, background removed locally; same
+      // erasebg-transformed*.png convention as the rest of the site), since
+      // the model photos themselves keep their studio backdrop and reusing
+      // them as-is for the ghost (the default behavior) would fade in a grey
+      // rectangle, not a silhouette.
+      pageBackground: {
+        White: "/images/supersize-alpaca-tee/white-erasebg-transformed.png",
+        Sky: "/images/supersize-alpaca-tee/sky-erasebg-transformed.png",
+        Black: "/images/supersize-alpaca-tee/black-erasebg-transformed.png",
+      },
     },
     {
       id: "clouds-skater-dress",

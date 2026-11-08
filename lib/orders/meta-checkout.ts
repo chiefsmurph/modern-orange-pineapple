@@ -13,7 +13,7 @@ import { buildItem, checkoutBlock, CheckoutError, type PricedItem } from "./buil
 import { cartSessionParams, SITE_ORIGIN } from "./checkout.ts";
 import { shopProducts, type ShopProduct } from "../catalog/index.ts";
 import { feedId } from "../google-feed.ts";
-import legacy from "../../public/products.ts";
+import legacy, { legacyVariantCombos } from "../../public/products.ts";
 import { onSaleLegacy } from "../shop-cards.ts";
 
 /** Distinct lines per cart (Stripe metadata allows 50 keys; each line takes one). */
@@ -63,10 +63,7 @@ export function feedIndex(products: ShopProduct[] = shopProducts): Map<string, I
   for (const product of products)
     for (const v of product.variants) map.set(feedId(product.slug, v.opts), { slug: product.slug, opts: { ...v.opts } });
   for (const p of legacy.products.filter(onSaleLegacy))
-    for (const size of p.options.size ?? [undefined]) {
-      const opts = size ? { size } : {};
-      map.set(feedId(p.id, opts), { slug: p.id, opts });
-    }
+    for (const opts of legacyVariantCombos(p)) map.set(feedId(p.id, opts), { slug: p.id, opts });
   if (products === shopProducts) index = map;
   return map;
 }
