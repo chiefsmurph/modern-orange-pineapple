@@ -111,7 +111,17 @@ test("the shorts' copy: a MOP lead line, then the facts; no supplier blurb", () 
 test("products the shared page can't show faithfully keep the older template", () => {
   const base = shorts as Product;
   assert.equal(legacyPageProduct({ ...base, freeShippingMode: undefined }), null, "the page says Free US shipping");
-  assert.equal(legacyPageProduct({ ...base, design: "pelican-beanie" }), null, "artist credits come from credit lines");
+  // A single design for the whole product (e.g. supersize-alpaca-tee) becomes
+  // one "<role> by <name>" credit line; an option-based one (a design that
+  // varies per colour, like the retired pelican-beanie-t-shirt) isn't
+  // supported here and keeps the older template.
+  const single = legacyPageProduct({ ...base, design: "pelican-beanie" })!;
+  assert.deepEqual(single.credits, [{ lines: ["Beanie by Janette Garcia"], when: {} }]);
+  assert.equal(
+    legacyPageProduct({ ...base, design: { option: "style", designs: { Classic: "pelican-classic", Beanie: "pelican-beanie" } } }),
+    null,
+    "an option-based design isn't supported here"
+  );
   // per-colour photos follow the colour pick
   const coloured = legacyPageProduct({ ...base, options: { color: ["Yellow", "White"], size: ["S"] }, images: { Yellow: ["/y.webp"], White: ["/w.webp"] } })!;
   assert.deepEqual(imagesFor(coloured, { color: "White" }), ["/w.webp"]);
