@@ -31,7 +31,8 @@ test("'Free US shipping' is true: every card is free shipping, checkout ships to
   assert.ok(onSale.length > 0);
   for (const p of onSale) {
     assert.ok(p.freeShippingMode, `${p.id} is free shipping`);
-    assert.equal(buildItem(p.id, { size: p.options.size?.[0] ?? "M" }, 1, {}).shippingCents, 0, p.id);
+    const opts = { size: p.options.size?.[0] ?? "M", ...(p.options.color ? { color: p.options.color[0] } : {}) };
+    assert.equal(buildItem(p.id, opts, 1, {}).shippingCents, 0, p.id);
   }
 });
 

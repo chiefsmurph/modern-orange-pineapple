@@ -7,7 +7,7 @@
 // before. It can't go in the bag yet (lib/bag.ts and the bag checkout only know
 // the line-up), so its page has "Buy now" and no "Add to bag".
 import type { ShopProduct } from "./catalog/index.ts";
-import { getTotalPrice, type Product } from "../public/products.ts";
+import { getTotalPrice, legacyVariantCombos, type Product } from "../public/products.ts";
 
 export type PageProduct = Pick<
   ShopProduct,
@@ -40,11 +40,8 @@ export function legacyPageProduct(p: Product): PageProduct | null {
   const options = Object.fromEntries(
     Object.entries(p.options).filter((e): e is [string, string[]] => !!e[1]?.length)
   );
-  // every combination of the options, e.g. each size
-  const combos = Object.keys(options).reduce<Record<string, string>[]>(
-    (acc, name) => acc.flatMap((o) => options[name].map((v) => ({ ...o, [name]: v }))),
-    [{}]
-  );
+  // every combination of the options, e.g. each size (or color x size)
+  const combos = legacyVariantCombos(p);
   return {
     slug: p.id,
     title: p.title,

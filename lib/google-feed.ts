@@ -8,7 +8,7 @@ import { shopProducts, type ShopProduct } from "./catalog/index.ts";
 import { imageSetFor, imagesFor, optionNames, syncedQuery } from "./catalog/select.ts";
 import { valueLabel } from "./catalog/copy.ts";
 import { withoutAddedDefaults } from "./catalog/added.ts";
-import legacy, { getTotalPrice } from "../public/products.ts";
+import legacy, { getTotalPrice, getProductImages, legacyVariantCombos } from "../public/products.ts";
 import { onSaleLegacy } from "./shop-cards.ts";
 
 /**
@@ -24,6 +24,15 @@ import { onSaleLegacy } from "./shop-cards.ts";
  */
 const LEGACY_CHECKOUT_JPEG: Record<string, string> = {
   "blue-sky-cotton-shorts": "/images/blue-sky-cotton-shorts/worn-front-shorts-crop-v2-checkout.jpg",
+};
+
+/** Same idea as LEGACY_CHECKOUT_JPEG, for an older product with a color option: one JPEG per color. */
+const LEGACY_CHECKOUT_JPEG_BY_COLOR: Record<string, Record<string, string>> = {
+  "supersize-alpaca-tee": {
+    White: "/images/supersize-alpaca-tee/white-checkout.jpg",
+    Sky: "/images/supersize-alpaca-tee/sky-checkout.jpg",
+    Black: "/images/supersize-alpaca-tee/black-checkout.jpg",
+  },
 };
 
 export const SITE = "https://mopclothing.com";
@@ -144,28 +153,35 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
   // whole-site feed (products === shopProducts): a caller passing a subset,
   // like a single product for a test, gets only that product's own items.
   for (const p of products === shopProducts ? legacy.products.filter(onSaleLegacy) : []) {
-    const sizes = p.options.size ?? [undefined];
+    const combos = legacyVariantCombos(p);
+    const heroByColor = LEGACY_CHECKOUT_JPEG_BY_COLOR[p.id];
     const heroPath = LEGACY_CHECKOUT_JPEG[p.id];
-    const images = Array.isArray(p.images) ? p.images : Object.values(p.images)[0];
-    const hero = heroPath ?? images[0];
-    if (!hero) continue;
-    const extra = flavor === "meta" ? [] : images.filter((src) => src !== images[0]).slice(0, 3);
     const category = /dress/.test(p.id)
       ? "Apparel & Accessories > Clothing > Dresses"
       : /shorts/.test(p.id)
         ? "Apparel & Accessories > Clothing > Shorts"
         : "Apparel & Accessories > Clothing > Shirts & Tops";
     const gender = /crop|dress/.test(p.id) ? "female" : "unisex";
-    for (const size of sizes) {
+    for (const opts of combos) {
+      const images = getProductImages(p, opts.color) ?? [];
+      // Meta disallows WebP, so a multi-color product needs its own JPEG per color
+      // (LEGACY_CHECKOUT_JPEG_BY_COLOR); everything else falls back to its own images.
+      const hero = (opts.color ? heroByColor?.[opts.color] : undefined) ?? heroPath ?? images[0];
+      if (!hero) continue;
+      const extra = flavor === "meta" ? [] : images.filter((src) => src !== images[0]).slice(0, 3);
       // The catalog's v.price above already includes US shipping (freeShippingMode);
       // getTotalPrice is the same all-in total for an older product.
-      const price = getTotalPrice(p, size);
-      const title = `${p.title}${size ? `, size ${size}` : ""}`.slice(0, 150);
-      const query = size ? `size=${encodeURIComponent(size)}` : "";
+      const price = getTotalPrice(p, opts.size);
+      const summary = opts.color ? opts.color : "";
+      const title = `${p.title}${summary ? ` - ${summary}` : ""}${opts.size ? `, size ${opts.size}` : ""}`.slice(0, 150);
+      const query = Object.entries(opts)
+        .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+        .join("&");
+      const color = opts.color;
       items.push(
         [
           "<item>",
-          `<g:id>${xml(feedId(p.id, size ? { size } : {}))}</g:id>`,
+          `<g:id>${xml(feedId(p.id, opts))}</g:id>`,
           `<g:item_group_id>${xml(p.id)}</g:item_group_id>`,
           `<g:title>${xml(title)}</g:title>`,
           `<g:description>${xml(plain(p.description).slice(0, 4900))}</g:description>`,
@@ -178,7 +194,8 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
           `<g:brand>${xml(BRAND)}</g:brand>`,
           "<g:identifier_exists>no</g:identifier_exists>",
           `<g:google_product_category>${xml(category)}</g:google_product_category>`,
-          size ? `<g:size>${xml(size)}</g:size>` : "",
+          color ? `<g:color>${xml(color)}</g:color>` : "",
+          opts.size ? `<g:size>${xml(opts.size)}</g:size>` : "",
           `<g:gender>${gender}</g:gender>`,
           "<g:age_group>adult</g:age_group>",
           "<g:shipping><g:country>US</g:country><g:service>Standard</g:service><g:price>0.00 USD</g:price></g:shipping>",

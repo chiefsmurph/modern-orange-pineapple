@@ -113,6 +113,23 @@ export const getProductImages = (
   color: string | undefined = colorOptions[0]
 ) => (Array.isArray(images) ? images : images[color]);
 
+/**
+ * Every combination of a product's options (e.g. each size, or each
+ * color x size for a multi-colour one like the Supersize Alpaca Tee), in
+ * option-declaration order. Shared by the product page (lib/product-page.ts),
+ * the feeds (lib/google-feed.ts) and Meta Shops checkout (lib/orders/meta-checkout.ts)
+ * so a product with more than one option (not just `size`) is covered everywhere.
+ */
+export const legacyVariantCombos = (p: Product): Record<string, string>[] => {
+  const options = Object.fromEntries(
+    Object.entries(p.options).filter((e): e is [string, string[]] => !!e[1]?.length)
+  );
+  return Object.keys(options).reduce<Record<string, string>[]>(
+    (acc, name) => acc.flatMap((o) => options[name].map((v) => ({ ...o, [name]: v }))),
+    [{}]
+  );
+};
+
 /** The design for the current selection (option name → chosen value). */
 export const getProductDesignId = (
   product: Product,
@@ -183,6 +200,54 @@ const products: { products: Product[] } = {
         cost: 752,
       },
       freeShippingMode: true,
+    },
+    {
+      id: "supersize-alpaca-tee",
+      // Big alpaca, collar to hem, front; rabbit logo + wordmark on the back
+      // (lib/orders/yoycol-config.ts yoycolColorProducts). 3 colourways, one
+      // all-over print design per colour, all on the same White AOP O-neck
+      // blank (3MTXVYM32). John art-directed; original alpaca drawing by
+      // Austin Maxwell (lib/artists.ts "smoking-alpaca").
+      title: "Supersize Alpaca Tee",
+      description:
+        "The big alpaca, collar to hem. Rabbit logo and MODERN ORANGE PINEAPPLE on the back.\n\n- All-over print, 100% cotton\n- Regular fit with classic O-neck\n- Fabric weight: 190 g/m²\n- Made to order, ships in about 3-4 weeks",
+      // PRICE_TBD (John, 2026-11-07): his message proposed $37.40, but that ends
+      // in a round 0 - breaks the "mixed endings, last digit != 0" rule
+      // (feedback-prices-end-70-40-20.md: tees in the proposed MOP set end .73).
+      // Using $37.73 as a compliant placeholder; NEEDS JOHN'S CONFIRMED PRICE
+      // before this goes live.
+      price: 37.73,
+      options: {
+        color: ["White", "Sky", "Black"],
+        size: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+      },
+      vendor: {
+        platform: "yoycol",
+        // 3 colourways / designCodes on one SPU - see yoycolColorProducts
+        // (lib/orders/yoycol-config.ts) for White/Sky/Black -> PY8DV/PY7X7/PY8EN.
+        productId: "SPU 3MTXVYM32 (3 colourways)",
+      },
+      design: "smoking-alpaca",
+      images: {
+        White: [
+          "/images/supersize-alpaca-tee/white-front.webp",
+          "/images/supersize-alpaca-tee/white-back.webp",
+        ],
+        Sky: [
+          "/images/supersize-alpaca-tee/sky-front.webp",
+          "/images/supersize-alpaca-tee/sky-back.webp",
+        ],
+        Black: [
+          "/images/supersize-alpaca-tee/black-front.webp",
+          "/images/supersize-alpaca-tee/black-back.webp",
+        ],
+      },
+      shipping: {
+        name: "Standard Shipping",
+        cost: 752,
+      },
+      freeShippingMode: true,
+      sizeNote: "Runs small: we ship one size up from what you pick (so order your normal size).",
     },
     {
       id: "clouds-skater-dress",

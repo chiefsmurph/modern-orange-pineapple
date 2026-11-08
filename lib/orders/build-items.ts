@@ -24,7 +24,10 @@ import {
 } from "../catalog/select.ts";
 import { optionTitle, valueLabel } from "../catalog/copy.ts";
 import { addedDefault } from "../catalog/added.ts";
-import { yoycolFor, yoycolSku } from "./yoycol-config.ts";
+import { yoycolFor, yoycolForColor, yoycolSku, yoycolSizeShiftUp } from "./yoycol-config.ts";
+
+/** Slugs that ship one size up at Yoycol (yoycol-config.ts, John 2026-11-07). */
+const SUPERSIZE_ALPACA_SLUGS = new Set(["supersize-alpaca-tee"]);
 import type { OrderItem } from "./types.ts";
 
 export class CheckoutError extends Error {
@@ -118,12 +121,27 @@ export function buildItem(
       unitAmount: cents(legacy.freeShippingMode ? getTotalPrice(legacy, opts.size) : getItemPrice(legacy, opts.size)),
     };
     if (legacy.vendor.platform === "yoycol") {
-      const y = yoycolFor(legacy.id, env);
+      const y = yoycolFor(legacy.id, env) ?? yoycolForColor(legacy.id, opts.color, env);
       if (!y || !opts.size) {
         item.manual = `Yoycol product ${legacy.vendor.productId}: no design code configured`;
       } else {
         item.supplier = "yoycol";
-        item.yoycol = { designCode: y.designCode, skuCode: yoycolSku(y, opts.size) };
+        // Ship one size up for this template (yoycol-config.ts, John 2026-11-07). The
+        // customer's picked size (opts.size) is unchanged everywhere else - emails,
+        // metadata, the confirmation page - only the Yoycol order's SKU shifts.
+        const shift = SUPERSIZE_ALPACA_SLUGS.has(legacy.id) ? yoycolSizeShiftUp(opts.size) : undefined;
+        const orderedSize = shift?.size ?? opts.size;
+        item.yoycol = { designCode: y.designCode, skuCode: yoycolSku(y, orderedSize) };
+        if (shift?.shifted) {
+          item.manual = `Shipped one size up per fit note: customer picked ${opts.size}, ordered Yoycol ${orderedSize}.`;
+        } else if (shift && shift.atTop) {
+          item.manual = `TODO: ${opts.size} is the top of the size chart - can't shift it up one size. Confirm fit with John before shipping as-is.`;
+        }
+        // TODO (yoycol-neck-label-automation.md): the Yoycol Open API has no neck-label
+        // field. Attaching the "MOP tag <size>" label needs a second, unauthenticated-by-us
+        // web-session call (POST /api/trade/modify/item/orderBrandEdit) that isn't wired up
+        // server-side yet. Until it is, John must add the neck label by hand in the Yoycol
+        // dashboard before this order ships - the order email flags it (lib/orders/*email*).
       }
     } else {
       item.manual = `Printful product template ${legacy.vendor.productTemplate} (no sync variant: place it by hand)`;
