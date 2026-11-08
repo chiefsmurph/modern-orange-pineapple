@@ -68,7 +68,7 @@ export const yoycolSku = (p: YoycolProduct, size: string) =>
 export type YoycolColorProduct = {
   spu: string;
   templateName: string;
-  colors: Record<string, { designCode: string; colorHex: string }>;
+  colors: Record<string, { colorHex: string; backs: Record<string, string> }>;
 };
 
 export const yoycolColorProducts: Record<string, YoycolColorProduct> = {
@@ -76,13 +76,17 @@ export const yoycolColorProducts: Record<string, YoycolColorProduct> = {
   // (Black/PY8EN), tee 3MTXVYM32 (Yoycol Open API, read 2026-11-07). All
   // three are the same blank (White AOP O-neck tee); the colourway is the
   // print design, so colorHex is FFFFFF for every one.
+  //
+  // Back (John, 11/08): "Logo" (rabbit + wordmark, the original design above)
+  // or "Plain" (no back print), same price. Plain-back design codes read from
+  // the Yoycol Open API 2026-11-08: White/PYBUK, Sky/PYBUN, Black/PYBUF.
   "supersize-alpaca-tee": {
     spu: "3MTXVYM32",
     templateName: "Supersize Alpaca",
     colors: {
-      White: { designCode: "PY8DV", colorHex: "FFFFFF" },
-      Sky: { designCode: "PY7X7", colorHex: "FFFFFF" },
-      Black: { designCode: "PY8EN", colorHex: "FFFFFF" },
+      White: { colorHex: "FFFFFF", backs: { Logo: "PY8DV", Plain: "PYBUK" } },
+      Sky: { colorHex: "FFFFFF", backs: { Logo: "PY7X7", Plain: "PYBUN" } },
+      Black: { colorHex: "FFFFFF", backs: { Logo: "PY8EN", Plain: "PYBUF" } },
     },
   },
 };
@@ -90,13 +94,17 @@ export const yoycolColorProducts: Record<string, YoycolColorProduct> = {
 export const yoycolForColor = (
   slug: string,
   color: string | undefined,
+  back: string | undefined,
   env: Record<string, string | undefined> = process.env
 ): YoycolProduct | undefined => {
   const base = yoycolColorProducts[slug];
   const variant = color ? base?.colors[color] : undefined;
-  if (!base || !variant) return undefined;
+  const backKey = back ?? (variant ? Object.keys(variant.backs)[0] : undefined);
+  const savedCode = variant && backKey ? variant.backs[backKey] : undefined;
+  if (!base || !variant || !savedCode) return undefined;
   const codes = parseDesignCodes(env.YOYCOL_DESIGN_CODES);
-  const designCode = codes[`${slug}:${color}`] ?? codes[slug] ?? variant.designCode;
+  const designCode =
+    codes[`${slug}:${color}:${backKey}`] ?? codes[`${slug}:${color}`] ?? codes[slug] ?? savedCode;
   return { spu: base.spu, designCode, colorHex: variant.colorHex, templateName: base.templateName };
 };
 

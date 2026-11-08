@@ -157,7 +157,12 @@ export function googleFeedXml(products: ShopProduct[], now = new Date(), flavor:
   // whole-site feed (products === shopProducts): a caller passing a subset,
   // like a single product for a test, gets only that product's own items.
   for (const p of products === shopProducts ? legacy.products.filter(onSaleLegacy) : []) {
-    const combos = legacyVariantCombos(p);
+    // One item per color (Logo back, the default): a "back" option (the
+    // Supersize Alpaca Tee) doesn't change the garment enough to warrant its
+    // own listing, so pin it instead of exploding every combo (John, 11/08).
+    const combos = legacyVariantCombos(p).filter(
+      (o) => !p.options.back || o.back === p.options.back[0]
+    );
     const heroByColor = LEGACY_CHECKOUT_JPEG_BY_COLOR[p.id];
     const heroPath = LEGACY_CHECKOUT_JPEG[p.id];
     const category = /dress/.test(p.id)

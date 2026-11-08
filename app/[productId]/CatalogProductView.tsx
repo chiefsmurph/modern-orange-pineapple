@@ -182,6 +182,9 @@ export default function CatalogProductView({
                 {name === "size" && activeSizeNote && (
                   <p className={own.sizeNote}>{activeSizeNote}</p>
                 )}
+                {name === "back" && product.backNote && (
+                  <p className={own.sizeNote}>{product.backNote}</p>
+                )}
                 <div className={name === "sky" ? own.thumbChoices : own.choices}>
                   {product.options[name].map((value) => {
                     // Skies are picked from labelled thumbnails of the shirt itself

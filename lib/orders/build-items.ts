@@ -121,7 +121,7 @@ export function buildItem(
       unitAmount: cents(legacy.freeShippingMode ? getTotalPrice(legacy, opts.size) : getItemPrice(legacy, opts.size)),
     };
     if (legacy.vendor.platform === "yoycol") {
-      const y = yoycolFor(legacy.id, env) ?? yoycolForColor(legacy.id, opts.color, env);
+      const y = yoycolFor(legacy.id, env) ?? yoycolForColor(legacy.id, opts.color, opts.back, env);
       if (!y || !opts.size) {
         item.manual = `Yoycol product ${legacy.vendor.productId}: no design code configured`;
       } else {

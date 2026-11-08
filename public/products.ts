@@ -1,6 +1,6 @@
 import type { DesignId } from "@/lib/artists";
 
-export type ProductOptions = Partial<Record<"color" | "size", string[]>>;
+export type ProductOptions = Partial<Record<"color" | "back" | "size", string[]>>;
 
 /**
  * Which artwork (lib/artists.ts `designs`) a product shows, for its artist
@@ -46,6 +46,13 @@ export type Product = {
         productTemplate: string;
       };
   images: string[] | Record<string, string[]>;
+  /**
+   * Per-color image set to show instead of `images` when a "back" option is
+   * set to "Plain" (lib/product-page.ts): same shape as `images`, just with
+   * the back-print photo(s) swapped for a plain-back mockup. A color missing
+   * here keeps the regular `images` (no plain-back mockup yet).
+   */
+  plainBackImages?: Record<string, string[]>;
   shipping: {
     name: string;
     cost: number;
@@ -232,6 +239,10 @@ const products: { products: Product[] } = {
       price: 37.24,
       options: {
         color: ["White", "Sky", "Black"],
+        // Back print (John, approved 11/08): "Logo" (rabbit + wordmark, the
+        // design pictured) or "Plain" (no back print), same price. Yoycol
+        // design codes per (color, back) in lib/orders/yoycol-config.ts.
+        back: ["Logo", "Plain"],
         size: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
       },
       vendor: {
@@ -262,6 +273,30 @@ const products: { products: Product[] } = {
         Black: [
           "/images/supersize-alpaca-tee/black-model-front.webp",
           "/images/supersize-alpaca-tee/black-model-back.webp",
+          "/images/supersize-alpaca-tee/black-front.webp",
+          "/images/supersize-alpaca-tee/black-back.webp",
+        ],
+      },
+      // Same 4 photos per color, but the model-back photo is the plain-back
+      // mockup (Yoycol, pulled 11/08 via the website template endpoint - see
+      // ~/code/_handoff/2026-11-07-big-alpaca-allover/mockups-model/). No
+      // plain-back flat-lay yet, so that photo stays the Logo one.
+      plainBackImages: {
+        White: [
+          "/images/supersize-alpaca-tee/white-model-front.webp",
+          "/images/supersize-alpaca-tee/white-model-back-plain.webp",
+          "/images/supersize-alpaca-tee/white-front.webp",
+          "/images/supersize-alpaca-tee/white-back.webp",
+        ],
+        Sky: [
+          "/images/supersize-alpaca-tee/sky-model-front.webp",
+          "/images/supersize-alpaca-tee/sky-model-back-plain.webp",
+          "/images/supersize-alpaca-tee/sky-front.webp",
+          "/images/supersize-alpaca-tee/sky-back.webp",
+        ],
+        Black: [
+          "/images/supersize-alpaca-tee/black-model-front.webp",
+          "/images/supersize-alpaca-tee/black-model-back-plain.webp",
           "/images/supersize-alpaca-tee/black-front.webp",
           "/images/supersize-alpaca-tee/black-back.webp",
         ],
