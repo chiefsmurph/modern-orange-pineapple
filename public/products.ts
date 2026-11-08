@@ -286,19 +286,16 @@ const products: { products: Product[] } = {
           "/images/supersize-alpaca-tee/white-model-front.webp",
           "/images/supersize-alpaca-tee/white-model-back-plain.webp",
           "/images/supersize-alpaca-tee/white-front.webp",
-          "/images/supersize-alpaca-tee/white-back.webp",
         ],
         Sky: [
           "/images/supersize-alpaca-tee/sky-model-front.webp",
           "/images/supersize-alpaca-tee/sky-model-back-plain.webp",
           "/images/supersize-alpaca-tee/sky-front.webp",
-          "/images/supersize-alpaca-tee/sky-back.webp",
         ],
         Black: [
           "/images/supersize-alpaca-tee/black-model-front.webp",
           "/images/supersize-alpaca-tee/black-model-back-plain.webp",
           "/images/supersize-alpaca-tee/black-front.webp",
-          "/images/supersize-alpaca-tee/black-back.webp",
         ],
       },
       shipping: {

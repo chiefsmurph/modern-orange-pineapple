@@ -105,12 +105,13 @@ test("page: Logo preselected by default; the page offers a Back picker and Plain
     const plainImages = imageSetFor(page, { color, back: "Plain" })!.images;
     assert.deepEqual(logoImages, (p.images as Record<string, string[]>)[color]);
     assert.deepEqual(plainImages, p.plainBackImages![color], color);
-    // Only the model-back photo differs; front and flat-lay stay the same.
+    // Model back swapped to plain; the logo flat-lay back is dropped.
     assert.equal(plainImages[0], logoImages[0], `${color} model-front unchanged`);
     assert.notEqual(plainImages[1], logoImages[1], `${color} model-back swapped`);
     assert.match(plainImages[1], /-model-back-plain\.webp$/, color);
     assert.equal(plainImages[2], logoImages[2], `${color} flat front unchanged`);
-    assert.equal(plainImages[3], logoImages[3], `${color} flat back unchanged (no plain flat-lay yet)`);
+    assert.equal(plainImages.length, 3, `${color}: the Logo flat-lay back is left out on Plain`);
+    assert.ok(!plainImages.some((u) => /-back\.webp$/.test(u) && !/plain/.test(u)), `${color}: no logo back shown on Plain`);
   }
   // Every color has a plain-back mockup, so no "no logo" fallback note is needed.
   assert.equal(page.backNote, undefined);
