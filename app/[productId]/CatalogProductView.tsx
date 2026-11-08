@@ -309,11 +309,16 @@ export default function CatalogProductView({
       </div>
 
       {/* Desktop-only faint ghosts at the sides: the same URLs as the big photo
-          (no extra downloads), once the photos are in. */}
-      {photosReady && <Ghost src={images[0]} side="left" />}
-      {photosReady && images[1] && queue.current?.status(preloadKey({ kind: "main", src: images[1] })) === "loaded" && (
-        <Ghost src={images[1]} side="right" />
-      )}
+          (no extra downloads), once the photos are in. Off for a product whose
+          photos are a full scene rather than a background-removed cutout
+          (product.pageBackground === false, public/products.ts); default on. */}
+      {product.pageBackground !== false && photosReady && <Ghost src={images[0]} side="left" />}
+      {product.pageBackground !== false &&
+        photosReady &&
+        images[1] &&
+        queue.current?.status(preloadKey({ kind: "main", src: images[1] })) === "loaded" && (
+          <Ghost src={images[1]} side="right" />
+        )}
     </div>
   );
 }

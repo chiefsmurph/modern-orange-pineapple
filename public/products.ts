@@ -76,6 +76,16 @@ export type Product = {
   comingSoon?: { message: string };
   /** The artwork, for the artist credit. Leave unset when the artist isn't known. */
   design?: ProductDesign;
+  /**
+   * Desktop-only faint left/right ghost copies of the product photo, behind
+   * the page (app/[productId]/CatalogProductView.tsx `Ghost`). Looks right
+   * with the site's usual background-removed cutout photos
+   * (erasebg-transformed*.png); looks wrong with a full photographic mockup
+   * that has its own scene/backdrop (e.g. supersize-alpaca-tee's sandy Yoycol
+   * mockups). Unset = on, as before. Flip back to true (or delete this line)
+   * once that product has a transparent cutout photo of its own.
+   */
+  pageBackground?: boolean;
 };
 
 export type Delivery = {
@@ -248,6 +258,11 @@ const products: { products: Product[] } = {
       },
       freeShippingMode: true,
       sizeNote: "Runs small: we ship one size up from what you pick (so order your normal size).",
+      // Off (John, 11/08): the Yoycol mockups are full photos (sand, shorts,
+      // flip-flops), not a transparent cutout, so the usual faded ghost
+      // background looked wrong here. Flip back to true/delete once there's
+      // a cut-out model shot (transparent PNG) for this product.
+      pageBackground: false,
     },
     {
       id: "clouds-skater-dress",

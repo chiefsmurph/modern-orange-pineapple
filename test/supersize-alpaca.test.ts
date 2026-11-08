@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { buildItem } from "../lib/orders/build-items.ts";
 import { yoycolForColor, yoycolSizeShiftUp } from "../lib/orders/yoycol-config.ts";
 import legacy from "../public/products.ts";
+import { legacyPageProduct } from "../lib/product-page.ts";
 
 const SLUG = "supersize-alpaca-tee";
 
@@ -55,4 +56,17 @@ test("on sale, free US shipping, $37.73 PRICE_TBD placeholder, 3 colors x 8 size
   assert.equal(p.price, 37.73, "PRICE_TBD placeholder - needs John's confirmed price before going live");
   assert.deepEqual(p.options.color, ["White", "Sky", "Black"]);
   assert.deepEqual(p.options.size, ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"]);
+});
+
+test("pageBackground is off (John, 11/08: the Yoycol mockups are a full scene, not a cutout) and reaches the page product", () => {
+  const p = legacy.products.find((x) => x.id === SLUG)!;
+  assert.equal(p.pageBackground, false);
+  const page = legacyPageProduct(p)!;
+  assert.equal(page.pageBackground, false);
+});
+
+test("every other legacy product keeps its page background on (the flag is per-product, not a global off-switch)", () => {
+  const shorts = legacy.products.find((x) => x.id === "blue-sky-cotton-shorts")!;
+  assert.equal(shorts.pageBackground, undefined);
+  assert.equal(legacyPageProduct(shorts)!.pageBackground, undefined);
 });

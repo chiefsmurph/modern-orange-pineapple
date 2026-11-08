@@ -28,6 +28,8 @@ export type PageProduct = Pick<
   delivery: Product["vendor"]["platform"];
   /** Not in the bag: the page offers "Buy now" (its own Stripe checkout) only. */
   buyNowOnly?: boolean;
+  /** Public products.ts `pageBackground`; default on (CatalogProductView's Ghost). */
+  pageBackground?: boolean;
 };
 
 /**
@@ -72,5 +74,6 @@ export function legacyPageProduct(p: Product): PageProduct | null {
     credits,
     delivery: p.vendor.platform,
     buyNowOnly: true,
+    pageBackground: p.pageBackground,
   };
 }
