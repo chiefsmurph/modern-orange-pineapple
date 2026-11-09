@@ -188,6 +188,19 @@
   margin-top: 1rem;
 }
 
+.instagramNote {
+  margin: 0.75rem 0 0;
+  font-size: 0.72rem;
+  color: #3b4a54;
+}
+
+.instagramNote a {
+  color: #e1306c;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .buySummary {
   margin: 0;
   font-size: 0.8rem;

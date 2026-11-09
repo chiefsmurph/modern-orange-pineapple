@@ -2,6 +2,7 @@ import { QueryProvider } from "@/components/QueryProvider";
 import { Analytics } from "@/components/Analytics";
 import PaidEngagement from "@/components/PaidEngagement";
 import BagButton from "@/components/BagButton";
+import SiteFooter from "@/components/SiteFooter";
 import { Orbitron } from "next/font/google";
 import type { Viewport } from "next";
 import "./globals.css";
@@ -81,6 +82,8 @@ export default function RootLayout({
         {/* Static sky/sea backdrop (13 KB WebP / 8.5 KB AVIF) — replaces the 8.8 MB autoplay video. */}
         <div className="site-bg" aria-hidden="true" />
         <QueryProvider>{children}</QueryProvider>
+        {/* Instagram + Etsy, on every page */}
+        <SiteFooter />
         {/* the shopping bag, top right on every page */}
         <BagButton />
         <Analytics />

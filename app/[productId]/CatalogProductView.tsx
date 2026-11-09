@@ -23,6 +23,7 @@ import { catalogFabricNote, catalogSizeNote, optionTitle, valueLabel } from "@/l
 import { crossLinkFor } from "@/lib/catalog";
 import { swatchFor } from "@/lib/catalog/colors";
 import { designFromCreditLines } from "@/lib/artists";
+import { INSTAGRAM_URL } from "@/lib/structured-data";
 import { vendorDelivery } from "@/public/products";
 import CatalogGallery from "@/components/CatalogGallery";
 import ArtistCredit from "@/components/ArtistCredit";
@@ -321,6 +322,20 @@ export default function CatalogProductView({
           Free US shipping · Shipping &amp; returns
         </Link>
       </div>
+
+      <p className={own.instagramNote}>
+        See it in the wild →{" "}
+        <a
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-umami-event="instagram-click"
+          data-umami-event-source="product"
+          onClick={() => track("instagram-click", { source: "product", slug: product.slug })}
+        >
+          @mopclothingco on Instagram
+        </a>
+      </p>
 
       {/* Desktop-only faint ghosts at the sides (public/products.ts
           `pageBackground`): normally the same URLs as the big photo, no extra
