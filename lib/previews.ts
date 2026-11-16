@@ -167,6 +167,32 @@ export const previews: Preview[] = [
         ],
       },
       {
+        name: "Morro Rock \u00b7 Harbor",
+        tier: "Premium \u00b7 printed edge to edge",
+        line: "All-over print, edge to edge on soft cotton.",
+        wholesale: "$24",
+        retail: "$45",
+        ships: "Ships in 2\u20133 weeks",
+        images: [
+          IMG("rock-harbor-front", "All-over tee: Morro Rock under blue sky and clouds from the bay, with a tall ship at anchor and Morro Bay, CA script", "Front \u00b7 photo: MOP Clothing"),
+          IMG("rock-harbor-model", "Morro Rock Harbor all-over tee worn", "Worn"),
+          IMG("rock-harbor-back", "Back of the Morro Rock Harbor all-over tee: the MOP bunny logo and a small sea otter badge", "Back"),
+        ],
+      },
+      {
+        name: "Morro Rock \u00b7 Silhouette",
+        tier: "Premium \u00b7 printed edge to edge",
+        line: "All-over print, edge to edge on soft cotton.",
+        wholesale: "$24",
+        retail: "$45",
+        ships: "Ships in 2\u20133 weeks",
+        images: [
+          IMG("rock-silhouette-front", "All-over tee: Morro Rock in silhouette against a backlit sky and sun glare on the bay, with Morro Bay, CA script", "Front \u00b7 photo: MOP Clothing"),
+          IMG("rock-silhouette-model", "Morro Rock Silhouette all-over tee worn", "Worn"),
+          IMG("rock-silhouette-back", "Back of the Morro Rock Silhouette all-over tee: the MOP bunny logo and a small sea otter badge", "Back"),
+        ],
+      },
+      {
         name: "Morro Rock + Otter tee",
         line: "Comfort Colors heavyweight garment-dyed cotton. Shown in Black and Butter; also comes in Bay (sage).",
         wholesale: "$20",

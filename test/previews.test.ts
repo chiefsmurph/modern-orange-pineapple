@@ -125,9 +125,9 @@ test("no preview names a trademark or business (outreach research 10/13)", () =>
   }
 });
 
-test("Morro Bay pitch: four options, Curious Otter first, prices shown, MOP Clothing brand", () => {
+test("Morro Bay pitch: six options, Curious Otter first, prices shown, MOP Clothing brand", () => {
   const p = getPreview("morro-bay-0b7d6793")!;
-  assert.deepEqual(p.options!.map((o) => o.name), ["Curious Otter", "Morro Rock", "Morro Rock + Otter tee", "Otter line-art tee"]);
+  assert.deepEqual(p.options!.map((o) => o.name), ["Curious Otter", "Morro Rock", "Morro Rock \u00b7 Harbor", "Morro Rock \u00b7 Silhouette", "Morro Rock + Otter tee", "Otter line-art tee"]);
   for (const o of p.options!) {
     assert.match(o.wholesale, /^\$\d+$/);
     assert.match(o.retail, /^\$\d+$/);
