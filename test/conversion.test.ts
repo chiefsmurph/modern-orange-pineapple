@@ -83,7 +83,7 @@ test("Google feed: one item per variant, every required field, valid XML", () =>
     assert.ok(!ids.has(id), `duplicate ${id}`);
     ids.add(id);
     assert.match(it, /<g:link>https:\/\/mopclothing\.com\/[a-z0-9-]+\?[^<]*utm_source=google&amp;utm_medium=shopping&amp;utm_campaign=free_listings<\/g:link>/);
-    assert.match(it, /<g:image_link>https:\/\/mopclothing\.com\/images\/(catalog\/.+-checkout\.jpg|blue-sky-cotton-shorts\/worn-front-shorts-crop-v2-checkout\.jpg|supersize-alpaca-tee\/(white|sky|black)-checkout\.jpg)<\/g:image_link>/);
+    assert.match(it, /<g:image_link>https:\/\/mopclothing\.com\/images\/(catalog\/.+-checkout\.jpg|blue-sky-cotton-shorts\/worn-front-shorts-crop-v2-checkout\.jpg|supersize-alpaca-tee\/(white|sky|black)-checkout\.jpg|curious-otter-allover-tee\/checkout\.jpg)<\/g:image_link>/);
     assert.match(it, /<g:availability>in_stock<\/g:availability>/);
     assert.match(it, /<g:brand>Modern Orange Pineapple<\/g:brand>/);
     assert.match(it, /<g:shipping><g:country>US<\/g:country><g:service>Standard<\/g:service><g:price>0.00 USD<\/g:price><\/g:shipping>/);

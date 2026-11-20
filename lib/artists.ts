@@ -68,6 +68,16 @@ export const designs = {
       { artist: "mop", role: "Colour & design" },
     ],
   },
+  // Both photos are credited as written: the otter is public domain, the Morro Rock
+  // badge is CC BY 3.0, so its credit must stay on the page.
+  "curious-otter": {
+    title: "Curious Otter",
+    credits: [{ artist: "mop", role: "Colour & design" }],
+    notes: [
+      "Otter photo: \"Sea Otter Surprise\" by Erin Strand / USFWS (public domain)",
+      "Morro Rock badge: \"Morro Rock In The Morning\" by Vanessa Kay (CC BY 3.0)",
+    ],
+  },
   // The pelican's own artist isn't known, so only the beanie is credited.
   "pelican-beanie": {
     title: "Beanie",

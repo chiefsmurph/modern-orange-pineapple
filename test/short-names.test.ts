@@ -9,15 +9,17 @@ import { featuredCards, restCards, shopCards } from "../lib/shop-cards.ts";
 import { googleFeedXml } from "../lib/google-feed.ts";
 import { buildItem } from "../lib/orders/build-items.ts";
 import { checkoutSessionParams } from "../lib/orders/checkout.ts";
+import legacyProducts from "../public/products.ts";
 import { productShareTitle } from "../lib/share-meta.ts";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 
 test("the short-name map: real products, really shorter, and the list John asked for", () => {
   for (const [slug, short] of Object.entries(shortNames)) {
-    const p = getShopProduct(slug);
-    assert.ok(p, `${slug} is a product`);
-    assert.ok(short.length < p.title.length, `${slug}: "${short}" is shorter than "${p.title}"`);
+    // An older hand-written product (public/products.ts) can have one too.
+    const title = getShopProduct(slug)?.title ?? legacyProducts.products.find((o) => o.id === slug)?.title;
+    assert.ok(title, `${slug} is a product`);
+    assert.ok(short.length < title.length, `${slug}: "${short}" is shorter than "${title}"`);
   }
   assert.equal(shortNames["day-all-over"], "Day All-Over");
   assert.equal(shortNames["dusk-all-over"], "Dusk All-Over");
@@ -43,7 +45,8 @@ test("every Featured and home-grid card has a phone name of at most 22 character
 test("feeds, Stripe and the share cards keep the full names", () => {
   const feed = googleFeedXml(shopProducts, new Date(), "meta") + googleFeedXml(shopProducts, new Date(), "google");
   for (const slug of Object.keys(shortNames)) {
-    const p = getShopProduct(slug)!;
+    const p = getShopProduct(slug);
+    if (!p) continue; // older (public/products.ts) products aren't in shopProducts
     const esc = p.title.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
     assert.ok(feed.includes(`<g:title>${esc}`), `feed: ${p.title}`);
     const params = checkoutSessionParams(buildItem(slug, p.variants[0].opts, 1, {}));

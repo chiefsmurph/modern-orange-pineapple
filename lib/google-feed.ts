@@ -24,6 +24,7 @@ import { onSaleLegacy } from "./shop-cards.ts";
  */
 const LEGACY_CHECKOUT_JPEG: Record<string, string> = {
   "blue-sky-cotton-shorts": "/images/blue-sky-cotton-shorts/worn-front-shorts-crop-v2-checkout.jpg",
+  "curious-otter-allover-tee": "/images/curious-otter-allover-tee/checkout.jpg",
 };
 
 /** Same idea as LEGACY_CHECKOUT_JPEG, for an older product with a color option: one JPEG per color. */

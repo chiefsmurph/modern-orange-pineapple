@@ -452,6 +452,36 @@ const products: { products: Product[] } = {
       },
       freeShippingMode: true,
     },
+    {
+      id: "curious-otter-allover-tee",
+      // Yoycol all-over tee (template Q46Q2, lib/orders/yoycol-config.ts), fulfilled by
+      // Yoycol, NOT Printful: the order webhook makes an unpaid Yoycol order for John to pay.
+      // A nature/wildlife all-over like the sky tees (John 11/19), not a city/souvenir shirt.
+      // Item price + $7.52 shipping (free-shipping model) = $44.76, the other all-overs' price.
+      title: "Curious Otter All-Over Tee",
+      description:
+        "A sea otter floating in calm blue water, front and centre, under a soft foggy sky that fades down the whole shirt. A small Morro Rock badge sits on the back below the MOP bunny.\n\n- All-over print, 100% cotton\n- Regular fit with classic O-neck\n- Fabric weight: 190 g/m²\n- Made to order, ships in about 3-4 weeks",
+      price: 37.24,
+      options: {
+        size: ["XS", "S", "M", "L", "XL", "2XL"],
+      },
+      vendor: {
+        platform: "yoycol",
+        productId: "SPU 3MTXVYM32 / design Q46Q2",
+      },
+      design: "curious-otter",
+      // Yoycol's own model mockups for the template (Open API product_templates/17172772, 2026-11-19).
+      images: [
+        "/images/curious-otter-allover-tee/model-front.webp",
+        "/images/curious-otter-allover-tee/model-back.webp",
+      ],
+      shipping: {
+        name: "Standard Shipping",
+        cost: 752,
+      },
+      freeShippingMode: true,
+      pageBackground: false,
+    },
   ],
 };
 

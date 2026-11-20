@@ -191,6 +191,7 @@ export const shortNames: Record<string, string> = {
   "rabbit-polo": "Rabbit Polo",
   "alpaca-polo": "Alpaca Polo",
   "star-polo": "Star Polo",
+  "curious-otter-allover-tee": "Curious Otter All-Over",
 };
 
 /** The phone card's name for a product: its short name, else the full one. */

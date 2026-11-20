@@ -24,6 +24,15 @@ export const yoycolProducts: Record<string, YoycolProduct> = {
     colorHex: "FFFFFF",
     templateName: "Clouds In Sky Shirt",
   },
+  // Template 17172772 "Curious Otter – Big, No Text (Morro Bay)", same tee blank
+  // 3MTXVYM32 (Yoycol Open API, read 2026-11-19). Fulfilled by Yoycol: the Stripe
+  // webhook creates an UNPAID Yoycol order (John pays it) and never calls Printful.
+  "curious-otter-allover-tee": {
+    spu: "3MTXVYM32",
+    designCode: "Q46Q2",
+    colorHex: "FFFFFF",
+    templateName: "Curious Otter – Big, No Text (Morro Bay)",
+  },
   // Template 13560173 "Clouds Cotton Shorts", shorts 3MPXZT40.
   "blue-sky-cotton-shorts": {
     spu: "3MPXZT40",
