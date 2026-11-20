@@ -3,6 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildItem } from "../lib/orders/build-items.ts";
 import legacy from "../public/products.ts";
+import { legacyPageProduct } from "../lib/product-page.ts";
 import { creditText, getDesign } from "../lib/artists.ts";
 
 test("the otter tee orders from Yoycol (design Q46Q2, tee blank, picked size) at the all-over price", () => {
@@ -18,4 +19,10 @@ test("the otter tee page credits the CC BY Morro Rock photo", () => {
   assert.equal(p.title, "Curious Otter All-Over Tee");
   assert.doesNotMatch(p.title + p.description, /Morro Bay/);
   assert.match(creditText(getDesign(p.design as never)!), /Vanessa Kay \(CC BY 3\.0\)/);
+});
+
+test("the page's credit lines carry the CC BY credit unaltered", () => {
+  const p = legacy.products.find((x) => x.id === "curious-otter-allover-tee")!;
+  const lines = legacyPageProduct(p)!.credits.flatMap((c) => c.lines);
+  assert.ok(lines.includes("Morro Rock badge: \"Morro Rock In The Morning\" by Vanessa Kay (CC BY 3.0)"));
 });

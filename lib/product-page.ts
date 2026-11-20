@@ -56,7 +56,11 @@ export function legacyPageProduct(p: Product): PageProduct | null {
   const credits = design
     ? [
         {
-          lines: design.credits.map(({ artist, role }) => (role ? `${role} by ${getArtist(artist).name}` : getArtist(artist).name)),
+          lines: [
+            ...design.credits.map(({ artist, role }) => (role ? `${role} by ${getArtist(artist).name}` : getArtist(artist).name)),
+            // plain source lines (photo credits, licences) are shown as written
+            ...(design.notes ?? []),
+          ],
           when: {},
         },
       ]
